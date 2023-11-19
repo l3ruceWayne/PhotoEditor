@@ -74,7 +74,7 @@ public abstract class MatUtil extends JFrame {
         jLabel.setIcon(imgIcon);
     }
 
-    private static BufferedImage bufferedImg(Mat img) {
+    public static BufferedImage bufferedImg(Mat img) {
 
         int type = (img.channels() > 1) ? BufferedImage.TYPE_3BYTE_BGR : BufferedImage.TYPE_BYTE_GRAY;
 
