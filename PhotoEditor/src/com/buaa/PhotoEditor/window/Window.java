@@ -942,9 +942,6 @@ public class Window extends javax.swing.JFrame {
         );
 
         MyFile file=new MyFile(this);
-        file.fileMenu.add(file.getOpen().openItem);
-        file.fileMenu.add(file.getSave().saveItem);
-        file.fileMenu.add(file.getSave().saveAsItem);
         menuBar.add(file.fileMenu);
 
         optionsMenu.setText("Options");

@@ -15,6 +15,9 @@ public class MyFile {
         this.open = new Open(window);
         this.save = new Save(window);
         fileMenu = new JMenu("File");
+        fileMenu.add(open.openItem);
+        fileMenu.add(save.saveItem);
+        fileMenu.add(save.saveAsItem);
     }
 
     public Window getWindow() {
