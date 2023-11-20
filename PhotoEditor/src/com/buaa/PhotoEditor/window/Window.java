@@ -18,6 +18,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import com.buaa.PhotoEditor.window.file.Save;
+import com.buaa.PhotoEditor.window.file.MyFile;
 import com.buaa.PhotoEditor.window.tool.Eraser;
 import com.buaa.PhotoEditor.window.tool.Pen;
 import com.buaa.PhotoEditor.window.tool.Region;
@@ -938,13 +939,8 @@ public class Window extends javax.swing.JFrame {
                                 .addContainerGap(306, Short.MAX_VALUE))
         );
 
-        openPhotoMenu.setText("Open");
-        openPhotoMenu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                selectImg(evt);
-            }
-        });
-        menuBar.add(openPhotoMenu);
+        MyFile file=new MyFile(this);
+        menuBar.add(file.fileMenu);
 
         optionsMenu.setText("Options");
 
@@ -1226,37 +1222,6 @@ public class Window extends javax.swing.JFrame {
         );
 
         pack();
-    }
-
-    public void selectImg(MouseEvent evt) {
-
-        JFileChooser fileChooser = new JFileChooser();
-
-        if (fileChooser.showOpenDialog(this)
-                == JFileChooser.APPROVE_OPTION) {
-
-            originalImgPath = fileChooser.getSelectedFile().getAbsolutePath();
-
-            img = MatUtil.readImg(originalImgPath);
-            // pending
-            nexLayerImg = MatUtil.copy(img);
-
-            originalImg = MatUtil.copy(img);
-
-            // pending 进行一定的缩放
-            MatUtil.show(img, showImgRegionLabel);
-
-            showImgRegionLabel.setSize(img.width(), img.height());
-
-            this.setSize(img.width(),img.height());
-            this.setLocationRelativeTo(null);
-            last.clear();
-            next.clear();
-
-            showImgRegionLabel.setText("");
-
-            updatePropertys();
-        }
     }
 
     public void dogMaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dogMaskActionPerformed
