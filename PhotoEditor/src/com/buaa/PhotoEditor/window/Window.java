@@ -1247,37 +1247,6 @@ public class Window extends javax.swing.JFrame {
         pack();
     }
 
-    public void selectImg(MouseEvent evt) {
-
-        JFileChooser fileChooser = new JFileChooser();
-
-        if (fileChooser.showOpenDialog(this)
-                == JFileChooser.APPROVE_OPTION) {
-
-            originalImgPath = fileChooser.getSelectedFile().getAbsolutePath();
-
-            img = MatUtil.readImg(originalImgPath);
-            // pending
-            nexLayerImg = MatUtil.copy(img);
-
-            originalImg = MatUtil.copy(img);
-
-            // pending 进行一定的缩放
-            MatUtil.show(img, showImgRegionLabel);
-
-            showImgRegionLabel.setSize(img.width(), img.height());
-
-            this.setSize(img.width(),img.height());
-            this.setLocationRelativeTo(null);
-            last.clear();
-            next.clear();
-
-            showImgRegionLabel.setText("");
-
-            updatePropertys();
-        }
-    }
-
     public void dogMaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dogMaskActionPerformed
 
         Mat newImg = MatUtil.copy(img);
