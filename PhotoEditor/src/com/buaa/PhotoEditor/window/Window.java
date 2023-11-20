@@ -18,6 +18,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import com.buaa.PhotoEditor.window.file.Save;
+import com.buaa.PhotoEditor.window.file.MyFile;
 import com.buaa.PhotoEditor.window.tool.Eraser;
 import com.buaa.PhotoEditor.window.tool.Pen;
 import com.buaa.PhotoEditor.window.tool.Region;
@@ -940,13 +941,11 @@ public class Window extends javax.swing.JFrame {
                                 .addContainerGap(306, Short.MAX_VALUE))
         );
 
-        openPhotoMenu.setText("Open");
-        openPhotoMenu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                selectImg(evt);
-            }
-        });
-        menuBar.add(openPhotoMenu);
+        MyFile file=new MyFile(this);
+        file.fileMenu.add(file.getOpen().openItem);
+        file.fileMenu.add(file.getSave().saveItem);
+        file.fileMenu.add(file.getSave().saveAsItem);
+        menuBar.add(file.fileMenu);
 
         optionsMenu.setText("Options");
 

@@ -4,13 +4,13 @@ import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
 
-public class myFile {
+public class MyFile {
     public JMenu fileMenu;
     private Window window;
     private Open open;
     private Save save;
 
-    public myFile(Window window) {
+    public MyFile(Window window) {
         this.window = window;
         this.open = new Open(window);
         this.save = new Save(window);
