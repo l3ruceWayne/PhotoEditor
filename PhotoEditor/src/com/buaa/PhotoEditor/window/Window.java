@@ -119,6 +119,7 @@ public class Window extends javax.swing.JFrame {
     // Tool
     public JMenu toolMenu;
     // 当点击Pen时，该实例化对象的isSelected变为true
+    public JCheckBoxMenuItem toolMenuPenItem;
 
     // Property
     public JMenu propertyMenu;
@@ -347,6 +348,7 @@ public class Window extends javax.swing.JFrame {
         glitchMenuAddItem = new javax.swing.JMenuItem();
         glitchMenuLilacItem = new javax.swing.JMenuItem();
         toolMenu = new javax.swing.JMenu();
+        toolMenuPenItem = new JCheckBoxMenuItem();
         propertyMenu = new javax.swing.JMenu();
         // GlitchWave是按下Glitch再按下wave后出现的弹窗
         glitchMenuWaveItemDialog.setTitle("Glitch Wave");
@@ -1193,7 +1195,25 @@ public class Window extends javax.swing.JFrame {
 //        });
         toolMenu.add(region.selectRegionItem);
 
-        toolMenu.add(pen.penItem);
+        toolMenuPenItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
+                InputEvent.ALT_MASK
+                        | InputEvent.SHIFT_MASK
+                        | InputEvent.CTRL_MASK)
+        );
+        toolMenuPenItem.setText("Pen");
+        toolMenuPenItem.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+//                    toolMenuSelectRegionItem.isSelected() = false;
+//                    toolMenuSelectRegionItem.setSelected(false);
+                    removeRegionSelected();
+                    eraser.eraserItem.setSelected(false);
+                }
+            }
+        });
+        toolMenu.add(toolMenuPenItem);
+
 
         toolMenu.add(eraser.eraserItem);
 
@@ -1936,7 +1956,7 @@ public class Window extends javax.swing.JFrame {
                 /*
                 画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，当松开的时候我们将上一个状态入栈，然后更改img
                  */
-                if (pen.penItem.isSelected()
+                if (toolMenuPenItem.isSelected()
                         || eraser.eraserItem.isSelected()) {
                     last.add(img);
                     if (paintingImg != null) {
@@ -1957,9 +1977,9 @@ public class Window extends javax.swing.JFrame {
                 if (region.selectRegionItem.isSelected()) {
                     setRegionSize(e.getX(), e.getY());
                     // pending
-                } else if (pen.penItem.isSelected()) {
+                } else if (toolMenuPenItem.isSelected()) {
                     penSize = (Integer) propertyMenuDialogPenSizeSpinner.getValue();
-                    pen.paint(e.getX(), e.getY());
+                    paint(e.getX(), e.getY());
                 } else if (eraser.eraserItem.isSelected()) {
                     // pending
                     eraser.eraserSize = (Integer) propertyMenuDialogPenSizeSpinner.getValue();
@@ -2029,6 +2049,30 @@ public class Window extends javax.swing.JFrame {
         temp = MatUtil.copy(img);
         MatUtil.writeText(text, temp, MatUtil.getRect(region.selectedRegionLabel));
         MatUtil.show(temp, showImgRegionLabel);
+    }
+
+    public void paint(int x, int y) {
+        // 调整界面大小，让图片填充后可以删掉
+        // pending
+        if (x > img.width() || y > img.height()) return;
+        // pending
+        if (paintingImg == null) {
+            paintingImg = MatUtil.copy(img);
+        }
+        MatUtil.paint(new int[]{
+                        penColor.getBackground().getBlue(),
+                        penColor.getBackground().getGreen(),
+                        penColor.getBackground().getRed()},
+                penSize,
+                penSize,
+                x,
+                y,
+                paintingImg);
+
+        // 实现笔画的方法是，鼠标的坐标+penSize构成Rect，将img的rect区域进行像素更改
+
+        MatUtil.show(paintingImg, showImgRegionLabel);
+
     }
 
     // pending 加一个erase的大小调节功能
