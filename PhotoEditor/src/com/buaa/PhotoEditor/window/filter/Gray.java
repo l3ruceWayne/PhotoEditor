@@ -10,40 +10,39 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-public class Blur {
-    public JMenuItem blurItem;
+public class Gray {
+    public JMenuItem grayItem;
     public Window window;
 
-    public Blur(Window window) {
+    public Gray(Window window) {
         this.window = window;
-        blurItem = new JMenuItem("Blur");
-        blurItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
+        grayItem = new JMenuItem("Gray");
+
+        grayItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
                 InputEvent.CTRL_MASK));
-        blurItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                blurActionPerformed(evt);
+
+        grayItem.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                grayActionPerformed(evt);
             }
         });
     }
-    public void blurActionPerformed(ActionEvent evt) {
-
-        int blurLevel = Integer.parseInt(JOptionPane.showInputDialog(null, "Nível de desfoque", JOptionPane.WARNING_MESSAGE));
+    public void grayActionPerformed(ActionEvent evt) {
 
         Mat newImg = MatUtil.copy(window.img);
 
         if (window.region.selectRegionItem.isSelected()) {
 
-            MatUtil.blur(newImg, blurLevel, MatUtil.getRect(window.region.selectedRegionLabel));
+            MatUtil.grayScale(newImg, MatUtil.getRect(window.region.selectedRegionLabel));
             window.region.removeRegionSelected();
 
         } else {
-            MatUtil.blur(newImg, blurLevel);
+            MatUtil.grayScale(newImg);
         }
 
         MatUtil.show(newImg, window.showImgRegionLabel);
 
         window.last.push(window.img);
         window.img = newImg;
-
     }
 }
