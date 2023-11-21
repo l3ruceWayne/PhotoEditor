@@ -4,7 +4,7 @@ GitHub: https://github.com/igor036
  */
 package com.buaa.PhotoEditor.window;
 
-import com.buaa.PhotoEditor.modal.EColor;
+import com.buaa.PhotoEditor.Main;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.util.Text;
 
@@ -19,9 +19,11 @@ import javax.swing.event.*;
 
 import com.buaa.PhotoEditor.window.file.Save;
 import com.buaa.PhotoEditor.window.file.MyFile;
+import com.buaa.PhotoEditor.window.filter.Filter;
 import com.buaa.PhotoEditor.window.tool.Eraser;
 import com.buaa.PhotoEditor.window.tool.Pen;
 import com.buaa.PhotoEditor.window.tool.Region;
+import com.buaa.PhotoEditor.window.layer.Layer;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -34,6 +36,11 @@ public class Window extends javax.swing.JFrame {
     public Eraser eraser;
     public Pen pen;
     public Region region;
+    public Filter filter;
+    /* Layer类的实例化对象只能有一个（因为不同的图层需要共用一个Layer，这样才能显示所有的图层列表）
+        所以是static
+    * */
+    public static Layer layer;
     //control of photo
     public Mat img;              //actually
     public Mat originalImg;
@@ -44,9 +51,6 @@ public class Window extends javax.swing.JFrame {
     public Stack<Mat> next;     //ctrl+y`
 
 
-    //glitch wave 毛刺波？
-    public int waveLength;
-    public EColor color;
 
     //widget 小部件
     // pending 小组件大小缩放
@@ -65,9 +69,7 @@ public class Window extends javax.swing.JFrame {
     public Text text;
 
     public javax.swing.JDialog Text;
-    public static JRadioButton red;
-    public static JRadioButton blue;
-    public static JRadioButton green;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // 点击工具后出现的菜单栏
     // 一个框架？Img需要和lPhoto相关联
@@ -75,12 +77,7 @@ public class Window extends javax.swing.JFrame {
 
     public JMenuItem blur;
     public JSlider brightnessSlider;
-    public JMenu btMasks;
     public JButton btResize;
-    public JButton btnVhs;
-    public JMenuItem cartoon;
-    public ButtonGroup colors;
-    public ButtonGroup vhs;
 
     public boolean flag;
     // 总画板
@@ -104,18 +101,8 @@ public class Window extends javax.swing.JFrame {
     public JMenuItem writeText;
     public JMenuItem zoomIn;
     public JMenuItem zoomOut;
-    public JMenuItem focus;
 
 
-    // Glitch
-    public JMenu glitchMenu;
-    public JMenuItem glitchMenuWaveItem;
-    public JMenuItem glitchMenuVHSItem;
-    public JMenuItem glitchMenuAddItem;
-    public JMenuItem glitchMenuLilacItem;
-    public JDialog glitchMenuLilacItemDialog;
-    public JDialog glitchMenuWaveItemDialog;
-    public JDialog glitchMenuVHSItemDialog;
 
     // Tool
     public JMenu toolMenu;
@@ -137,13 +124,10 @@ public class Window extends javax.swing.JFrame {
 
     public javax.swing.JMenuItem dogMask;
     public javax.swing.Box.Filler filler1;
-    public javax.swing.JMenu filter;
     public javax.swing.JMenuItem glasses1Mask;
 
 
     public javax.swing.ButtonGroup goutTypePen;
-    public javax.swing.JMenuItem gray;
-    public javax.swing.JMenuItem inversor;
     public javax.swing.JLabel jLabel1;
     public javax.swing.JLabel jLabel2;
     public javax.swing.JLabel jLabel3;
@@ -158,13 +142,11 @@ public class Window extends javax.swing.JFrame {
     public javax.swing.JSeparator jSeparator2;
     public javax.swing.JSeparator jSeparator3;
     public javax.swing.JTextArea jTextArea1;
-    public javax.swing.JLabel offsetLabel;
     public javax.swing.JLabel lbSize;
     public javax.swing.JLabel lbText;
     public javax.swing.JLabel lightenLabel1;
     public javax.swing.JMenuItem morphology;
     public javax.swing.JScrollBar noiseBar;
-    public javax.swing.JButton glitchWaveOKButton;
     public javax.swing.JPanel penColor;
     public javax.swing.JLabel penColorLabel;
     public javax.swing.JLabel penSizeLabel;
@@ -177,19 +159,6 @@ public class Window extends javax.swing.JFrame {
     public javax.swing.JTextField txtHeight;
     public javax.swing.JTextField txtText;
     public javax.swing.JTextField txtWidth;
-    public javax.swing.JTextField txtxLength;
-    public javax.swing.JRadioButton vhs_1;
-    public javax.swing.JLabel vhs_1_icon;
-    public javax.swing.JLabel vhs_1_icon4;
-    public javax.swing.JLabel vhs_1_icon5;
-    public javax.swing.JRadioButton vhs_2;
-    public javax.swing.JLabel vhs_2_icon;
-    public javax.swing.JRadioButton vhs_3;
-    public javax.swing.JLabel vhs_3_icon;
-    public javax.swing.JRadioButton vhs_4;
-    public javax.swing.JLabel vhs_4_icon;
-    public javax.swing.JRadioButton vhs_date_1;
-    public javax.swing.JRadioButton vhs_date_2;
 
     //control variables of listeners
     // selectRegion是画出一块区域进行单独编辑
@@ -204,7 +173,6 @@ public class Window extends javax.swing.JFrame {
         this.setSize(img.width(), img.height());
         setResizable(true);
         setLocationRelativeTo(null);
-
     }
 
     public Window(String title) {
@@ -216,16 +184,10 @@ public class Window extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         // 按下每个按键会弹出一个对应窗口
         // 设置窗口的大小
-        glitchMenuWaveItemDialog.setSize(400, 200);
-        glitchMenuVHSItemDialog.setSize(500, 200);
-        glitchMenuLilacItemDialog.setSize(300, 100);
-        propertyMenuDialog.setSize(400, 400);
+        propertyMenuDialog.setSize(400, 800);
         Text.setSize(400, 400);
 
         // 设置弹窗的位置，null指明默认是中央
-        glitchMenuWaveItemDialog.setLocationRelativeTo(null);
-        glitchMenuVHSItemDialog.setLocationRelativeTo(null);
-        glitchMenuLilacItemDialog.setLocationRelativeTo(null);
         propertyMenuDialog.setLocationRelativeTo(null);
         Text.setLocationRelativeTo(null);
 
@@ -249,30 +211,12 @@ public class Window extends javax.swing.JFrame {
         pen = new Pen(this);
         eraser = new Eraser(this);
         region = new Region(this);
+        // 只有一个layer，所以layer赋值之后就不再赋值
+        if(layer == null){
+            layer = new Layer(this);
+        }
 
-        glitchMenuWaveItemDialog = new javax.swing.JDialog();
-        glitchWaveOKButton = new javax.swing.JButton();
-        blue = new javax.swing.JRadioButton();
-        red = new javax.swing.JRadioButton();
-        green = new javax.swing.JRadioButton();
-        txtxLength = new javax.swing.JTextField();
-        offsetLabel = new javax.swing.JLabel();
-        colors = new javax.swing.ButtonGroup();
-        glitchMenuVHSItemDialog = new javax.swing.JDialog();
-        vhs_1 = new javax.swing.JRadioButton();
-        vhs_2 = new javax.swing.JRadioButton();
-        vhs_3 = new javax.swing.JRadioButton();
-        vhs_4 = new javax.swing.JRadioButton();
-        vhs_date_1 = new javax.swing.JRadioButton();
-        vhs_date_2 = new javax.swing.JRadioButton();
-        vhs_1_icon = new javax.swing.JLabel();
-        vhs_2_icon = new javax.swing.JLabel();
-        vhs_3_icon = new javax.swing.JLabel();
-        vhs_4_icon = new javax.swing.JLabel();
-        vhs_1_icon4 = new javax.swing.JLabel();
-        vhs_1_icon5 = new javax.swing.JLabel();
-        btnVhs = new javax.swing.JButton();
-        vhs = new javax.swing.ButtonGroup();
+
         propertyMenuDialog = new javax.swing.JDialog();
         propertyMenuDialogContrastLabel = new javax.swing.JLabel();
         propertyMenuDialogBrightnessLabel = new javax.swing.JLabel();
@@ -302,7 +246,6 @@ public class Window extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         goutTypePen = new javax.swing.ButtonGroup();
-        glitchMenuLilacItemDialog = new javax.swing.JDialog();
         rbtGreen = new javax.swing.JCheckBox();
         rbtBlue = new javax.swing.JCheckBox();
         rbtRed = new javax.swing.JCheckBox();
@@ -330,254 +273,25 @@ public class Window extends javax.swing.JFrame {
         zoomIn = new javax.swing.JMenuItem();
         zoomOut = new javax.swing.JMenuItem();
         writeText = new javax.swing.JMenuItem();
-        focus = new javax.swing.JMenuItem();
-        btMasks = new javax.swing.JMenu();
         dogMask = new javax.swing.JMenuItem();
         glasses1Mask = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        filter = new javax.swing.JMenu();
-        gray = new javax.swing.JMenuItem();
         blur = new javax.swing.JMenuItem();
-        inversor = new javax.swing.JMenuItem();
         morphology = new javax.swing.JMenuItem();
-        cartoon = new javax.swing.JMenuItem();
         sepia = new javax.swing.JMenuItem();
-        glitchMenu = new javax.swing.JMenu();
-        glitchMenuWaveItem = new javax.swing.JMenuItem();
-        glitchMenuVHSItem = new javax.swing.JMenuItem();
-        glitchMenuAddItem = new javax.swing.JMenuItem();
-        glitchMenuLilacItem = new javax.swing.JMenuItem();
         toolMenu = new javax.swing.JMenu();
         propertyMenu = new javax.swing.JMenu();
         // GlitchWave是按下Glitch再按下wave后出现的弹窗
-        glitchMenuWaveItemDialog.setTitle("Glitch Wave");
-        glitchMenuWaveItemDialog.setResizable(false);
         // colors是GlitchWave中的三个按键
-        colors.add(blue);
-        blue.setText("蓝色");
-
-        colors.add(red);
-        red.setText("红色");
-
-        colors.add(green);
-        green.setText("绿色");
-
-        glitchWaveOKButton.setText("确定");
-        // 当确定按钮被按下
-        glitchWaveOKButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                okButtonActionPerformed(evt);
-            }
-        });
-
-        offsetLabel.setText("偏移量:");
-
-        GroupLayout glitchWaveLayout = new GroupLayout(glitchMenuWaveItemDialog.getContentPane());
-        glitchMenuWaveItemDialog.getContentPane().setLayout(glitchWaveLayout);
-
-        // 设置GlitchWave弹窗的水平布局
-//        GroupLayout.SequentialGroup hGroup = glitchWaveLayout
-//                .createSequentialGroup();
-//        hGroup.addGap(17);
-//        hGroup.addGroup(glitchWaveLayout.createParallelGroup(GroupLayout
-//                        .Alignment.LEADING)
-//                .addComponent(green));
-//        hGroup.addGap(5);
-//
-//        hGroup.addGroup(glitchWaveLayout.createParallelGroup(GroupLayout
-//                        .Alignment
-//                        .LEADING)
-//                .addComponent(blue)
-//                .addComponent(offsetLabel));
-//        hGroup.addGap(5);
-//
-//        hGroup.addGroup(glitchWaveLayout.createParallelGroup(GroupLayout
-//                        .Alignment
-//                        .LEADING)
-//                .addComponent(red)
-//                .addComponent(txtxLength,
-//                        GroupLayout.PREFERRED_SIZE,
-//                        82,
-//                        GroupLayout.PREFERRED_SIZE
-//                        )
-//                .addComponent(okButton));
-//        glitchWaveLayout.setHorizontalGroup(hGroup);
-//
-//        // 设置GlitchWave弹窗的垂直布局
-//        GroupLayout.SequentialGroup vGroup = glitchWaveLayout
-//                .createSequentialGroup();
-//        vGroup.addGap(5);
-//        vGroup.addGroup(glitchWaveLayout.createParallelGroup()
-//                .addComponent(green)
-//                .addComponent(blue)
-//                .addComponent(red));
-//        vGroup.addGap(5);
-//        vGroup.addGroup(glitchWaveLayout.createParallelGroup()
-//                .addComponent(offsetLabel)
-//                .addComponent(txtxLength,
-//                        GroupLayout.PREFERRED_SIZE,
-//                        GroupLayout.DEFAULT_SIZE,
-//                        GroupLayout.PREFERRED_SIZE)
-//                .addComponent(okButton)
-//        );
-//        vGroup.addGap(5);
-//        glitchWaveLayout.setVerticalGroup(vGroup);
+        filter = new Filter(this);
 
 
-        glitchWaveLayout.setHorizontalGroup(
-                glitchWaveLayout.
-                        createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(glitchWaveLayout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addGroup(glitchWaveLayout.
-                                        createParallelGroup(GroupLayout.
-                                                Alignment.LEADING)
-                                        .addGroup(glitchWaveLayout.createSequentialGroup()
-                                                .addComponent(green)
-                                                .addGap(45, 45, 45)
-                                                .addComponent(blue)
-                                                .addGap(35, 35, 35)
-                                        )
-                                        .addGroup(javax.swing.GroupLayout
-                                                        .Alignment.TRAILING,
-                                                glitchWaveLayout.createSequentialGroup()
-                                                        .addComponent(offsetLabel)
-                                                        .addPreferredGap(javax.swing
-                                                                .LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(txtxLength,
-                                                                javax.swing
-                                                                        .GroupLayout.PREFERRED_SIZE,
-                                                                82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(javax.swing.
-                                                                LayoutStyle.ComponentPlacement.UNRELATED)
-                                        )
-                                )
-                                .addGroup(glitchWaveLayout.createParallelGroup(javax.swing
-                                                .GroupLayout.Alignment.TRAILING)
-                                        .addComponent(red)
-                                        .addComponent(glitchWaveOKButton))
-                                .addContainerGap(29, Short.MAX_VALUE)
-                        )
-        );
-        // 设置垂直布局
-        glitchWaveLayout.setVerticalGroup(
-                glitchWaveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(glitchWaveLayout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addGroup(glitchWaveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(green)
-                                        .addComponent(blue)
-                                        .addComponent(red))
-                                .addGap(18, 18, 18)
-                                .addGroup(glitchWaveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txtxLength, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(glitchWaveOKButton)
-                                        .addComponent(offsetLabel))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
-        glitchMenuVHSItemDialog.setTitle("Glitch VHS");
-        glitchMenuVHSItemDialog.setResizable(false);
-        // vhs is ButtonGroup
-        vhs.add(vhs_1);
-        // vhs_1 is RadioButton
-        vhs_1.setText("VHS_1");
 
-        vhs.add(vhs_2);
-        vhs_2.setText("VHS_2");
 
-        vhs.add(vhs_3);
-        vhs_3.setText("VHS_3");
 
-        vhs.add(vhs_4);
-        vhs_4.setText("VHS_4");
 
-        vhs.add(vhs_date_1);
-        vhs_date_1.setText("VHS_DATE_1");
 
-        vhs.add(vhs_date_2);
-        vhs_date_2.setText("VHS_DATE_2");
-
-        btnVhs.setText("应用");
-        btnVhs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVhsActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout GlitchVHSLayout = new javax.swing.GroupLayout(glitchMenuVHSItemDialog.getContentPane());
-        glitchMenuVHSItemDialog.getContentPane().setLayout(GlitchVHSLayout);
-        // 水平布局
-        GlitchVHSLayout.setHorizontalGroup(
-                GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(GlitchVHSLayout.createSequentialGroup()
-                                .addGap(23, 23, 23)
-                                .addGroup(GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(GlitchVHSLayout.createSequentialGroup()
-                                                .addComponent(vhs_1)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(vhs_1_icon))
-                                        .addGroup(GlitchVHSLayout.createSequentialGroup()
-                                                .addComponent(vhs_2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(vhs_2_icon)))
-                                .addGap(32, 32, 32)
-                                .addGroup(GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(GlitchVHSLayout.createSequentialGroup()
-                                                .addComponent(vhs_3)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(vhs_3_icon)
-                                                .addGap(30, 30, 30)
-                                                .addComponent(vhs_date_2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(vhs_1_icon5))
-                                        .addGroup(GlitchVHSLayout.createSequentialGroup()
-                                                .addGroup(GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(btnVhs)
-                                                        .addGroup(GlitchVHSLayout.createSequentialGroup()
-                                                                .addComponent(vhs_4)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(vhs_4_icon)))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(vhs_date_1)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(vhs_1_icon4)))
-                                .addContainerGap(65, Short.MAX_VALUE))
-        );
-        // 垂直布局
-        GlitchVHSLayout.setVerticalGroup(
-                GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(GlitchVHSLayout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addGroup(GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(GlitchVHSLayout.createSequentialGroup()
-                                                .addGroup(GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(vhs_1)
-                                                        .addComponent(vhs_1_icon))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(vhs_2)
-                                                        .addComponent(vhs_2_icon)))
-                                        .addGroup(GlitchVHSLayout.createSequentialGroup()
-                                                .addGroup(GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                .addComponent(vhs_3)
-                                                                .addComponent(vhs_3_icon))
-                                                        .addComponent(vhs_date_2)
-                                                        .addComponent(vhs_1_icon5))
-                                                .addGap(15, 15, 15)
-                                                .addGroup(GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(vhs_4)
-                                                        .addComponent(vhs_4_icon)
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, GlitchVHSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                .addComponent(vhs_date_1)
-                                                                .addComponent(vhs_1_icon4)))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                                .addComponent(btnVhs)
-                                .addContainerGap())
-        );
 
         propertyMenuDialog.setTitle("属性");
 
@@ -815,37 +529,8 @@ public class Window extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        glitchMenuLilacItemDialog.setTitle("Glitch Lilás");
 
-        rbtGreen.setText("Verde");
 
-        rbtBlue.setText("Azul");
-
-        rbtRed.setText("Vermelho");
-
-        javax.swing.GroupLayout GlitchLilacLayout = new javax.swing.GroupLayout(glitchMenuLilacItemDialog.getContentPane());
-        glitchMenuLilacItemDialog.getContentPane().setLayout(GlitchLilacLayout);
-        GlitchLilacLayout.setHorizontalGroup(
-                GlitchLilacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(GlitchLilacLayout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(rbtGreen)
-                                .addGap(18, 18, 18)
-                                .addComponent(rbtBlue)
-                                .addGap(34, 34, 34)
-                                .addComponent(rbtRed)
-                                .addContainerGap(38, Short.MAX_VALUE))
-        );
-        GlitchLilacLayout.setVerticalGroup(
-                GlitchLilacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(GlitchLilacLayout.createSequentialGroup()
-                                .addGap(25, 25, 25)
-                                .addGroup(GlitchLilacLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(rbtGreen)
-                                        .addComponent(rbtBlue)
-                                        .addComponent(rbtRed))
-                                .addContainerGap(19, Short.MAX_VALUE))
-        );
 
         lbText.setText("Texto:");
 
@@ -1023,18 +708,10 @@ public class Window extends javax.swing.JFrame {
         });
         optionsMenu.add(writeText);
 
-        focus.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        focus.setText("Focar");
-        focus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                focusActionPerformed(evt);
-            }
-        });
-        optionsMenu.add(focus);
+
 
         menuBar.add(optionsMenu);
 
-        btMasks.setText("Mascaras");
 
         dogMask.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, java.awt.event.InputEvent.CTRL_MASK));
         dogMask.setText("Cachorro");
@@ -1043,7 +720,6 @@ public class Window extends javax.swing.JFrame {
                 dogMaskActionPerformed(evt);
             }
         });
-        btMasks.add(dogMask);
 
         glasses1Mask.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.CTRL_MASK));
         glasses1Mask.setText("Óculos 1");
@@ -1052,7 +728,6 @@ public class Window extends javax.swing.JFrame {
                 glasses1MaskActionPerformed(evt);
             }
         });
-        btMasks.add(glasses1Mask);
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Óculos 2");
@@ -1061,38 +736,13 @@ public class Window extends javax.swing.JFrame {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        btMasks.add(jMenuItem1);
 
-        menuBar.add(btMasks);
 
-        filter.setText("Filtros");
 
-        gray.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
-        gray.setText("Escala de Cinza");
-        gray.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                grayActionPerformed(evt);
-            }
-        });
-        filter.add(gray);
 
-        blur.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
-        blur.setText("Desfocar");
-        blur.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                blurActionPerformed(evt);
-            }
-        });
-        filter.add(blur);
 
-        inversor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
-        inversor.setText("Inverter");
-        inversor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inversorActionPerformed(evt);
-            }
-        });
-        filter.add(inversor);
+
+
 
         morphology.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
         morphology.setText("Morfologia");
@@ -1101,16 +751,8 @@ public class Window extends javax.swing.JFrame {
                 morphologyActionPerformed(evt);
             }
         });
-        filter.add(morphology);
 
-        cartoon.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
-        cartoon.setText("Desenho");
-        cartoon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cartoonActionPerformed(evt);
-            }
-        });
-        filter.add(cartoon);
+
 
         sepia.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         sepia.setText("Sépia");
@@ -1119,23 +761,11 @@ public class Window extends javax.swing.JFrame {
                 sepiaActionPerformed(evt);
             }
         });
-        filter.add(sepia);
 
-        menuBar.add(filter);
+        menuBar.add(filter.filterMenu);
 
-        glitchMenu.setText("Glitch");
 
-        glitchMenuWaveItem.setAccelerator(javax.swing.KeyStroke.
-                getKeyStroke(java.awt.event.KeyEvent.VK_W,
-                        java.awt.event.InputEvent.SHIFT_MASK));
-        glitchMenuWaveItem.setText("Wave");
 
-        glitchMenuWaveItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                glitchMenuWaveItemDialog.setModal(true);
-                glitchMenuWaveItemDialog.setVisible(true);
-            }
-        });
         // 有问题的源代码
         //         点击Glitch再点击Wave一栏之后，执行actionPerformed方法，其中第二行是阻塞的方法
 //        glitchWave.addActionListener(new java.awt.event.ActionListener() {
@@ -1144,38 +774,10 @@ public class Window extends javax.swing.JFrame {
 //                glitchWaveActionPerformed(evt);
 //            }
 //        });
-        glitchMenu.add(glitchMenuWaveItem);
 
-        glitchMenuVHSItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
-        glitchMenuVHSItem.setText("VHS");
-        glitchMenuVHSItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
-        glitchMenu.add(glitchMenuVHSItem);
 
-        // bug
-        glitchMenuAddItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
-        glitchMenuAddItem.setText("add");
-        glitchMenuAddItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        glitchMenu.add(glitchMenuAddItem);
 
-        glitchMenuLilacItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,
-                InputEvent.CTRL_MASK));
-        glitchMenuLilacItem.setText("lilac");
-        glitchMenuLilacItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                lilacActionPerformed(evt);
-            }
-        });
-        glitchMenu.add(glitchMenuLilacItem);
-
-        menuBar.add(glitchMenu);
+        menuBar.add(filter.filterMenu);
 
         toolMenu.setText("Tool");
         // 快捷键
@@ -1202,7 +804,7 @@ public class Window extends javax.swing.JFrame {
             }
         });
         menuBar.add(propertyMenu);
-
+        menuBar.add(layer.layerItem);
         setJMenuBar(menuBar);
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -1236,63 +838,11 @@ public class Window extends javax.swing.JFrame {
         removeRegionSelected();
     }//GEN-LAST:event_dogMaskActionPerformed
 
-    public void grayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_grayActionPerformed
 
-        Mat newImg = MatUtil.copy(img);
 
-        if (region.selectRegionItem.isSelected()) {
 
-            MatUtil.grayScale(newImg, MatUtil.getRect(region.selectedRegionLabel));
-            removeRegionSelected();
 
-        } else {
-            MatUtil.grayScale(newImg);
-        }
 
-        MatUtil.show(newImg, showImgRegionLabel);
-
-        last.push(img);
-        img = newImg;
-    }//GEN-LAST:event_grayActionPerformed
-
-    public void blurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blurActionPerformed
-
-        int blurLevel = Integer.parseInt(JOptionPane.showInputDialog(null, "Nível de desfoque", JOptionPane.WARNING_MESSAGE));
-
-        Mat newImg = MatUtil.copy(img);
-
-        if (region.selectRegionItem.isSelected()) {
-
-            MatUtil.blur(newImg, blurLevel, MatUtil.getRect(region.selectedRegionLabel));
-            removeRegionSelected();
-
-        } else {
-            MatUtil.blur(newImg, blurLevel);
-        }
-
-        MatUtil.show(newImg, showImgRegionLabel);
-
-        last.push(img);
-        img = newImg;
-
-    }//GEN-LAST:event_blurActionPerformed
-
-    public void inversorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inversorActionPerformed
-
-        Mat newImg = MatUtil.copy(img);
-
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.inversor(newImg, MatUtil.getRect(region.selectedRegionLabel));
-            removeRegionSelected();
-        } else
-            MatUtil.inversor(newImg);
-
-        MatUtil.show(newImg, showImgRegionLabel);
-
-        last.push(img);
-        img = newImg;
-
-    }//GEN-LAST:event_inversorActionPerformed
 
     public void glasses1MaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_glasses1MaskActionPerformed
 
@@ -1328,66 +878,30 @@ public class Window extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    public void glitchWaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_glitchWaveActionPerformed
+//    public void glitchWaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_glitchWaveActionPerformed
+//
+////        br.com.ySelf.JDialog.glitchWaveDialog glitchWaveDialog1 = new glitchWaveDialog();
+////        glitchWaveDialog1.main();
+//        glitchMenuWaveItemDialog.setModal(true);
+//        glitchMenuWaveItemDialog.setVisible(true);
+//        // 获取一个当前状态的copy，对copy进行更改，便于ctrl z 回退
+//        // 如果点击的是x，就不执行下面的内容了
+//        if (!glitchWaveOKButton.isSelected()) return;
+//        Mat newImg = MatUtil.copy(img);
+//        if (region.selectRegionItem.isSelected()) {
+//            MatUtil.glitchWave(newImg, waveLength, color, MatUtil.getRect(region.selectedRegionLabel));
+//            removeRegionSelected();
+//        } else {
+//            MatUtil.glitchWave(newImg, waveLength, color);
+//        }
+//
+//        MatUtil.show(newImg, showImgRegionLabel);
+//
+//        last.push(img);
+//        img = newImg;
+//
+//    }
 
-//        br.com.ySelf.JDialog.glitchWaveDialog glitchWaveDialog1 = new glitchWaveDialog();
-//        glitchWaveDialog1.main();
-        glitchMenuWaveItemDialog.setModal(true);
-        glitchMenuWaveItemDialog.setVisible(true);
-        // 获取一个当前状态的copy，对copy进行更改，便于ctrl z 回退
-        // 如果点击的是x，就不执行下面的内容了
-        if (!glitchWaveOKButton.isSelected()) return;
-        Mat newImg = MatUtil.copy(img);
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.glitchWave(newImg, waveLength, color, MatUtil.getRect(region.selectedRegionLabel));
-            removeRegionSelected();
-        } else {
-            MatUtil.glitchWave(newImg, waveLength, color);
-        }
-
-        MatUtil.show(newImg, showImgRegionLabel);
-
-        last.push(img);
-        img = newImg;
-
-    }
-
-    public void okButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        if (!offsetLabel.isVisible() && !txtxLength.isVisible())
-            glitchMenuWaveItemDialog.dispose();
-        else {
-            try {
-                waveLength = Integer.parseInt(txtxLength.getText());
-                /* !! ALERT: improve, make dynamic verification */
-                if (green.isSelected()) {
-                    color = EColor.GREEN;
-                } else if (blue.isSelected()) {
-                    color = EColor.BLUE;
-                } else if (red.isSelected()) {
-                    color = EColor.RED;
-                }
-                Mat newImg = MatUtil.copy(img);
-                if (region.selectRegionItem.isSelected()) {
-                    MatUtil.glitchWave(newImg, waveLength, color, MatUtil.
-                            getRect(region.selectedRegionLabel));
-                    removeRegionSelected();
-                } else {
-                    MatUtil.glitchWave(newImg, waveLength, color);
-                }
-
-                MatUtil.show(newImg, showImgRegionLabel);
-
-                last.push(img);
-                img = newImg;
-                // 执行完之后再关闭窗口
-                glitchMenuWaveItemDialog.dispose();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null,
-                        "填写错误！");
-            }
-
-        }
-    }//GEN-LAST:event_okButtonActionPerformed
 
     public void morphologyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_morphologyActionPerformed
 
@@ -1414,61 +928,8 @@ public class Window extends javax.swing.JFrame {
 
     }//GEN-LAST:event_morphologyActionPerformed
 
-    public void btnVhsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVhsActionPerformed
-        glitchMenuVHSItemDialog.dispose();
-    }//GEN-LAST:event_btnVhsActionPerformed
 
-    public void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
 
-        try {
-
-            glitchMenuVHSItemDialog.setModal(true);
-            glitchMenuVHSItemDialog.setVisible(true);
-
-            Mat newImg = MatUtil.copy(img);
-
-            /* !! ALERT: improve, make dynamic verification */
-            if (vhs_1.isSelected()) {
-                MatUtil.vhs(newImg, MatUtil.VHS_1);
-            } else if (vhs_2.isSelected()) {
-                MatUtil.vhs(newImg, MatUtil.VHS_2);
-            } else if (vhs_3.isSelected()) {
-                MatUtil.vhs(newImg, MatUtil.VHS_3);
-            } else if (vhs_4.isSelected()) {
-                MatUtil.vhs(newImg, MatUtil.VHS_4);
-            } else if (vhs_date_1.isSelected()) {
-                MatUtil.vhs(newImg, MatUtil.VHS_DATE_1);
-            } else {
-                MatUtil.vhs(newImg, MatUtil.VHS_DATE_2);
-            }
-
-            MatUtil.show(newImg, showImgRegionLabel);
-
-            last.push(img);
-            img = newImg;
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Tente novamente!");
-            System.out.println("ERRO: " + ex.getMessage());
-        }
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    public void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-
-        JFileChooser fileChooser = new JFileChooser();
-
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-
-            Mat newImg = MatUtil.copy(img);
-            MatUtil.overlay(newImg, MatUtil.readImg(fileChooser.getSelectedFile().getAbsolutePath()));
-            MatUtil.show(newImg, showImgRegionLabel);
-
-            last.push(img);
-            img = newImg;
-
-        }
-
-    }
 
     // pending
     public void formKeyPressed(KeyEvent evt) {
@@ -1499,22 +960,7 @@ public class Window extends javax.swing.JFrame {
         restartPorpertyComponentsValues();
     }//GEN-LAST:event_propertysMouseClicked
 
-    public void cartoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cartoonActionPerformed
 
-        Mat newImg = MatUtil.copy(img);
-
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.cartoon(newImg, MatUtil.getRect(region.selectedRegionLabel));
-            removeRegionSelected();
-        } else
-            MatUtil.cartoon(newImg);
-
-        MatUtil.show(newImg, showImgRegionLabel);
-
-        last.push(img);
-        img = newImg;
-
-    }//GEN-LAST:event_cartoonActionPerformed
 
 //    public void noiseBarMouseReleased(MouseEvent evt) {
 //        applyNoise(noiseBar.getValue(), true);
@@ -1782,18 +1228,6 @@ public class Window extends javax.swing.JFrame {
 
     }//GEN-LAST:event_sepiaActionPerformed
 
-    public void lilacActionPerformed(java.awt.event.ActionEvent evt) {
-        //GEN-FIRST:event_lilacActionPerformed
-
-        glitchMenuLilacItemDialog.setModal(true);
-        glitchMenuLilacItemDialog.setVisible(true);
-
-        if (rbtBlue.isSelected() || rbtGreen.isSelected() || rbtRed.isSelected()) {
-            Mat newImg = MatUtil.copy(img);
-            last.push(newImg);
-            img = temp;
-        }
-    }//GEN-LAST:event_lilacActionPerformed
 
     public void contrastSlideStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_contrastSlideStateChanged
         contrastAndBrightness();
@@ -1839,22 +1273,7 @@ public class Window extends javax.swing.JFrame {
         writeText();
     }//GEN-LAST:event_textScaleStateChanged
 
-    public void focusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_focusActionPerformed
 
-        if (region.selectRegionItem.isSelected()) {
-
-            Mat newImg = MatUtil.copy(img);
-            MatUtil.focus(newImg, MatUtil.getRect(region.selectedRegionLabel));
-            MatUtil.show(newImg, showImgRegionLabel);
-
-            last.push(img);
-            img = newImg;
-
-            removeRegionSelected();
-
-        } else
-            JOptionPane.showMessageDialog(null, "Selecione a área que deseja focar!");
-    }
 
     public void changeSaturation(ChangeEvent evt) {
 
