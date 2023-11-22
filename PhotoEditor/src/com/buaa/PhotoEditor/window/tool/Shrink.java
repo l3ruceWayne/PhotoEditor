@@ -33,9 +33,9 @@ public class Shrink {
 
 //        zoomOutItem.setEnabled(false);
 
-        MatUtil.resize(window.img, new Size(window.zoomRegion.getWidth(), window.zoomRegion.getHeight()));
+        MatUtil.resize(window.img, new Size(window.tool.zoomRegion.getWidth(), window.tool.zoomRegion.getHeight()));
 
-        window.img.copyTo(matZoomOut.submat(MatUtil.getRect(window.zoomRegion)));
+        window.img.copyTo(matZoomOut.submat(MatUtil.getRect(window.tool.zoomRegion)));
         window.img = matZoomOut;
 
         MatUtil.show(window.img, window.showImgRegionLabel);

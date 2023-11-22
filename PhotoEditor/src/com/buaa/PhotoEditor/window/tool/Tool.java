@@ -11,11 +11,30 @@ public class Tool {
 
     public Window window;
 
+    public Eraser eraser;
+    public Pen pen;
+    public Region region;
+    public Shrink zoomOut;
+    public Enlarge zoomIn;
+    public Rotate rotate;
+    public Drag drag;
+
     public int penSize;
     public int eraserSize;
 
+    public JPanel zoomRegion;
+
     public Tool (Window window) {
         this.window = window;
+
+        this.pen = new Pen(window);
+        this.eraser = new Eraser(window);
+        this.region = new Region(window);
+        this.zoomOut = new Shrink(window);
+        this.zoomIn = new Enlarge(window);
+        this.rotate = new Rotate(window);
+        this.drag = new Drag(window);
+
         addMouseListeners();
     }
 
@@ -23,8 +42,8 @@ public class Tool {
         window.panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (window.region.selectRegionItem.isSelected()) {
-                    window.region.addRegion(e.getPoint());
+                if (region.selectRegionItem.isSelected()) {
+                    region.addRegion(e.getPoint());
                 }
             }
 
@@ -34,8 +53,8 @@ public class Tool {
                 /*
                 画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，当松开的时候我们将上一个状态入栈，然后更改img
                  */
-                if (window.pen.penItem.isSelected()
-                        || window.eraser.eraserItem.isSelected()) {
+                if (pen.penItem.isSelected()
+                        || eraser.eraserItem.isSelected()) {
                     window.last.add(window.img);
                     if (window.paintingImg != null) {
                         window.img = MatUtil.copy(window.paintingImg);
@@ -51,16 +70,16 @@ public class Tool {
             // 拖拽的时候将会一直调用该方法
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (window.region.selectRegionItem.isSelected()) {
-                    window.region.setRegionSize(e.getX(), e.getY());
+                if (region.selectRegionItem.isSelected()) {
+                    region.setRegionSize(e.getX(), e.getY());
                     // pending
-                } else if (window.pen.penItem.isSelected()) {
+                } else if (pen.penItem.isSelected()) {
                     penSize = (Integer) window.propertyMenuDialogPenSizeSpinner.getValue();
-                    window.pen.paint(e.getX(), e.getY());
-                } else if (window.eraser.eraserItem.isSelected()) {
+                    pen.paint(e.getX(), e.getY());
+                } else if (eraser.eraserItem.isSelected()) {
                     // pending
                     eraserSize = (Integer) window.propertyMenuDialogPenSizeSpinner.getValue();
-                    window.eraser.erase(e.getX(), e.getY());
+                    eraser.erase(e.getX(), e.getY());
                 }
             }
         });

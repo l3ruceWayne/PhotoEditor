@@ -174,7 +174,7 @@ public class Text {
 
     public void writeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeTextActionPerformed
 
-        if (window.region.selectRegionItem.isSelected()) {
+        if (window.tool.region.selectRegionItem.isSelected()) {
 
             dialogAddText.setModal(true);
             dialogAddText.setVisible(true);
@@ -182,7 +182,7 @@ public class Text {
             window.last.push(window.img);
             window.img = window.temp;
 
-            window.region.removeRegionSelected();
+            window.tool.region.removeRegionSelected();
         } else
             JOptionPane.showMessageDialog(null, "Select an area to add text!");
 
@@ -196,7 +196,7 @@ public class Text {
 
     public void writeText() {
         window.temp = MatUtil.copy(window.img);
-        MatUtil.writeText(this, window.temp, MatUtil.getRect(window.region.selectedRegionLabel));
+        MatUtil.writeText(this, window.temp, MatUtil.getRect(window.tool.region.selectedRegionLabel));
         MatUtil.show(window.temp, window.showImgRegionLabel);
     }
 

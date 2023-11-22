@@ -15,20 +15,18 @@ public class Region {
     public Mat copyRegionMat;
     public JLabel selectedRegionLabel;
     public Window window;
-    public Tool tool;
     public JCheckBoxMenuItem selectRegionItem;
 
     public Region(Window window) {
         this.window = window;
-        tool = new Tool(window);
         selectedRegionLabel = new JLabel();
         selectRegionItem = new JCheckBoxMenuItem("Region");
         selectRegionItem.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    window.pen.penItem.setSelected(false);
-                    window.eraser.eraserItem.setSelected(false);
+                    window.tool.pen.penItem.setSelected(false);
+                    window.tool.eraser.eraserItem.setSelected(false);
                 }
             }
         });
@@ -76,11 +74,11 @@ public class Region {
 
         // 在panel的z轴视角上设置各组件的优先级/遮盖关系：index小的，优先级高
         window.panel.setComponentZOrder(selectedRegionLabel, 0);
-        for (int i = 0; i < window.widget.widgetLabelList.size(); i++) {
-            window.panel.setComponentZOrder(window.widget.widgetLabelList.get(i), i + 1);
+        for (int i = 0; i < window.add.widget.widgetLabelList.size(); i++) {
+            window.panel.setComponentZOrder(window.add.widget.widgetLabelList.get(i), i + 1);
         }
         window.panel.setComponentZOrder(window.showImgRegionLabel,
-                window.widget.widgetLabelList.size() + 1);
+                window.add.widget.widgetLabelList.size() + 1);
 
         window.panel.revalidate();
         window.panel.repaint();

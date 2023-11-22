@@ -12,17 +12,15 @@ import java.awt.event.ItemListener;
 public class Eraser {
     public JCheckBoxMenuItem eraserItem;
     public Window window;
-    public Tool tool;
     public Eraser(Window window) {
         this.window = window;
-        tool = new Tool(window);
         eraserItem = new JCheckBoxMenuItem("Eraser");
         eraserItem.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    window.region.removeRegionSelected();
-                    window.pen.penItem.setSelected(false);
+                    window.tool.region.removeRegionSelected();
+                    window.tool.pen.penItem.setSelected(false);
                 }
             }
         });
@@ -38,8 +36,8 @@ public class Eraser {
             window.paintingImg = MatUtil.copy(window.img);
         }
 
-        Mat eraseRegion = window.paintingImg.submat(new Rect(x, y, tool.eraserSize,
-                tool.eraserSize));
+        Mat eraseRegion = window.paintingImg.submat(new Rect(x, y, window.tool.eraserSize,
+                window.tool.eraserSize));
 
         // pending
             /*if (zoomOut.isEnabled())
@@ -48,7 +46,7 @@ public class Eraser {
             else
 
              */
-        Mat originalRegion = window.originalImg.submat(new Rect(x, y, tool.eraserSize, tool.eraserSize));
+        Mat originalRegion = window.originalImg.submat(new Rect(x, y, window.tool.eraserSize, window.tool.eraserSize));
         // 拿原图覆盖现在正在画的图，就相当于橡皮擦操作
         MatUtil.overlay(eraseRegion, originalRegion);
 

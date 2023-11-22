@@ -42,7 +42,7 @@ public class Save {
     private void getNewImg() {
         Mat newImg = MatUtil.copy(window.img);
         // 保存后，小组件和图片融为一体，所以把小组件删除
-        for (JLabel widgetLabel : window.widget.widgetLabelList) {
+        for (JLabel widgetLabel : window.add.widget.widgetLabelList) {
             MatUtil.widget(newImg,
                     MatUtil.readImg(widgetLabel.getIcon().toString()),
                     widgetLabel.getX(), widgetLabel.getY());

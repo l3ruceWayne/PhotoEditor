@@ -19,17 +19,9 @@ import javax.swing.event.*;
 import com.buaa.PhotoEditor.window.file.Save;
 import com.buaa.PhotoEditor.window.file.MyFile;
 // add
-import com.buaa.PhotoEditor.window.add.Widget;
-import com.buaa.PhotoEditor.window.add.Text;
+import com.buaa.PhotoEditor.window.add.Add;
 // tool
 import com.buaa.PhotoEditor.window.tool.Tool;
-import com.buaa.PhotoEditor.window.tool.Eraser;
-import com.buaa.PhotoEditor.window.tool.Pen;
-import com.buaa.PhotoEditor.window.tool.Region;
-import com.buaa.PhotoEditor.window.tool.Shrink;
-import com.buaa.PhotoEditor.window.tool.Enlarge;
-import com.buaa.PhotoEditor.window.tool.Rotate;
-import com.buaa.PhotoEditor.window.tool.Drag;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
@@ -42,17 +34,8 @@ public class Window extends javax.swing.JFrame {
     public Save save;
     // tool
     public Tool tool;
-    public Eraser eraser;
-    public Pen pen;
-    public Region region;
-    public Shrink zoomOut;
-    public Enlarge zoomIn;
-    public Rotate rotate;
-    public Drag drag;
-    public JPanel zoomRegion;
     // add
-    public Widget widget;
-    public Text Text;
+    public Add add;
     //control of photo
     public Mat img;              //actually
     public Mat originalImg;
@@ -119,10 +102,6 @@ public class Window extends javax.swing.JFrame {
     public JDialog glitchMenuWaveItemDialog;
     public JDialog glitchMenuVHSItemDialog;
 
-    // Tool
-//    public JMenu toolMenu;
-    // 当点击Pen时，该实例化对象的isSelected变为true
-
     // Property
     public JMenu propertyMenu;
     public JDialog propertyMenuDialog;
@@ -133,15 +112,12 @@ public class Window extends javax.swing.JFrame {
     public JSpinner propertyMenuDialogPenSizeSpinner;
     public SpinnerNumberModel model = new SpinnerNumberModel(5, 1, 30, 1);
 
-    public JMenu addMenu;
-
     public javax.swing.JSlider contrastSlide;
 
     public javax.swing.JMenuItem dogMask;
     public javax.swing.Box.Filler filler1;
     public javax.swing.JMenu filter;
     public javax.swing.JMenuItem glasses1Mask;
-
 
     public javax.swing.ButtonGroup goutTypePen;
     public javax.swing.JMenuItem gray;
@@ -236,17 +212,9 @@ public class Window extends javax.swing.JFrame {
         panel = new JPanel(); // 一定要先初始化panel，才能调用tool类构造方法
         save = new Save(this);
         // add
-        widget = new Widget(this);
-        Text = new Text(this);
+        add = new Add(this);
         // tool
         tool = new Tool(this);
-        pen = new Pen(this);
-        eraser = new Eraser(this);
-        region = new Region(this);
-        zoomOut = new Shrink(this);
-        zoomIn = new Enlarge(this);
-        rotate = new Rotate(this);
-        drag = new Drag(this);
 
         glitchMenuWaveItemDialog = new javax.swing.JDialog();
         glitchWaveOKButton = new javax.swing.JButton();
@@ -317,7 +285,6 @@ public class Window extends javax.swing.JFrame {
         optionsMenuRedoItem = new javax.swing.JMenuItem();
         optionsMenuCopyItem = new javax.swing.JMenuItem();
         optionsMenuCutItem = new javax.swing.JMenuItem();
-        addMenu = new JMenu();
         focus = new javax.swing.JMenuItem();
         btMasks = new javax.swing.JMenu();
         dogMask = new javax.swing.JMenuItem();
@@ -892,7 +859,7 @@ public class Window extends javax.swing.JFrame {
         // 点击复制之后选择的区域会被复制，点击鼠标会在鼠标位置粘贴复制的内容
         optionsMenuCopyItem.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                region.copySelectedRegion(evt);
+                tool.region.copySelectedRegion(evt);
             }
         });
         optionsMenu.add(optionsMenuCopyItem);
@@ -920,10 +887,7 @@ public class Window extends javax.swing.JFrame {
 
         menuBar.add(optionsMenu);
 
-        addMenu.setText("Add");
-        addMenu.add(widget.widgetItem);
-        addMenu.add(Text.addTextItem);
-        menuBar.add(addMenu);
+        menuBar.add(add.addMenu);
 
         btMasks.setText("Mascaras");
 
@@ -1085,6 +1049,14 @@ public class Window extends javax.swing.JFrame {
         });
         menuBar.add(propertyMenu);
 
+        menuBar.add(tool.region.selectRegionItem);
+        menuBar.add(tool.pen.penItem);
+        menuBar.add(tool.eraser.eraserItem);
+        menuBar.add(tool.rotate.rotateItem);
+        menuBar.add(tool.zoomIn.zoomInItem);
+        menuBar.add(tool.zoomOut.zoomOutItem);
+        menuBar.add(tool.drag.dragItem);
+
         setJMenuBar(menuBar);
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -1105,14 +1077,6 @@ public class Window extends javax.swing.JFrame {
 
         pack();
 
-        menuBar.add(region.selectRegionItem);
-        menuBar.add(pen.penItem);
-        menuBar.add(eraser.eraserItem);
-        menuBar.add(rotate.rotateItem);
-        menuBar.add(zoomIn.zoomInItem);
-        menuBar.add(zoomOut.zoomOutItem);
-        menuBar.add(drag.dragItem);
-
     }
 
     public void dogMaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dogMaskActionPerformed
@@ -1124,17 +1088,17 @@ public class Window extends javax.swing.JFrame {
 
         last.push(img);
         img = newImg;
-        region.removeRegionSelected();
+        tool.region.removeRegionSelected();
     }//GEN-LAST:event_dogMaskActionPerformed
 
     public void grayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_grayActionPerformed
 
         Mat newImg = MatUtil.copy(img);
 
-        if (region.selectRegionItem.isSelected()) {
+        if (tool.region.selectRegionItem.isSelected()) {
 
-            MatUtil.grayScale(newImg, MatUtil.getRect(region.selectedRegionLabel));
-            region.removeRegionSelected();
+            MatUtil.grayScale(newImg, MatUtil.getRect(tool.region.selectedRegionLabel));
+            tool.region.removeRegionSelected();
 
         } else {
             MatUtil.grayScale(newImg);
@@ -1152,10 +1116,10 @@ public class Window extends javax.swing.JFrame {
 
         Mat newImg = MatUtil.copy(img);
 
-        if (region.selectRegionItem.isSelected()) {
+        if (tool.region.selectRegionItem.isSelected()) {
 
-            MatUtil.blur(newImg, blurLevel, MatUtil.getRect(region.selectedRegionLabel));
-            region.removeRegionSelected();
+            MatUtil.blur(newImg, blurLevel, MatUtil.getRect(tool.region.selectedRegionLabel));
+            tool.region.removeRegionSelected();
 
         } else {
             MatUtil.blur(newImg, blurLevel);
@@ -1172,9 +1136,9 @@ public class Window extends javax.swing.JFrame {
 
         Mat newImg = MatUtil.copy(img);
 
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.inversor(newImg, MatUtil.getRect(region.selectedRegionLabel));
-            region.removeRegionSelected();
+        if (tool.region.selectRegionItem.isSelected()) {
+            MatUtil.inversor(newImg, MatUtil.getRect(tool.region.selectedRegionLabel));
+            tool.region.removeRegionSelected();
         } else
             MatUtil.inversor(newImg);
 
@@ -1229,9 +1193,9 @@ public class Window extends javax.swing.JFrame {
         // 如果点击的是x，就不执行下面的内容了
         if (!glitchWaveOKButton.isSelected()) return;
         Mat newImg = MatUtil.copy(img);
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.glitchWave(newImg, waveLength, color, MatUtil.getRect(region.selectedRegionLabel));
-            region.removeRegionSelected();
+        if (tool.region.selectRegionItem.isSelected()) {
+            MatUtil.glitchWave(newImg, waveLength, color, MatUtil.getRect(tool.region.selectedRegionLabel));
+            tool.region.removeRegionSelected();
         } else {
             MatUtil.glitchWave(newImg, waveLength, color);
         }
@@ -1258,10 +1222,10 @@ public class Window extends javax.swing.JFrame {
                     color = EColor.RED;
                 }
                 Mat newImg = MatUtil.copy(img);
-                if (region.selectRegionItem.isSelected()) {
+                if (tool.region.selectRegionItem.isSelected()) {
                     MatUtil.glitchWave(newImg, waveLength, color, MatUtil.
-                            getRect(region.selectedRegionLabel));
-                    region.removeRegionSelected();
+                            getRect(tool.region.selectedRegionLabel));
+                    tool.region.removeRegionSelected();
                 } else {
                     MatUtil.glitchWave(newImg, waveLength, color);
                 }
@@ -1288,9 +1252,9 @@ public class Window extends javax.swing.JFrame {
 
             Mat newImg = MatUtil.copy(img);
 
-            if (region.selectRegionItem.isSelected()) {
-                MatUtil.morphology(newImg, morph_size, MatUtil.getRect(region.selectedRegionLabel));
-                region.removeRegionSelected();
+            if (tool.region.selectRegionItem.isSelected()) {
+                MatUtil.morphology(newImg, morph_size, MatUtil.getRect(tool.region.selectedRegionLabel));
+                tool.region.removeRegionSelected();
             } else {
                 MatUtil.morphology(newImg, morph_size);
             }
@@ -1366,10 +1330,10 @@ public class Window extends javax.swing.JFrame {
 
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
 
-            if (region.selectRegionItem.isSelected()) {
-                region.removeRegionSelected();
-            } else if (widget.selectedWidgetLabel != null) {
-                widget.removeWidget();
+            if (tool.region.selectRegionItem.isSelected()) {
+                tool.region.removeRegionSelected();
+            } else if (add.widget.selectedWidgetLabel != null) {
+                add.widget.removeWidget();
             } else if (pasting) {
                 pasting = false;
                 disablePasteMode();
@@ -1377,7 +1341,7 @@ public class Window extends javax.swing.JFrame {
         } else if (evt.getKeyCode() == KeyEvent.VK_F12) {
             MatUtil.show(nexLayerImg, "");
         }
-    }//GEN-LAST:event_formKeyPressed
+    }
 
     public void propertysMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_propertysMouseClicked
         temp = MatUtil.copy(img);
@@ -1386,7 +1350,7 @@ public class Window extends javax.swing.JFrame {
         propertyMenuDialog.setResizable(true);
         last.push(img);
         img = temp;
-        region.removeRegionSelected();
+        tool.region.removeRegionSelected();
         restartPorpertyComponentsValues();
     }//GEN-LAST:event_propertysMouseClicked
 
@@ -1394,9 +1358,9 @@ public class Window extends javax.swing.JFrame {
 
         Mat newImg = MatUtil.copy(img);
 
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.cartoon(newImg, MatUtil.getRect(region.selectedRegionLabel));
-            region.removeRegionSelected();
+        if (tool.region.selectRegionItem.isSelected()) {
+            MatUtil.cartoon(newImg, MatUtil.getRect(tool.region.selectedRegionLabel));
+            tool.region.removeRegionSelected();
         } else
             MatUtil.cartoon(newImg);
 
@@ -1431,12 +1395,12 @@ public class Window extends javax.swing.JFrame {
 //    public void saveAsNewImage()
     public void cutActionPerformed(ActionEvent evt) {
         // pending 弹窗的位置
-        if (!region.selectRegionItem.isSelected()) {
+        if (!tool.region.selectRegionItem.isSelected()) {
             JOptionPane.showMessageDialog(null,
                     "Please select region first");
         } else {
 
-            Mat newImg = MatUtil.cut(img, MatUtil.getRect(region.selectedRegionLabel));
+            Mat newImg = MatUtil.cut(img, MatUtil.getRect(tool.region.selectedRegionLabel));
 
             MatUtil.show(newImg, showImgRegionLabel);
             showImgRegionLabel.setSize(newImg.width(),newImg.height());
@@ -1446,7 +1410,7 @@ public class Window extends javax.swing.JFrame {
             last.push(img);
             img = newImg;
 
-            region.removeRegionSelected();
+            tool.region.removeRegionSelected();
         }
     }
     // pending1
@@ -1457,19 +1421,19 @@ public class Window extends javax.swing.JFrame {
 
             last.push(img);
 
-            if (!region.selectRegionItem.isSelected()) {
+            if (!tool.region.selectRegionItem.isSelected()) {
 
                 img = next.pop();
 
             } else {
 
-                Rect selectedRegionRect = MatUtil.getRect(region.selectedRegionLabel);
+                Rect selectedRegionRect = MatUtil.getRect(tool.region.selectedRegionLabel);
                 Mat newImg = MatUtil.copy(img);
 
                 next.peek().submat(selectedRegionRect)
                         .copyTo(newImg.submat(selectedRegionRect));
                 img = newImg;
-                region.removeRegionSelected();
+                tool.region.removeRegionSelected();
             }
             showImgRegionLabel.setSize(img.width(),img.height());
             this.setSize(img.width(),img.height());
@@ -1488,20 +1452,20 @@ public class Window extends javax.swing.JFrame {
 
         if (!last.isEmpty()) {
             next.push(img);
-            if (!region.selectRegionItem.isSelected()) {
+            if (!tool.region.selectRegionItem.isSelected()) {
 
                 img = last.pop();
 
             } else {
 
-                Rect selectedRegionRect = MatUtil.getRect(region.selectedRegionLabel);
+                Rect selectedRegionRect = MatUtil.getRect(tool.region.selectedRegionLabel);
                 Mat newImg = MatUtil.copy(img);
                 // last.peek()是想要返回的最近的那一个版本
                 last.peek().submat(selectedRegionRect)
                         .copyTo(newImg.submat(selectedRegionRect));
 //                last.push(img);
                 img = newImg;
-                region.removeRegionSelected();
+                tool.region.removeRegionSelected();
             }
             showImgRegionLabel.setSize(img.width(),img.height());
             this.setSize(img.width(), img.height());
@@ -1543,10 +1507,10 @@ public class Window extends javax.swing.JFrame {
 
         Mat newImg = MatUtil.copy(img);
 
-        if (region.selectRegionItem.isSelected()) {
+        if (tool.region.selectRegionItem.isSelected()) {
 
-            MatUtil.sepia(newImg, MatUtil.getRect(region.selectedRegionLabel));
-            region.removeRegionSelected();
+            MatUtil.sepia(newImg, MatUtil.getRect(tool.region.selectedRegionLabel));
+            tool.region.removeRegionSelected();
 
         } else
             MatUtil.sepia(newImg);
@@ -1581,16 +1545,16 @@ public class Window extends javax.swing.JFrame {
 
     public void focusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_focusActionPerformed
 
-        if (region.selectRegionItem.isSelected()) {
+        if (tool.region.selectRegionItem.isSelected()) {
 
             Mat newImg = MatUtil.copy(img);
-            MatUtil.focus(newImg, MatUtil.getRect(region.selectedRegionLabel));
+            MatUtil.focus(newImg, MatUtil.getRect(tool.region.selectedRegionLabel));
             MatUtil.show(newImg, showImgRegionLabel);
 
             last.push(img);
             img = newImg;
 
-            region.removeRegionSelected();
+            tool.region.removeRegionSelected();
 
         } else
             JOptionPane.showMessageDialog(null, "Selecione a área que deseja focar!");
@@ -1603,8 +1567,8 @@ public class Window extends javax.swing.JFrame {
         int saturation = propertyMenuDialogSaturationSlider.getValue();
         lastSaturation = propertyMenuDialogSaturationSlider.getValue();
 
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.saturation(temp, saturation, MatUtil.getRect(region.selectedRegionLabel));
+        if (tool.region.selectRegionItem.isSelected()) {
+            MatUtil.saturation(temp, saturation, MatUtil.getRect(tool.region.selectedRegionLabel));
         } else {
             MatUtil.saturation(temp, saturation);
         }
@@ -1678,8 +1642,8 @@ public class Window extends javax.swing.JFrame {
                 // 粘贴模式下，粘贴框随鼠标一起移动
                 if (pasting) {
                     // REGION就是将要复制的区域大小，是一个轮廓
-                    region.selectedRegionLabel.setLocation(e.getPoint());
-                    region.selectedRegionLabel.repaint();
+                    tool.region.selectedRegionLabel.setLocation(e.getPoint());
+                    tool.region.selectedRegionLabel.repaint();
                 }
             }
         });
@@ -1712,8 +1676,8 @@ public class Window extends javax.swing.JFrame {
         Mat newImg = MatUtil.copy(img);
         // newImg 的 selectRegion 被 copyRegionMat的内容覆盖
         MatUtil.copyToRegion(newImg,
-                region.copyRegionMat,
-                MatUtil.getRect(region.selectedRegionLabel));
+                tool.region.copyRegionMat,
+                MatUtil.getRect(tool.region.selectedRegionLabel));
 
         MatUtil.show(newImg, showImgRegionLabel);
 
@@ -1725,9 +1689,9 @@ public class Window extends javax.swing.JFrame {
 
         temp = MatUtil.copy(img);
 
-        if (region.selectRegionItem.isSelected())
+        if (tool.region.selectRegionItem.isSelected())
             MatUtil.contrastAndBrightness(temp, brightnessSlider.getValue(), -contrastSlide.getValue(),
-                    MatUtil.getRect(region.selectedRegionLabel));
+                    MatUtil.getRect(tool.region.selectedRegionLabel));
         else
             MatUtil.contrastAndBrightness(temp, brightnessSlider.getValue(), -contrastSlide.getValue());
 
@@ -1737,8 +1701,8 @@ public class Window extends javax.swing.JFrame {
 
     public void applyNoise(int level, boolean replace) {
         copy = MatUtil.copy(img);
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.noise(copy, level, MatUtil.getRect(region.selectedRegionLabel));
+        if (tool.region.selectRegionItem.isSelected()) {
+            MatUtil.noise(copy, level, MatUtil.getRect(tool.region.selectedRegionLabel));
         } else {
             MatUtil.noise(copy, level);
         }
@@ -1762,9 +1726,9 @@ public class Window extends javax.swing.JFrame {
     }
 
     public void disablePasteMode() {
-        region.removeRegionSelected();
-        region.selectedRegionLabel.removeAll();
-        region.copyRegionMat = null;
+        tool.region.removeRegionSelected();
+        tool.region.selectedRegionLabel.removeAll();
+        tool.region.copyRegionMat = null;
     }
 
     public Mat getImg() {

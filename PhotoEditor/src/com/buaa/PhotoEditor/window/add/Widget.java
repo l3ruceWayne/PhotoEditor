@@ -45,7 +45,7 @@ public class Widget {
 
     public void addWidget(ActionEvent evt) {
 
-        window.region.disableListeners();
+        window.tool.region.disableListeners();
 
         JFileChooser fileChooser = new JFileChooser();
 

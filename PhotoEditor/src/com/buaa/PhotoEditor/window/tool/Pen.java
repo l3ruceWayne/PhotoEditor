@@ -12,10 +12,8 @@ import java.awt.event.KeyEvent;
 public class Pen {
     public JCheckBoxMenuItem penItem;
     public Window window;
-    public Tool tool;
     public Pen(Window window) {
         this.window = window;
-        tool = new Tool(window);
         // menubar
         penItem = new JCheckBoxMenuItem("Pen");
         // shortcut
@@ -29,8 +27,8 @@ public class Pen {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    window.region.removeRegionSelected();
-                    window.eraser.eraserItem.setSelected(false);
+                    window.tool.region.removeRegionSelected();
+                    window.tool.eraser.eraserItem.setSelected(false);
                 }
             }
         });
@@ -48,8 +46,8 @@ public class Pen {
                         window.penColor.getBackground().getBlue(),
                         window.penColor.getBackground().getGreen(),
                         window.penColor.getBackground().getRed()},
-                tool.penSize,
-                tool.penSize,
+                window.tool.penSize,
+                window.tool.penSize,
                 x,
                 y,
                 window.paintingImg);

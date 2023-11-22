@@ -27,27 +27,27 @@ public class Enlarge {
     public void zoomInActionPerformed(
             java.awt.event.MouseEvent evt) {
 
-        if (window.region.selectRegionItem.isSelected()) {
-            window.zoomRegion = new JPanel();
-            window.zoomRegion.setBounds(window.region.selectedRegionLabel.getX(),
-                    window.region.selectedRegionLabel.getY(),
-                    window.region.selectedRegionLabel.getWidth(),
-                    window.region.selectedRegionLabel.getHeight());
-            window.zoomOut.matZoomOut = MatUtil.copy(window.img);
+        if (window.tool.region.selectRegionItem.isSelected()) {
+            window.tool.zoomRegion = new JPanel();
+            window.tool.zoomRegion.setBounds(window.tool.region.selectedRegionLabel.getX(),
+                    window.tool.region.selectedRegionLabel.getY(),
+                    window.tool.region.selectedRegionLabel.getWidth(),
+                    window.tool.region.selectedRegionLabel.getHeight());
+            window.tool.zoomOut.matZoomOut = MatUtil.copy(window.img);
 
-            window.img = window.img.submat(MatUtil.getRect(window.zoomRegion));
+            window.img = window.img.submat(MatUtil.getRect(window.tool.zoomRegion));
 
             //pen image - 2nd layer
             if (window.nexLayerImg != null) {
 
-                window.zoomOut.matZoomOutNexLayerImg = MatUtil.copy(window.nexLayerImg);
-                window.nexLayerImg = window.nexLayerImg.submat(MatUtil.getRect(window.zoomRegion));
-                MatUtil.resize(window.nexLayerImg, window.zoomOut.matZoomOut.size());
+                window.tool.zoomOut.matZoomOutNexLayerImg = MatUtil.copy(window.nexLayerImg);
+                window.nexLayerImg = window.nexLayerImg.submat(MatUtil.getRect(window.tool.zoomRegion));
+                MatUtil.resize(window.nexLayerImg, window.tool.zoomOut.matZoomOut.size());
             }
 
-            MatUtil.resize(window.img, window.zoomOut.matZoomOut.size());
+            MatUtil.resize(window.img, window.tool.zoomOut.matZoomOut.size());
             MatUtil.show(window.img, window.showImgRegionLabel);
-            window.region.removeRegionSelected();
+            window.tool.region.removeRegionSelected();
 
         } else
             JOptionPane.showMessageDialog(null, "Select an area to zoom in!");
