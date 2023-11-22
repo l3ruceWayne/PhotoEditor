@@ -77,7 +77,6 @@ public class Window extends javax.swing.JFrame {
 
     public JMenuItem blur;
     public JMenu btMasks;
-    public JButton btResize;
     public JButton btnVhs;
     public JMenuItem cartoon;
     public ButtonGroup colors;
@@ -131,18 +130,10 @@ public class Window extends javax.swing.JFrame {
     public javax.swing.JMenuItem gray;
     public javax.swing.JMenuItem inversor;
     public javax.swing.JLabel jLabel1;
-    public javax.swing.JLabel jLabel2;
-    public javax.swing.JLabel jLabel3;
-    public javax.swing.JLabel jLabel4;
-    public javax.swing.JLabel jLabel5;
-    public javax.swing.JLabel jLabel6;
-    public javax.swing.JLabel jLabel7;
     public javax.swing.JLabel jLabel8;
     public javax.swing.JMenuItem jMenuItem1;
     public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JSeparator jSeparator1;
-    public javax.swing.JSeparator jSeparator2;
-    public javax.swing.JSeparator jSeparator3;
     public javax.swing.JTextArea jTextArea1;
     public javax.swing.JLabel offsetLabel;
     public javax.swing.JLabel lbText;
@@ -196,14 +187,12 @@ public class Window extends javax.swing.JFrame {
         glitchMenuWaveItemDialog.setSize(400, 200);
         glitchMenuVHSItemDialog.setSize(500, 200);
         glitchMenuLilacItemDialog.setSize(300, 100);
-        property.propertyMenuDialog.setSize(400, 400);
         Text.setSize(400, 400);
 
         // 设置弹窗的位置，null指明默认是中央
         glitchMenuWaveItemDialog.setLocationRelativeTo(null);
         glitchMenuVHSItemDialog.setLocationRelativeTo(null);
         glitchMenuLilacItemDialog.setLocationRelativeTo(null);
-        property.propertyMenuDialog.setLocationRelativeTo(null);
         Text.setLocationRelativeTo(null);
 
 
@@ -254,16 +243,7 @@ public class Window extends javax.swing.JFrame {
         propertyMenuDialogPenSizeSpinner = new javax.swing.JSpinner(model);
         penColorLabel = new javax.swing.JLabel();
         penColor = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jSeparator2 = new javax.swing.JSeparator();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        btResize = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JSeparator();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         goutTypePen = new javax.swing.ButtonGroup();
@@ -537,151 +517,6 @@ public class Window extends javax.swing.JFrame {
                                 .addContainerGap())
         );
 
-        penSizeLabel.setText("笔刷大小:");
-
-        penColorLabel.setText("画笔颜色:");
-
-        penColor.setBackground(new java.awt.Color(0, 0, 0));
-        penColor.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                penColorMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout penColorLayout = new javax.swing.GroupLayout(penColor);
-        penColor.setLayout(penColorLayout);
-        penColorLayout.setHorizontalGroup(
-                penColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 21, Short.MAX_VALUE)
-        );
-        penColorLayout.setVerticalGroup(
-                penColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 20, Short.MAX_VALUE)
-        );
-
-        jLabel2.setText("Pincel");
-
-        jLabel3.setText("Contraste");
-
-        property.getMySize().lbSize.setText("Size: ");
-
-        jLabel4.setText("Width:");
-
-        jLabel5.setText("Height:");
-
-        btResize.setText("Resize");
-        btResize.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btResizeActionPerformed(evt);
-            }
-        });
-
-        jLabel6.setText("Noise");
-        jLabel7.setText("Size");
-
-        javax.swing.GroupLayout PropertysLayout = new javax.swing.GroupLayout(property.propertyMenuDialog.getContentPane());
-        property.propertyMenuDialog.getContentPane().setLayout(PropertysLayout);
-        PropertysLayout.setHorizontalGroup(
-                PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(PropertysLayout.createSequentialGroup()
-                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                .addGap(167, 167, 167)
-                                                .addComponent(jLabel3))
-                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                                .addGap(17, 17, 17)
-                                                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                                                .addGap(13, 13, 13)
-                                                                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                                                                .addComponent(jLabel4)
-                                                                                                .addGap(2, 2, 2)
-                                                                                                .addComponent(property.getMySize().txtWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                .addGap(30, 30, 30)
-                                                                                                .addComponent(jLabel5))
-                                                                                        .addComponent(property.getMySize().lbSize))
-                                                                                .addGap(5, 5, 5)
-                                                                                .addComponent(property.getMySize().txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                ))
-                                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                                .addComponent(property.getGraininess().grainLabel)
-                                                                .addGap(34, 34, 34)
-                                                                .addComponent(property.getGraininess().grainBar, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                ))
-                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                .addGap(135, 135, 135)
-                                                .addComponent(btResize))
-                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                .addGap(21, 21, 21)
-                                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                .addGap(167, 167, 167)
-                                                .addComponent(jLabel6))
-                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                .addGap(157, 157, 157)
-                                                .addComponent(jLabel7))
-                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(property.getContrastAndBrightness().contrastLabel)
-                                                        .addComponent(property.getContrastAndBrightness().brightnessLabel)
-                                                        .addComponent(property.getSaturation().saturationLabel))
-                                                .addGap(28, 28, 28)
-                                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(property.getSaturation().saturationSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(property.getContrastAndBrightness().brightnessSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(property.getContrastAndBrightness().contrastSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addContainerGap(73, Short.MAX_VALUE))
-        );
-
-        PropertysLayout.setVerticalGroup(
-                PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(PropertysLayout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                .addComponent(property.getContrastAndBrightness().contrastSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(property.getContrastAndBrightness().brightnessSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                .addComponent(property.getContrastAndBrightness().contrastLabel)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(property.getContrastAndBrightness().brightnessLabel)))
-                                .addGap(18, 18, 18)
-                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(property.getSaturation().saturationSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(property.getSaturation().saturationLabel))
-                                .addGap(36, 36, 36)
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(property.getGraininess().grainBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(property.getGraininess().grainLabel))
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(property.getMySize().lbSize)
-                                .addGap(24, 24, 24)
-                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(property.getMySize().txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(property.getMySize().txtWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel4)
-                                        .addComponent(jLabel5))
-                                .addGap(18, 18, 18)
-                                .addComponent(btResize)
-                                .addGap(42, 42, 42))
-        );
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -1431,29 +1266,6 @@ public class Window extends javax.swing.JFrame {
         nexLayerImg = matZoomOutNexLayerImg;
 
     }//GEN-LAST:event_zoomOutActionPerformed
-
-    public void btResizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResizeActionPerformed
-
-        try {
-
-            double width = Double.parseDouble(property.getMySize().txtWidth.getText());
-            double height = Double.parseDouble(property.getMySize().txtHeight.getText());
-
-            Mat newImg = MatUtil.copy(temp);
-            MatUtil.resize(newImg, new Size(width, height));
-
-            last.push(img);
-            img = temp = newImg;
-
-            MatUtil.show(temp, showImgRegionLabel);
-
-            updatePropertys();
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Pre-encha corretamente os dados!");
-        }
-
-    }//GEN-LAST:event_btResizeActionPerformed
 
     public void sepiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sepiaActionPerformed
 
