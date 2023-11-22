@@ -6,7 +6,6 @@ package com.buaa.PhotoEditor.window;
 
 import com.buaa.PhotoEditor.Main;
 import com.buaa.PhotoEditor.util.MatUtil;
-import com.buaa.PhotoEditor.util.Text;
 
 import java.awt.*;
 
@@ -19,11 +18,17 @@ import javax.swing.event.*;
 
 import com.buaa.PhotoEditor.window.file.Save;
 import com.buaa.PhotoEditor.window.file.MyFile;
+
+// add
+import com.buaa.PhotoEditor.window.add.Add;
+// tool
+import com.buaa.PhotoEditor.window.tool.Tool;
+
+
 import com.buaa.PhotoEditor.window.filter.Filter;
-import com.buaa.PhotoEditor.window.tool.Eraser;
-import com.buaa.PhotoEditor.window.tool.Pen;
-import com.buaa.PhotoEditor.window.tool.Region;
+
 import com.buaa.PhotoEditor.window.layer.Layer;
+
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -33,14 +38,18 @@ public class Window extends javax.swing.JFrame {
 
 
     public Save save;
-    public Eraser eraser;
-    public Pen pen;
-    public Region region;
+
+    // tool
+    public Tool tool;
+    // add
+    public Add add;
+
     public Filter filter;
     /* Layer类的实例化对象只能有一个（因为不同的图层需要共用一个Layer，这样才能显示所有的图层列表）
         所以是static
     * */
     public static Layer layer;
+
     //control of photo
     public Mat img;              //actually
     public Mat originalImg;
@@ -52,23 +61,11 @@ public class Window extends javax.swing.JFrame {
 
 
 
-    //widget 小部件
-    // pending 小组件大小缩放
-    public String widgetPath;
-    public final List<String> WIDGET_SUPPORT_FILE_TYPES;
-    public final List<JLabel> widgetLabelList;
-
     //outer's
     public Mat paintingImg;            //image paint
     public Mat nexLayerImg;           //image use to paint
-    public Mat matZoomOut;
-    public Mat matZoomOutNexLayerImg;
     public int lastSaturation;
 
-    public JPanel zoomRegion;
-    public Text text;
-
-    public javax.swing.JDialog Text;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // 点击工具后出现的菜单栏
@@ -93,20 +90,12 @@ public class Window extends javax.swing.JFrame {
     public JMenu optionsMenu;
     public JMenuItem optionsMenuUndoItem;
     public JMenuItem optionsMenuRedoItem;
-    public JMenuItem optionsMenuWidgetItem;
-    public JLabel selectedWidgetLabel;
     public JMenuItem optionsMenuCopyItem;
     public boolean pasting = false;
     public JMenuItem optionsMenuCutItem;
-    public JMenuItem writeText;
-    public JMenuItem zoomIn;
-    public JMenuItem zoomOut;
 
 
 
-    // Tool
-    public JMenu toolMenu;
-    // 当点击Pen时，该实例化对象的isSelected变为true
 
     // Property
     public JMenu propertyMenu;
@@ -117,8 +106,6 @@ public class Window extends javax.swing.JFrame {
     public JSlider propertyMenuDialogSaturationSlider;
     public JSpinner propertyMenuDialogPenSizeSpinner;
     public SpinnerNumberModel model = new SpinnerNumberModel(5, 1, 30, 1);
-    public int penSize;
-
 
     public javax.swing.JSlider contrastSlide;
 
@@ -126,16 +113,14 @@ public class Window extends javax.swing.JFrame {
     public javax.swing.Box.Filler filler1;
     public javax.swing.JMenuItem glasses1Mask;
 
-
     public javax.swing.ButtonGroup goutTypePen;
-    public javax.swing.JLabel jLabel1;
+
     public javax.swing.JLabel jLabel2;
     public javax.swing.JLabel jLabel3;
     public javax.swing.JLabel jLabel4;
     public javax.swing.JLabel jLabel5;
     public javax.swing.JLabel jLabel6;
     public javax.swing.JLabel jLabel7;
-    public javax.swing.JLabel jLabel8;
     public javax.swing.JMenuItem jMenuItem1;
     public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JSeparator jSeparator1;
@@ -143,21 +128,17 @@ public class Window extends javax.swing.JFrame {
     public javax.swing.JSeparator jSeparator3;
     public javax.swing.JTextArea jTextArea1;
     public javax.swing.JLabel lbSize;
-    public javax.swing.JLabel lbText;
     public javax.swing.JLabel lightenLabel1;
     public javax.swing.JMenuItem morphology;
     public javax.swing.JScrollBar noiseBar;
     public javax.swing.JPanel penColor;
     public javax.swing.JLabel penColorLabel;
     public javax.swing.JLabel penSizeLabel;
-    public javax.swing.JPanel pnlTextColor;
     public javax.swing.JCheckBox rbtBlue;
     public javax.swing.JCheckBox rbtGreen;
     public javax.swing.JCheckBox rbtRed;
     public javax.swing.JMenuItem sepia;
-    public javax.swing.JSpinner textScale;
     public javax.swing.JTextField txtHeight;
-    public javax.swing.JTextField txtText;
     public javax.swing.JTextField txtWidth;
 
     //control variables of listeners
@@ -184,37 +165,38 @@ public class Window extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         // 按下每个按键会弹出一个对应窗口
         // 设置窗口的大小
+
+
         propertyMenuDialog.setSize(400, 800);
         Text.setSize(400, 400);
 
+
         // 设置弹窗的位置，null指明默认是中央
         propertyMenuDialog.setLocationRelativeTo(null);
-        Text.setLocationRelativeTo(null);
 
 
-        WIDGET_SUPPORT_FILE_TYPES = new ArrayList<>();
-        widgetLabelList = new ArrayList<>();
         // 撤销和反撤销操作用的栈
         last = new Stack<>();
         next = new Stack<>();
-
-        WIDGET_SUPPORT_FILE_TYPES.add("JPG");
-        WIDGET_SUPPORT_FILE_TYPES.add("JPEG");
-        WIDGET_SUPPORT_FILE_TYPES.add("PNG");
         this.setTitle(title);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     public void initComponents() {
+        panel = new JPanel(); // 一定要先初始化panel，才能调用tool类构造方法
         save = new Save(this);
-        pen = new Pen(this);
-        eraser = new Eraser(this);
-        region = new Region(this);
+
+        // add
+        add = new Add(this);
+        // tool
+        tool = new Tool(this);
+
         // 只有一个layer，所以layer赋值之后就不再赋值
         if(layer == null){
             layer = new Layer(this);
         }
+
 
 
         propertyMenuDialog = new javax.swing.JDialog();
@@ -249,14 +231,7 @@ public class Window extends javax.swing.JFrame {
         rbtGreen = new javax.swing.JCheckBox();
         rbtBlue = new javax.swing.JCheckBox();
         rbtRed = new javax.swing.JCheckBox();
-        Text = new javax.swing.JDialog();
-        lbText = new javax.swing.JLabel();
-        txtText = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        pnlTextColor = new javax.swing.JPanel();
-        textScale = new javax.swing.JSpinner();
-        panel = new JPanel();
+
         showImgRegionLabel = new JLabel();
         filler1 = new javax.swing.Box.Filler(new java.
                 awt.Dimension(0, 0),
@@ -267,19 +242,16 @@ public class Window extends javax.swing.JFrame {
         optionsMenu = new JMenu();
         optionsMenuUndoItem = new javax.swing.JMenuItem();
         optionsMenuRedoItem = new javax.swing.JMenuItem();
-        optionsMenuWidgetItem = new javax.swing.JMenuItem();
         optionsMenuCopyItem = new javax.swing.JMenuItem();
         optionsMenuCutItem = new javax.swing.JMenuItem();
-        zoomIn = new javax.swing.JMenuItem();
-        zoomOut = new javax.swing.JMenuItem();
-        writeText = new javax.swing.JMenuItem();
+
         dogMask = new javax.swing.JMenuItem();
         glasses1Mask = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         blur = new javax.swing.JMenuItem();
         morphology = new javax.swing.JMenuItem();
         sepia = new javax.swing.JMenuItem();
-        toolMenu = new javax.swing.JMenu();
+
         propertyMenu = new javax.swing.JMenu();
         // GlitchWave是按下Glitch再按下wave后出现的弹窗
         // colors是GlitchWave中的三个按键
@@ -532,72 +504,6 @@ public class Window extends javax.swing.JFrame {
 
 
 
-        lbText.setText("Texto:");
-
-        jLabel1.setText("Tamanho:");
-
-        jLabel8.setText("Cor:");
-
-        pnlTextColor.setBackground(new java.awt.Color(0, 0, 0));
-        pnlTextColor.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnlTextColorMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlTextColorLayout = new javax.swing.GroupLayout(pnlTextColor);
-        pnlTextColor.setLayout(pnlTextColorLayout);
-        pnlTextColorLayout.setHorizontalGroup(
-                pnlTextColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 21, Short.MAX_VALUE)
-        );
-        pnlTextColorLayout.setVerticalGroup(
-                pnlTextColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 15, Short.MAX_VALUE)
-        );
-
-        textScale.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                textScaleStateChanged(evt);
-            }
-        });
-
-        javax.swing.GroupLayout TextLayout = new javax.swing.GroupLayout(Text.getContentPane());
-        Text.getContentPane().setLayout(TextLayout);
-        TextLayout.setHorizontalGroup(
-                TextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(TextLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(TextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(TextLayout.createSequentialGroup()
-                                                .addComponent(jLabel8)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(pnlTextColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(lbText)
-                                        .addComponent(jLabel1))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(TextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtText, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(textScale, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(91, Short.MAX_VALUE))
-        );
-        TextLayout.setVerticalGroup(
-                TextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(TextLayout.createSequentialGroup()
-                                .addGap(27, 27, 27)
-                                .addGroup(TextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(lbText)
-                                        .addComponent(txtText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(17, 17, 17)
-                                .addGroup(TextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel1)
-                                        .addComponent(textScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(TextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel8)
-                                        .addComponent(pnlTextColor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(82, Short.MAX_VALUE))
-        );
         // 当点击右上角的叉号时进行什么操作
         // pending 未保存的情况下，弹窗
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -648,15 +554,6 @@ public class Window extends javax.swing.JFrame {
         });
         optionsMenu.add(optionsMenuRedoItem);
 
-        optionsMenuWidgetItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
-        optionsMenuWidgetItem.setText("Widget");
-        optionsMenuWidgetItem.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addWidget(evt);
-            }
-        });
-        optionsMenu.add(optionsMenuWidgetItem);
-
         optionsMenuCopyItem
                 .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
                         InputEvent.CTRL_MASK));
@@ -665,7 +562,7 @@ public class Window extends javax.swing.JFrame {
         // 点击复制之后选择的区域会被复制，点击鼠标会在鼠标位置粘贴复制的内容
         optionsMenuCopyItem.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                copySelectedRegion(evt);
+                tool.region.copySelectedRegion(evt);
             }
         });
         optionsMenu.add(optionsMenuCopyItem);
@@ -682,35 +579,15 @@ public class Window extends javax.swing.JFrame {
         optionsMenu.add(save.saveItem);
         optionsMenu.add(save.saveAsItem);
 
-        zoomIn.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS, java.awt.event.InputEvent.SHIFT_MASK));
-        zoomIn.setText("Zoom +");
-        zoomIn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                zoomInActionPerformed(evt);
-            }
-        });
-        optionsMenu.add(zoomIn);
 
-        zoomOut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, java.awt.event.InputEvent.SHIFT_MASK));
-        zoomOut.setText("Zoom -");
-        zoomOut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                zoomOutActionPerformed(evt);
-            }
-        });
-        optionsMenu.add(zoomOut);
+        
 
-        writeText.setText("Texto");
-        writeText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                writeTextActionPerformed(evt);
-            }
-        });
-        optionsMenu.add(writeText);
+        menuBar.add(add.addMenu);
 
+        
 
+        
 
-        menuBar.add(optionsMenu);
 
 
         dogMask.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, java.awt.event.InputEvent.CTRL_MASK));
@@ -779,8 +656,6 @@ public class Window extends javax.swing.JFrame {
 
         menuBar.add(filter.filterMenu);
 
-        toolMenu.setText("Tool");
-        // 快捷键
 
         // 点击选择区域之后开始按键监听
 //        toolMenuSelectRegionItem.addActionListener(new ActionListener() {
@@ -789,13 +664,6 @@ public class Window extends javax.swing.JFrame {
 //                clickToolMenuSelectRegionItem(evt);
 //            }
 //        });
-        toolMenu.add(region.selectRegionItem);
-
-        toolMenu.add(pen.penItem);
-
-        toolMenu.add(eraser.eraserItem);
-
-        menuBar.add(toolMenu);
 
         propertyMenu.setText("Property");
         propertyMenu.addMouseListener(new MouseAdapter() {
@@ -804,7 +672,19 @@ public class Window extends javax.swing.JFrame {
             }
         });
         menuBar.add(propertyMenu);
+
+
+        menuBar.add(tool.region.selectRegionItem);
+        menuBar.add(tool.pen.penItem);
+        menuBar.add(tool.eraser.eraserItem);
+        menuBar.add(tool.rotate.rotateItem);
+        menuBar.add(tool.zoomIn.zoomInItem);
+        menuBar.add(tool.zoomOut.zoomOutItem);
+        menuBar.add(tool.drag.dragItem);
+
+
         menuBar.add(layer.layerItem);
+
         setJMenuBar(menuBar);
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -824,6 +704,7 @@ public class Window extends javax.swing.JFrame {
         );
 
         pack();
+
     }
 
     public void dogMaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dogMaskActionPerformed
@@ -835,8 +716,10 @@ public class Window extends javax.swing.JFrame {
 
         last.push(img);
         img = newImg;
-        removeRegionSelected();
+        tool.region.removeRegionSelected();
     }//GEN-LAST:event_dogMaskActionPerformed
+
+
 
 
 
@@ -878,29 +761,7 @@ public class Window extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-//    public void glitchWaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_glitchWaveActionPerformed
-//
-////        br.com.ySelf.JDialog.glitchWaveDialog glitchWaveDialog1 = new glitchWaveDialog();
-////        glitchWaveDialog1.main();
-//        glitchMenuWaveItemDialog.setModal(true);
-//        glitchMenuWaveItemDialog.setVisible(true);
-//        // 获取一个当前状态的copy，对copy进行更改，便于ctrl z 回退
-//        // 如果点击的是x，就不执行下面的内容了
-//        if (!glitchWaveOKButton.isSelected()) return;
-//        Mat newImg = MatUtil.copy(img);
-//        if (region.selectRegionItem.isSelected()) {
-//            MatUtil.glitchWave(newImg, waveLength, color, MatUtil.getRect(region.selectedRegionLabel));
-//            removeRegionSelected();
-//        } else {
-//            MatUtil.glitchWave(newImg, waveLength, color);
-//        }
-//
-//        MatUtil.show(newImg, showImgRegionLabel);
-//
-//        last.push(img);
-//        img = newImg;
-//
-//    }
+
 
 
     public void morphologyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_morphologyActionPerformed
@@ -911,9 +772,9 @@ public class Window extends javax.swing.JFrame {
 
             Mat newImg = MatUtil.copy(img);
 
-            if (region.selectRegionItem.isSelected()) {
-                MatUtil.morphology(newImg, morph_size, MatUtil.getRect(region.selectedRegionLabel));
-                removeRegionSelected();
+            if (tool.region.selectRegionItem.isSelected()) {
+                MatUtil.morphology(newImg, morph_size, MatUtil.getRect(tool.region.selectedRegionLabel));
+                tool.region.removeRegionSelected();
             } else {
                 MatUtil.morphology(newImg, morph_size);
             }
@@ -931,15 +792,15 @@ public class Window extends javax.swing.JFrame {
 
 
 
-    // pending
+    // pending ESC
     public void formKeyPressed(KeyEvent evt) {
 
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
 
-            if (region.selectRegionItem.isSelected()) {
-                removeRegionSelected();
-            } else if (selectedWidgetLabel != null) {
-                removeWidget();
+            if (tool.region.selectRegionItem.isSelected()) {
+                tool.region.removeRegionSelected();
+            } else if (add.widget.selectedWidgetLabel != null) {
+                add.widget.removeWidget();
             } else if (pasting) {
                 pasting = false;
                 disablePasteMode();
@@ -947,7 +808,7 @@ public class Window extends javax.swing.JFrame {
         } else if (evt.getKeyCode() == KeyEvent.VK_F12) {
             MatUtil.show(nexLayerImg, "");
         }
-    }//GEN-LAST:event_formKeyPressed
+    }
 
     public void propertysMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_propertysMouseClicked
         temp = MatUtil.copy(img);
@@ -956,9 +817,10 @@ public class Window extends javax.swing.JFrame {
         propertyMenuDialog.setResizable(true);
         last.push(img);
         img = temp;
-        removeRegionSelected();
+        tool.region.removeRegionSelected();
         restartPorpertyComponentsValues();
     }//GEN-LAST:event_propertysMouseClicked
+
 
 
 
@@ -983,18 +845,15 @@ public class Window extends javax.swing.JFrame {
 
     }
 
-
-
-
 //    public void saveAsNewImage()
     public void cutActionPerformed(ActionEvent evt) {
         // pending 弹窗的位置
-        if (!region.selectRegionItem.isSelected()) {
+        if (!tool.region.selectRegionItem.isSelected()) {
             JOptionPane.showMessageDialog(null,
                     "Please select region first");
         } else {
 
-            Mat newImg = MatUtil.cut(img, MatUtil.getRect(region.selectedRegionLabel));
+            Mat newImg = MatUtil.cut(img, MatUtil.getRect(tool.region.selectedRegionLabel));
 
             MatUtil.show(newImg, showImgRegionLabel);
             showImgRegionLabel.setSize(newImg.width(),newImg.height());
@@ -1004,78 +863,10 @@ public class Window extends javax.swing.JFrame {
             last.push(img);
             img = newImg;
 
-            removeRegionSelected();
+            tool.region.removeRegionSelected();
         }
     }
     // pending1
-    public void copySelectedRegion(ActionEvent evt) {
-
-        region.selectRegionItem.setSelected(false);
-        // 如果还没有选择区域，弹出对话框
-        if(region.selectedRegionLabel.getBorder() == null) {
-            // pending 对话框的位置？
-            JOptionPane.showMessageDialog(null,
-                    "Please select region first");
-            return;
-        }
-        region.copyRegionMat = img.submat(MatUtil.getRect(region.selectedRegionLabel));
-        // pending 下面代码的作用不明
-//        JLabel lbRegion = new JLabel();
-//        MatUtil.show(copyRegionMat, lbRegion);
-//        selectedRegionLabel.setLayout(null);
-//        selectedRegionLabel.add(lbRegion);
-//        selectedRegionLabel.revalidate();
-//        selectedRegionLabel.repaint();
-
-        // 进入pasting模式
-        pasting = true;
-    }
-
-    public void addWidget(ActionEvent evt) {
-        // ?
-        disableListeners();
-
-        JFileChooser fileChooser = new JFileChooser();
-
-        if (fileChooser.showOpenDialog(this)
-                == JFileChooser.APPROVE_OPTION) {
-            widgetPath = fileChooser.getSelectedFile().getAbsolutePath();
-            // pending
-            if (WIDGET_SUPPORT_FILE_TYPES.contains(widgetPath
-                    .substring(widgetPath.lastIndexOf(".") + 1)
-                    .toUpperCase())) {
-
-                Mat widget = MatUtil.readImg(widgetPath);
-                ImageIcon widgetIcon = new ImageIcon(widgetPath);
-                JLabel widgetLabel = new JLabel(widgetIcon);
-
-                addWidgetListener(widgetLabel, widgetIcon);
-
-                widgetLabel.setBounds(this.getX() / 2, this.getY() / 2,
-                        widget.width(), widget.height());
-
-                panel.setLayout(null);
-                panel.add(widgetLabel);
-
-
-                // 设定各小组件优先级
-                panel.setComponentZOrder(widgetLabel, 0);
-                for (int i = 0; i < widgetLabelList.size(); i++) {
-                    panel.setComponentZOrder(widgetLabelList.get(i), i + 1);
-                }
-                panel.setComponentZOrder(showImgRegionLabel,
-                        widgetLabelList.size() + 1);
-                panel.revalidate();
-                panel.repaint();
-                widgetLabelList.add(widgetLabel);
-
-
-            } else {
-                JOptionPane.showMessageDialog(null,
-                        "only support JPG, JPEG and PNG");
-            }
-        }
-    }
 
     public void redo(ActionEvent evt) {
 
@@ -1083,19 +874,19 @@ public class Window extends javax.swing.JFrame {
 
             last.push(img);
 
-            if (!region.selectRegionItem.isSelected()) {
+            if (!tool.region.selectRegionItem.isSelected()) {
 
                 img = next.pop();
 
             } else {
 
-                Rect selectedRegionRect = MatUtil.getRect(region.selectedRegionLabel);
+                Rect selectedRegionRect = MatUtil.getRect(tool.region.selectedRegionLabel);
                 Mat newImg = MatUtil.copy(img);
 
                 next.peek().submat(selectedRegionRect)
                         .copyTo(newImg.submat(selectedRegionRect));
                 img = newImg;
-                removeRegionSelected();
+                tool.region.removeRegionSelected();
             }
             showImgRegionLabel.setSize(img.width(),img.height());
             this.setSize(img.width(),img.height());
@@ -1114,20 +905,20 @@ public class Window extends javax.swing.JFrame {
 
         if (!last.isEmpty()) {
             next.push(img);
-            if (!region.selectRegionItem.isSelected()) {
+            if (!tool.region.selectRegionItem.isSelected()) {
 
                 img = last.pop();
 
             } else {
 
-                Rect selectedRegionRect = MatUtil.getRect(region.selectedRegionLabel);
+                Rect selectedRegionRect = MatUtil.getRect(tool.region.selectedRegionLabel);
                 Mat newImg = MatUtil.copy(img);
                 // last.peek()是想要返回的最近的那一个版本
                 last.peek().submat(selectedRegionRect)
                         .copyTo(newImg.submat(selectedRegionRect));
 //                last.push(img);
                 img = newImg;
-                removeRegionSelected();
+                tool.region.removeRegionSelected();
             }
             showImgRegionLabel.setSize(img.width(),img.height());
             this.setSize(img.width(), img.height());
@@ -1141,50 +932,6 @@ public class Window extends javax.swing.JFrame {
 //            JOptionPane.showMessageDialog(null, "Não há mais oque desfazer!");
 //        }
     }
-
-    public void zoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomInActionPerformed
-
-        if (region.selectRegionItem.isSelected()) {
-
-            zoomIn.setEnabled(false);
-            zoomRegion = new JPanel();
-            zoomRegion.setBounds(region.selectedRegionLabel.getX(),
-                    region.selectedRegionLabel.getY(),
-                    region.selectedRegionLabel.getWidth(),
-                    region.selectedRegionLabel.getHeight());
-            matZoomOut = MatUtil.copy(img);
-
-            img = img.submat(MatUtil.getRect(zoomRegion));
-
-            //pen image - 2nd layer
-            if (nexLayerImg != null) {
-
-                matZoomOutNexLayerImg = MatUtil.copy(nexLayerImg);
-                nexLayerImg = nexLayerImg.submat(MatUtil.getRect(zoomRegion));
-                MatUtil.resize(nexLayerImg, matZoomOut.size());
-            }
-
-            MatUtil.resize(img, matZoomOut.size());
-            MatUtil.show(img, showImgRegionLabel);
-            removeRegionSelected();
-
-        } else
-            JOptionPane.showMessageDialog(null, "Selecione a região do zoom");
-
-    }//GEN-LAST:event_zoomInActionPerformed
-
-    public void zoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomOutActionPerformed
-        zoomIn.setEnabled(true);
-
-        MatUtil.resize(img, new Size(zoomRegion.getWidth(), zoomRegion.getHeight()));
-
-        img.copyTo(matZoomOut.submat(MatUtil.getRect(zoomRegion)));
-        img = matZoomOut;
-
-        MatUtil.show(img, showImgRegionLabel);
-        nexLayerImg = matZoomOutNexLayerImg;
-
-    }//GEN-LAST:event_zoomOutActionPerformed
 
     public void btResizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResizeActionPerformed
 
@@ -1213,10 +960,10 @@ public class Window extends javax.swing.JFrame {
 
         Mat newImg = MatUtil.copy(img);
 
-        if (region.selectRegionItem.isSelected()) {
+        if (tool.region.selectRegionItem.isSelected()) {
 
-            MatUtil.sepia(newImg, MatUtil.getRect(region.selectedRegionLabel));
-            removeRegionSelected();
+            MatUtil.sepia(newImg, MatUtil.getRect(tool.region.selectedRegionLabel));
+            tool.region.removeRegionSelected();
 
         } else
             MatUtil.sepia(newImg);
@@ -1238,42 +985,6 @@ public class Window extends javax.swing.JFrame {
     }//GEN-LAST:event_brightnessSliderStateChanged
 
 
-    public void pnlTextColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlTextColorMouseClicked
-
-        Color color = JColorChooser.showDialog(null,
-                "选择颜色",
-                Color.BLACK);
-        text.setColor(new Scalar(color.getBlue(), color.getGreen(), color.getRed()));
-
-        writeText();
-
-    }//GEN-LAST:event_pnlTextColorMouseClicked
-
-    public void writeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeTextActionPerformed
-
-        if (region.selectRegionItem.isSelected()) {
-
-            text = new Text();
-
-            Text.setModal(true);
-            Text.setVisible(true);
-
-            last.push(img);
-            img = temp;
-
-            removeRegionSelected();
-        } else
-            JOptionPane.showMessageDialog(null, "Selecione a área do texto!");
-
-    }//GEN-LAST:event_writeTextActionPerformed
-
-    public void textScaleStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_textScaleStateChanged
-
-        text.setScale((int) textScale.getValue());
-        writeText();
-    }//GEN-LAST:event_textScaleStateChanged
-
-
 
     public void changeSaturation(ChangeEvent evt) {
 
@@ -1282,8 +993,8 @@ public class Window extends javax.swing.JFrame {
         int saturation = propertyMenuDialogSaturationSlider.getValue();
         lastSaturation = propertyMenuDialogSaturationSlider.getValue();
 
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.saturation(temp, saturation, MatUtil.getRect(region.selectedRegionLabel));
+        if (tool.region.selectRegionItem.isSelected()) {
+            MatUtil.saturation(temp, saturation, MatUtil.getRect(tool.region.selectedRegionLabel));
         } else {
             MatUtil.saturation(temp, saturation);
         }
@@ -1307,49 +1018,49 @@ public class Window extends javax.swing.JFrame {
                 }
             }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (region.selectRegionItem.isSelected()) {
-                    addRegion(e.getPoint());
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // pending
-                /*
-                画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，当松开的时候我们将上一个状态入栈，然后更改img
-                 */
-                if (pen.penItem.isSelected()
-                        || eraser.eraserItem.isSelected()) {
-                    last.add(img);
-                    if (paintingImg != null) {
-                        img = MatUtil.copy(paintingImg);
-                    }
-                    // 下面这行代码是必须的，这样可以保证每次绘画的时候是在现在图像的基础上进画
-                    // 如果没有这行代码，paintImg保持的只是上一个画好的状态，如果之后做了其他操作，将不会显示
-                    paintingImg = null;
-                }
-            }
+//            @Override
+//            public void mousePressed(MouseEvent e) {
+//                if (region.selectRegionItem.isSelected()) {
+//                    region.addRegion(e.getPoint());
+//                }
+//            }
+//
+//            @Override
+//            public void mouseReleased(MouseEvent e) {
+//                // pending
+//                /*
+//                画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，当松开的时候我们将上一个状态入栈，然后更改img
+//                 */
+//                if (pen.penItem.isSelected()
+//                        || eraser.eraserItem.isSelected()) {
+//                    last.add(img);
+//                    if (paintingImg != null) {
+//                        img = MatUtil.copy(paintingImg);
+//                    }
+//                    // 下面这行代码是必须的，这样可以保证每次绘画的时候是在现在图像的基础上进画
+//                    // 如果没有这行代码，paintImg保持的只是上一个画好的状态，如果之后做了其他操作，将不会显示
+//                    paintingImg = null;
+//                }
+//            }
 
         });
 
         panel.addMouseMotionListener(new MouseAdapter() {
-            // 拖拽的时候将会一直调用该方法
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                if (region.selectRegionItem.isSelected()) {
-                    setRegionSize(e.getX(), e.getY());
-                    // pending
-                } else if (pen.penItem.isSelected()) {
-                    penSize = (Integer) propertyMenuDialogPenSizeSpinner.getValue();
-                    pen.paint(e.getX(), e.getY());
-                } else if (eraser.eraserItem.isSelected()) {
-                    // pending
-                    eraser.eraserSize = (Integer) propertyMenuDialogPenSizeSpinner.getValue();
-                    erase(e.getX(), e.getY());
-                }
-            }
+//            // 拖拽的时候将会一直调用该方法
+//            @Override
+//            public void mouseDragged(MouseEvent e) {
+//                if (region.selectRegionItem.isSelected()) {
+//                    region.setRegionSize(e.getX(), e.getY());
+//                    // pending
+//                } else if (pen.penItem.isSelected()) {
+//                    penSize = (Integer) propertyMenuDialogPenSizeSpinner.getValue();
+//                    pen.paint(e.getX(), e.getY());
+//                } else if (eraser.eraserItem.isSelected()) {
+//                    // pending
+//                    eraserSize = (Integer) propertyMenuDialogPenSizeSpinner.getValue();
+//                    eraser.erase(e.getX(), e.getY());
+//                }
+//            }
 
             // pending
             @Override
@@ -1357,8 +1068,8 @@ public class Window extends javax.swing.JFrame {
                 // 粘贴模式下，粘贴框随鼠标一起移动
                 if (pasting) {
                     // REGION就是将要复制的区域大小，是一个轮廓
-                    region.selectedRegionLabel.setLocation(e.getPoint());
-                    region.selectedRegionLabel.repaint();
+                    tool.region.selectedRegionLabel.setLocation(e.getPoint());
+                    tool.region.selectedRegionLabel.repaint();
                 }
             }
         });
@@ -1380,67 +1091,10 @@ public class Window extends javax.swing.JFrame {
             }
         };
 
-        txtText.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                text.setStr(txtText.getText());
-                writeText();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                text.setStr(txtText.getText());
-                writeText();
-
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                text.setStr(txtText.getText());
-                writeText();
-
-            }
-        });
-
 
         rbtBlue.addActionListener(cbx);
         rbtGreen.addActionListener(cbx);
         rbtRed.addActionListener(cbx);
-    }
-
-
-    public void writeText() {
-        temp = MatUtil.copy(img);
-        MatUtil.writeText(text, temp, MatUtil.getRect(region.selectedRegionLabel));
-        MatUtil.show(temp, showImgRegionLabel);
-    }
-
-    // pending 加一个erase的大小调节功能
-    // 一键清除功能
-    public void erase(int x, int y) {
-        // pending
-        if (x > img.width() || y > img.height()) return;
-
-        if (paintingImg == null) {
-            paintingImg = MatUtil.copy(img);
-        }
-
-        Mat eraseRegion = paintingImg.submat(new Rect(x, y, eraser.eraserSize,
-                eraser.eraserSize));
-
-        // pending
-            /*if (zoomOut.isEnabled())
-                img2 = nexLayerImg.submat(MatUtil.getRect(zoomRegion))
-                        .submat(new Rect(x, y, width, height));
-            else
-
-             */
-        Mat originalRegion = originalImg.submat(new Rect(x, y, eraser.eraserSize, eraser.eraserSize));
-        // 拿原图覆盖现在正在画的图，就相当于橡皮擦操作
-        MatUtil.overlay(eraseRegion, originalRegion);
-
-        MatUtil.show(paintingImg, showImgRegionLabel);
-
     }
 
     public void paste() {
@@ -1448,8 +1102,8 @@ public class Window extends javax.swing.JFrame {
         Mat newImg = MatUtil.copy(img);
         // newImg 的 selectRegion 被 copyRegionMat的内容覆盖
         MatUtil.copyToRegion(newImg,
-                region.copyRegionMat,
-                MatUtil.getRect(region.selectedRegionLabel));
+                tool.region.copyRegionMat,
+                MatUtil.getRect(tool.region.selectedRegionLabel));
 
         MatUtil.show(newImg, showImgRegionLabel);
 
@@ -1457,66 +1111,13 @@ public class Window extends javax.swing.JFrame {
         img = newImg;
     }
 
-    public void addRegion(Point p) {
-
-        region.selectedRegionLabel.setLocation(p);
-        region.selectedRegionLabel.setSize(1, 1);
-        region.selectedRegionLabel.setBorder(BorderFactory
-                .createLineBorder(Color.cyan));
-
-        panel.setLayout(null);
-        panel.add(region.selectedRegionLabel);
-
-        // 在panel的z轴视角上设置各组件的优先级/遮盖关系：index小的，优先级高
-        panel.setComponentZOrder(region.selectedRegionLabel, 0);
-        for (int i = 0; i < widgetLabelList.size(); i++) {
-            panel.setComponentZOrder(widgetLabelList.get(i), i + 1);
-        }
-        panel.setComponentZOrder(showImgRegionLabel,
-                widgetLabelList.size() + 1);
-
-        panel.revalidate();
-        panel.repaint();
-
-        region.selectedRegionX = region.selectedRegionLabel.getX();
-        region.selectedRegionY = region.selectedRegionLabel.getY();
-    }
-
-    public void setRegionSize(int x, int y) {
-
-        int width = Math.abs(region.selectedRegionX - x);
-        int height = Math.abs(region.selectedRegionY - y);
-        x = Math.min(x, region.selectedRegionX);
-        y = Math.min(y, region.selectedRegionY);
-        region.selectedRegionLabel.setBounds(x, y, width, height);
-
-    }
-
-
-    // pending
-    public void removeRegionSelected() {
-        panel.setLayout(null);
-        panel.remove(region.selectedRegionLabel);
-        panel.revalidate();
-        panel.repaint();
-        region.selectRegionItem.setSelected(false);
-    }
-
-    public void removeWidget() {
-        widgetLabelList.remove(selectedWidgetLabel);
-        panel.setLayout(null);
-        panel.remove(selectedWidgetLabel);
-        panel.repaint();
-        panel.revalidate();
-    }
-
     public void contrastAndBrightness() {
 
         temp = MatUtil.copy(img);
 
-        if (region.selectRegionItem.isSelected())
+        if (tool.region.selectRegionItem.isSelected())
             MatUtil.contrastAndBrightness(temp, brightnessSlider.getValue(), -contrastSlide.getValue(),
-                    MatUtil.getRect(region.selectedRegionLabel));
+                    MatUtil.getRect(tool.region.selectedRegionLabel));
         else
             MatUtil.contrastAndBrightness(temp, brightnessSlider.getValue(), -contrastSlide.getValue());
 
@@ -1526,8 +1127,8 @@ public class Window extends javax.swing.JFrame {
 
     public void applyNoise(int level, boolean replace) {
         copy = MatUtil.copy(img);
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.noise(copy, level, MatUtil.getRect(region.selectedRegionLabel));
+        if (tool.region.selectRegionItem.isSelected()) {
+            MatUtil.noise(copy, level, MatUtil.getRect(tool.region.selectedRegionLabel));
         } else {
             MatUtil.noise(copy, level);
         }
@@ -1551,14 +1152,9 @@ public class Window extends javax.swing.JFrame {
     }
 
     public void disablePasteMode() {
-        removeRegionSelected();
-        region.selectedRegionLabel.removeAll();
-        region.copyRegionMat = null;
-    }
-
-    public void disableListeners() {
-        region.selectRegionItem.setSelected(false);
-        pasting = false;
+        tool.region.removeRegionSelected();
+        tool.region.selectedRegionLabel.removeAll();
+        tool.region.copyRegionMat = null;
     }
 
     public Mat getImg() {
@@ -1578,115 +1174,8 @@ public class Window extends javax.swing.JFrame {
         int width = img.width() >= 200 ? img.width() : 200;
         int height = img.height() >= 200 ? img.height() : 200;
 
-
         this.setSize(width, height);
         this.setLocationRelativeTo(null);
 
-
     }
-
-
-    public void addWidgetListener(JLabel widgetLabel, ImageIcon widgetIcon) {
-        flag = false;
-        Window win = this;
-        int width = widgetIcon.getIconWidth();
-        int height = widgetIcon.getIconHeight();
-        MouseInputAdapter mia = new MouseInputAdapter() {
-            int ex;
-            int ey;
-
-            public void mousePressed(MouseEvent e) {
-                win.selectedWidgetLabel = widgetLabel;
-                ex = e.getX();
-                ey = e.getY();
-
-//                widgetLabel.setBorder(BorderFactory.createLineBorder(Color.CYAN));
-            }
-
-            public void mouseReleased(MouseEvent e) {
-                flag = false;
-//                widgetLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE.brighter()));
-            }
-
-            public void mouseDragged(MouseEvent e) {
-
-                int lx = widgetLabel.getX();
-                int ly = widgetLabel.getY();
-                int x = e.getX() + lx;
-                int y = e.getY() + ly;
-                if (isInResizeArea(e, widgetLabel)) {
-//                    widgetLabel.setCursor(new Cursor(Cursor.NW_RESIZE_CURSOR));
-                    flag = true;
-                    int dx = x - lx;
-                    double percent = (double) dx / (double) width;
-                    // 同比例缩放
-                    dx = (int) (percent * width);
-                    int dy = (int) (percent * height);
-                    Image originalImage = widgetIcon.getImage();
-                    Image scaledImage = originalImage.getScaledInstance(
-                            dx,
-                            dy,
-                            Image.SCALE_SMOOTH
-                    );
-                    widgetLabel.setIcon(new ImageIcon(scaledImage));
-                    widgetLabel.setBounds(lx, ly, dx, dy);
-                } else if (!flag) {
-                    widgetLabel.setCursor(new Cursor(Cursor.MOVE_CURSOR));
-                    widgetLabel.setLocation(x - ex, y - ey);
-                }
-                panel.revalidate();
-                panel.repaint();
-            }
-
-            public void mouseEntered(MouseEvent e) {
-                if (isInResizeArea(e, widgetLabel)) {
-                    widgetLabel.setCursor(new Cursor(Cursor.NW_RESIZE_CURSOR));
-                }
-            }
-
-            public void mouseExited(MouseEvent e) {
-                if (!isInResizeArea(e, widgetLabel)) {
-                    widgetLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                }
-            }
-
-            public void mouseMoved(MouseEvent e) {
-                if (isInResizeArea(e, widgetLabel)) {
-                    widgetLabel.setCursor(new Cursor(Cursor.NW_RESIZE_CURSOR));
-
-                } else {
-                    widgetLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-
-                }
-            }
-        };
-
-        widgetLabel.addMouseListener(mia);
-        widgetLabel.addMouseMotionListener(mia);
-
-    }
-
-    public static boolean isInResizeArea(MouseEvent e, JLabel widgetLabel) {
-        int rx = widgetLabel.getWidth();
-        int ry = widgetLabel.getHeight();
-        int x = e.getX();
-        int y = e.getY();
-        if (rx - 20 < x && x < rx + 20 && ry - 20 < y && y < ry + 20) {
-            return true;
-        }
-        return false;
-    }
-
-
-    public void removeWidgetSelection() {
-
-        if (selectedWidgetLabel != null) {
-            selectedWidgetLabel.setBorder(null);
-            selectedWidgetLabel = null;
-        }
-    }
-
-
-    // End of variables declaration//GEN-END:variables
-
 }
