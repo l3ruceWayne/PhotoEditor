@@ -14,22 +14,21 @@ public class Pen {
     public Window window;
     public Pen(Window window) {
         this.window = window;
-
         // menubar
         penItem = new JCheckBoxMenuItem("Pen");
         // shortcut
-        penItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
-                InputEvent.ALT_MASK
-                        | InputEvent.SHIFT_MASK
-                        | InputEvent.CTRL_MASK)
-        );
+//        penItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
+//                InputEvent.ALT_MASK
+//                        | InputEvent.SHIFT_MASK
+//                        | InputEvent.CTRL_MASK)
+//        );
         // onclick event
         penItem.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    window.region.removeRegionSelected();
-                    window.eraser.eraserItem.setSelected(false);
+                    window.tool.region.removeRegionSelected();
+                    window.tool.eraser.eraserItem.setSelected(false);
                 }
             }
         });
@@ -47,8 +46,8 @@ public class Pen {
                         window.penColor.getBackground().getBlue(),
                         window.penColor.getBackground().getGreen(),
                         window.penColor.getBackground().getRed()},
-                window.penSize,
-                window.penSize,
+                window.tool.penSize,
+                window.tool.penSize,
                 x,
                 y,
                 window.paintingImg);

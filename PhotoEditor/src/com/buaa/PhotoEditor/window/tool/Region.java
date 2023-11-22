@@ -5,6 +5,7 @@ import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.Mat;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -24,8 +25,8 @@ public class Region {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    window.pen.penItem.setSelected(false);
-                    window.eraser.eraserItem.setSelected(false);
+                    window.tool.pen.penItem.setSelected(false);
+                    window.tool.eraser.eraserItem.setSelected(false);
                 }
             }
         });
@@ -59,6 +60,46 @@ public class Region {
 
         // 进入pasting模式
         window.pasting = true;
+    }
+
+    public void addRegion(Point p) {
+
+        selectedRegionLabel.setLocation(p);
+        selectedRegionLabel.setSize(1, 1);
+        selectedRegionLabel.setBorder(BorderFactory
+                .createLineBorder(Color.cyan));
+
+        window.panel.setLayout(null);
+        window.panel.add(selectedRegionLabel);
+
+        // 在panel的z轴视角上设置各组件的优先级/遮盖关系：index小的，优先级高
+        window.panel.setComponentZOrder(selectedRegionLabel, 0);
+        for (int i = 0; i < window.add.widget.widgetLabelList.size(); i++) {
+            window.panel.setComponentZOrder(window.add.widget.widgetLabelList.get(i), i + 1);
+        }
+        window.panel.setComponentZOrder(window.showImgRegionLabel,
+                window.add.widget.widgetLabelList.size() + 1);
+
+        window.panel.revalidate();
+        window.panel.repaint();
+
+        selectedRegionX = selectedRegionLabel.getX();
+        selectedRegionY = selectedRegionLabel.getY();
+    }
+
+    public void setRegionSize(int x, int y) {
+
+        int width = Math.abs(selectedRegionX - x);
+        int height = Math.abs(selectedRegionY - y);
+        x = Math.min(x, selectedRegionX);
+        y = Math.min(y, selectedRegionY);
+        selectedRegionLabel.setBounds(x, y, width, height);
+
+    }
+
+    public void disableListeners() {
+        selectRegionItem.setSelected(false);
+        window.pasting = false;
     }
 
 }
