@@ -17,8 +17,10 @@ import java.util.Stack;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import com.buaa.PhotoEditor.window.edit.Edit;
 import com.buaa.PhotoEditor.window.file.Save;
 import com.buaa.PhotoEditor.window.file.MyFile;
+import com.buaa.PhotoEditor.window.property.Property;
 import com.buaa.PhotoEditor.window.tool.Eraser;
 import com.buaa.PhotoEditor.window.tool.Pen;
 import com.buaa.PhotoEditor.window.tool.Region;
@@ -29,6 +31,7 @@ import org.opencv.core.Size;
 
 public class Window extends javax.swing.JFrame {
 
+    Property property = new Property(this);
 
     public Save save;
     public Eraser eraser;
@@ -59,7 +62,6 @@ public class Window extends javax.swing.JFrame {
     public Mat nexLayerImg;           //image use to paint
     public Mat matZoomOut;
     public Mat matZoomOutNexLayerImg;
-    public int lastSaturation;
 
     public JPanel zoomRegion;
     public Text text;
@@ -74,7 +76,6 @@ public class Window extends javax.swing.JFrame {
 
 
     public JMenuItem blur;
-    public JSlider brightnessSlider;
     public JMenu btMasks;
     public JButton btResize;
     public JButton btnVhs;
@@ -91,16 +92,10 @@ public class Window extends javax.swing.JFrame {
     // 图片显示区域
     public JLabel showImgRegionLabel;
 
-    public JMenu openPhotoMenu;
     // options
-    public JMenu optionsMenu;
-    public JMenuItem optionsMenuUndoItem;
-    public JMenuItem optionsMenuRedoItem;
     public JMenuItem optionsMenuWidgetItem;
     public JLabel selectedWidgetLabel;
-    public JMenuItem optionsMenuCopyItem;
     public boolean pasting = false;
-    public JMenuItem optionsMenuCutItem;
     public JMenuItem writeText;
     public JMenuItem zoomIn;
     public JMenuItem zoomOut;
@@ -122,18 +117,9 @@ public class Window extends javax.swing.JFrame {
     // 当点击Pen时，该实例化对象的isSelected变为true
 
     // Property
-    public JMenu propertyMenu;
-    public JDialog propertyMenuDialog;
-    public JLabel propertyMenuDialogContrastLabel;
-    public JLabel propertyMenuDialogBrightnessLabel;
-    public JLabel propertyMenuDialogSaturationLabel;
-    public JSlider propertyMenuDialogSaturationSlider;
     public JSpinner propertyMenuDialogPenSizeSpinner;
     public SpinnerNumberModel model = new SpinnerNumberModel(5, 1, 30, 1);
     public int penSize;
-
-
-    public javax.swing.JSlider contrastSlide;
 
     public javax.swing.JMenuItem dogMask;
     public javax.swing.Box.Filler filler1;
@@ -159,11 +145,8 @@ public class Window extends javax.swing.JFrame {
     public javax.swing.JSeparator jSeparator3;
     public javax.swing.JTextArea jTextArea1;
     public javax.swing.JLabel offsetLabel;
-    public javax.swing.JLabel lbSize;
     public javax.swing.JLabel lbText;
-    public javax.swing.JLabel lightenLabel1;
     public javax.swing.JMenuItem morphology;
-    public javax.swing.JScrollBar noiseBar;
     public javax.swing.JButton glitchWaveOKButton;
     public javax.swing.JPanel penColor;
     public javax.swing.JLabel penColorLabel;
@@ -174,9 +157,7 @@ public class Window extends javax.swing.JFrame {
     public javax.swing.JCheckBox rbtRed;
     public javax.swing.JMenuItem sepia;
     public javax.swing.JSpinner textScale;
-    public javax.swing.JTextField txtHeight;
     public javax.swing.JTextField txtText;
-    public javax.swing.JTextField txtWidth;
     public javax.swing.JTextField txtxLength;
     public javax.swing.JRadioButton vhs_1;
     public javax.swing.JLabel vhs_1_icon;
@@ -190,10 +171,6 @@ public class Window extends javax.swing.JFrame {
     public javax.swing.JLabel vhs_4_icon;
     public javax.swing.JRadioButton vhs_date_1;
     public javax.swing.JRadioButton vhs_date_2;
-
-    //control variables of listeners
-    // selectRegion是画出一块区域进行单独编辑
-//    public boolean toolMenuSelectRegionItem.isSelected() = false;
 
 
     public Window(Mat img, String title) {
@@ -219,14 +196,14 @@ public class Window extends javax.swing.JFrame {
         glitchMenuWaveItemDialog.setSize(400, 200);
         glitchMenuVHSItemDialog.setSize(500, 200);
         glitchMenuLilacItemDialog.setSize(300, 100);
-        propertyMenuDialog.setSize(400, 400);
+        property.propertyMenuDialog.setSize(400, 400);
         Text.setSize(400, 400);
 
         // 设置弹窗的位置，null指明默认是中央
         glitchMenuWaveItemDialog.setLocationRelativeTo(null);
         glitchMenuVHSItemDialog.setLocationRelativeTo(null);
         glitchMenuLilacItemDialog.setLocationRelativeTo(null);
-        propertyMenuDialog.setLocationRelativeTo(null);
+        property.propertyMenuDialog.setLocationRelativeTo(null);
         Text.setLocationRelativeTo(null);
 
 
@@ -273,11 +250,6 @@ public class Window extends javax.swing.JFrame {
         vhs_1_icon5 = new javax.swing.JLabel();
         btnVhs = new javax.swing.JButton();
         vhs = new javax.swing.ButtonGroup();
-        propertyMenuDialog = new javax.swing.JDialog();
-        propertyMenuDialogContrastLabel = new javax.swing.JLabel();
-        propertyMenuDialogBrightnessLabel = new javax.swing.JLabel();
-        noiseBar = new javax.swing.JScrollBar();
-        lightenLabel1 = new javax.swing.JLabel();
         penSizeLabel = new javax.swing.JLabel();
         propertyMenuDialogPenSizeSpinner = new javax.swing.JSpinner(model);
         penColorLabel = new javax.swing.JLabel();
@@ -286,19 +258,12 @@ public class Window extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
-        lbSize = new javax.swing.JLabel();
-        txtWidth = new javax.swing.JTextField();
-        txtHeight = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btResize = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        contrastSlide = new javax.swing.JSlider();
-        brightnessSlider = new javax.swing.JSlider();
-        propertyMenuDialogSaturationLabel = new javax.swing.JLabel();
-        propertyMenuDialogSaturationSlider = new javax.swing.JSlider();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         goutTypePen = new javax.swing.ButtonGroup();
@@ -320,13 +285,7 @@ public class Window extends javax.swing.JFrame {
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         menuBar = new javax.swing.JMenuBar();
-        openPhotoMenu = new javax.swing.JMenu();
-        optionsMenu = new JMenu();
-        optionsMenuUndoItem = new javax.swing.JMenuItem();
-        optionsMenuRedoItem = new javax.swing.JMenuItem();
         optionsMenuWidgetItem = new javax.swing.JMenuItem();
-        optionsMenuCopyItem = new javax.swing.JMenuItem();
-        optionsMenuCutItem = new javax.swing.JMenuItem();
         zoomIn = new javax.swing.JMenuItem();
         zoomOut = new javax.swing.JMenuItem();
         writeText = new javax.swing.JMenuItem();
@@ -348,7 +307,6 @@ public class Window extends javax.swing.JFrame {
         glitchMenuAddItem = new javax.swing.JMenuItem();
         glitchMenuLilacItem = new javax.swing.JMenuItem();
         toolMenu = new javax.swing.JMenu();
-        propertyMenu = new javax.swing.JMenu();
         // GlitchWave是按下Glitch再按下wave后出现的弹窗
         glitchMenuWaveItemDialog.setTitle("Glitch Wave");
         glitchMenuWaveItemDialog.setResizable(false);
@@ -579,39 +537,6 @@ public class Window extends javax.swing.JFrame {
                                 .addContainerGap())
         );
 
-        propertyMenuDialog.setTitle("属性");
-
-        propertyMenuDialog.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-//                if(copy == null) return;
-//                previous.push(img);
-//                copy.copyTo(img);
-//                MatUtil.show(img, lPhoto);
-//                copy = null;
-            }
-        });
-
-        propertyMenuDialogContrastLabel.setText("对比度：");
-
-        propertyMenuDialogBrightnessLabel.setText("亮度：");
-
-        noiseBar.setMaximum(255);
-        noiseBar.setOrientation(JScrollBar.HORIZONTAL);
-//        noiseBar.addMouseListener(new MouseAdapter() {
-//            // 当鼠标松开的时候，即是调整结束的时候，此时应用调整内容
-//            public void mouseReleased(MouseEvent evt) {
-//                noiseBarMouseReleased(evt);
-//            }
-//        });
-        noiseBar.addAdjustmentListener(new AdjustmentListener() {
-            public void adjustmentValueChanged(AdjustmentEvent evt) {
-                noiseBarAdjustmentValueChanged(evt);
-            }
-        });
-
-        lightenLabel1.setText("噪声:");
-
         penSizeLabel.setText("笔刷大小:");
 
         penColorLabel.setText("画笔颜色:");
@@ -638,56 +563,24 @@ public class Window extends javax.swing.JFrame {
 
         jLabel3.setText("Contraste");
 
-        lbSize.setText("Tamannho(LxA): ");
+        property.getMySize().lbSize.setText("Size: ");
 
-        jLabel4.setText("Largura:");
+        jLabel4.setText("Width:");
 
-        jLabel5.setText("Altura:");
+        jLabel5.setText("Height:");
 
-        btResize.setText("Redimensionar");
+        btResize.setText("Resize");
         btResize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btResizeActionPerformed(evt);
             }
         });
 
-        jLabel6.setText("Ruído:");
+        jLabel6.setText("Noise");
+        jLabel7.setText("Size");
 
-        jLabel7.setText("Tamanho:");
-
-        contrastSlide.setMinimum(-100);
-        contrastSlide.setToolTipText("");
-        contrastSlide.setValue(0);
-        contrastSlide.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                contrastSlideStateChanged(evt);
-            }
-        });
-
-        brightnessSlider.setMinimum(1);
-        brightnessSlider.setToolTipText("");
-        brightnessSlider.setValue(1);
-        brightnessSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                brightnessSliderStateChanged(evt);
-            }
-        });
-
-
-        propertyMenuDialogSaturationLabel.setText("饱和度：");
-        propertyMenuDialogSaturationSlider.setMinimum(-100);
-        propertyMenuDialogSaturationSlider.setMaximum(100);
-        propertyMenuDialogSaturationSlider.setToolTipText("");
-        propertyMenuDialogSaturationSlider.setValue(0);
-        propertyMenuDialogSaturationSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                changeSaturation(evt);
-            }
-        });
-
-
-        javax.swing.GroupLayout PropertysLayout = new javax.swing.GroupLayout(propertyMenuDialog.getContentPane());
-        propertyMenuDialog.getContentPane().setLayout(PropertysLayout);
+        javax.swing.GroupLayout PropertysLayout = new javax.swing.GroupLayout(property.propertyMenuDialog.getContentPane());
+        property.propertyMenuDialog.getContentPane().setLayout(PropertysLayout);
         PropertysLayout.setHorizontalGroup(
                 PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(PropertysLayout.createSequentialGroup()
@@ -707,29 +600,19 @@ public class Window extends javax.swing.JFrame {
                                                                                         .addGroup(PropertysLayout.createSequentialGroup()
                                                                                                 .addComponent(jLabel4)
                                                                                                 .addGap(2, 2, 2)
-                                                                                                .addComponent(txtWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                .addComponent(property.getMySize().txtWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                                                 .addGap(30, 30, 30)
                                                                                                 .addComponent(jLabel5))
-                                                                                        .addComponent(lbSize))
+                                                                                        .addComponent(property.getMySize().lbSize))
                                                                                 .addGap(5, 5, 5)
-                                                                                .addComponent(txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                        .addComponent(penSizeLabel)
-                                                                                        .addComponent(penColorLabel))
-                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                        .addComponent(propertyMenuDialogPenSizeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                        .addComponent(penColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                                .addComponent(property.getMySize().txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                ))
                                                         .addGroup(PropertysLayout.createSequentialGroup()
-                                                                .addComponent(lightenLabel1)
+                                                                .addComponent(property.getGraininess().grainLabel)
                                                                 .addGap(34, 34, 34)
-                                                                .addComponent(noiseBar, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(PropertysLayout.createSequentialGroup()
-                                                                .addGap(148, 148, 148)
-                                                                .addComponent(jLabel2))))
+                                                                .addComponent(property.getGraininess().grainBar, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                ))
                                         .addGroup(PropertysLayout.createSequentialGroup()
                                                 .addGap(135, 135, 135)
                                                 .addComponent(btResize))
@@ -745,16 +628,17 @@ public class Window extends javax.swing.JFrame {
                                         .addGroup(PropertysLayout.createSequentialGroup()
                                                 .addContainerGap()
                                                 .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(propertyMenuDialogContrastLabel)
-                                                        .addComponent(propertyMenuDialogBrightnessLabel)
-                                                        .addComponent(propertyMenuDialogSaturationLabel))
+                                                        .addComponent(property.getContrastAndBrightness().contrastLabel)
+                                                        .addComponent(property.getContrastAndBrightness().brightnessLabel)
+                                                        .addComponent(property.getSaturation().saturationLabel))
                                                 .addGap(28, 28, 28)
                                                 .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(propertyMenuDialogSaturationSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(brightnessSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(contrastSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                        .addComponent(property.getSaturation().saturationSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(property.getContrastAndBrightness().brightnessSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(property.getContrastAndBrightness().contrastSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addContainerGap(73, Short.MAX_VALUE))
         );
+
         PropertysLayout.setVerticalGroup(
                 PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(PropertysLayout.createSequentialGroup()
@@ -763,47 +647,35 @@ public class Window extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(PropertysLayout.createSequentialGroup()
-                                                .addComponent(contrastSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(property.getContrastAndBrightness().contrastSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(brightnessSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(property.getContrastAndBrightness().brightnessSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(PropertysLayout.createSequentialGroup()
-                                                .addComponent(propertyMenuDialogContrastLabel)
+                                                .addComponent(property.getContrastAndBrightness().contrastLabel)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(propertyMenuDialogBrightnessLabel)))
+                                                .addComponent(property.getContrastAndBrightness().brightnessLabel)))
                                 .addGap(18, 18, 18)
                                 .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(propertyMenuDialogSaturationSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(propertyMenuDialogSaturationLabel))
+                                        .addComponent(property.getSaturation().saturationSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(property.getSaturation().saturationLabel))
                                 .addGap(36, 36, 36)
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(noiseBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(lightenLabel1))
+                                        .addComponent(property.getGraininess().grainBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(property.getGraininess().grainLabel))
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel2)
-                                .addGap(4, 4, 4)
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(penSizeLabel)
-                                        .addComponent(propertyMenuDialogPenSizeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(11, 11, 11)
-                                .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(penColorLabel)
-                                        .addComponent(penColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(lbSize)
+                                .addComponent(property.getMySize().lbSize)
                                 .addGap(24, 24, 24)
                                 .addGroup(PropertysLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(property.getMySize().txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(property.getMySize().txtWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel4)
                                         .addComponent(jLabel5))
                                 .addGap(18, 18, 18)
@@ -939,29 +811,8 @@ public class Window extends javax.swing.JFrame {
                                 .addContainerGap(306, Short.MAX_VALUE))
         );
 
-        MyFile file=new MyFile(this);
+        MyFile file = new MyFile(this);
         menuBar.add(file.fileMenu);
-
-        optionsMenu.setText("Options");
-
-        optionsMenuUndoItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
-        optionsMenuUndoItem.setText("Undo");
-        optionsMenuUndoItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                undo(evt);
-            }
-        });
-        optionsMenu.add(optionsMenuUndoItem);
-
-        optionsMenuRedoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,
-                InputEvent.CTRL_MASK));
-        optionsMenuRedoItem.setText("Redo");
-        optionsMenuRedoItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                redo(evt);
-            }
-        });
-        optionsMenu.add(optionsMenuRedoItem);
 
         optionsMenuWidgetItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
         optionsMenuWidgetItem.setText("Widget");
@@ -970,32 +821,6 @@ public class Window extends javax.swing.JFrame {
                 addWidget(evt);
             }
         });
-        optionsMenu.add(optionsMenuWidgetItem);
-
-        optionsMenuCopyItem
-                .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
-                        InputEvent.CTRL_MASK));
-        // 点复制之前需要选择好区域
-        optionsMenuCopyItem.setText("Copy");
-        // 点击复制之后选择的区域会被复制，点击鼠标会在鼠标位置粘贴复制的内容
-        optionsMenuCopyItem.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                copySelectedRegion(evt);
-            }
-        });
-        optionsMenu.add(optionsMenuCopyItem);
-
-        optionsMenuCutItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        optionsMenuCutItem.setText("Cut");
-        optionsMenuCutItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                cutActionPerformed(evt);
-            }
-        });
-        optionsMenu.add(optionsMenuCutItem);
-
-        optionsMenu.add(save.saveItem);
-        optionsMenu.add(save.saveAsItem);
 
         zoomIn.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS, java.awt.event.InputEvent.SHIFT_MASK));
         zoomIn.setText("Zoom +");
@@ -1004,7 +829,7 @@ public class Window extends javax.swing.JFrame {
                 zoomInActionPerformed(evt);
             }
         });
-        optionsMenu.add(zoomIn);
+//        optionsMenu.add(zoomIn);
 
         zoomOut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, java.awt.event.InputEvent.SHIFT_MASK));
         zoomOut.setText("Zoom -");
@@ -1013,7 +838,7 @@ public class Window extends javax.swing.JFrame {
                 zoomOutActionPerformed(evt);
             }
         });
-        optionsMenu.add(zoomOut);
+//        optionsMenu.add(zoomOut);
 
         writeText.setText("Texto");
         writeText.addActionListener(new java.awt.event.ActionListener() {
@@ -1021,7 +846,7 @@ public class Window extends javax.swing.JFrame {
                 writeTextActionPerformed(evt);
             }
         });
-        optionsMenu.add(writeText);
+//        optionsMenu.add(writeText);
 
         focus.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         focus.setText("Focar");
@@ -1030,9 +855,11 @@ public class Window extends javax.swing.JFrame {
                 focusActionPerformed(evt);
             }
         });
-        optionsMenu.add(focus);
+//        optionsMenu.add(focus);
 
-        menuBar.add(optionsMenu);
+//        menuBar.add(optionsMenu);
+        Edit edit = new Edit(this);
+        menuBar.add(edit.editMenu);
 
         btMasks.setText("Mascaras");
 
@@ -1195,13 +1022,7 @@ public class Window extends javax.swing.JFrame {
 
         menuBar.add(toolMenu);
 
-        propertyMenu.setText("Property");
-        propertyMenu.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                propertysMouseClicked(evt);
-            }
-        });
-        menuBar.add(propertyMenu);
+        menuBar.add(property.propertyMenu);
 
         setJMenuBar(menuBar);
 
@@ -1488,17 +1309,6 @@ public class Window extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formKeyPressed
 
-    public void propertysMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_propertysMouseClicked
-        temp = MatUtil.copy(img);
-        propertyMenuDialog.setModal(true);
-        propertyMenuDialog.setVisible(true);
-        propertyMenuDialog.setResizable(true);
-        last.push(img);
-        img = temp;
-        removeRegionSelected();
-        restartPorpertyComponentsValues();
-    }//GEN-LAST:event_propertysMouseClicked
-
     public void cartoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cartoonActionPerformed
 
         Mat newImg = MatUtil.copy(img);
@@ -1516,13 +1326,6 @@ public class Window extends javax.swing.JFrame {
 
     }//GEN-LAST:event_cartoonActionPerformed
 
-//    public void noiseBarMouseReleased(MouseEvent evt) {
-//        applyNoise(noiseBar.getValue(), true);
-//    }
-
-    public void noiseBarAdjustmentValueChanged(java.awt.event.AdjustmentEvent evt) {//GEN-FIRST:event_noiseBarAdjustmentValueChanged
-        applyNoise(noiseBar.getValue(), false);
-    }
 
     public void penColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_penColorMouseClicked
         // 阻塞式选择画笔颜色
@@ -1537,53 +1340,6 @@ public class Window extends javax.swing.JFrame {
 
     }
 
-
-
-
-//    public void saveAsNewImage()
-    public void cutActionPerformed(ActionEvent evt) {
-        // pending 弹窗的位置
-        if (!region.selectRegionItem.isSelected()) {
-            JOptionPane.showMessageDialog(null,
-                    "Please select region first");
-        } else {
-
-            Mat newImg = MatUtil.cut(img, MatUtil.getRect(region.selectedRegionLabel));
-
-            MatUtil.show(newImg, showImgRegionLabel);
-            showImgRegionLabel.setSize(newImg.width(),newImg.height());
-            this.setSize(newImg.width(), newImg.height());
-            this.setLocationRelativeTo(null);
-
-            last.push(img);
-            img = newImg;
-
-            removeRegionSelected();
-        }
-    }
-    // pending1
-    public void copySelectedRegion(ActionEvent evt) {
-
-        region.selectRegionItem.setSelected(false);
-        // 如果还没有选择区域，弹出对话框
-        if(region.selectedRegionLabel.getBorder() == null) {
-            // pending 对话框的位置？
-            JOptionPane.showMessageDialog(null,
-                    "Please select region first");
-            return;
-        }
-        region.copyRegionMat = img.submat(MatUtil.getRect(region.selectedRegionLabel));
-        // pending 下面代码的作用不明
-//        JLabel lbRegion = new JLabel();
-//        MatUtil.show(copyRegionMat, lbRegion);
-//        selectedRegionLabel.setLayout(null);
-//        selectedRegionLabel.add(lbRegion);
-//        selectedRegionLabel.revalidate();
-//        selectedRegionLabel.repaint();
-
-        // 进入pasting模式
-        pasting = true;
-    }
 
     public void addWidget(ActionEvent evt) {
         // ?
@@ -1631,70 +1387,6 @@ public class Window extends javax.swing.JFrame {
         }
     }
 
-    public void redo(ActionEvent evt) {
-
-        if (!next.isEmpty()) {
-
-            last.push(img);
-
-            if (!region.selectRegionItem.isSelected()) {
-
-                img = next.pop();
-
-            } else {
-
-                Rect selectedRegionRect = MatUtil.getRect(region.selectedRegionLabel);
-                Mat newImg = MatUtil.copy(img);
-
-                next.peek().submat(selectedRegionRect)
-                        .copyTo(newImg.submat(selectedRegionRect));
-                img = newImg;
-                removeRegionSelected();
-            }
-            showImgRegionLabel.setSize(img.width(),img.height());
-            this.setSize(img.width(),img.height());
-            this.setLocationRelativeTo(null);
-
-            MatUtil.show(img, showImgRegionLabel);
-
-        }
-        // pending 认为不需要
-//        else {
-//            JOptionPane.showMessageDialog(null, "Não há mais oque refazer!");
-//        }
-    }
-
-    public void undo(ActionEvent evt) {
-
-        if (!last.isEmpty()) {
-            next.push(img);
-            if (!region.selectRegionItem.isSelected()) {
-
-                img = last.pop();
-
-            } else {
-
-                Rect selectedRegionRect = MatUtil.getRect(region.selectedRegionLabel);
-                Mat newImg = MatUtil.copy(img);
-                // last.peek()是想要返回的最近的那一个版本
-                last.peek().submat(selectedRegionRect)
-                        .copyTo(newImg.submat(selectedRegionRect));
-//                last.push(img);
-                img = newImg;
-                removeRegionSelected();
-            }
-            showImgRegionLabel.setSize(img.width(),img.height());
-            this.setSize(img.width(), img.height());
-            this.setLocationRelativeTo(null);
-
-            MatUtil.show(img, showImgRegionLabel);
-
-        }
-        // pending  感觉不需要加弹窗
-//        else {
-//            JOptionPane.showMessageDialog(null, "Não há mais oque desfazer!");
-//        }
-    }
 
     public void zoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomInActionPerformed
 
@@ -1744,8 +1436,8 @@ public class Window extends javax.swing.JFrame {
 
         try {
 
-            double width = Double.parseDouble(txtWidth.getText());
-            double height = Double.parseDouble(txtHeight.getText());
+            double width = Double.parseDouble(property.getMySize().txtWidth.getText());
+            double height = Double.parseDouble(property.getMySize().txtHeight.getText());
 
             Mat newImg = MatUtil.copy(temp);
             MatUtil.resize(newImg, new Size(width, height));
@@ -1794,14 +1486,6 @@ public class Window extends javax.swing.JFrame {
             img = temp;
         }
     }//GEN-LAST:event_lilacActionPerformed
-
-    public void contrastSlideStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_contrastSlideStateChanged
-        contrastAndBrightness();
-    }//GEN-LAST:event_contrastSlideStateChanged
-
-    public void brightnessSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_brightnessSliderStateChanged
-        contrastAndBrightness();
-    }//GEN-LAST:event_brightnessSliderStateChanged
 
 
     public void pnlTextColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlTextColorMouseClicked
@@ -1854,23 +1538,6 @@ public class Window extends javax.swing.JFrame {
 
         } else
             JOptionPane.showMessageDialog(null, "Selecione a área que deseja focar!");
-    }
-
-    public void changeSaturation(ChangeEvent evt) {
-
-        temp = MatUtil.copy(img);
-
-        int saturation = propertyMenuDialogSaturationSlider.getValue();
-        lastSaturation = propertyMenuDialogSaturationSlider.getValue();
-
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.saturation(temp, saturation, MatUtil.getRect(region.selectedRegionLabel));
-        } else {
-            MatUtil.saturation(temp, saturation);
-        }
-
-        MatUtil.show(temp, showImgRegionLabel);
-
     }
 
     public void addMouseListeners() {
@@ -2091,46 +1758,6 @@ public class Window extends javax.swing.JFrame {
         panel.revalidate();
     }
 
-    public void contrastAndBrightness() {
-
-        temp = MatUtil.copy(img);
-
-        if (region.selectRegionItem.isSelected())
-            MatUtil.contrastAndBrightness(temp, brightnessSlider.getValue(), -contrastSlide.getValue(),
-                    MatUtil.getRect(region.selectedRegionLabel));
-        else
-            MatUtil.contrastAndBrightness(temp, brightnessSlider.getValue(), -contrastSlide.getValue());
-
-
-        MatUtil.show(temp, showImgRegionLabel);
-    }
-
-    public void applyNoise(int level, boolean replace) {
-        copy = MatUtil.copy(img);
-        if (region.selectRegionItem.isSelected()) {
-            MatUtil.noise(copy, level, MatUtil.getRect(region.selectedRegionLabel));
-        } else {
-            MatUtil.noise(copy, level);
-        }
-        // 需要再加一个确定键，确定之后img入栈，然后替换为当前调整后的内容
-        MatUtil.show(copy, showImgRegionLabel);
-
-        if (replace) {
-            last.push(img);
-            img = copy;
-        }
-
-    }
-
-    public void restartPorpertyComponentsValues() {
-        Component[] components = propertyMenuDialog.getContentPane().getComponents();
-        for (Component c : components) {
-            if (c instanceof JScrollBar) {
-                ((JScrollBar) c).setValue(0);
-            }
-        }
-    }
-
     public void disablePasteMode() {
         removeRegionSelected();
         region.selectedRegionLabel.removeAll();
@@ -2152,9 +1779,9 @@ public class Window extends javax.swing.JFrame {
 
     public void updatePropertys() {
 
-        txtWidth.setText(img.width() + "");
-        txtHeight.setText(img.height() + "");
-        lbSize.setText("Tamanho (LxA): " + img.width() + "x" + img.height());
+        property.getMySize().txtWidth.setText(img.width() + "");
+        property.getMySize().txtHeight.setText(img.height() + "");
+        property.getMySize().lbSize.setText("Size: " + img.width() + "x" + img.height());
 
         int width = img.width() >= 200 ? img.width() : 200;
         int height = img.height() >= 200 ? img.height() : 200;
