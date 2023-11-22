@@ -23,11 +23,11 @@ import com.buaa.PhotoEditor.window.add.Add;
 // tool
 import com.buaa.PhotoEditor.window.tool.Tool;
 
+
 import com.buaa.PhotoEditor.window.filter.Filter;
-import com.buaa.PhotoEditor.window.tool.Eraser;
-import com.buaa.PhotoEditor.window.tool.Pen;
-import com.buaa.PhotoEditor.window.tool.Region;
+
 import com.buaa.PhotoEditor.window.layer.Layer;
+
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -41,9 +41,6 @@ public class Window extends javax.swing.JFrame {
     public Tool tool;
     // add
     public Add add;
-    public Eraser eraser;
-    public Pen pen;
-    public Region region;
     public Filter filter;
     /* Layer类的实例化对象只能有一个（因为不同的图层需要共用一个Layer，这样才能显示所有的图层列表）
         所以是static
@@ -92,8 +89,8 @@ public class Window extends javax.swing.JFrame {
     public JMenuItem optionsMenuCopyItem;
     public boolean pasting = false;
     public JMenuItem optionsMenuCutItem;
-    public JMenuItem focus;
-    public JMenuItem zoomIn;
+
+
 
 
     // Property
@@ -163,7 +160,10 @@ public class Window extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         // 按下每个按键会弹出一个对应窗口
         // 设置窗口的大小
-        propertyMenuDialog.setSize(400, 400);
+
+
+        propertyMenuDialog.setSize(400, 800);
+        Text.setSize(400, 400);
 
 
         // 设置弹窗的位置，null指明默认是中央
@@ -185,9 +185,6 @@ public class Window extends javax.swing.JFrame {
         add = new Add(this);
         // tool
         tool = new Tool(this);
-        pen = new Pen(this);
-        eraser = new Eraser(this);
-        region = new Region(this);
         // 只有一个layer，所以layer赋值之后就不再赋值
         if(layer == null){
             layer = new Layer(this);
@@ -196,10 +193,7 @@ public class Window extends javax.swing.JFrame {
 
         propertyMenuDialog = new javax.swing.JDialog();
         propertyMenuDialogContrastLabel = new javax.swing.JLabel();
-        propertyMenuDialogBrightnessLabel = new javax.swing.JLabel();
-        noiseBar = new javax.swing.JScrollBar();
         lightenLabel1 = new javax.swing.JLabel();
-        penSizeLabel = new javax.swing.JLabel();
         propertyMenuDialogPenSizeSpinner = new javax.swing.JSpinner(model);
         penColorLabel = new javax.swing.JLabel();
         penColor = new javax.swing.JPanel();
@@ -246,7 +240,6 @@ public class Window extends javax.swing.JFrame {
         blur = new javax.swing.JMenuItem();
         morphology = new javax.swing.JMenuItem();
         sepia = new javax.swing.JMenuItem();
-        toolMenu = new javax.swing.JMenu();
         propertyMenu = new javax.swing.JMenu();
         // GlitchWave是按下Glitch再按下wave后出现的弹窗
         // colors是GlitchWave中的三个按键
@@ -565,6 +558,8 @@ public class Window extends javax.swing.JFrame {
 
         optionsMenu.add(save.saveItem);
         optionsMenu.add(save.saveAsItem);
+        
+        menuBar.add(add.addMenu);
 
         dogMask.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, java.awt.event.InputEvent.CTRL_MASK));
         dogMask.setText("Cachorro");
@@ -657,7 +652,9 @@ public class Window extends javax.swing.JFrame {
         menuBar.add(tool.zoomOut.zoomOutItem);
         menuBar.add(tool.drag.dragItem);
 
+
         menuBar.add(layer.layerItem);
+
         setJMenuBar(menuBar);
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -691,10 +688,6 @@ public class Window extends javax.swing.JFrame {
         img = newImg;
         tool.region.removeRegionSelected();
     }//GEN-LAST:event_dogMaskActionPerformed
-
-
-
-
 
 
     public void glasses1MaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_glasses1MaskActionPerformed
@@ -731,29 +724,6 @@ public class Window extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-//    public void glitchWaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_glitchWaveActionPerformed
-//
-////        br.com.ySelf.JDialog.glitchWaveDialog glitchWaveDialog1 = new glitchWaveDialog();
-////        glitchWaveDialog1.main();
-//        glitchMenuWaveItemDialog.setModal(true);
-//        glitchMenuWaveItemDialog.setVisible(true);
-//        // 获取一个当前状态的copy，对copy进行更改，便于ctrl z 回退
-//        // 如果点击的是x，就不执行下面的内容了
-//        if (!glitchWaveOKButton.isSelected()) return;
-//        Mat newImg = MatUtil.copy(img);
-//        if (region.selectRegionItem.isSelected()) {
-//            MatUtil.glitchWave(newImg, waveLength, color, MatUtil.getRect(region.selectedRegionLabel));
-//            removeRegionSelected();
-//        } else {
-//            MatUtil.glitchWave(newImg, waveLength, color);
-//        }
-//
-//        MatUtil.show(newImg, showImgRegionLabel);
-//
-//        last.push(img);
-//        img = newImg;
-//
-//    }
 
 
     public void morphologyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_morphologyActionPerformed
@@ -975,23 +945,6 @@ public class Window extends javax.swing.JFrame {
         contrastAndBrightness();
     }//GEN-LAST:event_brightnessSliderStateChanged
 
-
-    public void focusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_focusActionPerformed
-
-        if (tool.region.selectRegionItem.isSelected()) {
-
-            Mat newImg = MatUtil.copy(img);
-            MatUtil.focus(newImg, MatUtil.getRect(tool.region.selectedRegionLabel));
-            MatUtil.show(newImg, showImgRegionLabel);
-
-            last.push(img);
-            img = newImg;
-
-            tool.region.removeRegionSelected();
-
-        } else
-            JOptionPane.showMessageDialog(null, "Selecione a área que deseja focar!");
-    }
 
 
     public void changeSaturation(ChangeEvent evt) {
