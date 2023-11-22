@@ -12,17 +12,18 @@ import java.awt.event.KeyEvent;
 public class Pen {
     public JCheckBoxMenuItem penItem;
     public Window window;
+    public Tool tool;
     public Pen(Window window) {
         this.window = window;
-
+        tool = new Tool(window);
         // menubar
         penItem = new JCheckBoxMenuItem("Pen");
         // shortcut
-        penItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
-                InputEvent.ALT_MASK
-                        | InputEvent.SHIFT_MASK
-                        | InputEvent.CTRL_MASK)
-        );
+//        penItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
+//                InputEvent.ALT_MASK
+//                        | InputEvent.SHIFT_MASK
+//                        | InputEvent.CTRL_MASK)
+//        );
         // onclick event
         penItem.addItemListener(new ItemListener() {
             @Override
@@ -47,8 +48,8 @@ public class Pen {
                         window.penColor.getBackground().getBlue(),
                         window.penColor.getBackground().getGreen(),
                         window.penColor.getBackground().getRed()},
-                window.penSize,
-                window.penSize,
+                tool.penSize,
+                tool.penSize,
                 x,
                 y,
                 window.paintingImg);
