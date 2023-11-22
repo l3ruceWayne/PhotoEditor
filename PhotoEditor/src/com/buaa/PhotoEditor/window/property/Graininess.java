@@ -31,8 +31,8 @@ public class Graininess {
 
     private void applyNoise(int level, boolean replace) {
         window.copy = MatUtil.copy(window.img);
-        if (window.region.selectRegionItem.isSelected()) {
-            MatUtil.noise(window.copy, level, MatUtil.getRect(window.region.selectedRegionLabel));
+        if (window.tool.region.selectRegionItem.isSelected()) {
+            MatUtil.noise(window.copy, level, MatUtil.getRect(window.tool.region.selectedRegionLabel));
         } else {
             MatUtil.noise(window.copy, level);
         }

@@ -49,9 +49,9 @@ public class ContrastAndBrightness {//因为MatUtil里修改contrast和brightnes
     private void contrastAndBrightness() {
         window.temp = MatUtil.copy(window.img);
         //修改亮度和对比度
-        if (window.region.selectRegionItem.isSelected())
+        if (window.tool.region.selectRegionItem.isSelected())
             MatUtil.contrastAndBrightness(window.temp, brightnessSlider.getValue(), -contrastSlide.getValue(),
-                    MatUtil.getRect(window.region.selectedRegionLabel));
+                    MatUtil.getRect(window.tool.region.selectedRegionLabel));
         else
             MatUtil.contrastAndBrightness(window.temp, brightnessSlider.getValue(), -contrastSlide.getValue());
 

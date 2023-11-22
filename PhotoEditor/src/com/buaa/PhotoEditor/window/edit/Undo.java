@@ -27,17 +27,17 @@ public class Undo {
         if (!window.last.isEmpty()) {
             window.next.push(window.img);
 
-            if (!window.region.selectRegionItem.isSelected()) {
+            if (!window.tool.region.selectRegionItem.isSelected()) {
                 window.img = window.last.pop();
             } else {
-                Rect selectedRegionRect = MatUtil.getRect(window.region.selectedRegionLabel);
+                Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel);
                 Mat newImg = MatUtil.copy(window.img);
                 // last.peek()是栈顶Mat，即前一个版本，作用为把上一次改变的区域还原
                 window.last.peek().submat(selectedRegionRect).copyTo(newImg.submat(selectedRegionRect));
                 //更新
                 window.img = newImg;
                 //取消区域选择复选框
-                window.removeRegionSelected();
+                window.tool.region.removeRegionSelected();
             }
 
             window.showImgRegionLabel.setSize(window.img.width(), window.img.height());

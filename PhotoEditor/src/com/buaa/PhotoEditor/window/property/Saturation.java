@@ -34,8 +34,8 @@ public class Saturation {
         int saturation = saturationSlider.getValue();
         lastSaturation = saturationSlider.getValue();
 
-        if (window.region.selectRegionItem.isSelected()) {
-            MatUtil.saturation(window.temp, saturation, MatUtil.getRect(window.region.selectedRegionLabel));
+        if (window.tool.region.selectRegionItem.isSelected()) {
+            MatUtil.saturation(window.temp, saturation, MatUtil.getRect(window.tool.region.selectedRegionLabel));
         } else {
             MatUtil.saturation(window.temp, saturation);
         }

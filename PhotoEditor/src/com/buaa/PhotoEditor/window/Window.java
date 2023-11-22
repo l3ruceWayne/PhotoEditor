@@ -655,7 +655,7 @@ public class Window extends javax.swing.JFrame {
     }
 
 
-    }
+
 
     public void disablePasteMode() {
         tool.region.removeRegionSelected();

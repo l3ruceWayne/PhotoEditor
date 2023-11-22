@@ -23,13 +23,13 @@ public class Copy {
     }
 
     private void copySelectedRegion(ActionEvent e) {
-        window.region.selectRegionItem.setSelected(false);
+        window.tool.region.selectRegionItem.setSelected(false);
         // 如果还没有选择区域，弹出提示框
-        if (window.region.selectedRegionLabel.getBorder() == null) {
+        if (window.tool.region.selectedRegionLabel.getBorder() == null) {
             JOptionPane.showMessageDialog(null, "Please select region first");
             return;
         }
-        window.region.copyRegionMat = window.img.submat(MatUtil.getRect(window.region.selectedRegionLabel));
+        window.tool.region.copyRegionMat = window.img.submat(MatUtil.getRect(window.tool.region.selectedRegionLabel));
         // pasting状态置1
         window.pasting = true;
     }
