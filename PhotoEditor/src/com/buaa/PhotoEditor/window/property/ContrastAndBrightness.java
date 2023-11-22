@@ -38,15 +38,15 @@ public class ContrastAndBrightness {//因为MatUtil里修改contrast和brightnes
         });
     }
 
-    public void brightnessSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_brightnessSliderStateChanged
+    private void brightnessSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_brightnessSliderStateChanged
         contrastAndBrightness();
     }
 
-    public void contrastSlideStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_contrastSlideStateChanged
+    private void contrastSlideStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_contrastSlideStateChanged
         contrastAndBrightness();
     }
 
-    public void contrastAndBrightness() {
+    private void contrastAndBrightness() {
         window.temp = MatUtil.copy(window.img);
         //修改亮度和对比度
         if (window.region.selectRegionItem.isSelected())

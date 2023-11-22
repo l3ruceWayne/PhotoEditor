@@ -25,11 +25,11 @@ public class Graininess {
         });
     }
 
-    public void grainBarAdjustmentValueChanged(java.awt.event.AdjustmentEvent evt) {//GEN-FIRST:event_noiseBarAdjustmentValueChanged
+    private void grainBarAdjustmentValueChanged(java.awt.event.AdjustmentEvent evt) {//GEN-FIRST:event_noiseBarAdjustmentValueChanged
         applyNoise(grainBar.getValue(), false);
     }
 
-    public void applyNoise(int level, boolean replace) {
+    private void applyNoise(int level, boolean replace) {
         window.copy = MatUtil.copy(window.img);
         if (window.region.selectRegionItem.isSelected()) {
             MatUtil.noise(window.copy, level, MatUtil.getRect(window.region.selectedRegionLabel));

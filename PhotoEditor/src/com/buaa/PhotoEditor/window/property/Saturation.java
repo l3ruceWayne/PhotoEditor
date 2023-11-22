@@ -28,7 +28,7 @@ public class Saturation {
         });
     }
 
-    public void changeSaturation(ChangeEvent evt) {
+    private void changeSaturation(ChangeEvent evt) {
         window.temp = MatUtil.copy(window.img);
 
         int saturation = saturationSlider.getValue();

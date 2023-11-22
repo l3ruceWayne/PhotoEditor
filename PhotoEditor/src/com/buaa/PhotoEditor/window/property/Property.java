@@ -174,7 +174,7 @@ public class Property {
         restartPorpertyComponentsValues();
     }
 
-    public void restartPorpertyComponentsValues() {
+    private void restartPorpertyComponentsValues() {
         Component[] components = propertyMenuDialog.getContentPane().getComponents();
         for (Component c : components) {
             if (c instanceof JScrollBar) {
@@ -183,7 +183,7 @@ public class Property {
         }
     }
 
-    public void btResizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResizeActionPerformed
+    private void btResizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResizeActionPerformed
         try {
             double width = Double.parseDouble(getMySize().txtWidth.getText());
             double height = Double.parseDouble(getMySize().txtHeight.getText());
