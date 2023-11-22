@@ -24,16 +24,16 @@ public class Focus {
     }
     public void focusActionPerformed(ActionEvent evt) {
 
-        if (window.region.selectRegionItem.isSelected()) {
+        if (window.tool.region.selectRegionItem.isSelected()) {
 
             Mat newImg = MatUtil.copy(window.img);
-            MatUtil.focus(newImg, MatUtil.getRect(window.region.selectedRegionLabel));
+            MatUtil.focus(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel));
             MatUtil.show(newImg, window.showImgRegionLabel);
 
             window.last.push(window.img);
             window.img = newImg;
 
-            window.region.removeRegionSelected();
+            window.tool.region.removeRegionSelected();
 
         } else
             JOptionPane.showMessageDialog(null, "Please select a region first");

@@ -168,7 +168,6 @@ public class Window extends javax.swing.JFrame {
 
 
         propertyMenuDialog.setSize(400, 800);
-        Text.setSize(400, 400);
 
 
         // 设置弹窗的位置，null指明默认是中央
@@ -672,6 +671,7 @@ public class Window extends javax.swing.JFrame {
             }
         });
         menuBar.add(propertyMenu);
+        menuBar.add(layer.layerItem);
 
 
         menuBar.add(tool.region.selectRegionItem);
@@ -683,7 +683,6 @@ public class Window extends javax.swing.JFrame {
         menuBar.add(tool.drag.dragItem);
 
 
-        menuBar.add(layer.layerItem);
 
         setJMenuBar(menuBar);
 

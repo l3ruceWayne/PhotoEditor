@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Shrink {
+public class ZoomOut {
 
     public Window window;
     public JMenu zoomOutItem;
@@ -17,7 +17,7 @@ public class Shrink {
     public Mat matZoomOut;
     public Mat matZoomOutNexLayerImg;
 
-    public Shrink(Window window) {
+    public ZoomOut(Window window) {
         this.window = window;
         zoomOutItem = new JMenu("Zoom -");
 

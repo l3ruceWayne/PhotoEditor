@@ -14,8 +14,8 @@ public class Tool {
     public Eraser eraser;
     public Pen pen;
     public Region region;
-    public Shrink zoomOut;
-    public Enlarge zoomIn;
+    public ZoomOut zoomOut;
+    public ZoomIn zoomIn;
     public Rotate rotate;
     public Drag drag;
 
@@ -30,8 +30,8 @@ public class Tool {
         this.pen = new Pen(window);
         this.eraser = new Eraser(window);
         this.region = new Region(window);
-        this.zoomOut = new Shrink(window);
-        this.zoomIn = new Enlarge(window);
+        this.zoomOut = new ZoomOut(window);
+        this.zoomIn = new ZoomIn(window);
         this.rotate = new Rotate(window);
         this.drag = new Drag(window);
 
