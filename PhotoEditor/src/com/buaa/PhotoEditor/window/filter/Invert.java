@@ -26,9 +26,9 @@ public class Invert {
 
         Mat newImg = MatUtil.copy(window.img);
 
-        if (window.region.selectRegionItem.isSelected()) {
-            MatUtil.inversor(newImg, MatUtil.getRect(window.region.selectedRegionLabel));
-            window.region.removeRegionSelected();
+        if (window.tool.region.selectRegionItem.isSelected()) {
+            MatUtil.inversor(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel));
+            window.tool.region.removeRegionSelected();
         } else
             MatUtil.inversor(newImg);
 

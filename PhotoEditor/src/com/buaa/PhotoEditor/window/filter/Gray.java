@@ -31,10 +31,10 @@ public class Gray {
 
         Mat newImg = MatUtil.copy(window.img);
 
-        if (window.region.selectRegionItem.isSelected()) {
+        if (window.tool.region.selectRegionItem.isSelected()) {
 
-            MatUtil.grayScale(newImg, MatUtil.getRect(window.region.selectedRegionLabel));
-            window.region.removeRegionSelected();
+            MatUtil.grayScale(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel));
+            window.tool.region.removeRegionSelected();
 
         } else {
             MatUtil.grayScale(newImg);

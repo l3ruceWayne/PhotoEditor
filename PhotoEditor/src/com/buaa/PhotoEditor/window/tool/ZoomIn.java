@@ -7,12 +7,12 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Enlarge {
+public class ZoomIn {
 
     public Window window;
     public JMenu zoomInItem;
 
-    public Enlarge(Window window) {
+    public ZoomIn(Window window) {
         this.window = window;
         zoomInItem = new JMenu("Zoom +");
 

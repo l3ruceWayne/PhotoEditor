@@ -31,10 +31,10 @@ public class Blur {
 
         Mat newImg = MatUtil.copy(window.img);
 
-        if (window.region.selectRegionItem.isSelected()) {
+        if (window.tool.region.selectRegionItem.isSelected()) {
 
-            MatUtil.blur(newImg, blurLevel, MatUtil.getRect(window.region.selectedRegionLabel));
-            window.region.removeRegionSelected();
+            MatUtil.blur(newImg, blurLevel, MatUtil.getRect(window.tool.region.selectedRegionLabel));
+            window.tool.region.removeRegionSelected();
 
         } else {
             MatUtil.blur(newImg, blurLevel);
