@@ -29,7 +29,7 @@ public class Layer {
         layerList.add(perLayer);
         layerItem = new JMenuItem("Layer");
         // 调整间距
-        layerItem.setBorder(BorderFactory.createEmptyBorder(10,-10,10,10));
+//        layerItem.setBorder(BorderFactory.createEmptyBorder(10,-10,10,10));
         layerItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 layerActionPerformed(evt);

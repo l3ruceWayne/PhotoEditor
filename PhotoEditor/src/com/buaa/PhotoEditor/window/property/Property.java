@@ -170,7 +170,7 @@ public class Property {
         propertyMenuDialog.setResizable(true);
         window.last.push(window.img);
         window.img = window.temp;
-        window.removeRegionSelected();
+        window.tool.region.removeRegionSelected();
         restartPorpertyComponentsValues();
     }
 
