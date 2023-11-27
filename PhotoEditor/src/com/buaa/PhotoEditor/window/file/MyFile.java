@@ -3,7 +3,12 @@ package com.buaa.PhotoEditor.window.file;
 import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
-
+/**
+* @Description: 对应菜单栏的File选项以及其子选项，负责文件的打开，保存和另存为功能
+* @author: 卢思文
+* @date: 11/27/2023 4:42 PM
+* @version: 1.0
+**/
 public class MyFile {
     public JMenu fileMenu;
     private Window window;

@@ -27,7 +27,7 @@ public class PerLayer {
     }
 
     public void setNextLayerMat(Mat img) {
-        this.window.setNextLayerMat(img);
+        window.nexLayerImg = img;
     }
     
     public void showWindow(){
@@ -39,6 +39,6 @@ public class PerLayer {
     }
     
     public Mat getImg(){
-        return window.getImg();
+        return window.img;
     }
 }

@@ -9,7 +9,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-
+/**
+ * @Description: 点击选择区域功能后，光标暂且设置成默认
+ * （如果上一个状态是画笔，如果不设置成默认，就一直是画笔了）
+ * @author: 卢思文
+ * @date: 11/26/2023 8:13 PM
+ * @version: 1.0
+ **/
 public class Region {
     public int selectedRegionX, selectedRegionY;
     public Mat copyRegionMat;
@@ -27,6 +33,7 @@ public class Region {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     window.tool.pen.penItem.setSelected(false);
                     window.tool.eraser.eraserItem.setSelected(false);
+                    window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
             }
         });
@@ -50,13 +57,6 @@ public class Region {
             return;
         }
         copyRegionMat = window.img.submat(MatUtil.getRect(selectedRegionLabel));
-        // pending 下面代码的作用不明
-//        JLabel lbRegion = new JLabel();
-//        MatUtil.show(copyRegionMat, lbRegion);
-//        selectedRegionLabel.setLayout(null);
-//        selectedRegionLabel.add(lbRegion);
-//        selectedRegionLabel.revalidate();
-//        selectedRegionLabel.repaint();
 
         // 进入pasting模式
         window.pasting = true;

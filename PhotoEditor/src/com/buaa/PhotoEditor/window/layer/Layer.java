@@ -10,9 +10,12 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-Layer类聚合了单个图层(PerLayer)和图层窗口(LayerFrame)
- */
+/**
+* @Description: Layer类聚合了单个图层类（PerLayer）和图层窗口类（LayerFrame）
+* @author: 卢思文
+* @date: 11/26/2023 9:00 PM
+* @version: 1.0
+**/
 public class Layer {
     public JMenuItem layerItem;
     public static LayerFrame layerFrame = new LayerFrame();

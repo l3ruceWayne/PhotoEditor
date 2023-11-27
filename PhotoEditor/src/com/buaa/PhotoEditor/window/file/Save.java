@@ -9,7 +9,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-
+/**
+* @Description: 负责修改后图片的保存和另存为功能
+* @author: 卢思文
+* @date: 11/27/2023 4:44 PM
+* @version: 1.0
+**/
 public class Save {
     public JMenuItem saveItem;
     public JMenuItem saveAsItem;
@@ -38,7 +43,12 @@ public class Save {
             }
         });
     }
-
+    /**
+    * @Description: 更新window.img为保存后的img，以便后续再进行编辑
+    * @author: 卢思文
+    * @date: 11/27/2023 4:44 PM
+    * @version: 1.0
+    **/
     private void getNewImg() {
         Mat newImg = MatUtil.copy(window.img);
         // 保存后，小组件和图片融为一体，所以把小组件删除
@@ -55,7 +65,13 @@ public class Save {
         }
         window.img = newImg;
     }
-
+    /**
+    * @param e : 事件
+    * @Description: 保存修改后的图片
+    * @author: 卢思文
+    * @date: 11/27/2023 4:47 PM
+    * @version: 1.0
+    **/
     private void saveImg(ActionEvent e) {
         if (window.img == null) {
             JOptionPane.showMessageDialog(null,
@@ -70,7 +86,13 @@ public class Save {
         JOptionPane.showMessageDialog(null,
                 "Success");
     }
-
+    /**
+    * @param e : 事件
+    * @Description: 对修改后的图片进行另存为操作
+    * @author: 卢思文
+    * @date: 11/27/2023 4:48 PM
+    * @version: 1.0
+    **/
     private void saveAsNewImg(ActionEvent e) {
         if (window.img == null) {
             JOptionPane.showMessageDialog(null,
