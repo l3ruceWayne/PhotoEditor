@@ -17,6 +17,8 @@ public class Region {
     public Window window;
     public JCheckBoxMenuItem selectRegionItem;
 
+    public Point pointRegion;
+
     public Region(Window window) {
         this.window = window;
         selectedRegionLabel = new JLabel();
@@ -27,6 +29,7 @@ public class Region {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     window.tool.pen.penItem.setSelected(false);
                     window.tool.eraser.eraserItem.setSelected(false);
+                    window.tool.drag.dragItem.setSelected(false);
                 }
             }
         });
@@ -39,31 +42,11 @@ public class Region {
         window.panel.repaint();
         selectRegionItem.setSelected(false);
     }
-    public void copySelectedRegion(ActionEvent evt) {
-
-        selectRegionItem.setSelected(false);
-        // 如果还没有选择区域，弹出对话框
-        if(selectedRegionLabel.getBorder() == null) {
-            // pending 对话框的位置？
-            JOptionPane.showMessageDialog(null,
-                    "Please select region first");
-            return;
-        }
-        copyRegionMat = window.img.submat(MatUtil.getRect(selectedRegionLabel));
-        // pending 下面代码的作用不明
-//        JLabel lbRegion = new JLabel();
-//        MatUtil.show(copyRegionMat, lbRegion);
-//        selectedRegionLabel.setLayout(null);
-//        selectedRegionLabel.add(lbRegion);
-//        selectedRegionLabel.revalidate();
-//        selectedRegionLabel.repaint();
-
-        // 进入pasting模式
-        window.pasting = true;
-    }
 
     public void addRegion(Point p) {
-
+//        int newX = window.tool.drag.newX;
+//        int newY = window.tool.drag.newY;
+//        if (p.x < window.img.width()+newX || p.x > newX || p.y < window.img.height()+newY || p.y > newY) return;
         selectedRegionLabel.setLocation(p);
         selectedRegionLabel.setSize(1, 1);
         selectedRegionLabel.setBorder(BorderFactory
@@ -88,13 +71,12 @@ public class Region {
     }
 
     public void setRegionSize(int x, int y) {
-
         int width = Math.abs(selectedRegionX - x);
         int height = Math.abs(selectedRegionY - y);
         x = Math.min(x, selectedRegionX);
         y = Math.min(y, selectedRegionY);
         selectedRegionLabel.setBounds(x, y, width, height);
-
+        pointRegion = new Point(x+width, y-height);
     }
 
     public void disableListeners() {

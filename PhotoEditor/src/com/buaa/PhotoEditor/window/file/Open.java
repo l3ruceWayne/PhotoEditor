@@ -39,6 +39,8 @@ public class Open {
             this.window.setLocationRelativeTo(null);
             window.last.clear();
             window.next.clear();
+            window.isProperty.clear();
+            window.propertyValue.clear();
             window.showImgRegionLabel.setText("");
             window.updatePropertys();//LYX 这个方法在其他地方也有调用，所以没有把它写进Open类里面来，之后要改的话再改吧
         }

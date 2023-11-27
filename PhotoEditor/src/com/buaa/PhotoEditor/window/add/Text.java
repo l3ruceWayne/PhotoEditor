@@ -3,6 +3,7 @@ package com.buaa.PhotoEditor.window.add;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 
 import javax.swing.*;
@@ -10,25 +11,30 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 
 public class Text {
 
     public Window window;
     public JMenuItem addTextItem;
-    
+
     private Scalar color;
     private int scale;
     private String str;
 
     // dialog
     public JDialog dialogAddText;
-    public JPanel panelAddTextColor;
+    public JPanel panelTextColor;
     public JLabel labelAddTextContents;
     public JLabel labelAddTextSize;
     public JLabel labelAddTextColor;
     public JSpinner spinnerAddText;
     public JTextField textField;
+
+    public Point point;
 
     public Text(Window window){
         scale = 1;
@@ -39,7 +45,7 @@ public class Text {
 
         addTextItem = new JMenuItem("Add Text");
         dialogAddText = new JDialog();
-        panelAddTextColor = new JPanel();
+        panelTextColor = new JPanel();
         labelAddTextContents = new JLabel("Contents");
         labelAddTextSize = new JLabel("Size: ");
         labelAddTextColor = new JLabel("Color: ");
@@ -54,7 +60,23 @@ public class Text {
             }
         });
     }
-    
+
+    /*
+    * @param:
+    * @return
+    * @Description: 初始化文字设置
+    * @author: 张旖霜
+    * @date: 11/27/2023 12:48 PM
+    * @version: 1.0
+    */
+    public void initPanel() {
+        setStr("");
+        textField.setText(str);
+        spinnerAddText.setValue(1);
+        setColor(new Scalar(0, 0, 0));
+        panelTextColor.setBackground(Color.BLACK);
+    }
+
     public Scalar getColor() {
         return color;
     }
@@ -79,24 +101,30 @@ public class Text {
         this.str = str;
     }
 
+    /*
+    * @param:
+    * @return
+    * @Description:创建文字设置的面板
+    * @author: 张旖霜
+    * @date: 11/27/2023 12:51 PM
+    * @version: 1.0
+    */
     public void createAddTextPanel() {
         dialogAddText.setSize(400, 400);
         dialogAddText.setTitle("Text");
         dialogAddText.setResizable(false);
         dialogAddText.setLocationRelativeTo(null);
 
-        spinnerAddText.setValue(1);
-
-        panelAddTextColor.setBackground(new java.awt.Color(0, 0, 0));
-        panelAddTextColor.addMouseListener(new java.awt.event.MouseAdapter() {
+        panelTextColor.setBackground(new java.awt.Color(0, 0, 0));
+        panelTextColor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pnlTextColorMouseClicked(evt);
             }
         });
 
-        // panelAddTextColor
-        GroupLayout pnlTextColorLayout = new javax.swing.GroupLayout(panelAddTextColor);
-        panelAddTextColor.setLayout(pnlTextColorLayout);
+        // panelTextColor
+        GroupLayout pnlTextColorLayout = new javax.swing.GroupLayout(panelTextColor);
+        panelTextColor.setLayout(pnlTextColorLayout);
         pnlTextColorLayout.setHorizontalGroup(
                 pnlTextColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 21, Short.MAX_VALUE)
@@ -107,8 +135,20 @@ public class Text {
         );
 
         spinnerAddText.addChangeListener(new javax.swing.event.ChangeListener() {
+            /*
+            * @param:
+            * @return
+            * @Description:设置条件，字体大小不能小于等于0
+            * @author: 张旖霜
+            * @date: 11/27/2023 12:51 PM
+            * @version: 1.0
+            */
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                textScaleStateChanged(evt);
+                if ((int)spinnerAddText.getValue() > 0) {
+                    textScaleStateChanged(evt);
+                }else {
+                    spinnerAddText.setValue(1);
+                }
             }
         });
 
@@ -123,7 +163,7 @@ public class Text {
                                         .addGroup(addTextLayout.createSequentialGroup()
                                                 .addComponent(labelAddTextColor)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(panelAddTextColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(panelTextColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addComponent(labelAddTextContents)
                                         .addComponent(labelAddTextSize))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -146,7 +186,7 @@ public class Text {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(addTextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(labelAddTextColor)
-                                        .addComponent(panelAddTextColor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(panelTextColor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(82, Short.MAX_VALUE))
         );
 
@@ -172,20 +212,27 @@ public class Text {
         });
     }
 
+    /*
+    * @param:
+    * @return
+    * @Description:选好位置（框选区域）后，显示字体设置面板
+    * @author: 张旖霜
+    * @date: 11/27/2023 12:51 PM
+    * @version: 1.0
+    */
     public void writeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeTextActionPerformed
 
         if (window.tool.region.selectRegionItem.isSelected()) {
-
+            window.tool.region.removeRegionSelected();
             dialogAddText.setModal(true);
             dialogAddText.setVisible(true);
 
+            window.isProperty.push(0);
             window.last.push(window.img);
             window.img = window.temp;
-
-            window.tool.region.removeRegionSelected();
+            initPanel();
         } else
             JOptionPane.showMessageDialog(null, "Select an area to add text!");
-
     }
 
     public void textScaleStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_textScaleStateChanged
@@ -194,22 +241,50 @@ public class Text {
         writeText();
     }
 
+    /*
+    * @param:
+    * @return
+    * @Description:根据字体的设置，在图片上写入文字（之前用的是putText方法，但是这个方法不支持中文，所以只能用drawString方法，将文字“画”在图片上）
+    * @author: 张旖霜
+    * @date: 11/27/2023 12:52 PM
+    * @version: 1.0
+    */
     public void writeText() {
         window.temp = MatUtil.copy(window.img);
-        MatUtil.writeText(this, window.temp, MatUtil.getRect(window.tool.region.selectedRegionLabel));
+        int x = window.tool.region.selectedRegionLabel.getX();
+        int y = window.tool.region.selectedRegionLabel.getY();
+
+
+        BufferedImage bufImg = MatUtil.bufferedImg(window.temp);
+        Font font = new Font("simhei", Font.PLAIN, getScale()*25);
+
+        Graphics g = bufImg.getGraphics();
+
+        g.setFont(font);
+        g.setColor(new Color((int)getColor().val[2], (int)getColor().val[1], (int)getColor().val[0]));
+        g.drawString(getStr(), x + 5, y + getScale()*25);
+
+        g.dispose();
+        window.temp = MatUtil.bufImgToMat(bufImg);
         MatUtil.show(window.temp, window.showImgRegionLabel);
     }
 
-    public void pnlTextColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlTextColorMouseClicked
+    /*
+    * @param:
+    * @return
+    * @Description:点击颜色框，显示颜色选择面板
+    * @author: 张旖霜
+    * @date: 11/27/2023 12:52 PM
+    * @version: 1.0
+    */
+    public void pnlTextColorMouseClicked(java.awt.event.MouseEvent evt) {
 
-        Color color = JColorChooser.showDialog(null,
-                "选择颜色",
-                Color.BLACK);
+        Color color = JColorChooser.showDialog(null,"Color", Color.BLACK);
 
         setColor(new Scalar(color.getBlue(), color.getGreen(), color.getRed()));
-        panelAddTextColor.setBackground(color);
+        panelTextColor.setBackground(color);
         writeText();
 
     }
-    
+
 }
