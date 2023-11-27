@@ -42,7 +42,10 @@ import org.opencv.core.Size;
 
 public class Window extends javax.swing.JFrame {
 
+
     public Property property = new Property(this);
+
+
 
     public Save save;
 
@@ -96,10 +99,14 @@ public class Window extends javax.swing.JFrame {
     public JLabel showImgRegionLabel;
 
     // options
+
     public boolean pasting = false;
     public String title;
     public int imgWidth;
     public int imgHeight;
+
+
+
 
 
 
@@ -131,6 +138,7 @@ public class Window extends javax.swing.JFrame {
     public javax.swing.JCheckBox rbtGreen;
     public javax.swing.JCheckBox rbtRed;
     public javax.swing.JMenuItem sepia;
+
     public javax.swing.JTextField txtHeight;
     public javax.swing.JTextField txtWidth;
 
@@ -508,9 +516,6 @@ public class Window extends javax.swing.JFrame {
 
 
 
-
-
-
     public void penColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_penColorMouseClicked
         // 阻塞式选择画笔颜色
         // 窗口弹出后一直到选好颜色点击确定，才会执行下一行代码
@@ -544,8 +549,6 @@ public class Window extends javax.swing.JFrame {
         MatUtil.show(img, showImgRegionLabel);
 
     }//GEN-LAST:event_sepiaActionPerformed
-
-
 
 
 

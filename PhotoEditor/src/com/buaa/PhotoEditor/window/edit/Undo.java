@@ -4,7 +4,9 @@ import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
+
 import org.opencv.core.Size;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +14,9 @@ import java.awt.event.ActionEvent;
 public class Undo {
     public JMenuItem undoItem;
     private Window window;
+
     public int state;
+
 
     public Undo(Window window) {
         this.window = window;
@@ -28,6 +32,7 @@ public class Undo {
     private void undo (ActionEvent e){
         if (!window.last.isEmpty()) {
             window.next.push(window.img);
+
             // property
             window.nextIsProperty.push(0);
 
@@ -53,6 +58,7 @@ public class Undo {
 //                    MatUtil.resize(window.img, new Size(width, height));
 //                    window.updatePropertys();
 //                }
+
             } else {
                 Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel);
                 Mat newImg = MatUtil.copy(window.img);
@@ -65,8 +71,10 @@ public class Undo {
             }
 
             window.showImgRegionLabel.setSize(window.img.width(), window.img.height());
+
 //            this.window.setSize(window.img.width(), window.img.height());
 //            this.window.setLocationRelativeTo(null);
+
             MatUtil.show(window.img, window.showImgRegionLabel);
         } else {
             //个人认为需要保留弹窗，后期可删

@@ -39,7 +39,9 @@ public class Cut {
             this.window.setSize(newImg.width(), newImg.height());
             this.window.setLocationRelativeTo(null);
             // 将当前的window.img压入window.last中，保存上一张图片
+
             window.isProperty.push(0);
+
             window.last.push(window.img);
             //更新
             window.img = newImg;
