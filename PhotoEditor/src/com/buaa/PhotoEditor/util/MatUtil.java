@@ -6,6 +6,8 @@ package com.buaa.PhotoEditor.util;
 
 import com.buaa.PhotoEditor.modal.EColor;
 import com.buaa.PhotoEditor.modal.ESloopFaceDirection;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
@@ -21,6 +23,7 @@ import javax.swing.JLabel;
 
 import com.buaa.PhotoEditor.window.add.Text;
 import org.opencv.core.*;
+import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -69,7 +72,7 @@ public abstract class MatUtil extends JFrame {
     }
     // 将图片img显示在页lbImg上
     public static void show(Mat img, JLabel jLabel) {
-        //lbImg.setBounds(0, 0, (int) img.size().width, (int) img.size().height);
+//        jLabel.setBounds(10, 10, (int) img.size().width, (int) img.size().height);
         // pending
         ImageIcon imgIcon = new ImageIcon(bufferedImg(img));
         jLabel.setIcon(imgIcon);
@@ -597,12 +600,32 @@ public abstract class MatUtil extends JFrame {
     public static void sepia(Mat img, Rect region){
         sepia(img.submat(region));
     }
-    
-    public static void writeText(Text text, Mat img, Rect region ) {
-    
-        img = img.submat(region);
-        Point point = new Point(0, img.height()/2);
-        Imgproc.putText(img, text.getStr(), point,Core.FONT_ITALIC, text.getScale(), text.getColor(),text.getScale());
+
+//    public static void writeText(Text text, Mat img, Rect region ) {
+//        img = img.submat(region);
+//        Point point = new Point(0, text.getScale()*25);
+//        Imgproc.putText(img, text.getStr(), point, Core.FONT_HERSHEY_SIMPLEX, text.getScale(), text.getColor(),text.getScale());
+//    }
+
+
+    /*
+    * @param bufImg: 要被转换的bufferedImage类型图片
+    * @return Mat类型图片
+    * @Description:bufferedImage类型转换成Mat类型（主要用在writeText）
+    * @author: 张旖霜
+    * @date: 11/27/2023 12:45 PM
+    * @version: 1.0
+    */
+    public static Mat bufImgToMat(BufferedImage bufImg) {
+        byte[] pixels = ((DataBufferByte) bufImg.getRaster().getDataBuffer())
+                .getData();
+
+        // Create a Matrix the same size of image
+        Mat image = new Mat(bufImg.getHeight(), bufImg.getWidth(), CvType.CV_8UC3);
+        // Fill Matrix with image values
+        image.put(0, 0, pixels);
+
+        return image;
     }
     
     

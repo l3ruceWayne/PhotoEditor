@@ -54,7 +54,10 @@ public class Redo {
 
             if (!window.tool.region.selectRegionItem.isSelected()) {
                 window.img = window.next.pop();
+
             } else {
+
+
                 Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel);
                 Mat newImg = MatUtil.copy(window.img);
                 // last.peek()是栈顶Mat，即上一次撤销前的版本，作用为恢复上一次撤销前改变的区域
@@ -66,8 +69,10 @@ public class Redo {
             }
 
             window.showImgRegionLabel.setSize(window.img.width(), window.img.height());
-            this.window.setSize(window.img.width(), window.img.height());
-            this.window.setLocationRelativeTo(null);
+
+//            this.window.setSize(window.img.width(), window.img.height());
+//            this.window.setLocationRelativeTo(null);
+
 
             MatUtil.show(window.img, window.showImgRegionLabel);
         } else {

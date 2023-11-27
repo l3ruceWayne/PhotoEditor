@@ -39,7 +39,8 @@ public class LayerFrame extends JFrame {
             model.remove(0);
         }
         for (int i = 0; i < layers.size(); i++){
-            model.addElement("Layer" + (i + 1));
+            // 显示的直接是图层名字，而不是根据图层顺序决定名字
+            model.addElement(layers.get(i).getTitle());
         }
     }
 
@@ -174,5 +175,7 @@ public class LayerFrame extends JFrame {
         Layer.alterLayer(jList.getSelectedIndex());
     }
 
-
+    public void disposeLayerFrame() {
+        dispose();
+    }
 }

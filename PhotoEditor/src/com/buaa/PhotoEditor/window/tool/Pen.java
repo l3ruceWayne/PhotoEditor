@@ -2,6 +2,7 @@ package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import org.opencv.core.Mat;
 
 import javax.swing.*;
 import java.awt.event.InputEvent;
@@ -29,15 +30,25 @@ public class Pen {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     window.tool.region.removeRegionSelected();
                     window.tool.eraser.eraserItem.setSelected(false);
+                    window.tool.drag.dragItem.setSelected(false);
                 }
             }
         });
     }
-
+    /*
+     * @param x, y:鼠标位置
+     * @return
+     * @Description: newX和newY是drag后的重新定位
+     * @author: 张旖霜
+     * @date: 11/27/2023 3:30 PM
+     * @version: 1.0
+     */
     public void paint(int x, int y) {
         // 调整界面大小，让图片填充后可以删掉
         // pending
-        if (x > window.img.width() || y > window.img.height()) return;
+        int newX = window.tool.drag.newX;
+        int newY = window.tool.drag.newY;
+//        if (x > window.img.width()+newX || x < newX || y > window.img.height()+newY || y < newY) return;
         // pending
         if (window.paintingImg == null) {
             window.paintingImg = MatUtil.copy(window.img);
@@ -48,8 +59,8 @@ public class Pen {
                         window.penColor.getBackground().getRed()},
                 window.tool.penSize,
                 window.tool.penSize,
-                x,
-                y,
+                x - newX,
+                y - newY,
                 window.paintingImg);
 
         // 实现笔画的方法是，鼠标的坐标+penSize构成Rect，将img的rect区域进行像素更改

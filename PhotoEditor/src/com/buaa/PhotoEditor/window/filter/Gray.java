@@ -42,6 +42,7 @@ public class Gray {
 
         MatUtil.show(newImg, window.showImgRegionLabel);
 
+        window.isProperty.push(0);
         window.last.push(window.img);
         window.img = newImg;
     }

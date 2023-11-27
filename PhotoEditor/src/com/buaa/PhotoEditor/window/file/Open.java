@@ -61,6 +61,8 @@ public class Open {
             this.window.setLocationRelativeTo(null);
             window.last.clear();
             window.next.clear();
+            window.isProperty.clear();
+            window.propertyValue.clear();
             window.showImgRegionLabel.setText("");
             window.updatePropertys();
         }
