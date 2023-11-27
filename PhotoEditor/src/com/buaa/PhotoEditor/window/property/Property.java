@@ -78,7 +78,7 @@ public class Property {
 
         resizeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                Resize(evt);
+                window.property.mySize.Resize(evt);
 
             }
         });
@@ -228,33 +228,7 @@ public class Property {
     }
 
 
-    /**
-    * @param evt : 事件
-    * @Description:
-     * 只是简单的实现改变尺寸
-     * 改变尺寸后，图片显示有bug
-    * @author: 卢思文
-    * @date: 11/25/2023 11:41 AM
-    * @version: 1.0
-    **/
-    private void Resize(ActionEvent evt) {
-        try {
-            double newWidth = Double.parseDouble(getMySize().txtWidth.getText());
-            double newHeight = Double.parseDouble(getMySize().txtHeight.getText());
 
-            Mat newImg = MatUtil.copy(window.temp);
-            MatUtil.resize(newImg, new Size(newWidth, newHeight));
-
-            window.last.push(window.img);
-
-            window.img = window.temp = newImg;
-            MatUtil.show(window.temp, window.showImgRegionLabel);
-            updateProperty();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Please prefill the data correctly!");
-        }
-
-    }
     public void updateProperty() {
 
         getMySize().txtWidth.setText(window.img.width() + "");
