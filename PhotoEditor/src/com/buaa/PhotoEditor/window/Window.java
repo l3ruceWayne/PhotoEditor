@@ -31,6 +31,7 @@ import com.buaa.PhotoEditor.window.layer.Layer;
 
 
 import org.opencv.core.Mat;
+
 /**
 * @Description: menuBar的显示效果不好（各项之间的距离等），需改进
  * 后续在关闭窗口的时候检查是否保存，未保存则提醒。相关代码如下
@@ -42,6 +43,7 @@ import org.opencv.core.Mat;
 public class Window extends JFrame {
 
     public Property property;
+
 
     public Save save;
 
@@ -65,9 +67,14 @@ public class Window extends JFrame {
     public String originalImgPath;
     // temp的作用？
     public Mat temp;             //temp
+    public Mat zoomImg;
     public static Mat copy;
     public Stack<Mat> last; //ctrl+z
     public Stack<Mat> next;     //ctrl+y`
+    public Stack<Integer> isProperty;
+    public Stack<Integer> propertyValue;
+    public Stack<Integer> nextIsProperty;
+    public Stack<Integer> nextPropertyValue;
 
     public Mat paintingImg;            //image paint
     public Mat nexLayerImg;           //image use to paint
@@ -80,8 +87,17 @@ public class Window extends JFrame {
     public JLabel showImgRegionLabel;
     // options
 
-
     public boolean pasting = false;
+
+    public String title;
+    public int imgWidth;
+    public int imgHeight;
+
+
+
+
+
+
 
     // Property
 
@@ -89,7 +105,10 @@ public class Window extends JFrame {
 
     public Window(Mat img, String title) {
         this(title);
+        this.title  = title;
         this.img = img;
+        this.imgWidth = img.width();
+        this.imgHeight = img.height();
         MatUtil.show(img, showImgRegionLabel);
         showImgRegionLabel.setSize(img.width(), img.height());
         this.setSize(img.width(), img.height());
@@ -99,6 +118,7 @@ public class Window extends JFrame {
 
     public Window(String title) {
 
+        this.title  = title;
         initComponents();
 
         addMouseListeners();
@@ -112,6 +132,10 @@ public class Window extends JFrame {
         // 撤销和反撤销操作用的栈
         last = new Stack<>();
         next = new Stack<>();
+        isProperty = new Stack<>();
+        propertyValue = new Stack<>();
+        nextIsProperty = new Stack<>();
+        nextPropertyValue = new Stack<>();
         this.setTitle(title);
     }
 
@@ -232,6 +256,7 @@ public class Window extends JFrame {
 
 
 
+
     public void addMouseListeners() {
 
         panel.addMouseListener(new MouseAdapter() {
@@ -267,6 +292,7 @@ public class Window extends JFrame {
                 }
             }
         });
+
 
     }
 

@@ -54,7 +54,11 @@ public class Eraser {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     window.tool.region.removeRegionSelected();
                     window.tool.pen.penItem.setSelected(false);
+
                     window.showImgRegionLabel.setCursor(eraserCursor);
+
+                    window.tool.drag.dragItem.setSelected(false);
+
                 }
             }
         });
@@ -63,21 +67,34 @@ public class Eraser {
     }
 
 
+    // pending 加一个erase的大小调节功能
+    // 一键清除功能
+    /*
+    * @param x, y:鼠标位置
+    * @return
+    * @Description: newX和newY是drag后的重新定位
+    * @author: 张旖霜
+    * @date: 11/27/2023 3:30 PM
+    * @version: 1.0
+    */
+
     public void erase(int x, int y) {
         // pending
-        if (x > window.img.width() || y > window.img.height()) return;
+        int newX = window.tool.drag.newX;
+        int newY = window.tool.drag.newY;
+        if (x > window.img.width()+newX || x < newX || y > window.img.height()+newY || y < newY) return;
 
         if (window.paintingImg == null) {
             window.paintingImg = MatUtil.copy(window.img);
         }
 
-        Mat eraseRegion = window.paintingImg.submat(
-                new Rect(x, y, window.tool.eraser.eraserSize,
+
+        Mat eraseRegion = window.paintingImg.submat(new Rect(x-newX, y-newY, window.tool.eraser.eraserSize,
                 window.tool.eraser.eraserSize));
 
-        Mat originalRegion = window.originalImg
-                .submat(new Rect(x, y, window.tool.eraser.eraserSize,
-                        window.tool.eraser.eraserSize));
+        
+        Mat originalRegion = window.originalImg.submat(new Rect(x-newX, y-newY, window.tool.eraser.eraserSize, window.tool.eraser.eraserSize));
+
         // 拿原图覆盖现在正在画的图，就相当于橡皮擦操作
         MatUtil.overlay(eraseRegion, originalRegion);
 

@@ -3,6 +3,7 @@ package com.buaa.PhotoEditor.window.file;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -20,8 +21,11 @@ public class Save {
     public JMenuItem saveAsItem;
     private Window window;
 
+    private String path;
+
     public Save(Window window) {
         this.window = window;
+
         saveItem = new JMenuItem("Save");
         saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 KeyEvent.CTRL_DOWN_MASK));
@@ -61,28 +65,35 @@ public class Save {
         // 显示融为一体的图片
         MatUtil.show(newImg, window.showImgRegionLabel);
         if (window.last.size() != 0 && window.img != window.last.peek()) {
+            window.isProperty.push(0);
             window.last.push(window.img);
         }
         window.img = newImg;
     }
-    /**
-    * @param e : 事件
-    * @Description: 保存修改后的图片
-    * @author: 卢思文
-    * @date: 11/27/2023 4:47 PM
+
+
+    /*
+    * @param:
+    * @return
+    * @Description:保存图片，如果用户点击了save as，保存路径改为save as的保存路径
+    * @author: 张旖霜、卢思文
+    * @date: 11/27/2023 12:54 PM
     * @version: 1.0
-    **/
+    */
+
     private void saveImg(ActionEvent e) {
         if (window.img == null) {
             JOptionPane.showMessageDialog(null,
                     "Please open an image and edit it first");
             return;
         }
-
+        MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
         getNewImg();
 
-        MatUtil.save(window.originalImgPath,
-                window.img);
+        if (path == null) {
+            path = window.originalImgPath;
+        }
+        MatUtil.save(path, window.img);
         JOptionPane.showMessageDialog(null,
                 "Success");
     }
@@ -99,6 +110,8 @@ public class Save {
                     "Please open an image and edit it first");
             return;
         }
+        // 为了避免保存到zoom的图片，所以保存前先resize回之前的大小
+        MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save As");
@@ -108,7 +121,7 @@ public class Save {
         int userSelection = fileChooser.showSaveDialog(null);
         // 如果用户点击保存
         if (userSelection == JFileChooser.APPROVE_OPTION) {
-            String path = fileChooser.getSelectedFile().getPath();
+            path = fileChooser.getSelectedFile().getPath();
             if (!path.contains(".png")) {
                 path += ".png";
             }

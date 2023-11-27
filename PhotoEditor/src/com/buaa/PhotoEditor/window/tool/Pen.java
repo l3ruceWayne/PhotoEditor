@@ -2,6 +2,7 @@ package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import org.opencv.core.Mat;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,6 +74,7 @@ public class Pen {
                     window.tool.region.removeRegionSelected();
                     window.tool.eraser.eraserItem.setSelected(false);
                     window.showImgRegionLabel.setCursor(penCursor);
+                    window.tool.drag.dragItem.setSelected(false);
                 } else {
                     window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
@@ -90,29 +92,38 @@ public class Pen {
 
 
     }
-    /**
-    * @param x : 画笔x坐标
-    * @param y : 画笔y坐标
-    * @Description:  实现画笔功能，原理是将指定像素块染成指定的颜色
-    * @author: 卢思文
-    * @date: 11/26/2023 8:07 PM
-    * @version: 1.0
-    **/
+    
+    /*
+     * @param x, y:鼠标位置
+     * @return
+     * @Description: newX和newY是drag后的重新定位
+     * 实现画笔功能，原理是将指定像素块染成指定的颜色
+     * @author: 张旖霜、卢思文
+     * @date: 11/27/2023 3:30 PM
+     * @version: 1.0
+     */
     public void paint(int x, int y) {
-        if (x > window.img.width() || y > window.img.height()) return;
+        // 调整界面大小，让图片填充后可以删掉
+        // pending
+        int newX = window.tool.drag.newX;
+        int newY = window.tool.drag.newY;
+//        if (x > window.img.width()+newX || x < newX || y > window.img.height()+newY || y < newY) return;
+        // pending
 
         if (window.paintingImg == null) {
             window.paintingImg = MatUtil.copy(window.img);
         }
         
         MatUtil.paint(new int[]{
+
                         penColorPanel.getBackground().getBlue(),
                         penColorPanel.getBackground().getGreen(),
                         penColorPanel.getBackground().getRed()},
                 penSize,
                 penSize,
-                x,
-                y,
+                x - newX,
+                y - newY,
+
                 window.paintingImg);
 
         MatUtil.show(window.paintingImg, window.showImgRegionLabel);

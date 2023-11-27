@@ -4,6 +4,7 @@ import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 /**
@@ -27,8 +28,12 @@ public class Tool {
     public ZoomIn zoomIn;
     public Rotate rotate;
     public Drag drag;
+
     public static  SpinnerNumberModel penModel = new SpinnerNumberModel(5, 1, 30, 1);
     public static  SpinnerNumberModel eraserModel = new SpinnerNumberModel(5, 1, 30, 1);
+
+    public int ex, ey;
+
 
     public JPanel zoomRegion;
 
@@ -49,6 +54,11 @@ public class Tool {
         window.panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+//                int newX = window.tool.drag.newX;
+//                int newY = window.tool.drag.newY;
+                ex = e.getX();
+                ey = e.getY();
+//                if (x < window.img.width()+newX || x > newX || y < window.img.height()+newY || y > newY) return;
                 if (region.selectRegionItem.isSelected()) {
                     region.addRegion(e.getPoint());
                 }
@@ -60,6 +70,7 @@ public class Tool {
 
                 if (pen.penItem.isSelected()
                         || eraser.eraserItem.isSelected()) {
+                    window.isProperty.push(0);
                     window.last.add(window.img);
                     if (window.paintingImg != null) {
                         window.img = MatUtil.copy(window.paintingImg);
@@ -80,6 +91,11 @@ public class Tool {
              **/
             @Override
             public void mouseDragged(MouseEvent e) {
+//                int newX = window.tool.drag.newX;
+//                int newY = window.tool.drag.newY;
+//                int x = e.getX();
+//                int y = e.getY();
+//                if (x >= window.img.width() || y >= window.img.height()) return;
                 if (region.selectRegionItem.isSelected()) {
                     region.setRegionSize(e.getX(), e.getY());
                 } else if (pen.penItem.isSelected()) {

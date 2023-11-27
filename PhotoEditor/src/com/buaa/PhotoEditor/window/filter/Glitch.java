@@ -87,6 +87,7 @@ public class Glitch {
 
                 MatUtil.show(newImg, window.showImgRegionLabel);
 
+                window.isProperty.push(0);
                 window.last.push(window.img);
                 window.img = newImg;
                 // 执行完之后再关闭窗口

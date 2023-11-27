@@ -21,8 +21,6 @@ public class Main {
         }
 
         new Window("Layer 1");
-
-
     }
 
 }

@@ -9,19 +9,23 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-/**
- * @Description: 点击选择区域功能后，光标暂且设置成默认
- * （如果上一个状态是画笔，如果不设置成默认，就一直是画笔了）
- * @author: 卢思文
- * @date: 11/26/2023 8:13 PM
- * @version: 1.0
- **/
+/*
+* @Description:还未解决因为drag而产生的bug，重定位问题
+* 点击选择区域功能后，光标暂且设置成默认
+* （如果上一个状态是画笔，如果不设置成默认，就一直是画笔了）
+* @author: 张旖霜、卢思文
+* @date: 11/27/2023 3:31 PM
+* @version: 1.0
+*/
+
 public class Region {
     public int selectedRegionX, selectedRegionY;
     public Mat copyRegionMat;
     public JLabel selectedRegionLabel;
     public Window window;
     public JCheckBoxMenuItem selectRegionItem;
+
+    public Point pointRegion;
 
     public Region(Window window) {
         this.window = window;
@@ -33,7 +37,11 @@ public class Region {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     window.tool.pen.penItem.setSelected(false);
                     window.tool.eraser.eraserItem.setSelected(false);
+
                     window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
+                    window.tool.drag.dragItem.setSelected(false);
+
                 }
             }
         });
@@ -46,6 +54,7 @@ public class Region {
         window.panel.repaint();
         selectRegionItem.setSelected(false);
     }
+
     public void copySelectedRegion(ActionEvent evt) {
 
         selectRegionItem.setSelected(false);
@@ -62,8 +71,12 @@ public class Region {
         window.pasting = true;
     }
 
-    public void addRegion(Point p) {
 
+
+    public void addRegion(Point p) {
+//        int newX = window.tool.drag.newX;
+//        int newY = window.tool.drag.newY;
+//        if (p.x < window.img.width()+newX || p.x > newX || p.y < window.img.height()+newY || p.y > newY) return;
         selectedRegionLabel.setLocation(p);
         selectedRegionLabel.setSize(1, 1);
         selectedRegionLabel.setBorder(BorderFactory
@@ -88,13 +101,12 @@ public class Region {
     }
 
     public void setRegionSize(int x, int y) {
-
         int width = Math.abs(selectedRegionX - x);
         int height = Math.abs(selectedRegionY - y);
         x = Math.min(x, selectedRegionX);
         y = Math.min(y, selectedRegionY);
         selectedRegionLabel.setBounds(x, y, width, height);
-
+        pointRegion = new Point(x+width, y-height);
     }
 
     public void disableListeners() {
