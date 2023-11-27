@@ -7,24 +7,26 @@ import org.opencv.core.Rect;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+
 /**
 * @Description: 撤销上一步操作； 目前对于是撤销操作还是恢复图片上一状态还没有设置明确，后将改进
 * @author 罗雨曦
-* @date 2023/11/27 11:24
+* @date 2023/11/27 14:06
+* @version: 1.0
 **/
 public class Undo {
     public JMenuItem undoItem;
     private Window window;
 
+    /**
+     * @param window 当前窗口
+     * @return null
+     * @Description:构造方法——生成子菜单项并设置快捷键
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:06
+     * @version: 1.0
+     **/
     public Undo(Window window) {
-        /**
-         * @param window 当前窗口
-         * @return null
-         * @Description:构造方法——生成子菜单项并设置快捷键
-         * @author: 罗雨曦
-         * @date: 2023/11/27 11:25
-         **/
-
         this.window = window;
         undoItem = new JMenuItem("Undo");
         undoItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
@@ -35,15 +37,15 @@ public class Undo {
         });
     }
 
+    /**
+     * @param e 触发操作
+     * @return void
+     * @Description:利用栈操作实现撤销操作
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:07
+     * @version: 1.0
+     **/
     private void undo (ActionEvent e){
-        /**
-         * @param e
-         * @return void
-         * @Description:利用栈操作实现撤销操作
-         * @author: 罗雨曦
-         * @date: 2023/11/27 11:25
-         **/
-
         if (!window.last.isEmpty()) {
             window.next.push(window.img);
 

@@ -7,24 +7,26 @@ import org.opencv.core.Mat;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 /**
 * @Description: 打开图片（选择需要编辑的图片）； 后续可进行优化——点击后不是进入主界面，而是进入上一次打开所在路径
 * @author 罗雨曦
-* @date 2023/11/27 11:27
+* @date 2023/11/27 14:08
+* @version: 1.0
 **/
 public class Open {
     public JMenuItem openItem;
     private Window window;
 
+    /**
+     * @param window 当前窗口
+     * @return null
+     * @Description:构造方法——生成子菜单项并设置快捷键
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:09
+     * @version: 1.0
+     **/
     public Open(Window window) {
-        /**
-         * @param window 当前窗口
-         * @return null
-         * @Description:构造方法——生成子菜单项并设置快捷键
-         * @author: 罗雨曦
-         * @date: 2023/11/27 11:28
-         **/
-
         this.window = window;
         openItem = new JMenuItem("Open");
         openItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
@@ -36,15 +38,15 @@ public class Open {
         });
     }
 
+    /**
+     * @param e 触发操作
+     * @return void
+     * @Description:利用JFileChooser实现图片的选择，并将图片展示在当前窗口
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:09
+     * @version: 1.0
+     **/
     private void selectImg(ActionEvent e) {
-        /**
-         * @param e
-         * @return void
-         * @Description:利用JFileChooser实现图片的选择，并将图片展示在当前窗口
-         * @author: 罗雨曦
-         * @date: 2023/11/27 11:29
-         **/
-
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(this.window)
                 == JFileChooser.APPROVE_OPTION) {

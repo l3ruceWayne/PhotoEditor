@@ -6,10 +6,12 @@ import com.buaa.PhotoEditor.window.Window;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 /**
 * @Description: 调节图片饱和度
 * @author 罗雨曦
-* @date 2023/11/27 12:01
+* @date 2023/11/27 13:56
+* @version: 1.0
 **/
 public class Saturation {
     public JLabel saturationLabel;
@@ -17,15 +19,15 @@ public class Saturation {
     public int lastSaturation;
     private Window window;
 
+    /**
+     * @param window 当前窗口
+     * @return null
+     * @Description:构造方法——生成饱和度调节滚动条
+     * @author: 罗雨曦
+     * @date: 2023/11/27 13:56
+     * @version: 1.0
+     **/
     public Saturation(Window window){
-        /**
-         * @param window
-         * @return null
-         * @Description:构造方法——生成饱和度调节滚动条
-         * @author: 罗雨曦
-         * @date: 2023/11/27 12:01
-         **/
-
         this.window=window;
         saturationLabel=new JLabel("Saturation");
         saturationSlider=new JSlider();
@@ -40,15 +42,15 @@ public class Saturation {
         });
     }
 
+    /**
+     * @param evt 触发操作
+     * @return void
+     * @Description:重设饱和度参数
+     * @author: 罗雨曦
+     * @date: 2023/11/27 13:57
+     * @version: 1.0
+     **/
     private void changeSaturation(ChangeEvent evt) {
-        /**
-         * @param evt
-         * @return void
-         * @Description:重设饱和度参数
-         * @author: 罗雨曦
-         * @date: 2023/11/27 12:02
-         **/
-
         window.temp = MatUtil.copy(window.img);
 
         int saturation = saturationSlider.getValue();

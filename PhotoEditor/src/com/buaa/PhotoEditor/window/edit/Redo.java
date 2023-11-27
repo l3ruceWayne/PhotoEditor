@@ -10,24 +10,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+
 /**
 * @Description: 重做上一步操作； 目前对于是重做操作还是恢复图片下一状态还没有设置明确，后将改进
 * @author 罗雨曦
-* @date 2023/11/27 11:12
+* @date 2023/11/27 14:05
+* @version: 1.0
 **/
 public class Redo {
     public JMenuItem redoItem;
     private Window window;
 
+    /**
+     * @param window 当前窗口
+     * @return null
+     * @Description:构造方法——生成子菜单项并设置快捷键
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:05
+     * @version: 1.0
+     **/
     public Redo(Window window) {
-        /**
-         * @param window 当前窗口
-         * @return null
-         * @Description:构造方法——生成子菜单项并设置快捷键
-         * @author: 罗雨曦
-         * @date: 2023/11/27 11:21
-         **/
-
         this.window = window;
         redoItem = new JMenuItem("Redo");
         redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK));
@@ -38,15 +40,15 @@ public class Redo {
         });
     }
 
+    /**
+     * @param e 触发操作
+     * @return void
+     * @Description:利用栈操作实现重做操作
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:05
+     * @version: 1.0
+     **/
     private void redo(ActionEvent e) {
-        /**
-         * @param e
-         * @return void
-         * @Description:利用栈操作实现重做操作
-         * @author: 罗雨曦
-         * @date: 2023/11/27 11:22
-         **/
-
         if (!window.next.isEmpty()) {
             window.last.push(window.img);
 

@@ -6,10 +6,11 @@ import com.buaa.PhotoEditor.window.Window;
 import javax.swing.*;
 
 /**
- * @author 罗雨曦
- * @Description: 调节图片对比度与亮度
- * @date 2023/11/27 11:48
- **/
+* @Description: 调节图片对比度与亮度
+* @author 罗雨曦
+* @date 2023/11/27 13:49
+* @version: 1.0
+**/
 public class ContrastAndBrightness {
     public JSlider brightnessSlider;
     public JLabel brightnessLabel;
@@ -17,15 +18,15 @@ public class ContrastAndBrightness {
     public JLabel contrastLabel;
     private Window window;
 
+    /**
+     * @param window 当前窗口
+     * @return null
+     * @Description:构造方法——生成对比度与亮度调节滚动条
+     * @author: 罗雨曦
+     * @date: 2023/11/27 13:51
+     * @version: 1.0
+     **/
     public ContrastAndBrightness(Window window) {
-        /**
-         * @param window
-         * @return null
-         * @Description:构造方法——生成对比度与亮度调节滚动条
-         * @author: 罗雨曦
-         * @date: 2023/11/27 11:49
-         **/
-
         this.window = window;
 
         brightnessLabel = new JLabel("Brightness");
@@ -50,40 +51,39 @@ public class ContrastAndBrightness {
             }
         });
     }
-
-    private void brightnessSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_brightnessSliderStateChanged
-        /**
-         * @param evt
-         * @return void
-         * @Description:调用执行重设亮度参数的操作
-         * @author: 罗雨曦
-         * @date: 2023/11/27 11:49
-         **/
-        
+    /**
+     * @param evt 触发操作
+     * @return void
+     * @Description:调用执行重设亮度参数的操作
+     * @author: 罗雨曦
+     * @date: 2023/11/27 13:54
+     * @version: 1.0
+     **/
+    private void brightnessSliderStateChanged(javax.swing.event.ChangeEvent evt) {
         contrastAndBrightness();
     }
 
-    private void contrastSlideStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_contrastSlideStateChanged
-        /**
-         * @param evt
-         * @return void
-         * @Description:调用执行重设对比度参数的操作
-         * @author: 罗雨曦
-         * @date: 2023/11/27 11:50
-         **/
-        
+    /**
+     * @param evt 触发操作
+     * @return void
+     * @Description:调用执行重设对比度参数的操作
+     * @author: 罗雨曦
+     * @date: 2023/11/27 13:55
+     * @version: 1.0
+     **/
+    private void contrastSlideStateChanged(javax.swing.event.ChangeEvent evt) {
         contrastAndBrightness();
     }
 
+    /**
+     * @param
+     * @return void
+     * @Description:重设对比度与亮度参数
+     * @author: 罗雨曦
+     * @date: 2023/11/27 13:55
+     * @version: 1.0
+     **/
     private void contrastAndBrightness() {
-        /**
-         * @param 
-         * @return void
-         * @Description:重设对比度与亮度参数
-         * @author: 罗雨曦
-         * @date: 2023/11/27 11:50
-         **/
-        
         window.temp = MatUtil.copy(window.img);
         //修改亮度和对比度
         if (window.tool.region.selectRegionItem.isSelected())
