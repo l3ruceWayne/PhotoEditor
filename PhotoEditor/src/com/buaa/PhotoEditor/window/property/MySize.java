@@ -34,29 +34,5 @@ public class MySize {
         txtHeight = new JTextField();
     }
 
-    /**
-     * @param evt 触发操作
-     * @return void
-     * @Description:保存图片参数修改
-     * @author: 罗雨曦
-     * @date: 2023/11/27 14:01
-     * @version: 1.0
-     **/
-    public void btResizeActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            double width = Double.parseDouble(this.txtWidth.getText());
-            double height = Double.parseDouble(this.txtHeight.getText());
-
-            Mat newImg = MatUtil.copy(window.temp);
-            MatUtil.resize(newImg, new Size(width, height));
-
-            window.last.push(window.img);
-            window.img = window.temp = newImg;
-            MatUtil.show(window.temp, window.showImgRegionLabel);
-            window.updatePropertys();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Please prefill the data correctly!");
-        }
-    }
 
 }
