@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 /**
-* @Description: 打开图片（选择需要编辑的图片）
+* @Description: 打开图片（选择需要编辑的图片）； 后续可进行优化——点击后不是进入主界面，而是进入上一次打开所在路径
 * @author 罗雨曦
 * @date 2023/11/27 11:27
 **/

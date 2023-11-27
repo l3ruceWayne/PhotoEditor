@@ -8,7 +8,7 @@ import org.opencv.core.Rect;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 /**
-* @Description: 撤销上一步操作
+* @Description: 撤销上一步操作； 目前对于是撤销操作还是恢复图片上一状态还没有设置明确，后将改进
 * @author 罗雨曦
 * @date 2023/11/27 11:24
 **/

@@ -11,7 +11,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 /**
-* @Description: 重做上一步操作
+* @Description: 重做上一步操作； 目前对于是重做操作还是恢复图片下一状态还没有设置明确，后将改进
 * @author 罗雨曦
 * @date 2023/11/27 11:12
 **/
