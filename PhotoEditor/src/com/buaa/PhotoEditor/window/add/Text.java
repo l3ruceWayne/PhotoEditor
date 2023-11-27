@@ -15,7 +15,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-
+/*
+* @Description:选择区域后写入文字（特别说明：用户选择区域后才能写字，写文字后不能修改位置）
+* （但是其实不用到选择一个区域，因为是根据选择时点击的第一个位置来定位的，不受选择框限制）
+* @author: 张旖霜
+* @date: 11/27/2023 3:17 PM
+* @version: 1.0
+*/
 public class Text {
 
     public Window window;
@@ -25,7 +31,6 @@ public class Text {
     private int scale;
     private String str;
 
-    // dialog
     public JDialog dialogAddText;
     public JPanel panelTextColor;
     public JLabel labelAddTextContents;

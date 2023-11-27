@@ -34,6 +34,7 @@ public class Undo {
             if (!window.tool.region.selectRegionItem.isSelected()) {
                 window.img = window.last.pop();
 
+                // 下面注释掉的是还没实现的undo property
 //                state = window.isProperty.pop();
 //                if (state == 1)
 //                {

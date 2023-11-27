@@ -35,7 +35,14 @@ public class Pen {
             }
         });
     }
-
+    /*
+     * @param x, y:鼠标位置
+     * @return
+     * @Description: newX和newY是drag后的重新定位
+     * @author: 张旖霜
+     * @date: 11/27/2023 3:30 PM
+     * @version: 1.0
+     */
     public void paint(int x, int y) {
         // 调整界面大小，让图片填充后可以删掉
         // pending

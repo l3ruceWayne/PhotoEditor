@@ -97,7 +97,6 @@ public class Window extends javax.swing.JFrame {
 
     // options
     public boolean pasting = false;
-    // zys 1
     public String title;
     public int imgWidth;
     public int imgHeight;

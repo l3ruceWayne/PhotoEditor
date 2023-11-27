@@ -12,8 +12,6 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 /*
-* @param:
-* @return
 * @Description:图片旋转功能（90），后期可能可以添加图片翻转功能（镜面）
 * @author: 张旖霜
 * @date: 11/27/2023 12:59 PM

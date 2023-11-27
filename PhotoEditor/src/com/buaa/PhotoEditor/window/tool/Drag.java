@@ -35,6 +35,8 @@ public class Drag {
         newX = 0;
         newY = 0;
 
+        if (window.img != null) dragListener();
+
         dragItem.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -42,7 +44,6 @@ public class Drag {
                     window.tool.region.removeRegionSelected();
                     window.tool.pen.penItem.setSelected(false);
                     window.tool.eraser.eraserItem.setSelected(false);
-                    dragListener();
                 }
             }
         });

@@ -9,7 +9,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-
+/*
+* @Description:还未解决因为drag而产生的bug，重定位问题
+* @author: 张旖霜
+* @date: 11/27/2023 3:31 PM
+* @version: 1.0
+*/
 public class Region {
     public int selectedRegionX, selectedRegionY;
     public Mat copyRegionMat;

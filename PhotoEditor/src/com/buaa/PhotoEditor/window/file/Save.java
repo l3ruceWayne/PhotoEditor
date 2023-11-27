@@ -78,7 +78,6 @@ public class Save {
         MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
         getNewImg();
 
-        // zys 4
         if (path == null) {
             path = window.originalImgPath;
         }
@@ -104,7 +103,6 @@ public class Save {
         int userSelection = fileChooser.showSaveDialog(null);
         // 如果用户点击保存
         if (userSelection == JFileChooser.APPROVE_OPTION) {
-            // zys 1
             path = fileChooser.getSelectedFile().getPath();
             if (!path.contains(".png")) {
                 path += ".png";

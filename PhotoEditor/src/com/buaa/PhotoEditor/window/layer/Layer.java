@@ -55,7 +55,6 @@ public class Layer {
         // 之前报错原因是当我们点击“添加”之前如果没有导入图片，则获取不到，就报错了
         // 解决方案是，当没有导入图片时，点击后无反应或者后期再添加弹窗提示
 
-        // zys 3 (增加弹窗提醒)
         if(currentLayer.getImg() == null){
             JOptionPane.showMessageDialog(null, "Please open an image");
             layerFrame.disposeLayerFrame(); // 关闭窗口
@@ -71,7 +70,6 @@ public class Layer {
 
     }
     public static void removeLayer(int id) {
-        // zys 12 (增加弹窗提醒)
         if (id == -1) {
             JOptionPane.showMessageDialog(null, "Please choose a layer to remove");
             return;
@@ -88,13 +86,11 @@ public class Layer {
 
 
      public static void alterLayer(int id) {
-         // zys 3 (增加弹窗提醒)
          if (id == -1) {
              JOptionPane.showMessageDialog(null, "Please choose a layer to switch");
              return;
          }
         currentLayer.hideWindow();
-        // zys 5
          if (currentLayer == layerList.get(id))
          {
              currentLayer.showWindow(); // 打开当前图层
@@ -110,7 +106,6 @@ public class Layer {
             // setNextLayerMat的意义何在
             currentLayer.setNextLayerMat(img);
         }
-        // zys 1
          layerFrame.disposeLayerFrame(); // 关闭窗口
     }
 }

@@ -33,7 +33,7 @@ public class ZoomIn {
     }
 
     /*
-    * @param:
+    * @param img: 当前图片
     * @return
     * @Description:放大图片（+10%）后期可以考虑让用户设定放大缩小的比例
     * @author: 张旖霜

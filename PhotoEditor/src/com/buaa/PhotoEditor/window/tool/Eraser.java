@@ -29,6 +29,14 @@ public class Eraser {
 
     // pending 加一个erase的大小调节功能
     // 一键清除功能
+    /*
+    * @param x, y:鼠标位置
+    * @return
+    * @Description: newX和newY是drag后的重新定位
+    * @author: 张旖霜
+    * @date: 11/27/2023 3:30 PM
+    * @version: 1.0
+    */
     public void erase(int x, int y) {
         // pending
         int newX = window.tool.drag.newX;
