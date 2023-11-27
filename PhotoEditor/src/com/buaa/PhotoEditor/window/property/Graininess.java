@@ -7,11 +7,25 @@ import javax.swing.*;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 
+/**
+* @Description: 调节图片颗粒度（噪声）
+* @author 罗雨曦
+* @date 2023/11/27 13:57
+* @version: 1.0
+**/
 public class Graininess {
     public JLabel grainLabel;
     public JScrollBar grainBar;
     private Window window;
 
+    /**
+     * @param window 当前窗口
+     * @return null
+     * @Description:构造方法——生成噪声调节滚动条
+     * @author: 罗雨曦
+     * @date: 2023/11/27 13:58
+     * @version: 1.0
+     **/
     public Graininess(Window window){
         this.window=window;
         grainBar=new JScrollBar();
@@ -25,11 +39,27 @@ public class Graininess {
         });
     }
 
-    private void grainBarAdjustmentValueChanged(java.awt.event.AdjustmentEvent evt) {//GEN-FIRST:event_noiseBarAdjustmentValueChanged
-        applyNoise(grainBar.getValue(), false);
+    /**
+     * @param evt 触发操作
+     * @return void
+     * @Description:调用执行重设噪声参数的操作
+     * @author: 罗雨曦
+     * @date: 2023/11/27 13:58
+     * @version: 1.0
+     **/
+    private void grainBarAdjustmentValueChanged(java.awt.event.AdjustmentEvent evt) {
+        applyNoise(grainBar.getValue());
     }
 
-    private void applyNoise(int level, boolean replace) {
+    /**
+     * @param level 即将设置的噪声值
+     * @return void
+     * @Description:重设噪声参数
+     * @author: 罗雨曦
+     * @date: 2023/11/27 13:59
+     * @version: 1.0
+     **/
+    private void applyNoise(int level) {
         window.copy = MatUtil.copy(window.img);
         if (window.tool.region.selectRegionItem.isSelected()) {
             MatUtil.noise(window.copy, level, MatUtil.getRect(window.tool.region.selectedRegionLabel));
@@ -38,11 +68,5 @@ public class Graininess {
         }
         // 需要再加一个确定键，确定之后img入栈，然后替换为当前调整后的内容
         MatUtil.show(window.copy, window.showImgRegionLabel);
-
-        if (replace) {
-            window.last.push(window.img);
-            window.img = window.copy;
-        }
-
     }
 }

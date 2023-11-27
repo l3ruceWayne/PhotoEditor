@@ -8,10 +8,24 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+* @Description: 打开图片（选择需要编辑的图片）； 后续可进行优化——点击后不是进入主界面，而是进入上一次打开所在路径
+* @author 罗雨曦
+* @date 2023/11/27 14:08
+* @version: 1.0
+**/
 public class Open {
     public JMenuItem openItem;
     private Window window;
 
+    /**
+     * @param window 当前窗口
+     * @return null
+     * @Description:构造方法——生成子菜单项并设置快捷键
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:09
+     * @version: 1.0
+     **/
     public Open(Window window) {
         this.window = window;
         openItem = new JMenuItem("Open");
@@ -24,6 +38,14 @@ public class Open {
         });
     }
 
+    /**
+     * @param e 触发操作
+     * @return void
+     * @Description:利用JFileChooser实现图片的选择，并将图片展示在当前窗口
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:09
+     * @version: 1.0
+     **/
     private void selectImg(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(this.window)
@@ -42,7 +64,7 @@ public class Open {
             window.isProperty.clear();
             window.propertyValue.clear();
             window.showImgRegionLabel.setText("");
-            window.updatePropertys();//LYX 这个方法在其他地方也有调用，所以没有把它写进Open类里面来，之后要改的话再改吧
+            window.updatePropertys();
         }
     }
 }

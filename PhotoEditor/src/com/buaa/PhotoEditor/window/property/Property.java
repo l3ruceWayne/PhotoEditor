@@ -10,6 +10,12 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+* @Description: 主菜单栏上的一级菜单，整合参数设置相关操作，下设ContrastAndBrightness Graininess MySize Saturation四个功能子菜单； 目前面板布局存在问题，后需改进
+* @author 罗雨曦
+* @date 2023/11/27 14:02
+* @version: 1.0
+**/
 public class Property {
     public JMenu propertyMenu;
     public JDialog propertyMenuDialog;
@@ -20,6 +26,14 @@ public class Property {
     private Graininess graininess;
     private MySize mySize;
 
+    /**
+     * @param window 当前窗口
+     * @return null
+     * @Description:构造方法——生成参数设置面板
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:03
+     * @version: 1.0
+     **/
     public Property(Window window) {
         this.window = window;
         contrastAndBrightness = new ContrastAndBrightness(window);
@@ -41,8 +55,15 @@ public class Property {
         initLayout();
     }
 
+    /**
+     * @param
+     * @return void
+     * @Description:设置面板界面布局
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:03
+     * @version: 1.0
+     **/
     public void initLayout() {
-
         JLabel jLabel3 = new JLabel("Contrast");
         JLabel jLabel4 = new JLabel("Width:");
         JLabel jLabel5 = new JLabel("Height:");
@@ -51,7 +72,7 @@ public class Property {
         JButton btResize = new JButton("Resize");
         btResize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btResizeActionPerformed(evt);
+                mySize.btResizeActionPerformed(evt);
             }
         });
 
@@ -163,7 +184,15 @@ public class Property {
         );
     }
 
-    public void propertysMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_propertysMouseClicked
+    /**
+     * @param evt 触发操作
+     * @return void
+     * @Description:点击触发，完成面板有关参数的初始化设置
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:03
+     * @version: 1.0
+     **/
+    public void propertysMouseClicked(java.awt.event.MouseEvent evt) {
         window.temp = MatUtil.copy(window.img);
         propertyMenuDialog.setModal(true);
         propertyMenuDialog.setVisible(true);
@@ -174,6 +203,14 @@ public class Property {
         restartPorpertyComponentsValues();
     }
 
+    /**
+     * @param
+     * @return void
+     * @Description:初始化滚动条参数
+     * @author: 罗雨曦
+     * @date: 2023/11/27 14:04
+     * @version: 1.0
+     **/
     private void restartPorpertyComponentsValues() {
         Component[] components = propertyMenuDialog.getContentPane().getComponents();
         for (Component c : components) {
@@ -181,24 +218,6 @@ public class Property {
                 ((JScrollBar) c).setValue(0);
             }
         }
-    }
-
-    private void btResizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResizeActionPerformed
-        try {
-            double width = Double.parseDouble(getMySize().txtWidth.getText());
-            double height = Double.parseDouble(getMySize().txtHeight.getText());
-
-            Mat newImg = MatUtil.copy(window.temp);
-            MatUtil.resize(newImg, new Size(width, height));
-
-            window.last.push(window.img);
-            window.img = window.temp = newImg;
-            MatUtil.show(window.temp, window.showImgRegionLabel);
-            window.updatePropertys();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Please prefill the data correctly!");
-        }
-
     }
 
     public Window getWindow() {
