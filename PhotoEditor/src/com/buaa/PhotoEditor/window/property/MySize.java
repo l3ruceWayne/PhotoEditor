@@ -23,7 +23,7 @@ public class MySize {
     /**
      * @param window 当前窗口
      * @return null
-     * @Description:构造方法——生成参数重设区域
+     * @Description: 构造方法——生成参数重设区域
      * @author: 罗雨曦
      * @date: 2023/11/27 14:00
      * @version: 1.0
@@ -40,7 +40,7 @@ public class MySize {
      * @Description:
      * 只是简单的实现改变尺寸
      * 改变尺寸后，图片显示有bug
-     * @author: 卢思文
+     * @author: 卢思文、罗雨曦
      * @date: 11/25/2023 11:41 AM
      * @version: 1.0
      **/
