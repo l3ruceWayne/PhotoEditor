@@ -12,7 +12,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+* @Description:
+ * 1. 解决了添加widget图片不能为中文的问题，并且支持矢量图
+ * 2. 增添了自由改变widget尺寸的功能及对应的光标显示
+ * 3. 增添了移动widget的时候的光标显示
+* @author: 卢思文
+* @date: 11/27/2023 4:35 PM
+* @version: 1.0
+**/
 public class Widget {
 
     public Window window;
@@ -37,7 +45,6 @@ public class Widget {
         WIDGET_SUPPORT_FILE_TYPES.add("JPEG");
         WIDGET_SUPPORT_FILE_TYPES.add("PNG");
 
-//        widgetItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
         widgetItem.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addWidget(evt);
@@ -177,7 +184,15 @@ public class Widget {
         widgetLabel.addMouseMotionListener(mia);
 
     }
-
+    /**
+    * @param e 鼠标事件
+    * @param widgetLabel 添加的widget的JLabel对象
+    * @return boolean 是否在特定区域内
+    * @Description: 判断光标是否在widget的右下角（这里是改变widget大小的功能触发区）
+    * @author: 卢思文
+    * @date: 11/27/2023 4:38 PM
+    * @version: 1.0
+    **/
     public static boolean isInResizeArea(MouseEvent e, JLabel widgetLabel) {
         int rx = widgetLabel.getWidth();
         int ry = widgetLabel.getHeight();

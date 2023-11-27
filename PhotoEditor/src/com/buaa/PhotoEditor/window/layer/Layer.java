@@ -10,18 +10,15 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-Layer类聚合了单个图层(PerLayer)和图层窗口(LayerFrame)
- */
+
 
 /*
-* @param:
-* @return
 * @Description: 每个按钮触发都增加了弹窗提醒
-* @author: 张旖霜
+* @author: 张旖霜、卢思文
 * @date: 11/27/2023 12:55 PM
 * @version: 1.0
 */
+
 public class Layer {
     public JMenuItem layerItem;
     public static LayerFrame layerFrame = new LayerFrame();

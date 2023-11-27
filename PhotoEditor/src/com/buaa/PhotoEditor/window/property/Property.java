@@ -7,12 +7,15 @@ import org.opencv.core.Size;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
 * @Description: 主菜单栏上的一级菜单，整合参数设置相关操作，下设ContrastAndBrightness Graininess MySize Saturation四个功能子菜单； 目前面板布局存在问题，后需改进
-* @author 罗雨曦
+* 将updateProperty方法整合到了此类里面
+* @author 罗雨曦、卢思文
 * @date 2023/11/27 14:02
 * @version: 1.0
 **/
@@ -69,10 +72,14 @@ public class Property {
         JLabel jLabel5 = new JLabel("Height:");
         JLabel jLabel6 = new JLabel("Noise");
         JLabel jLabel7 = new JLabel("Size");
-        JButton btResize = new JButton("Resize");
-        btResize.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mySize.btResizeActionPerformed(evt);
+
+
+        JButton resizeButton = new JButton("Resize");
+
+        resizeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                Resize(evt);
+
             }
         });
 
@@ -115,7 +122,7 @@ public class Property {
                                                 ))
                                         .addGroup(PropertysLayout.createSequentialGroup()
                                                 .addGap(135, 135, 135)
-                                                .addComponent(btResize))
+                                                .addComponent(resizeButton))
                                         .addGroup(PropertysLayout.createSequentialGroup()
                                                 .addGap(21, 21, 21)
                                                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -179,7 +186,7 @@ public class Property {
                                         .addComponent(jLabel4)
                                         .addComponent(jLabel5))
                                 .addGap(18, 18, 18)
-                                .addComponent(btResize)
+                                .addComponent(resizeButton)
                                 .addGap(42, 42, 42))
         );
     }
@@ -218,6 +225,48 @@ public class Property {
                 ((JScrollBar) c).setValue(0);
             }
         }
+    }
+
+
+    /**
+    * @param evt : 事件
+    * @Description:
+     * 只是简单的实现改变尺寸
+     * 改变尺寸后，图片显示有bug
+    * @author: 卢思文
+    * @date: 11/25/2023 11:41 AM
+    * @version: 1.0
+    **/
+    private void Resize(ActionEvent evt) {
+        try {
+            double newWidth = Double.parseDouble(getMySize().txtWidth.getText());
+            double newHeight = Double.parseDouble(getMySize().txtHeight.getText());
+
+            Mat newImg = MatUtil.copy(window.temp);
+            MatUtil.resize(newImg, new Size(newWidth, newHeight));
+
+            window.last.push(window.img);
+
+            window.img = window.temp = newImg;
+            MatUtil.show(window.temp, window.showImgRegionLabel);
+            updateProperty();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Please prefill the data correctly!");
+        }
+
+    }
+    public void updateProperty() {
+
+        getMySize().txtWidth.setText(window.img.width() + "");
+        getMySize().txtHeight.setText(window.img.height() + "");
+        getMySize().lbSize.setText("Size: " + window.img.width() + "x" + window.img.height());
+
+        int width = window.img.width() >= 200 ? window.img.width() : 200;
+        int height = window.img.height() >= 200 ? window.img.height() : 200;
+
+        window.setSize(width, height);
+        window.setLocationRelativeTo(null);
+
     }
 
     public Window getWindow() {
