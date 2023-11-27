@@ -2,6 +2,9 @@ package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -26,31 +29,26 @@ public class ZoomIn {
 
     public void zoomInActionPerformed(
             java.awt.event.MouseEvent evt) {
+        zoomIn(window.img);
+    }
 
-        if (window.tool.region.selectRegionItem.isSelected()) {
-            window.tool.zoomRegion = new JPanel();
-            window.tool.zoomRegion.setBounds(window.tool.region.selectedRegionLabel.getX(),
-                    window.tool.region.selectedRegionLabel.getY(),
-                    window.tool.region.selectedRegionLabel.getWidth(),
-                    window.tool.region.selectedRegionLabel.getHeight());
-            window.tool.zoomOut.matZoomOut = MatUtil.copy(window.img);
+    /*
+    * @param img: 当前图片
+    * @return
+    * @Description:放大图片（+10%）后期可以考虑让用户设定放大缩小的比例
+    * @author: 张旖霜
+    * @date: 11/27/2023 1:00 PM
+    * @version: 1.0
+    */
+    private void zoomIn(Mat img) {
+//        if (window.zoomImg == null) {
+//            window.zoomImg = MatUtil.copy(img);
+//        }
+        int width = window.img.width()+(window.img.width()*10/100);
+        int height = window.img.height()+(window.img.height()*10/100);
+        Imgproc.resize(img, window.img, new Size(width, height));
+        window.showImgRegionLabel.setSize(width, height);
 
-            window.img = window.img.submat(MatUtil.getRect(window.tool.zoomRegion));
-
-            //pen image - 2nd layer
-            if (window.nexLayerImg != null) {
-
-                window.tool.zoomOut.matZoomOutNexLayerImg = MatUtil.copy(window.nexLayerImg);
-                window.nexLayerImg = window.nexLayerImg.submat(MatUtil.getRect(window.tool.zoomRegion));
-                MatUtil.resize(window.nexLayerImg, window.tool.zoomOut.matZoomOut.size());
-            }
-
-            MatUtil.resize(window.img, window.tool.zoomOut.matZoomOut.size());
-            MatUtil.show(window.img, window.showImgRegionLabel);
-            window.tool.region.removeRegionSelected();
-
-        } else
-            JOptionPane.showMessageDialog(null, "Select an area to zoom in!");
-
+        MatUtil.show(window.img, window.showImgRegionLabel);
     }
 }

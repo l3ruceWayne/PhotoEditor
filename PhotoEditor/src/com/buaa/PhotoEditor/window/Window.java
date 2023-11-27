@@ -42,7 +42,10 @@ import org.opencv.core.Size;
 
 public class Window extends javax.swing.JFrame {
 
-    Property property = new Property(this);
+
+    public Property property = new Property(this);
+
+
 
     public Save save;
 
@@ -62,9 +65,14 @@ public class Window extends javax.swing.JFrame {
     public Mat originalImg;
     public String originalImgPath;
     public Mat temp;             //temp
+    public Mat zoomImg;
     public static Mat copy;
     public Stack<Mat> last; //ctrl+z
     public Stack<Mat> next;     //ctrl+y`
+    public Stack<Integer> isProperty;
+    public Stack<Integer> propertyValue;
+    public Stack<Integer> nextIsProperty;
+    public Stack<Integer> nextPropertyValue;
 
 
 
@@ -92,15 +100,10 @@ public class Window extends javax.swing.JFrame {
 
     // options
 
-
     public boolean pasting = false;
-
-
-
-    
-
-
-
+    public String title;
+    public int imgWidth;
+    public int imgHeight;
 
 
 
@@ -143,7 +146,10 @@ public class Window extends javax.swing.JFrame {
 
     public Window(Mat img, String title) {
         this(title);
+        this.title  = title;
         this.img = img;
+        this.imgWidth = img.width();
+        this.imgHeight = img.height();
         MatUtil.show(img, showImgRegionLabel);
         showImgRegionLabel.setSize(img.width(), img.height());
         this.setSize(img.width(), img.height());
@@ -153,6 +159,7 @@ public class Window extends javax.swing.JFrame {
 
     public Window(String title) {
 
+        this.title  = title;
         initComponents();
 
         addMouseListeners();
@@ -166,6 +173,10 @@ public class Window extends javax.swing.JFrame {
         // 撤销和反撤销操作用的栈
         last = new Stack<>();
         next = new Stack<>();
+        isProperty = new Stack<>();
+        propertyValue = new Stack<>();
+        nextIsProperty = new Stack<>();
+        nextPropertyValue = new Stack<>();
         this.setTitle(title);
     }
 
@@ -505,9 +516,6 @@ public class Window extends javax.swing.JFrame {
 
 
 
-
-
-
     public void penColorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_penColorMouseClicked
         // 阻塞式选择画笔颜色
         // 窗口弹出后一直到选好颜色点击确定，才会执行下一行代码
@@ -541,8 +549,6 @@ public class Window extends javax.swing.JFrame {
         MatUtil.show(img, showImgRegionLabel);
 
     }//GEN-LAST:event_sepiaActionPerformed
-
-
 
 
 
@@ -650,6 +656,7 @@ public class Window extends javax.swing.JFrame {
 
         MatUtil.show(newImg, showImgRegionLabel);
 
+        isProperty.push(0);
         last.push(img);
         img = newImg;
     }

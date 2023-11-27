@@ -43,8 +43,10 @@ public class Redo {
             }
 
             window.showImgRegionLabel.setSize(window.img.width(), window.img.height());
-            this.window.setSize(window.img.width(), window.img.height());
-            this.window.setLocationRelativeTo(null);
+
+//            this.window.setSize(window.img.width(), window.img.height());
+//            this.window.setLocationRelativeTo(null);
+
 
             MatUtil.show(window.img, window.showImgRegionLabel);
         } else {

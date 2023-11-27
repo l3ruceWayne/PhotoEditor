@@ -23,6 +23,8 @@ public class Widget {
     public final List<String> WIDGET_SUPPORT_FILE_TYPES;
     public String widgetPath;
 
+    public boolean flag;
+
 
     public Widget(Window window) {
         this.window = window;
@@ -98,7 +100,7 @@ public class Widget {
     }
 
     public void addWidgetListener(JLabel widgetLabel, ImageIcon widgetIcon) {
-        window.flag = false;
+        flag = false;
 //        Window win = this;
         int width = widgetIcon.getIconWidth();
         int height = widgetIcon.getIconHeight();
@@ -115,7 +117,7 @@ public class Widget {
             }
 
             public void mouseReleased(MouseEvent e) {
-                window.flag = false;
+                flag = false;
 //                widgetLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE.brighter()));
             }
 
@@ -140,7 +142,7 @@ public class Widget {
                     );
                     widgetLabel.setIcon(new ImageIcon(scaledImage));
                     widgetLabel.setBounds(lx, ly, dx, dy);
-                } else if (!window.flag) {
+                } else if (!flag) {
                     widgetLabel.setCursor(new Cursor(Cursor.MOVE_CURSOR));
                     widgetLabel.setLocation(x - ex, y - ey);
                 }
