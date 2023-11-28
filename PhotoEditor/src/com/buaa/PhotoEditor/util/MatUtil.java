@@ -7,7 +7,9 @@ package com.buaa.PhotoEditor.util;
 import com.buaa.PhotoEditor.modal.EColor;
 import com.buaa.PhotoEditor.modal.ESloopFaceDirection;
 
+
 import java.awt.*;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
@@ -30,7 +32,7 @@ import org.opencv.imgproc.Imgproc;
 public abstract class MatUtil extends JFrame {
 
     private static final int ADJUSTMENT_X_WIDTH_GLASSES = 30;
-    
+
     /* URL IMAGES
      *-------------------------------------------------------->
      */
@@ -70,6 +72,7 @@ public abstract class MatUtil extends JFrame {
         window.setVisible(true);
 
     }
+
     // 将图片img显示在页lbImg上
     public static void show(Mat img, JLabel jLabel) {
 //        jLabel.setBounds(10, 10, (int) img.size().width, (int) img.size().height);
@@ -77,16 +80,24 @@ public abstract class MatUtil extends JFrame {
         ImageIcon imgIcon = new ImageIcon(bufferedImg(img));
         jLabel.setIcon(imgIcon);
     }
-
+    /* Mat类型的img转化为BufferedImage类型的对象
+    为什么要转化？因为Mat类型的对象适合图像处理，但是不适合展示处理好的结果
+    而BufferedImage则相反
+    所以在利用Mat处理完图像之后，转化为BufferedImage进行展示
+    此方法不能用来处理矢量图片
+     */
     public static BufferedImage bufferedImg(Mat img) {
-
-        int type = (img.channels() > 1) ? BufferedImage.TYPE_3BYTE_BGR : BufferedImage.TYPE_BYTE_GRAY;
+        int type = (img.channels() > 1) ? BufferedImage.TYPE_3BYTE_BGR :
+                BufferedImage.TYPE_BYTE_GRAY;
 
         int bufferSize = img.channels() * img.cols() * img.rows();
+
         byte[] buffer = new byte[bufferSize];
+
         img.get(0, 0, buffer);
         BufferedImage bfImg = new BufferedImage(img.cols(), img.rows(), type);
-        byte[] targetPixels = ((DataBufferByte) bfImg.getRaster().getDataBuffer()).getData();
+        byte[] targetPixels = ((DataBufferByte) bfImg.getRaster()
+                .getDataBuffer()).getData();
 
         System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
 
@@ -111,7 +122,7 @@ public abstract class MatUtil extends JFrame {
             int x = fr.x;
             int y = Math.abs(fr.y - (int) (fr.width * 0.15));
             double slopOfFace = Detection.slopOfFace(face);
-            
+
             Size size = new Size(width, height);
 
             //resize
@@ -121,7 +132,7 @@ public abstract class MatUtil extends JFrame {
 
             //rotation
             ESloopFaceDirection direction = ESloopFaceDirection.get(slopOfFace);
-            
+
             if (!direction.isMid()) {
                 rotate(dog_left_ear, slopOfFace);
                 rotate(dog_right_ear, slopOfFace);
@@ -137,7 +148,7 @@ public abstract class MatUtil extends JFrame {
 
             //left ear
             int xOverlayLeftEar = (int) (x + (fr.width * 0.7) + slopOfFace * direction.getInvFlag());
-            int yOverlayLeftEar = yOverlayRightEar + (int)(fr.height * 0.1 * direction.getInvFlag());
+            int yOverlayLeftEar = yOverlayRightEar + (int) (fr.height * 0.1 * direction.getInvFlag());
 
             Mat region_left_ear = img.submat(new Rect(xOverlayLeftEar, yOverlayLeftEar, width, height));
             overlay(region_left_ear, dog_left_ear);
@@ -145,12 +156,12 @@ public abstract class MatUtil extends JFrame {
             //snout       
             int xOverlaySnout = fr.x + Detection.anchorPointX(face, slopOfFace, direction);
             int yOverlaySnout = fr.y + Detection.anchorPointY(face);
-            
+
             Mat region_snout = img.submat(new Rect(xOverlaySnout, yOverlaySnout, width, height));
             overlay(region_snout, dog_snout);
         }
     }
-    
+
     public static void rotate(Mat img, double angle) {
 
         Point center = new Point(img.cols() / 2, img.rows() / 2);
@@ -162,31 +173,31 @@ public abstract class MatUtil extends JFrame {
 
     public static void glasses(Mat img, String png) {
 
-        if (!fileExist(png)) 
+        if (!fileExist(png))
             throw new RuntimeException("Mascara GLASSES não encontrada!");
-        
+
 
         Mat sub = readImg(png);
         Rect[] faces = Detection.rectOfFace(img);
-        
-        for (Rect fr: faces) {
-            
+
+        for (Rect fr : faces) {
+
             Rect[] eyes = Detection.rectsOfEyes(img);
             Rect leftEye = eyes[1];
-            
+
             Point a = new Point(fr.x + ADJUSTMENT_X_WIDTH_GLASSES, leftEye.y);
-            Point b = new Point(fr.x + fr.width - ADJUSTMENT_X_WIDTH_GLASSES ,leftEye.y + leftEye.height);
+            Point b = new Point(fr.x + fr.width - ADJUSTMENT_X_WIDTH_GLASSES, leftEye.y + leftEye.height);
             Rect eyesRegion = new Rect(a, b);
-            
+
             double sloopOfFace = Detection.slopOfFace(img.submat(eyesRegion));
             Mat face = img.submat(eyesRegion);
-            
+
             Imgproc.resize(sub, sub, face.size());
             rotate(sub, sloopOfFace);
             overlay(face, sub);
         }
     }
-    
+
     public static void widget(Mat img, Mat widget, int wx, int wy) {
 
         final int width = wx + widget.width() > img.width() ? img.width() : wx + widget.width();
@@ -199,6 +210,7 @@ public abstract class MatUtil extends JFrame {
 
         overlay(widgetRegion, widget);
     }
+
     // pending
     // widget覆盖img
     public static void overlay(Mat img, Mat widget) {
@@ -214,7 +226,7 @@ public abstract class MatUtil extends JFrame {
 
                     double alpha = pixel2[3] / 255f;
 
-                    for (int i = 0; i < 3; i++) 
+                    for (int i = 0; i < 3; i++)
                         pixel1[i] = pixel2[i] * alpha + pixel1[i] * (1 - alpha);
 
                 } //PHOTO WITHOUT OPACITY
@@ -228,7 +240,7 @@ public abstract class MatUtil extends JFrame {
             }
         }
     }
-    
+
     public static void glitchWave(Mat img, int waveLength, EColor color) {
 
         Mat sub = copy(img);
@@ -248,8 +260,7 @@ public abstract class MatUtil extends JFrame {
             }
         }
     }
-    
-    
+
 
     public static void sumMat(Mat img, Mat mask) {
 
@@ -268,13 +279,13 @@ public abstract class MatUtil extends JFrame {
             }
         }
     }
-   
+
     public static void noise(Mat img, int noise) {
-        
-        if (noise != 0) { 
-            
+
+        if (noise != 0) {
+
             Random random = new Random();
-        
+
             for (int x = 0; x < img.rows(); x++) {
                 for (int y = 0; y < img.cols(); y++) {
 
@@ -292,100 +303,100 @@ public abstract class MatUtil extends JFrame {
     }
 
     public static void cartoon(Mat img) {
-        
+
         Mat process = new Mat();
         Mat hierarchy = new Mat();
-  
+
         Imgproc.cvtColor(img, img, Imgproc.COLOR_BGRA2BGR);
-        Imgproc.pyrMeanShiftFiltering(img.clone(), img, 25, 40);       
+        Imgproc.pyrMeanShiftFiltering(img.clone(), img, 25, 40);
         Imgproc.cvtColor(img, process, Imgproc.COLOR_RGB2GRAY);
-        Imgproc.adaptiveThreshold(process,process, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C,Imgproc.THRESH_BINARY,9,2);
+        Imgproc.adaptiveThreshold(process, process, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 9, 2);
         Imgproc.cvtColor(process, process, Imgproc.COLOR_GRAY2RGB);
-        
+
         for (int x = 0; x < img.rows(); x++) {
             for (int y = 0; y < img.cols(); y++) {
-                
+
                 double[] pixel = process.get(x, y);
-                
+
                 if (pixel[0] == 0 && pixel[1] == 0 && pixel[2] == 0)
                     img.put(x, y, pixel);
             }
         }
     }
-    
-    public static void sepia(Mat img){
-    
+
+    public static void sepia(Mat img) {
+
         /* R = pixel[2] / tr = 0.393R + 0.769G + 0.189B
          * G = pixel[1] / tg = 0.349R + 0.686G + 0.168B
          * B = pixel[0] / tb = 0.0272R + 0.534G + 0.131B
          */
-        
+
         for (int x = 0; x < img.rows(); x++) {
             for (int y = 0; y < img.cols(); y++) {
-            
-                
-                double R = img.get(x, y)[2], 
-                       G = img.get(x, y)[1], 
-                       B = img.get(x, y)[0];
-                
+
+
+                double R = img.get(x, y)[2],
+                        G = img.get(x, y)[1],
+                        B = img.get(x, y)[0];
+
                 double[] data = {
-                    0.272*R + 0.534*G + 0.131*B,
-                    0.349*R + 0.686*G + 0.168*B,
-                    0.393*R + 0.769*G + 0.189*B
+                        0.272 * R + 0.534 * G + 0.131 * B,
+                        0.349 * R + 0.686 * G + 0.168 * B,
+                        0.393 * R + 0.769 * G + 0.189 * B
                 };
-                
+
                 img.put(x, y, data);
             }
         }
     }
-    
-    public static void lilac(Mat img, boolean[] colors){
-        
+
+    public static void lilac(Mat img, boolean[] colors) {
+
         for (int x = 0; x < img.rows(); x++) {
             for (int y = 0; y < img.cols(); y++) {
-                
+
 
                 double b = img.get(x, y)[0],
-                       g = img.get(x, y)[1],
-                       r = img.get(x, y)[2];
-                
+                        g = img.get(x, y)[1],
+                        r = img.get(x, y)[2];
+
                 double[] data = {
-                    colors[0] ? 0.5f * (255 + g + r) : b,
-                    colors[1] ? 0.25 * (510 + r + g - 2 * b) : g,
-                    colors[2] ? 0.5f * 1.0f / 3.0f * (r + g + b) : r
+                        colors[0] ? 0.5f * (255 + g + r) : b,
+                        colors[1] ? 0.25 * (510 + r + g - 2 * b) : g,
+                        colors[2] ? 0.5f * 1.0f / 3.0f * (r + g + b) : r
                 };
-                
+
                 img.put(x, y, data);
             }
         }
     }
-    
-    
-    public static void contrastAndBrightness(Mat img,double alpha, double beta) {
-        
+
+
+    public static void contrastAndBrightness(Mat img, double alpha, double beta) {
+
         alpha *= 0.4;
         beta *= 0.4;
-        
+
         for (int x = 0; x < img.rows(); x++) {
             for (int y = 0; y < img.cols(); y++) {
-                
+
                 double[] pixel = img.get(x, y);
-                
+
                 for (int i = 0; i < 3; i++)
-                    pixel[i] = (int)(alpha * (pixel[i] + beta));
-                
-                img.put(x,y,pixel);
+                    pixel[i] = (int) (alpha * (pixel[i] + beta));
+
+                img.put(x, y, pixel);
             }
         }
     }
-    
-    
-    public static void saturation(Mat img, double saturation)  {
-        
+
+
+    public static void saturation(Mat img, double saturation) {
+
         Mat hsv = new Mat();
         // 将img转换为HSV色彩空间，并存储到‘hsv’中
         Imgproc.cvtColor(img, hsv, Imgproc.COLOR_RGB2HSV);
-        
+
         for (int x = 0; x < hsv.rows(); x++) {
             for (int y = 0; y < hsv.cols(); y++) {
                 // 获取x,y处的像素值，这是一个数组，分别包括色调、饱和度、亮度
@@ -401,29 +412,29 @@ public abstract class MatUtil extends JFrame {
         }
         Imgproc.cvtColor(hsv, img, Imgproc.COLOR_HSV2RGB);
     }
-    
+
     public static void focus(Mat img, Rect region) {
-        
+
         Mat old = copy(img).submat(region);
         Mat focusRegion = copy(img).submat(region);
-        Mat kernel = Imgproc.getStructuringElement(2, new Size(23,23));
-        
+        Mat kernel = Imgproc.getStructuringElement(2, new Size(23, 23));
+
         //pre-process
         Imgproc.cvtColor(focusRegion, focusRegion, Imgproc.COLOR_RGB2GRAY);
-        Imgproc.Sobel(focusRegion, focusRegion, -1,1,0);
-        Imgproc.threshold(focusRegion, focusRegion,35, 255, Imgproc.THRESH_BINARY);
-        Imgproc.morphologyEx(focusRegion, focusRegion, Imgproc.MORPH_CLOSE,kernel);
-        Imgproc.GaussianBlur(focusRegion, focusRegion, new Size(3,3), 0,0,Core.BORDER_DEFAULT);
-       
-       
+        Imgproc.Sobel(focusRegion, focusRegion, -1, 1, 0);
+        Imgproc.threshold(focusRegion, focusRegion, 35, 255, Imgproc.THRESH_BINARY);
+        Imgproc.morphologyEx(focusRegion, focusRegion, Imgproc.MORPH_CLOSE, kernel);
+        Imgproc.GaussianBlur(focusRegion, focusRegion, new Size(3, 3), 0, 0, Core.BORDER_DEFAULT);
+
+
         //focus
         blur(img, 9);
         Mat copy = img.submat(region);
-        
+
         for (int x = 0; x < copy.rows(); x++) {
             for (int y = 0; y < copy.cols(); y++) {
-                
-                double[]pixel = focusRegion.get(x, y);
+
+                double[] pixel = focusRegion.get(x, y);
                 if (pixel[0] == 255)
                     copy.put(x, y, old.get(x, y));
             }
@@ -439,18 +450,18 @@ public abstract class MatUtil extends JFrame {
 
         img.put(0, 0, buffer);
     }
-    
+
     public static void inversor(Mat img, Rect region) {
 
         Mat sub = img.submat(region);
         byte[] buffer = toByteArray(sub);
 
-        for (int i = 0; i < buffer.length; i++) 
+        for (int i = 0; i < buffer.length; i++)
             buffer[i] *= -1;
 
         sub.put(0, 0, buffer);
     }
-   
+
 
     public static Mat copy(Mat img) {
         Mat imgCopy = new Mat();
@@ -467,19 +478,19 @@ public abstract class MatUtil extends JFrame {
 
         return buffer;
     }
-    
+
     public static void vhs(Mat img, String VHS) {
 
-        if (!fileExist(VHS)) 
+        if (!fileExist(VHS))
             throw new RuntimeException("Mascara VHS não encontrada!");
 
         Mat vhs = readImg(VHS);
         sumMat(img, vhs);
     }
-    
+
     public static void blur(Mat mat, int size) {
 
-        if (size % 3 != 0) 
+        if (size % 3 != 0)
             size += 3;
 
         Imgproc.GaussianBlur(mat, mat, new Size(size, size), Core.BORDER_DEFAULT);
@@ -502,7 +513,7 @@ public abstract class MatUtil extends JFrame {
 
         sub.copyTo(img.submat(region));
     }
-    
+
     public static void morphology(Mat img, int morph_size) {
 
         Mat element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(morph_size, morph_size));
@@ -516,7 +527,7 @@ public abstract class MatUtil extends JFrame {
         Imgproc.morphologyEx(img.submat(region), img.submat(region), Imgproc.MORPH_OPEN, element);
 
     }
-    
+
     public static void resize(Mat img) {
 
         Size size = new Size(img.width() * 0.05, img.height() * 0.05);
@@ -524,7 +535,7 @@ public abstract class MatUtil extends JFrame {
     }
 
     public static void grayScale(Mat img) {
-        
+
         Imgproc.cvtColor(img, img, Imgproc.COLOR_RGB2GRAY);
         Imgproc.cvtColor(img, img, Imgproc.COLOR_GRAY2BGR);
     }
@@ -532,7 +543,7 @@ public abstract class MatUtil extends JFrame {
     public static void resize(Mat img, Size size) {
         Imgproc.resize(img, img, size);
     }
-   
+
     public static void delete(Mat img, Rect region) {
         img.submat(region).setTo(new Scalar(0, 0, 0));
     }
@@ -541,7 +552,14 @@ public abstract class MatUtil extends JFrame {
         Rect region = new Rect(x, y, size, size);
         img.submat(region).setTo(new Scalar(0, 0, 0));
     }
-
+    /**
+    * @param url : 图片地址
+    * @return mat : 包含图片信息的Mat类实例化对象
+    * @Description: 修复了无法打开中文路径图片的问题
+    * @author: 卢思文
+    * @date: 11/26/2023 8:56 PM
+    * @version: 1.1
+    **/
     public static Mat readImg(String url) {
         byte[] data = null;
         try {
@@ -564,42 +582,43 @@ public abstract class MatUtil extends JFrame {
     public static void save(String path, Mat img) {
         Imgcodecs.imwrite(path, img);
     }
-    
+
     public static void paint(int[] color,
                              int width,
                              int height,
                              int x,
                              int y,
-                             Mat img){
+                             Mat img) {
         img.submat(new Rect(x, y, width, height))
-                .setTo(new Scalar(color[0],color[1],color[2]));
+                .setTo(new Scalar(color[0], color[1], color[2]));
     }
 
     public static double[] pixel(Mat img, int x, int y) {
         return img.get(x, y);
     }
-    
+
     public static void copyToRegion(Mat img, Mat copy, Rect region) {
         // srcMat.copyTo(dstMat);
         // 下面的代码会导致img的region区域的内容被copy覆盖，而img的其他区域内容不变
         copy.copyTo(img.submat(region));
     }
-    
-    public static void cartoon(Mat img,Rect region){
+
+    public static void cartoon(Mat img, Rect region) {
         cartoon(img.submat(region));
     }
-    
+
     public static void glitchWave(Mat img, int waveLength, EColor color, Rect region) {
         glitchWave(img.submat(region), waveLength, color);
     }
-    
+
     public static void noise(Mat img, int noise, Rect region) {
-        noise(img.submat(region),noise);
+        noise(img.submat(region), noise);
     }
-    
-    public static void sepia(Mat img, Rect region){
+
+    public static void sepia(Mat img, Rect region) {
         sepia(img.submat(region));
     }
+
 
 //    public static void writeText(Text text, Mat img, Rect region ) {
 //        img = img.submat(region);
@@ -626,17 +645,18 @@ public abstract class MatUtil extends JFrame {
         image.put(0, 0, pixels);
 
         return image;
+
     }
-    
-    
-    public static void contrastAndBrightness(Mat img,double alpha, double beta, Rect region) {
+
+
+    public static void contrastAndBrightness(Mat img, double alpha, double beta, Rect region) {
         contrastAndBrightness(img.submat(region), alpha, beta);
     }
-    
-    public static void saturation(Mat img, double saturation, Rect region)  { 
+
+    public static void saturation(Mat img, double saturation, Rect region) {
         saturation(img.submat(region), saturation);
     }
-    
+
     public static Rect getRect(JComponent c) {
 
         int x = c.getX();

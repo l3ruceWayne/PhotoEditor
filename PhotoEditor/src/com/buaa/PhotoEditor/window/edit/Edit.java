@@ -3,6 +3,9 @@ package com.buaa.PhotoEditor.window.edit;
 import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
+
+import java.nio.file.Path;
+
 /**
 * @Description: 主菜单栏上的一级菜单，整合编辑相关操作，下设copy cut undo redo四个功能子菜单
 * @author 罗雨曦
@@ -10,10 +13,12 @@ import javax.swing.*;
 * @version: 1.0
 **/
 
+
 public class Edit {
     public JMenu editMenu;
     private Window window;
     private Copy copy;
+    private Paste paste;
     private Cut cut;
     private Undo undo;
     private Redo redo;
@@ -32,7 +37,7 @@ public class Edit {
         this.cut = new Cut(window);
         this.undo = new Undo(window);
         this.redo = new Redo(window);
-
+        this.paste = new Paste(window);
         editMenu = new JMenu("Edit");
         editMenu.add(copy.copyItem);
         editMenu.add(cut.cutItem);
@@ -59,5 +64,5 @@ public class Edit {
     public Redo getRedo() {
         return redo;
     }
-
+    public Paste getPaste(){return paste;}
 }

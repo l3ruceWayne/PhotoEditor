@@ -11,10 +11,13 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 /*
 * @Description:还未解决因为drag而产生的bug，重定位问题
-* @author: 张旖霜
+* 点击选择区域功能后，光标暂且设置成默认
+* （如果上一个状态是画笔，如果不设置成默认，就一直是画笔了）
+* @author: 张旖霜、卢思文
 * @date: 11/27/2023 3:31 PM
 * @version: 1.0
 */
+
 public class Region {
     public int selectedRegionX, selectedRegionY;
     public Mat copyRegionMat;
@@ -34,7 +37,11 @@ public class Region {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     window.tool.pen.penItem.setSelected(false);
                     window.tool.eraser.eraserItem.setSelected(false);
+
+                    window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
                     window.tool.drag.dragItem.setSelected(false);
+
                 }
             }
         });
@@ -47,6 +54,24 @@ public class Region {
         window.panel.repaint();
         selectRegionItem.setSelected(false);
     }
+
+    public void copySelectedRegion(ActionEvent evt) {
+
+        selectRegionItem.setSelected(false);
+        // 如果还没有选择区域，弹出对话框
+        if(selectedRegionLabel.getBorder() == null) {
+            // pending 对话框的位置？
+            JOptionPane.showMessageDialog(null,
+                    "Please select region first");
+            return;
+        }
+        copyRegionMat = window.img.submat(MatUtil.getRect(selectedRegionLabel));
+
+        // 进入pasting模式
+        window.pasting = true;
+    }
+
+
 
     public void addRegion(Point p) {
 //        int newX = window.tool.drag.newX;
