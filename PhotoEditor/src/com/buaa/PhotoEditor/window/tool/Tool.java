@@ -102,7 +102,9 @@ public class Tool {
                     pen.penSize = (Integer) pen.penSizeSpinner.getValue();
                     pen.paint(e.getX(), e.getY());
                 } else if (eraser.eraserItem.isSelected()) {
+                    // 橡皮粗细的设置，貌似不用每次都重新设置一下
                     eraser.eraserSize = (Integer) eraser.eraserSizeSpinner.getValue();
+                    //
                     eraser.erase(e.getX(), e.getY());
                 }
             }

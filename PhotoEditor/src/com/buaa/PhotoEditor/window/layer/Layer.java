@@ -87,7 +87,7 @@ public class Layer {
              JOptionPane.showMessageDialog(null, "Please choose a layer to switch");
              return;
          }
-        currentLayer.hideWindow();
+//        currentLayer.hideWindow();
          if (currentLayer == layerList.get(id))
          {
              currentLayer.showWindow(); // 打开当前图层

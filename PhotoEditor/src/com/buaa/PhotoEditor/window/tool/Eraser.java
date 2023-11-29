@@ -67,7 +67,6 @@ public class Eraser {
     }
 
 
-    // pending 加一个erase的大小调节功能
     // 一键清除功能
     /*
     * @param x, y:鼠标位置
@@ -82,7 +81,9 @@ public class Eraser {
         // pending
         int newX = window.tool.drag.newX;
         int newY = window.tool.drag.newY;
-        if (x > window.img.width()+newX || x < newX || y > window.img.height()+newY || y < newY) return;
+        // lsw 修复了擦除到窗口外报错的问题，和修复pen类的paint方法一样
+        if (x > (window.img.width() - eraserSize)+newX || x < newX
+                || y > (window.img.height() - eraserSize) +newY || y < newY) return;
 
         if (window.paintingImg == null) {
             window.paintingImg = MatUtil.copy(window.img);

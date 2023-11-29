@@ -96,8 +96,9 @@ public class Pen {
     /*
      * @param x, y:鼠标位置
      * @return
-     * @Description: newX和newY是drag后的重新定位
-     * 实现画笔功能，原理是将指定像素块染成指定的颜色
+     * @Description:
+        * 实现画笔功能，原理是将指定像素块染成指定的颜色，目前问题是需要慢慢地画，否则笔迹断断续续
+        * newX和newY是drag后的重新定位
      * @author: 张旖霜、卢思文
      * @date: 11/27/2023 3:30 PM
      * @version: 1.0
@@ -107,7 +108,12 @@ public class Pen {
         // pending
         int newX = window.tool.drag.newX;
         int newY = window.tool.drag.newY;
-//        if (x > window.img.width()+newX || x < newX || y > window.img.height()+newY || y < newY) return;
+        /* lsw 解决了画到图片外报错的问题：让width和height分别减去penSize,
+            因为x只是鼠标的点，而画的时候是penSize大小的矩形块
+            所以当x在图片边界的时候，画的区域已经超过了边界，导致报错
+         */
+
+        if (x > (window.img.width() - penSize)+newX || x < newX || y > (window.img.height()-penSize)+newY || y < newY) return;
         // pending
 
         if (window.paintingImg == null) {
