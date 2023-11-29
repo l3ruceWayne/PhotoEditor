@@ -35,9 +35,9 @@ public class Pen {
      **/
     static {
         penCursorIcon = new ImageIcon(
-                "PhotoEditor/resources/penCursorImage.png");
+                "resources/penCursorImage.png");
         penItemIcon = new ImageIcon(
-                "PhotoEditor/resources/penItemImage.png"
+                "resources/penItemImage.png"
         );
         Image image = penCursorIcon.getImage();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -140,7 +140,7 @@ public class Pen {
     public void selectPenColor(MouseEvent evt) {
         Color color = JColorChooser
                 .showDialog(null,
-                        "选择颜色",
+                        "Select Color",
                         // bug
                         Color.BLACK);
 

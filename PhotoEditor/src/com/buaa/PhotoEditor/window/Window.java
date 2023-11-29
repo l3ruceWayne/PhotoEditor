@@ -43,24 +43,18 @@ import org.opencv.core.Mat;
 public class Window extends JFrame {
 
     public Property property;
-
-
     public Save save;
-
     // tool
     public Tool tool;
     // add
     public Add add;
-
     public Filter filter;
-
     public MyFile myFile;
     public Edit edit;
     /* Layer类的实例化对象只能有一个（因为不同的图层需要共用一个Layer，这样才能显示所有的图层列表）
         所以是static
     * */
     public static Layer layer;
-
     //control of photo
     public Mat img;              //actually
     public Mat originalImg;
@@ -75,33 +69,20 @@ public class Window extends JFrame {
     public Stack<Integer> propertyValue;
     public Stack<Integer> nextIsProperty;
     public Stack<Integer> nextPropertyValue;
-
     public Mat paintingImg;            //image paint
     public Mat nexLayerImg;           //image use to paint
     public boolean flag;
-
     public JPanel panel;
     // 总菜单栏
     public JMenuBar menuBar;
     // 图片显示区域
     public JLabel showImgRegionLabel;
     // options
-
     public boolean pasting = false;
-
     public String title;
     public int imgWidth;
     public int imgHeight;
-
-
-
-
-
-
-
     // Property
-
-
 
     public Window(Mat img, String title) {
         this(title);
@@ -126,9 +107,6 @@ public class Window extends JFrame {
         setLocationRelativeTo(null);
         // 按下每个按键会弹出一个对应窗口
         // 设置窗口的大小
-
-
-
         // 撤销和反撤销操作用的栈
         last = new Stack<>();
         next = new Stack<>();
@@ -155,15 +133,11 @@ public class Window extends JFrame {
         }
         showImgRegionLabel = new JLabel();
         menuBar = new JMenuBar();
-
         filter = new Filter(this);
-
         myFile = new MyFile(this);
         edit = new Edit(this);
         property = new Property(this);
-
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
 
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent evt) {
@@ -206,8 +180,6 @@ public class Window extends JFrame {
         menuBar.add(tool.zoomOut.zoomOutItem);
         menuBar.add(tool.drag.dragItem);
 
-
-
         setJMenuBar(menuBar);
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -229,10 +201,10 @@ public class Window extends JFrame {
         pack();
 
     }
-
     /**
      * @param evt : 键盘事件
      * @Description: ESC按键的功能设置
+     * 未来：选择copy功能后，将selectRegion置false
      * @author: 卢思文
      * @date: 11/26/2023 9:09 PM
      * @version: 1.0
@@ -245,7 +217,9 @@ public class Window extends JFrame {
                 tool.region.removeRegionSelected();
             } else if (add.widget.selectedWidgetLabel != null) {
                 add.widget.removeWidget();
-            } else if (pasting) {
+            }
+            // else if 写成if
+            if (pasting) {
                 pasting = false;
                 edit.getPaste().disablePasteMode();
             }
@@ -253,9 +227,6 @@ public class Window extends JFrame {
             MatUtil.show(nexLayerImg, "");
         }
     }
-
-
-
 
     public void addMouseListeners() {
 

@@ -88,7 +88,8 @@ public class Region {
         // 在panel的z轴视角上设置各组件的优先级/遮盖关系：index小的，优先级高
         window.panel.setComponentZOrder(selectedRegionLabel, 0);
         for (int i = 0; i < window.add.widget.widgetLabelList.size(); i++) {
-            window.panel.setComponentZOrder(window.add.widget.widgetLabelList.get(i), i + 1);
+            window.panel.setComponentZOrder(
+                    window.add.widget.widgetLabelList.get(i), i + 1);
         }
         window.panel.setComponentZOrder(window.showImgRegionLabel,
                 window.add.widget.widgetLabelList.size() + 1);
