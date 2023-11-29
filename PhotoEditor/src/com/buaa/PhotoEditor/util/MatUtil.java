@@ -8,8 +8,6 @@ import com.buaa.PhotoEditor.modal.EColor;
 import com.buaa.PhotoEditor.modal.ESloopFaceDirection;
 
 
-import java.awt.*;
-
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
@@ -23,7 +21,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.buaa.PhotoEditor.window.add.Text;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -591,6 +588,24 @@ public abstract class MatUtil extends JFrame {
                              Mat img) {
         img.submat(new Rect(x, y, width, height))
                 .setTo(new Scalar(color[0], color[1], color[2]));
+    }
+    /**
+    * @param x1 : 上一个点的x坐标
+    * @param y1 : 上一个点的y坐标
+    * @param x2 : 当前点的x坐标
+    * @param y2 : 当前点的y坐标
+    * @param color : 画笔颜色
+    * @param penSize : 画笔粗细
+    * @param mat : 被画的图片
+    * @return
+    * @Description: 以画笔的颜色、画笔的粗细在mat上画出当前点和上一个点之间的连线
+    * @author: 卢思文
+    * @date: 11/29/2023 4:12 PM
+    * @version: 1.0
+    **/
+    public static void drawLine(int x1, int y1, int x2, int y2, int[] color, int penSize, Mat mat) {
+        Scalar scalarColor = new Scalar(color[0], color[1], color[2]);
+        Imgproc.line(mat, new Point(x1, y1), new Point(x2, y2), scalarColor, penSize);
     }
 
     public static double[] pixel(Mat img, int x, int y) {

@@ -5,6 +5,8 @@ import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.Mat;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -19,6 +21,19 @@ import java.awt.event.*;
 public class Pen {
     public JCheckBoxMenuItem penItem;
     public Window window;
+    /*
+
+     */
+    public Point lastPoint = null;
+    /*
+        实现画笔颜色选择：
+            JPanel其实就是一个画板，我们让它显示颜色，然后画画的时候从中提取颜色作为画笔
+            的颜色
+            “提取颜色”的代码见本类的paint方法中的new int[]{
+                        penColorPanel.getBackground().getBlue(),
+                        penColorPanel.getBackground().getGreen(),
+                        penColorPanel.getBackground().getRed()}
+     */
     public JPanel penColorPanel;
     public JSpinner penSizeSpinner;
     public int penSize;
@@ -44,20 +59,11 @@ public class Pen {
         penCursor = toolkit.createCustomCursor(image, new Point(10, 0), "");
 
     }
-
+    // lsw: 删除了无用注释和换行
     public Pen(Window window) {
         this.window = window;
-        // menubar
-
         penItem = new JCheckBoxMenuItem(penItemIcon);
-        // shortcut
-//        penItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
-//                InputEvent.ALT_MASK
-//                        | InputEvent.SHIFT_MASK
-//                        | InputEvent.CTRL_MASK)
-//        );
-        // onclick event
-
+        // lsw: 删除了以下关于pen快捷键的代码
 
         penItem.addItemListener(new ItemListener() {
             /**
@@ -89,7 +95,18 @@ public class Pen {
             }
         });
         penSizeSpinner = new JSpinner(Tool.penModel);
-
+        // 初始化
+        penSize = (int)penSizeSpinner.getValue();
+        /*
+            lsw
+            增加事件捕获器
+         */
+        penSizeSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                penSize = (int)penSizeSpinner.getValue();
+            }
+        });
 
     }
     
@@ -97,42 +114,56 @@ public class Pen {
      * @param x, y:鼠标位置
      * @return
      * @Description:
-        * 实现画笔功能，原理是将指定像素块染成指定的颜色，目前问题是需要慢慢地画，否则笔迹断断续续
+        * 实现画笔功能，原理是将指定像素块染成指定的颜色
+        * 解决了“快速移动导致笔迹断续”的问题，思想：在离散的点之间插值
         * newX和newY是drag后的重新定位
      * @author: 张旖霜、卢思文
      * @date: 11/27/2023 3:30 PM
      * @version: 1.0
      */
+
     public void paint(int x, int y) {
-        // 调整界面大小，让图片填充后可以删掉
-        // pending
         int newX = window.tool.drag.newX;
         int newY = window.tool.drag.newY;
         /* lsw 解决了画到图片外报错的问题：让width和height分别减去penSize,
             因为x只是鼠标的点，而画的时候是penSize大小的矩形块
             所以当x在图片边界的时候，画的区域已经超过了边界，导致报错
          */
-
-        if (x > (window.img.width() - penSize)+newX || x < newX || y > (window.img.height()-penSize)+newY || y < newY) return;
-        // pending
+        // 下面这行代码作用是，当所画区域在图片外，return，这样避免报错
+        if (x > (window.img.width() - penSize)+newX ||
+                x < newX ||
+                y > (window.img.height()-penSize)+newY ||
+                y < newY) {
+            // 如果画在区域外，上一个点要置null
+            lastPoint = null;
+            return;
+        }
 
         if (window.paintingImg == null) {
             window.paintingImg = MatUtil.copy(window.img);
         }
-        
-        MatUtil.paint(new int[]{
 
-                        penColorPanel.getBackground().getBlue(),
-                        penColorPanel.getBackground().getGreen(),
-                        penColorPanel.getBackground().getRed()},
-                penSize,
-                penSize,
-                x - newX,
-                y - newY,
-
-                window.paintingImg);
-
+        int[] color = {penColorPanel.getBackground().getBlue(),
+                penColorPanel.getBackground().getGreen(),
+                penColorPanel.getBackground().getRed()
+        };
+        /*
+            lsw
+            将当前点与上一个点连线，顺利解决笔迹断续的问题！
+         */
+        if(lastPoint != null){
+            MatUtil.drawLine(lastPoint.x,
+                            lastPoint.y,
+                            x - newX,
+                            y - newY,
+                            color,
+                            penSize, window.paintingImg);
+        }else{
+            MatUtil.paint(color, penSize, penSize, x - newX, y - newY, window.paintingImg);
+        }
         MatUtil.show(window.paintingImg, window.showImgRegionLabel);
+        // 更新上一个点为当前点
+        lastPoint = new Point(x, y);
 
     }
     /**
