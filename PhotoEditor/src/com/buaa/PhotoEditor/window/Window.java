@@ -124,6 +124,8 @@ public class Window extends JFrame {
 
         // add
         add = new Add(this);
+
+        showImgRegionLabel = new JLabel();
         // tool
         tool = new Tool(this);
 
@@ -131,7 +133,6 @@ public class Window extends JFrame {
         if(layer == null){
             layer = new Layer(this);
         }
-        showImgRegionLabel = new JLabel();
         menuBar = new JMenuBar();
         filter = new Filter(this);
         myFile = new MyFile(this);
