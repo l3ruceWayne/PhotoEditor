@@ -80,7 +80,10 @@ public class Tool {
                 }
             }
 
-
+            /*
+                使用Eraser或者Pen，当松开鼠标之后，上一个图片（img）入栈，刚编辑好的图片是paintingImg
+                然后把“上一个图片”img 更新成 paintingImg
+             */
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (pen.penItem.isSelected()
@@ -91,7 +94,6 @@ public class Tool {
                     window.last.add(window.img);
                     if (window.paintingImg != null) {
                         window.img = MatUtil.copy(window.paintingImg);
-                        System.out.println("lsw");
                     }
                     /*
                     lsw
