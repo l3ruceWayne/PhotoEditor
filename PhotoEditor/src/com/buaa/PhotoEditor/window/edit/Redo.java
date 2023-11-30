@@ -58,10 +58,12 @@ public class Redo {
             } else {
 
 
-                Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel);
+                Rect selectedRegionRect = MatUtil
+                        .getRect(window.tool.region.selectedRegionLabel);
                 Mat newImg = MatUtil.copy(window.img);
                 // last.peek()是栈顶Mat，即上一次撤销前的版本，作用为恢复上一次撤销前改变的区域
-                window.next.peek().submat(selectedRegionRect).copyTo(newImg.submat(selectedRegionRect));
+                window.next.peek().submat(selectedRegionRect)
+                        .copyTo(newImg.submat(selectedRegionRect));
                 //更新
                 window.img = newImg;
                 //取消区域选择复选框

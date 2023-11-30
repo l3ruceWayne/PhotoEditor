@@ -46,13 +46,15 @@ public class Eraser {
         clearScreen = false;
         this.window = window;
         eraserItem = new JCheckBoxMenuItem(eraserItemIcon);
-        // 增加计时器，当长按橡皮2s后，清除全屏
+        // 增加计时器，当长按橡皮2000毫秒后，清除全屏
         Timer timer = new Timer(2000 , e ->{
-            // 有问题
             window.last.push(window.img);
             clearScreen = true;
             window.paintingImg = MatUtil.copy(window.originalImg);
+            // 更新“上一个图片”img
+            window.img = MatUtil.copy(window.originalImg);
             MatUtil.show(window.paintingImg, window.showImgRegionLabel);
+            window.paintingImg = null;
         });
         timer.setRepeats(false);
 
