@@ -50,6 +50,7 @@ public class Rotate {
     * @version: 1.0
     */
     private void rotate(Mat img) {
+        int temp;
         center = new Point(img.width()/2, img.height()/2);
         angle = 90;
         scale = 1.0;
@@ -61,10 +62,20 @@ public class Rotate {
         Core.transpose(img, rotateImg);
         Core.flip(rotateImg, newImg, 0);
 
+        // 旋转后，宽高大小交换
+        temp = window.imgWidth;
+        window.imgWidth = window.imgHeight;
+        window.imgHeight = temp;
+        // 重新设置图片大小
+        MatUtil.resize(newImg, new Size(window.img.height(), window.img.width()));
+
         MatUtil.show(newImg, window.showImgRegionLabel);
 
         window.isProperty.push(0);
         window.last.push(window.img);
         window.img = newImg;
+
+        // 更新eraser需要的原图
+        window.originalImg = MatUtil.copy(window.img);
     }
 }

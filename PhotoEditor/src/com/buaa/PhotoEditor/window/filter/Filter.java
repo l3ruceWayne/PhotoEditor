@@ -5,7 +5,12 @@ import com.buaa.PhotoEditor.window.add.Widget;
 
 import javax.swing.*;
 import java.awt.event.WindowStateListener;
-
+/**
+* @Description: 滤镜类，只需要在Window类里面new Filter(),即可实现所有滤镜相关内容初始化
+* @author: 卢思文
+* @date: 11/26/2023 8:58 PM
+* @version: 1.0
+**/
 public class Filter {
     public JMenu filterMenu;
     public Window window;

@@ -46,9 +46,12 @@ public class ZoomIn {
 //        }
         int width = window.img.width()+(window.img.width()*10/100);
         int height = window.img.height()+(window.img.height()*10/100);
-        Imgproc.resize(img, window.img, new Size(width, height));
+        // 重新设置显示的图片大小
+        MatUtil.resize(img, new Size(width, height));
         window.showImgRegionLabel.setSize(width, height);
 
         MatUtil.show(window.img, window.showImgRegionLabel);
+        // 更新eraser需要的原图
+        window.originalImg = MatUtil.copy(window.img);
     }
 }
