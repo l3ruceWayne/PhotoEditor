@@ -52,6 +52,7 @@ public class MySize {
             Mat newImg = MatUtil.copy(window.temp);
             MatUtil.resize(newImg, new Size(newWidth, newHeight));
 
+            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             window.last.push(window.img);
 
             window.img = window.temp = newImg;

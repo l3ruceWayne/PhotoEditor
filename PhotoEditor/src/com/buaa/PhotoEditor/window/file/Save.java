@@ -65,7 +65,8 @@ public class Save {
         // 显示融为一体的图片
         MatUtil.show(newImg, window.showImgRegionLabel);
         if (window.last.size() != 0 && window.img != window.last.peek()) {
-            window.isProperty.push(0);
+            // 当前property的值入栈
+            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             window.last.push(window.img);
         }
         window.img = newImg;

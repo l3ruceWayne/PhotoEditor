@@ -71,10 +71,9 @@ public class Window extends JFrame {
     public static Mat copy;
     public Stack<Mat> last; //ctrl+z
     public Stack<Mat> next;     //ctrl+y`
-    public Stack<Integer> isProperty;
-    public Stack<Integer> propertyValue;
-    public Stack<Integer> nextIsProperty;
-    public Stack<Integer> nextPropertyValue;
+    public Stack<int[]> lastPropertyValue;
+    public Stack<int[]> nextPropertyValue;
+    public int[] currentPropertyValue;
 
     public Mat paintingImg;            //image paint
     public Mat nexLayerImg;           //image use to paint
@@ -107,6 +106,15 @@ public class Window extends JFrame {
         this(title);
         this.title  = title;
         this.img = img;
+
+        // 将当前的property的初始值暂存起来（如同img）
+        currentPropertyValue[0] = property.getContrastAndBrightness().contrastSlide.getValue();
+        currentPropertyValue[1] = property.getContrastAndBrightness().brightnessSlider.getValue();
+        currentPropertyValue[2] = property.getSaturation().saturationSlider.getValue();
+        currentPropertyValue[3] = property.getGraininess().grainBar.getValue();
+        currentPropertyValue[4] = Integer.parseInt(property.getMySize().txtWidth.getText());
+        currentPropertyValue[5] = Integer.parseInt(property.getMySize().txtHeight.getText());
+
 //        this.imgWidth = img.width();
 //        this.imgHeight = img.height();
         MatUtil.show(img, showImgRegionLabel);
@@ -132,10 +140,10 @@ public class Window extends JFrame {
         // 撤销和反撤销操作用的栈
         last = new Stack<>();
         next = new Stack<>();
-        isProperty = new Stack<>();
-        propertyValue = new Stack<>();
-        nextIsProperty = new Stack<>();
+        // 初始化property的undo redo的栈
+        lastPropertyValue = new Stack<>();
         nextPropertyValue = new Stack<>();
+        currentPropertyValue = new int[10];
         this.setTitle(title);
     }
 

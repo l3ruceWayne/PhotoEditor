@@ -130,7 +130,8 @@ public class Pen {
                 画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，当松开的时候我们将上一个状态入栈，然后更改img
                  */
                 if (penItem.isSelected()) {
-                    window.isProperty.push(0);
+                    // 当前property的值入栈
+                    window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                     window.last.add(window.img);
                     if (window.paintingImg != null) {
                         window.img = MatUtil.copy(window.paintingImg);

@@ -195,7 +195,8 @@ public class Property {
      * @param evt 触发操作
      * @return void
      * @Description:点击触发，完成面板有关参数的初始化设置
-     * @author: 罗雨曦
+     * 触发后，把当前修改的新值保存到currentPropertyValue中（方便undo和redo的操作）
+     * @author: 罗雨曦 张旖霜
      * @date: 2023/11/27 14:03
      * @version: 1.0
      **/
@@ -204,10 +205,24 @@ public class Property {
         propertyMenuDialog.setModal(true);
         propertyMenuDialog.setVisible(true);
         propertyMenuDialog.setResizable(true);
+
+        // 当前property的值入栈
+        window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
         window.last.push(window.img);
+
+        // 更新property现在的值
+        window.currentPropertyValue[0] = contrastAndBrightness.contrastSlide.getValue();
+        window.currentPropertyValue[1] = contrastAndBrightness.brightnessSlider.getValue();
+        window.currentPropertyValue[2] = saturation.saturationSlider.getValue();
+        window.currentPropertyValue[3] = graininess.grainBar.getValue();
+        window.currentPropertyValue[4] = Integer.parseInt(mySize.txtWidth.getText());
+        window.currentPropertyValue[5] = Integer.parseInt(mySize.txtHeight.getText());
+
         window.img = window.temp;
+
         window.tool.region.removeRegionSelected();
-        restartPorpertyComponentsValues();
+        // 为什么需要每次点击property后初始化滚动条呢？感觉不需要
+//        restartPorpertyComponentsValues();
     }
 
     /**
@@ -235,13 +250,9 @@ public class Property {
         getMySize().txtHeight.setText(window.img.height() + "");
         getMySize().lbSize.setText("Size: " + window.img.width() + "x" + window.img.height());
 
-        // 更新图片大小
-        window.imgWidth = window.img.width();
-        window.imgHeight = window.img.height();
-
-        //        不需要重新设置窗口大小
 //        int width = window.img.width() >= 200 ? window.img.width() : 200;
 //        int height = window.img.height() >= 200 ? window.img.height() : 200;
+
 //        window.setSize(width, height);
         window.setLocationRelativeTo(null);
 

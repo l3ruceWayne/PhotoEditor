@@ -44,16 +44,28 @@ public class Redo {
      * @param e 触发操作
      * @return void
      * @Description:利用栈操作实现重做操作
-     * @author: 罗雨曦
+     * 实现了property值的redo操作
+     * @author: 罗雨曦 张旖霜
      * @date: 2023/11/27 14:05
      * @version: 1.0
      **/
     private void redo(ActionEvent e) {
         if (!window.next.isEmpty()) {
             window.last.push(window.img);
+            // 当前property的值入栈
+            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
 
             if (!window.tool.region.selectRegionItem.isSelected()) {
                 window.img = window.next.pop();
+
+                // 还原property的值
+                window.currentPropertyValue = MatUtil.copyPropertyValue(window.nextPropertyValue.pop());
+                window.property.getContrastAndBrightness().contrastSlide.setValue(window.currentPropertyValue[0]);
+                window.property.getContrastAndBrightness().brightnessSlider.setValue(window.currentPropertyValue[1]);
+                window.property.getSaturation().saturationSlider.setValue(window.currentPropertyValue[2]);
+                window.property.getGraininess().grainBar.setValue(window.currentPropertyValue[3]);
+                window.property.getMySize().txtWidth.setText(window.currentPropertyValue[4]+"");
+                window.property.getMySize().txtHeight.setText(window.currentPropertyValue[5]+"");
 
             } else {
 
@@ -70,10 +82,11 @@ public class Redo {
 
             window.showImgRegionLabel.setSize(window.img.width(), window.img.height());
 
+            // 不需要重新设置窗口大小
 //            this.window.setSize(window.img.width(), window.img.height());
 //            this.window.setLocationRelativeTo(null);
 
-
+            window.property.updateProperty();
             MatUtil.show(window.img, window.showImgRegionLabel);
         } else {
             //个人认为需要保留弹窗，后期可删

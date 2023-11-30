@@ -232,7 +232,7 @@ public class Text {
             dialogAddText.setModal(true);
             dialogAddText.setVisible(true);
 
-            window.isProperty.push(0);
+            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             window.last.push(window.img);
             window.img = window.temp;
             initPanel();

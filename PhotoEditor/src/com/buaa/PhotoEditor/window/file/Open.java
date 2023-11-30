@@ -69,8 +69,9 @@ public class Open {
             this.window.setLocationRelativeTo(null);
             window.last.clear();
             window.next.clear();
-            window.isProperty.clear();
-            window.propertyValue.clear();
+            // 清空property值的栈
+            window.lastPropertyValue.clear();
+            window.nextPropertyValue.clear();
             window.showImgRegionLabel.setText("");
 
             window.property.updateProperty();
