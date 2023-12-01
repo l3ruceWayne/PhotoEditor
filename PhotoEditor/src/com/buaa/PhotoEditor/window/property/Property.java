@@ -53,7 +53,8 @@ public class Property {
 
         propertyMenuDialog = new JDialog();
         propertyMenuDialog.setTitle("Property");
-        propertyMenuDialog.setSize(400, 400);
+        // lsw 高度改为600，让界面显示完全
+        propertyMenuDialog.setSize(400, 600);
         propertyMenuDialog.setLocationRelativeTo(null);
         initLayout();
     }
@@ -70,7 +71,8 @@ public class Property {
         JLabel jLabel3 = new JLabel("Contrast");
         JLabel jLabel4 = new JLabel("Width:");
         JLabel jLabel5 = new JLabel("Height:");
-        JLabel jLabel6 = new JLabel("Noise");
+//        JLabel jLabel6 = new JLabel("Noise");
+        JLabel jLabel6 = new JLabel("");
         JLabel jLabel7 = new JLabel("Size");
 
 
@@ -254,6 +256,7 @@ public class Property {
 //        int height = window.img.height() >= 200 ? window.img.height() : 200;
 
 //        window.setSize(width, height);
+
         window.setLocationRelativeTo(null);
 
     }

@@ -7,9 +7,11 @@ package com.buaa.PhotoEditor.window;
 import com.buaa.PhotoEditor.util.MatUtil;
 import static com.buaa.PhotoEditor.window.Constant.*;
 
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.PathIterator;
+
 import java.util.Stack;
 import java.util.zip.CheckedOutputStream;
 import javax.swing.*;
@@ -35,6 +37,7 @@ import com.buaa.PhotoEditor.window.layer.Layer;
 
 import org.opencv.core.Mat;
 
+
 /**
 * @Description: menuBar的显示效果不好（各项之间的距离等），需改进
  * 后续在关闭窗口的时候检查是否保存，未保存则提醒。相关代码如下
@@ -56,13 +59,12 @@ public class Window extends JFrame {
     // 为设置panel的布局增添的布局管理器
     public GridBagLayout gridBagLayout;
 
-    public Save save;
 
+    public Save save;
     // tool
     public Tool tool;
     // add
     public Add add;
-
     public Filter filter;
 
     public MyFile myFile;
@@ -71,7 +73,6 @@ public class Window extends JFrame {
         所以是static
     * */
     public static Layer layer;
-
     //control of photo
     public Mat img;              //actually
     // 谨慎更改originalImg
@@ -82,6 +83,7 @@ public class Window extends JFrame {
     public static Mat copy;
     public Stack<Mat> last; //ctrl+z
     public Stack<Mat> next;     //ctrl+y`
+
     public Stack<int[]> lastPropertyValue;
     public Stack<int[]> nextPropertyValue;
     public int[] currentPropertyValue;
@@ -89,27 +91,19 @@ public class Window extends JFrame {
     public Mat nexLayerImg;           //image use to paint
     public boolean flag;
 
+
+
     public JPanel panel;
     // 总菜单栏
     public JMenuBar menuBar;
     // 图片显示区域
     public JLabel showImgRegionLabel;
     // options
-
     public boolean pasting = false;
 
     public String title;
     public int imgWidth;
     public int imgHeight;
-
-
-
-
-
-
-
-    // Property
-
 
 
     public Window(Mat img, String title) {
@@ -144,9 +138,6 @@ public class Window extends JFrame {
         setLocationRelativeTo(null);
         // 按下每个按键会弹出一个对应窗口
         // 设置窗口的大小
-
-
-
         // 撤销和反撤销操作用的栈
         last = new Stack<>();
         next = new Stack<>();
@@ -158,16 +149,20 @@ public class Window extends JFrame {
     }
 
     public void initComponents() {
+
         // 5是原尺寸，点击一次放大+1， 点击一次缩小-1，放大缩小各五档
         counter = ORIGINAL_SIZE_COUNTER;
         // 对应zoomImg
         paintingImg = new Mat[MAX_SIZE_COUNTER + 1];
+
         // 一定要先初始化panel，之后再调用tool类构造方法
         panel = new JPanel();
         save = new Save(this);
         gridBagLayout = new GridBagLayout();
         // add
         add = new Add(this);
+
+        showImgRegionLabel = new JLabel();
         // tool
         tool = new Tool(this);
 
@@ -175,6 +170,7 @@ public class Window extends JFrame {
         if(layer == null){
             layer = new Layer(this);
         }
+
         showImgRegionLabel = new JLabel();
         menuBar = new JMenuBar();
 
@@ -187,6 +183,7 @@ public class Window extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
+
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent evt) {
                 ESCKeyPress(evt);
@@ -194,6 +191,7 @@ public class Window extends JFrame {
         });
 
         showImgRegionLabel.setText("Please select photo");
+
         /*
             让showImgRegionLabel显示在panel的中央，新添了下面3行代码，注释了原布局代码
             但是这会让程序刚启动的时候界面很小
@@ -216,6 +214,7 @@ public class Window extends JFrame {
 //                                .addContainerGap(306, Short.MAX_VALUE))
 //        );
 
+
         menuBar.add(myFile.fileMenu);
         menuBar.add(edit.editMenu);
         menuBar.add(add.addMenu);
@@ -233,7 +232,6 @@ public class Window extends JFrame {
         menuBar.add(tool.zoomIn.zoomInItem);
         menuBar.add(tool.zoomOut.zoomOutItem);
         menuBar.add(tool.drag.dragItem);
-
 
 
         setJMenuBar(menuBar);
@@ -260,6 +258,7 @@ public class Window extends JFrame {
     /**
      * @param evt : 键盘事件
      * @Description: ESC按键的功能设置
+     * 未来：选择copy功能后，将selectRegion置false
      * @author: 卢思文
      * @date: 11/26/2023 9:09 PM
      * @version: 1.0
@@ -272,7 +271,9 @@ public class Window extends JFrame {
                 tool.region.removeRegionSelected();
             } else if (add.widget.selectedWidgetLabel != null) {
                 add.widget.removeWidget();
-            } else if (pasting) {
+            }
+            // else if 写成if
+            if (pasting) {
                 pasting = false;
                 edit.getPaste().disablePasteMode();
             }
@@ -280,8 +281,6 @@ public class Window extends JFrame {
             MatUtil.show(nexLayerImg, "");
         }
     }
-
-
 
 
     public void addMouseListeners() {

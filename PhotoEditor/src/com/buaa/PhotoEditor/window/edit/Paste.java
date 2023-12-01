@@ -31,8 +31,10 @@ public class Paste {
 
         MatUtil.show(newImg, window.showImgRegionLabel);
 
+
         // 当前property的值入栈
         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+
         window.last.push(window.img);
         window.img = newImg;
     }

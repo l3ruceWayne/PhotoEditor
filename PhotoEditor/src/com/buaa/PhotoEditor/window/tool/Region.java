@@ -12,6 +12,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 /*
+
 * @Description:drag后重新定位的bug已修改
 * 点击选择区域功能后，光标暂且设置成默认
 * （如果上一个状态是画笔，如果不设置成默认，就一直是画笔了）
@@ -45,6 +46,7 @@ public class Region {
                     window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
                     window.tool.drag.dragItem.setSelected(false);
+
 
                     if (flag == false) {
                         regionListener();
@@ -121,6 +123,7 @@ public class Region {
         selectedRegionLabel.setBorder(BorderFactory
                 .createLineBorder(Color.cyan));
 
+
         window.showImgRegionLabel.setLayout(null);
         window.showImgRegionLabel.add(selectedRegionLabel);
 //        // 可能过后改bug会用
@@ -134,6 +137,8 @@ public class Region {
 //
         window.showImgRegionLabel.revalidate();
         window.showImgRegionLabel.repaint();
+
+
 
         selectedRegionX = selectedRegionLabel.getX();
         selectedRegionY = selectedRegionLabel.getY();

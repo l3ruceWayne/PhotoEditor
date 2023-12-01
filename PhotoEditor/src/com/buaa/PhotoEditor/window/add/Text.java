@@ -48,7 +48,7 @@ public class Text {
 
         this.window = window;
 
-        addTextItem = new JMenuItem("Add Text");
+        addTextItem = new JMenuItem("Text");
         dialogAddText = new JDialog();
         panelTextColor = new JPanel();
         labelAddTextContents = new JLabel("Contents");

@@ -58,8 +58,12 @@ public class Undo {
     private void undo (ActionEvent e){
         if (!window.last.isEmpty()) {
 
+
             window.next.push(window.img);
             window.nextPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+
+
+
 
             if (!window.tool.region.selectRegionItem.isSelected()) {
                 window.img = window.last.pop();
