@@ -7,9 +7,12 @@ package com.buaa.PhotoEditor.window;
 import com.buaa.PhotoEditor.util.MatUtil;
 
 
+import java.awt.*;
 import java.awt.event.*;
 import java.util.Stack;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.text.JTextComponent;
 
 import com.buaa.PhotoEditor.window.edit.Edit;
 import com.buaa.PhotoEditor.window.file.Save;
@@ -31,6 +34,8 @@ import com.buaa.PhotoEditor.window.layer.Layer;
 
 
 import org.opencv.core.Mat;
+
+import static javax.security.auth.callback.ConfirmationCallback.YES;
 
 /**
 * @Description: menuBar的显示效果不好（各项之间的距离等），需改进
@@ -71,10 +76,9 @@ public class Window extends JFrame {
     public static Mat copy;
     public Stack<Mat> last; //ctrl+z
     public Stack<Mat> next;     //ctrl+y`
-    public Stack<Integer> isProperty;
-    public Stack<Integer> propertyValue;
-    public Stack<Integer> nextIsProperty;
-    public Stack<Integer> nextPropertyValue;
+    public Stack<int[]> lastPropertyValue;
+    public Stack<int[]> nextPropertyValue;
+    public int[] currentPropertyValue;
 
     public Mat paintingImg;            //image paint
     public Mat nexLayerImg;           //image use to paint
@@ -93,7 +97,9 @@ public class Window extends JFrame {
     public int imgWidth;
     public int imgHeight;
 
-
+    //LYX 因为open时是先根据屏幕大小resize，所以打开后图片size可能会改变，这里存储图片原size
+    public int srcImgWidth;
+    public int srcImgHeight;
 
 
 
@@ -107,11 +113,26 @@ public class Window extends JFrame {
         this(title);
         this.title  = title;
         this.img = img;
-        this.imgWidth = img.width();
-        this.imgHeight = img.height();
+        //LYX 设置窗口的大小为全屏尺寸
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setSize(screenSize.width, screenSize.height);
+        //LYX 设置窗口为全屏显示
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //LYX 设置窗口大小为不可调整
+        this.setResizable(false);
+
+        // 将当前的property的初始值暂存起来（如同img）
+        currentPropertyValue[0] = property.getContrastAndBrightness().contrastSlide.getValue();
+        currentPropertyValue[1] = property.getContrastAndBrightness().brightnessSlider.getValue();
+        currentPropertyValue[2] = property.getSaturation().saturationSlider.getValue();
+        currentPropertyValue[3] = property.getGraininess().grainBar.getValue();
+        currentPropertyValue[4] = Integer.parseInt(property.getMySize().txtWidth.getText());
+        currentPropertyValue[5] = Integer.parseInt(property.getMySize().txtHeight.getText());
+
+//        this.imgWidth = img.width();
+//        this.imgHeight = img.height();
         MatUtil.show(img, showImgRegionLabel);
         showImgRegionLabel.setSize(img.width(), img.height());
-        this.setSize(img.width(), img.height());
         setResizable(true);
         setLocationRelativeTo(null);
     }
@@ -120,6 +141,18 @@ public class Window extends JFrame {
 
         this.title  = title;
         initComponents();
+
+        //LYX 调整文字大小
+        Font iniText=new Font("", Font.PLAIN, 35);
+        showImgRegionLabel.setFont(iniText);
+
+        //LYX 设置窗口的大小为全屏尺寸
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setSize(screenSize.width, screenSize.height);
+        //LYX 设置窗口为全屏显示
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //LYX 设置窗口大小为不可调整
+        setResizable(false);
 
         addMouseListeners();
         setResizable(true);
@@ -132,16 +165,17 @@ public class Window extends JFrame {
         // 撤销和反撤销操作用的栈
         last = new Stack<>();
         next = new Stack<>();
-        isProperty = new Stack<>();
-        propertyValue = new Stack<>();
-        nextIsProperty = new Stack<>();
+        // 初始化property的undo redo的栈
+        lastPropertyValue = new Stack<>();
         nextPropertyValue = new Stack<>();
+        currentPropertyValue = new int[10];
         this.setTitle(title);
     }
 
     public void initComponents() {
         // 一定要先初始化panel，之后再调用tool类构造方法
         panel = new JPanel();
+        showImgRegionLabel = new JLabel();
         save = new Save(this);
 
         // add
@@ -153,7 +187,7 @@ public class Window extends JFrame {
         if(layer == null){
             layer = new Layer(this);
         }
-        showImgRegionLabel = new JLabel();
+
         menuBar = new JMenuBar();
 
         filter = new Filter(this);
@@ -170,8 +204,8 @@ public class Window extends JFrame {
                 ESCKeyPress(evt);
             }
         });
-
-        showImgRegionLabel.setText("Please select photo");
+        //LYX 改变初始文字，增强提示性
+        showImgRegionLabel.setText("  ↑ Start by selecting a photo via 'File-Open' ");
         // pending
         GroupLayout panelLayout = new GroupLayout(panel);
         panel.setLayout(panelLayout);
@@ -258,8 +292,7 @@ public class Window extends JFrame {
 
 
     public void addMouseListeners() {
-
-        panel.addMouseListener(new MouseAdapter() {
+        showImgRegionLabel.addMouseListener(new MouseAdapter() {
             /**
             * @Description: 粘贴状态下，鼠标点击会进行粘贴
             * @author: 卢思文
@@ -277,7 +310,7 @@ public class Window extends JFrame {
 
         });
 
-        panel.addMouseMotionListener(new MouseAdapter() {
+        showImgRegionLabel.addMouseMotionListener(new MouseAdapter() {
             /**
             * @Description: 粘贴模式下，粘贴框随鼠标一起移动
             * @author: 卢思文

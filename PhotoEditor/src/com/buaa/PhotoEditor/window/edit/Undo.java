@@ -50,42 +50,29 @@ public class Undo {
      * @param e 触发操作
      * @return void
      * @Description:利用栈操作实现撤销操作
-     * @author: 罗雨曦
+     * 实现了property值的undo操作
+     * @author: 罗雨曦 张旖霜
      * @date: 2023/11/27 14:07
      * @version: 1.0
      **/
     private void undo (ActionEvent e){
         if (!window.last.isEmpty()) {
+
             window.next.push(window.img);
-
-
-
-            // property
-            window.nextIsProperty.push(0);
-
+            window.nextPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
 
             if (!window.tool.region.selectRegionItem.isSelected()) {
                 window.img = window.last.pop();
+                // 当前property的值入栈
+                window.currentPropertyValue = MatUtil.copyPropertyValue(window.lastPropertyValue.pop());
 
-                // 下面注释掉的是还没实现的undo property
-//                state = window.isProperty.pop();
-//                if (state == 1)
-//                {
-//                    window.property.getContrastAndBrightness().contrastSlide.setValue(window.propertyValue.pop());
-//                    window.property.getContrastAndBrightness().brightnessSlider.setValue(window.propertyValue.pop());
-//                } else if (state == 2)
-//                {
-//                    window.property.getSaturation().saturationSlider.setValue(window.propertyValue.pop());
-//                } else if (state == 3)
-//                {
-//                    window.property.getGraininess().grainBar.setValue(window.propertyValue.pop());
-//                } else if (state == 4)
-//                {
-//                    int width = window.propertyValue.pop();
-//                    int height = window.propertyValue.pop();
-//                    MatUtil.resize(window.img, new Size(width, height));
-//                    window.updatePropertys();
-//                }
+                // 还原property的值
+                window.property.getContrastAndBrightness().contrastSlide.setValue(window.currentPropertyValue[0]);
+                window.property.getContrastAndBrightness().brightnessSlider.setValue(window.currentPropertyValue[1]);
+                window.property.getSaturation().saturationSlider.setValue(window.currentPropertyValue[2]);
+                window.property.getGraininess().grainBar.setValue(window.currentPropertyValue[3]);
+                window.property.getMySize().txtWidth.setText(window.currentPropertyValue[4]+"");
+                window.property.getMySize().txtHeight.setText(window.currentPropertyValue[5]+"");
 
             } else {
                 Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel);
@@ -102,7 +89,7 @@ public class Undo {
 
 //            this.window.setSize(window.img.width(), window.img.height());
 //            this.window.setLocationRelativeTo(null);
-
+            window.property.updateProperty();
             MatUtil.show(window.img, window.showImgRegionLabel);
         } else {
             //个人认为需要保留弹窗，后期可删

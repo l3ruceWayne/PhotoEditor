@@ -462,6 +462,23 @@ public abstract class MatUtil extends JFrame {
         sub.put(0, 0, buffer);
     }
 
+    /*
+    * @param propertyValue: 当前要使用的property的值
+    * @return 以新的数组返回（其中的元素是property的值）
+    * @Description: 为了让栈里保存的是新的数组，而不仅仅是对currentPropertyValue数组的引用
+    * @author: 张旖霜
+    * @date: 11/30/2023 5:35 PM
+    * @version: 1.0
+    */
+    public static int[] copyPropertyValue(int[] propertyValue)
+    {
+        int[] newPropertyValue = new int[10];
+        for (int i=0; i<=5; i++)
+        {
+            newPropertyValue[i] = propertyValue[i];
+        }
+        return newPropertyValue;
+    }
 
     public static Mat copy(Mat img) {
         Mat imgCopy = new Mat();
