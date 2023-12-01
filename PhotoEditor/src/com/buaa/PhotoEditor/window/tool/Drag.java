@@ -43,6 +43,7 @@ public class Drag {
                     window.tool.pen.penItem.setSelected(false);
                     window.tool.eraser.eraserItem.setSelected(false);
                     window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    // flag 的作用是让监听器只启动一次，启动后将一直监听
                     if (flag == false) {
                         dragListener();
                         flag = true;
@@ -53,6 +54,10 @@ public class Drag {
     }
     public void dragListener() {
 //        JLabel imgLabel = window.showImgRegionLabel;
+        /*
+         下面这两行代码是不是等价于MatUtil.show(window.img, window.showImgRegionLabel);
+         是不是不写也行？
+         */
         ImageIcon imgIcon = new ImageIcon(MatUtil.bufferedImg(window.img));
         window.showImgRegionLabel.setIcon(imgIcon);
         MouseInputAdapter mia = new MouseInputAdapter() {
@@ -72,7 +77,6 @@ public class Drag {
                     int y = e.getY() + ly;
 //                    if (x-ex < 0 || y-ey<0 || x-ex>window.getSize().width || y-ex > window.getSize().height) return;
                     window.showImgRegionLabel.setLocation(x - ex, y - ey);
-
                     window.panel.revalidate();
                     window.panel.repaint();
                 }

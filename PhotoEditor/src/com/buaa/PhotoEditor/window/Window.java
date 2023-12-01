@@ -5,10 +5,13 @@ GitHub: https://github.com/igor036
 package com.buaa.PhotoEditor.window;
 
 import com.buaa.PhotoEditor.util.MatUtil;
+import static com.buaa.PhotoEditor.window.Constant.*;
 
-
+import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.PathIterator;
 import java.util.Stack;
+import java.util.zip.CheckedOutputStream;
 import javax.swing.*;
 
 import com.buaa.PhotoEditor.window.edit.Edit;
@@ -41,9 +44,17 @@ import org.opencv.core.Mat;
 * @version: 1.0
 **/
 public class Window extends JFrame {
-
+    // 掌管尺寸的计数器
+    public int counter;
+    // 掌管尺寸的数组 在打开图片后进行初始化
+    public int[][] size;
+    // 掌管放大缩小图片的数组和对应尺寸的原图数组
+    public Mat[] zoomImg;
+    public Mat[] originalZoomImg;
+    public Mat[] paintingImg;
     public Property property;
-
+    // 为设置panel的布局增添的布局管理器
+    public GridBagLayout gridBagLayout;
 
     public Save save;
 
@@ -63,11 +74,11 @@ public class Window extends JFrame {
 
     //control of photo
     public Mat img;              //actually
+    // 谨慎更改originalImg
     public Mat originalImg;
     public String originalImgPath;
     // temp的作用？
     public Mat temp;             //temp
-    public Mat zoomImg;
     public static Mat copy;
     public Stack<Mat> last; //ctrl+z
     public Stack<Mat> next;     //ctrl+y`
@@ -75,7 +86,6 @@ public class Window extends JFrame {
     public Stack<int[]> nextPropertyValue;
     public int[] currentPropertyValue;
 
-    public Mat paintingImg;            //image paint
     public Mat nexLayerImg;           //image use to paint
     public boolean flag;
 
@@ -148,10 +158,14 @@ public class Window extends JFrame {
     }
 
     public void initComponents() {
+        // 5是原尺寸，点击一次放大+1， 点击一次缩小-1，放大缩小各五档
+        counter = ORIGINAL_SIZE_COUNTER;
+        // 对应zoomImg
+        paintingImg = new Mat[MAX_SIZE_COUNTER + 1];
         // 一定要先初始化panel，之后再调用tool类构造方法
         panel = new JPanel();
         save = new Save(this);
-
+        gridBagLayout = new GridBagLayout();
         // add
         add = new Add(this);
         // tool
@@ -180,21 +194,27 @@ public class Window extends JFrame {
         });
 
         showImgRegionLabel.setText("Please select photo");
-        // pending
-        GroupLayout panelLayout = new GroupLayout(panel);
-        panel.setLayout(panelLayout);
-        panelLayout.setHorizontalGroup(
-                panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(panelLayout.createSequentialGroup()
-                                .addComponent(showImgRegionLabel)
-                                .addGap(0, 307, Short.MAX_VALUE))
-        );
-        panelLayout.setVerticalGroup(
-                panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(panelLayout.createSequentialGroup()
-                                .addComponent(showImgRegionLabel)
-                                .addContainerGap(306, Short.MAX_VALUE))
-        );
+        /*
+            让showImgRegionLabel显示在panel的中央，新添了下面3行代码，注释了原布局代码
+            但是这会让程序刚启动的时候界面很小
+         */
+        panel.setLayout(gridBagLayout);
+//        GridBagConstraints gbc = new GridBagConstraints();
+        panel.add(showImgRegionLabel);
+//        GroupLayout panelLayout = new GroupLayout(panel);
+//        panel.setLayout(panelLayout);
+//        panelLayout.setHorizontalGroup(
+//                panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//                        .addGroup(panelLayout.createSequentialGroup()
+//                                .addComponent(showImgRegionLabel)
+//                                .addGap(0, 307, Short.MAX_VALUE))
+//        );
+//        panelLayout.setVerticalGroup(
+//                panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//                        .addGroup(panelLayout.createSequentialGroup()
+//                                .addComponent(showImgRegionLabel)
+//                                .addContainerGap(306, Short.MAX_VALUE))
+//        );
 
         menuBar.add(myFile.fileMenu);
         menuBar.add(edit.editMenu);
@@ -217,17 +237,16 @@ public class Window extends JFrame {
 
 
         setJMenuBar(menuBar);
-
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addComponent(panel, GroupLayout.DEFAULT_SIZE,
                                 GroupLayout.DEFAULT_SIZE,
                                 Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addComponent(panel,
                                 GroupLayout.DEFAULT_SIZE,
                                 GroupLayout.DEFAULT_SIZE,

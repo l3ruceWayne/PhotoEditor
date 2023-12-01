@@ -23,6 +23,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.add.Text;
 import org.opencv.core.*;
 import org.opencv.core.Point;
@@ -58,6 +59,22 @@ public abstract class MatUtil extends JFrame {
     /*-------------------------------------------------------->
      *END URL IMAGES
      */
+    /**
+    * @param u : 此时counter为u
+    * @param x : u时的坐标值
+    * @param i : 转换成i时的坐标值
+    * @return
+    * @Description:
+    * @author: 卢思文
+    * @date: 12/1/2023 4:15 PM
+    * @version: 1.0
+    **/
+    public static int getPointAfterZoom(Window window, double x, int u, int i){
+        if(u == i)return (int)x;
+        double iWidth = window.zoomImg[i].width();
+        double uWidth = window.zoomImg[u].width();
+        return (int)(x * iWidth / uWidth);
+    }
     public static void show(Mat img, String title) {
 
         JLabel lbImg = new JLabel("");

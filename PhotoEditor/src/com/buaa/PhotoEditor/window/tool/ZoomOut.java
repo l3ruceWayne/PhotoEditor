@@ -7,6 +7,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 public class ZoomOut {
@@ -43,16 +44,17 @@ public class ZoomOut {
    * @version: 1.0
    */
     private void zoomOut(Mat img) {
-//        if (window.zoomImg == null) {
-//            window.zoomImg = MatUtil.copy(img);
-//        }
-        int width = window.img.width()-(window.img.width()*10/100);
-        int height = window.img.height()-(window.img.height()*10/100);
-        // 重新设置显示的图片大小
-        MatUtil.resize(img, new Size(width, height));
-
-        MatUtil.show(window.img, window.showImgRegionLabel);
-        // 更新eraser需要的原图
-        window.originalImg = MatUtil.copy(window.img);
+// 不能再放大了，return，后期加弹窗
+        if (window.counter == 0) {
+            return;
+        } else {
+            window.counter--;
+        }
+        int counter = window.counter;
+        int width = window.size[counter][0];
+        int height = window.size[counter][1];
+        window.showImgRegionLabel.setSize(width, height);
+        MatUtil.show(window.zoomImg[counter], window.showImgRegionLabel);
+        window.panel.setLayout(window.gridBagLayout);
     }
 }

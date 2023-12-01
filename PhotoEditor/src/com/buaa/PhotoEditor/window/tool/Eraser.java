@@ -111,8 +111,8 @@ public class Eraser {
                     // 当前property的值入栈
                     window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                     window.last.add(window.img);
-                    if (window.paintingImg != null) {
-                        window.img = MatUtil.copy(window.paintingImg);
+                    if (window.paintingImg[window.counter] != null) {
+                        window.zoomImg[window.counter] = MatUtil.copy(window.paintingImg[window.counter]);
                     }
                     // 下面这行代码是必须的，这样可以保证每次绘画的时候是在现在图像的基础上进画
                     // 如果没有这行代码，paintImg保持的只是上一个画好的状态，如果之后做了其他操作，将不会显示
@@ -138,12 +138,12 @@ public class Eraser {
     */
 
     public void erase(int x, int y) {
-        if (window.paintingImg == null) {
-            window.paintingImg = MatUtil.copy(window.img);
+        if (window.paintingImg[window.counter] == null) {
+            window.paintingImg[window.counter] = MatUtil.copy(window.zoomImg[window.counter]);
         }
 
 
-        Mat eraseRegion = window.paintingImg.submat(new Rect(x, y, window.tool.eraser.eraserSize,
+        Mat eraseRegion = window.paintingImg[window.counter].submat(new Rect(x, y, window.tool.eraser.eraserSize,
                 window.tool.eraser.eraserSize));
 
         
@@ -152,7 +152,7 @@ public class Eraser {
         // 拿原图覆盖现在正在画的图，就相当于橡皮擦操作
         MatUtil.overlay(eraseRegion, originalRegion);
 
-        MatUtil.show(window.paintingImg, window.showImgRegionLabel);
+        MatUtil.show(window.paintingImg[window.counter], window.showImgRegionLabel);
 
     }
 }
