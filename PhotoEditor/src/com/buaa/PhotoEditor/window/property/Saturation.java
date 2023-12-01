@@ -16,7 +16,6 @@ import javax.swing.event.ChangeListener;
 public class Saturation {
     public JLabel saturationLabel;
     public JSlider saturationSlider;
-    public int lastSaturation;
     private Window window;
 
     /**
@@ -54,7 +53,6 @@ public class Saturation {
         window.temp = MatUtil.copy(window.img);
 
         int saturation = saturationSlider.getValue();
-        lastSaturation = saturationSlider.getValue();
 
         if (window.tool.region.selectRegionItem.isSelected()) {
             MatUtil.saturation(window.temp, saturation, MatUtil.getRect(window.tool.region.selectedRegionLabel));

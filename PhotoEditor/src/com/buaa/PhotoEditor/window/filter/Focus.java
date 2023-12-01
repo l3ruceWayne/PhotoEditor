@@ -30,7 +30,8 @@ public class Focus {
             MatUtil.focus(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel));
             MatUtil.show(newImg, window.showImgRegionLabel);
 
-            window.isProperty.push(0);
+            // 当前property的值入栈
+            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             window.last.push(window.img);
             window.img = newImg;
 

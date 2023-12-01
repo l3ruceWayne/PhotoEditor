@@ -3,12 +3,20 @@ package com.buaa.PhotoEditor.window.file;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 
+import static com.buaa.PhotoEditor.window.Constant.*;
+import com.buaa.PhotoEditor.window.tool.ZoomIn;
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+
+
+
+import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-/**
+
 * @Description: 打开图片（选择需要编辑的图片）； 后续可进行优化——点击后不是进入主界面，而是进入上一次打开所在路径
 * 注意，不能打开矢量图
 * @author 罗雨曦、卢思文
@@ -37,6 +45,7 @@ public class Open {
                 selectImg(e);
             }
         });
+
     }
 
     /**
@@ -50,6 +59,7 @@ public class Open {
     * @version: 1.0
     **/
 
+
     private void selectImg(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(this.window)
@@ -59,19 +69,59 @@ public class Open {
             window.nexLayerImg = MatUtil.copy(window.img);
             window.originalImg = MatUtil.copy(window.img);
 
+            /*
+               尺寸数组的初始化及放大缩小图片的初始化
+             */
+            // 因为OpenCV库的resize要求size精确到double，而JLabel的resize是int，不情愿的转化成int
+            window.size = new int[MAX_SIZE_COUNTER + 1][2];
+            window.zoomImg = new Mat[MAX_SIZE_COUNTER + 1];
+            window.originalZoomImg = new Mat[MAX_SIZE_COUNTER + 1];
+            int originalWidth = window.originalImg.width();
+            int originalHeight = window.originalImg.height();
+            int widthOffset = originalWidth/ZOOM_RATIO;
+            int heightOffset = originalHeight/ZOOM_RATIO;
+            window.size[ORIGINAL_SIZE_COUNTER] = new int[2];
+            window.size[ORIGINAL_SIZE_COUNTER][0] = originalWidth;
+            window.size[ORIGINAL_SIZE_COUNTER][1] = originalHeight;
+            window.zoomImg[ORIGINAL_SIZE_COUNTER] = MatUtil.copy(window.originalImg);
+            window.originalZoomImg[ORIGINAL_SIZE_COUNTER] = MatUtil.copy(window.originalImg);
+
+            for (int i = 0; i < ORIGINAL_SIZE_COUNTER; i++) {
+                window.size[i] = new int[2];
+                window.size[i][0] = originalWidth - (ORIGINAL_SIZE_COUNTER - i) * widthOffset;
+                window.size[i][1] = originalHeight - (ORIGINAL_SIZE_COUNTER - i) * heightOffset;
+                window.zoomImg[i] = MatUtil.copy(window.originalImg);
+                window.originalZoomImg[i] = MatUtil.copy(window.originalImg);
+                MatUtil.resize(window.zoomImg[i], new Size(window.size[i][0],
+                        window.size[i][1]));
+            }
+            // 放大档
+            for (int i = ORIGINAL_SIZE_COUNTER + 1; i <= MAX_SIZE_COUNTER; i++) {
+                window.size[i] = new int[2];
+                window.size[i][0] = originalWidth + (i - ORIGINAL_SIZE_COUNTER) * widthOffset;
+                window.size[i][1] = originalHeight + (i - ORIGINAL_SIZE_COUNTER) * heightOffset;
+                window.zoomImg[i] = MatUtil.copy(window.originalImg);
+                window.originalZoomImg[i] = MatUtil.copy(window.originalImg);
+                MatUtil.resize(window.zoomImg[i], new Size(window.size[i][0],
+                        window.size[i][1]));
+            }
+
             //图片缩放
             MatUtil.show(window.img, window.showImgRegionLabel);
             window.showImgRegionLabel.setSize(window.img.width(), window.img.height());
             this.window.setSize(window.img.width(), window.img.height());
+            // 打开图片后储存图片的原始大小（保存图片原本大小）
+            window.imgWidth = window.img.width();
+            window.imgHeight = window.img.height();
             this.window.setLocationRelativeTo(null);
             window.last.clear();
             window.next.clear();
-            window.isProperty.clear();
-            window.propertyValue.clear();
+            // 清空property值的栈
+            window.lastPropertyValue.clear();
+            window.nextPropertyValue.clear();
             window.showImgRegionLabel.setText("");
 
             window.property.updateProperty();
-
         }
     }
 }

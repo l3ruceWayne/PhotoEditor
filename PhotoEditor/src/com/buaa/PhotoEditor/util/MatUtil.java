@@ -8,6 +8,10 @@ import com.buaa.PhotoEditor.modal.EColor;
 import com.buaa.PhotoEditor.modal.ESloopFaceDirection;
 
 
+
+import java.awt.*;
+
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
@@ -20,6 +24,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+
+import com.buaa.PhotoEditor.window.Window;
+import com.buaa.PhotoEditor.window.add.Text;
 
 import org.opencv.core.*;
 import org.opencv.core.Point;
@@ -55,6 +63,22 @@ public abstract class MatUtil extends JFrame {
     /*-------------------------------------------------------->
      *END URL IMAGES
      */
+    /**
+    * @param u : 此时counter为u
+    * @param x : u时的坐标值
+    * @param i : 转换成i时的坐标值
+    * @return
+    * @Description:
+    * @author: 卢思文
+    * @date: 12/1/2023 4:15 PM
+    * @version: 1.0
+    **/
+    public static int getPointAfterZoom(Window window, double x, int u, int i){
+        if(u == i)return (int)x;
+        double iWidth = window.zoomImg[i].width();
+        double uWidth = window.zoomImg[u].width();
+        return (int)(x * iWidth / uWidth);
+    }
     public static void show(Mat img, String title) {
 
         JLabel lbImg = new JLabel("");
@@ -460,6 +484,25 @@ public abstract class MatUtil extends JFrame {
     }
 
 
+    /*
+    * @param propertyValue: 当前要使用的property的值
+    * @return 以新的数组返回（其中的元素是property的值）
+    * @Description: 为了让栈里保存的是新的数组，而不仅仅是对currentPropertyValue数组的引用
+    * @author: 张旖霜
+    * @date: 11/30/2023 5:35 PM
+    * @version: 1.0
+    */
+    public static int[] copyPropertyValue(int[] propertyValue)
+    {
+        int[] newPropertyValue = new int[10];
+        for (int i=0; i<=5; i++)
+        {
+            newPropertyValue[i] = propertyValue[i];
+        }
+        return newPropertyValue;
+    }
+
+
     public static Mat copy(Mat img) {
         Mat imgCopy = new Mat();
         img.copyTo(imgCopy);
@@ -588,6 +631,7 @@ public abstract class MatUtil extends JFrame {
                              Mat img) {
         img.submat(new Rect(x, y, width, height))
                 .setTo(new Scalar(color[0], color[1], color[2]));
+
     }
     /**
     * @param x1 : 上一个点的x坐标
@@ -606,6 +650,7 @@ public abstract class MatUtil extends JFrame {
     public static void drawLine(int x1, int y1, int x2, int y2, int[] color, int penSize, Mat mat) {
         Scalar scalarColor = new Scalar(color[0], color[1], color[2]);
         Imgproc.line(mat, new Point(x1, y1), new Point(x2, y2), scalarColor, penSize);
+
     }
 
     public static double[] pixel(Mat img, int x, int y) {

@@ -1,14 +1,19 @@
 package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
+import com.buaa.PhotoEditor.window.Constant;
 import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.Mat;
-
+import static com.buaa.PhotoEditor.window.Constant.*;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Collections;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 
 /**
  * @Description: 增添选择画笔颜色/选择画笔粗细/选择画笔后光标变成画笔样式
@@ -21,6 +26,7 @@ import java.awt.event.*;
 public class Pen {
     public JCheckBoxMenuItem penItem;
     public Window window;
+
     /*
 
      */
@@ -34,12 +40,16 @@ public class Pen {
                         penColorPanel.getBackground().getGreen(),
                         penColorPanel.getBackground().getRed()}
      */
+
     public JPanel penColorPanel;
     public JSpinner penSizeSpinner;
     public int penSize;
     public static Cursor penCursor;
     public static ImageIcon penCursorIcon;
     public static ImageIcon penItemIcon;
+
+
+    private boolean flag;
 
     /**
      * @Description: 加载画笔图标，因为共用，所以static
@@ -59,21 +69,24 @@ public class Pen {
         penCursor = toolkit.createCustomCursor(image, new Point(10, 0), "");
 
     }
-    // lsw: 删除了无用注释和换行
+
     public Pen(Window window) {
         this.window = window;
+        // menubar
+
         penItem = new JCheckBoxMenuItem(penItemIcon);
-        // lsw: 删除了以下关于pen快捷键的代码
+
 
         penItem.addItemListener(new ItemListener() {
             /**
-            * @param e : 事件
-            * @Description: 点击画笔之后，取消使用选择区域、橡皮功能，光标变成画笔
+             * @param e : 事件
+             * @Description: 点击画笔之后，取消使用选择区域、橡皮功能，光标变成画笔
              * 取消画笔之后，光标恢复原样
-            * @author: 卢思文
-            * @date: 11/26/2023 8:05 PM
-            * @version: 1.0
-            **/
+             * @author: 卢思文
+             * @date: 11/26/2023 8:05 PM
+             * @version: 1.0
+             **/
+
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -81,6 +94,12 @@ public class Pen {
                     window.tool.eraser.eraserItem.setSelected(false);
                     window.showImgRegionLabel.setCursor(penCursor);
                     window.tool.drag.dragItem.setSelected(false);
+
+                    if (flag == false) {
+                        penListener();
+                        flag = true;
+                    }
+
                 } else {
                     window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
@@ -95,6 +114,7 @@ public class Pen {
             }
         });
         penSizeSpinner = new JSpinner(Tool.penModel);
+
         // 初始化
         penSize = (int)penSizeSpinner.getValue();
         /*
@@ -110,21 +130,96 @@ public class Pen {
 
     }
     
+
     /*
-     * @param x, y:鼠标位置
+     * @param:
      * @return
+     * @Description:监听鼠标状态（从tool类换到这里主要是为了修改drag后无法使用画笔的bug）
+     * （在tool类是在window.panel上进行监听，换到Pen类，在window.showImgRegionLabel进行监听）
+     * @author: 张旖霜
+     * @date: 11/27/2023 7:53 PM
+     * @version: 1.0
+     */
+    public void penListener() {
+        ImageIcon imgIcon = new ImageIcon(MatUtil.bufferedImg(window.zoomImg[window.counter]));
+        window.showImgRegionLabel.setIcon(imgIcon);
+        MouseInputAdapter mia = new MouseInputAdapter() {
+
+            public void mouseDragged(MouseEvent e) {
+                if (penItem.isSelected()) {
+                    if (e.getX() < 0 || e.getY() < 0 || e.getX() > window.img.width() - 5 || e.getY() > window.img.height() - 5) {
+                        return;
+                    }
+                    penSize = (Integer) penSizeSpinner.getValue();
+                    paint(e.getX(), e.getY());
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // pending
+                /*
+                画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，当松开的时候我们将上一个状态入栈，然后更改img
+                 */
+                if (penItem.isSelected()) {
+                    // 当前property的值入栈
+                    window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+                    window.last.add(window.zoomImg[window.counter]);
+                    for (int i = 0; i <= MAX_SIZE_COUNTER; i++) {
+                        if (window.paintingImg[i] != null) {
+                            window.zoomImg[i] = MatUtil.copy(window.paintingImg[i]);
+                        }
+                        // 下面这行代码是必须的，这样可以保证每次绘画的时候是在现在图像的基础上进画
+                        // 如果没有这行代码，paintImg保持的只是上一个画好的状态，如果之后做了其他操作，将不会显示
+                        window.paintingImg[i] = null;
+                    }
+                }
+            }
+        };
+
+        window.showImgRegionLabel.addMouseListener(mia);
+        window.showImgRegionLabel.addMouseMotionListener(mia);
+    }
+
+   
      * @Description:
         * 实现画笔功能，原理是将指定像素块染成指定的颜色
         * 解决了“快速移动导致笔迹断续”的问题，思想：在离散的点之间插值
         * newX和newY是drag后的重新定位
+
      * @author: 张旖霜、卢思文
      * @date: 11/27/2023 3:30 PM
      * @version: 1.0
      */
 
     public void paint(int x, int y) {
-        int newX = window.tool.drag.newX;
-        int newY = window.tool.drag.newY;
+
+        for (int i = 0; i <= MAX_SIZE_COUNTER; i++) {
+            if (window.paintingImg[i] == null) {
+                window.paintingImg[i] = MatUtil.copy(window.zoomImg[i]);
+            }
+        }
+        System.out.println(x);
+        System.out.println(y);
+        for (int i = 0; i <= MAX_SIZE_COUNTER; i++) {
+            System.out.print(i + " ");
+            System.out.print(MatUtil.getPointAfterZoom(window, x, window.counter, i) + " ");
+            System.out.println(MatUtil.getPointAfterZoom(window, y, window.counter, i));
+            MatUtil.paint(new int[]{
+
+                            penColorPanel.getBackground().getBlue(),
+                            penColorPanel.getBackground().getGreen(),
+                            penColorPanel.getBackground().getRed()},
+                    penSize,
+                    penSize,
+                    MatUtil.getPointAfterZoom(window, x, window.counter, i),
+                    MatUtil.getPointAfterZoom(window, y, window.counter, i),
+
+                    window.paintingImg[i]);
+        }
+
+        MatUtil.show(window.paintingImg[window.counter], window.showImgRegionLabel);
+      // 12/1
         /* lsw 解决了画到图片外报错的问题：让width和height分别减去penSize,
             因为x只是鼠标的点，而画的时候是penSize大小的矩形块
             所以当x在图片边界的时候，画的区域已经超过了边界，导致报错
@@ -164,6 +259,7 @@ public class Pen {
         MatUtil.show(window.paintingImg, window.showImgRegionLabel);
         // 更新上一个点为当前点
         lastPoint = new Point(x, y);
+
 
     }
     /**

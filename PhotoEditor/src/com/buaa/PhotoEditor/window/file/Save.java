@@ -65,7 +65,8 @@ public class Save {
         // 显示融为一体的图片
         MatUtil.show(newImg, window.showImgRegionLabel);
         if (window.last.size() != 0 && window.img != window.last.peek()) {
-            window.isProperty.push(0);
+            // 当前property的值入栈
+            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             window.last.push(window.img);
         }
         window.img = newImg;
@@ -87,8 +88,10 @@ public class Save {
                     "Please open an image and edit it first");
             return;
         }
-        // bug
-//        MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
+
+        // 为了避免保存到zoom的图片，所以保存前先resize回之前的大小
+        MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
+
         getNewImg();
 
         if (path == null) {
@@ -97,6 +100,8 @@ public class Save {
         MatUtil.save(path, window.img);
         JOptionPane.showMessageDialog(null,
                 "Success");
+
+
         /* 打开图片，添加小组件，保存，然后再选择区域，会报错，加上下面这行代码才行
             详细原因等待了解
          */

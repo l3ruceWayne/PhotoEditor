@@ -2,11 +2,16 @@ package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import java.util.zip.CheckedOutputStream;
+
 
 /**
  * @Description: 使用画笔的时候，鼠标按下->拖拽->松开是一个行为的完成，
@@ -20,6 +25,9 @@ import java.awt.event.MouseEvent;
  **/
 public class Tool {
 
+
+
+
     public Window window;
 
     public Eraser eraser;
@@ -30,8 +38,10 @@ public class Tool {
     public Rotate rotate;
     public Drag drag;
 
-    public static SpinnerNumberModel penModel = new SpinnerNumberModel(5, 1, 30, 1);
-    public static SpinnerNumberModel eraserModel = new SpinnerNumberModel(5, 1, 30, 1);
+
+    public static  SpinnerNumberModel penModel = new SpinnerNumberModel(5, 1, 30, 1);
+    public static  SpinnerNumberModel eraserModel = new SpinnerNumberModel(5, 1, 30, 1);
+
 
     public int ex, ey;
 
@@ -47,6 +57,8 @@ public class Tool {
         this.zoomIn = new ZoomIn(window);
         this.rotate = new Rotate(window);
         this.drag = new Drag(window);
+
+
 
         addMouseListeners();
     }
@@ -136,5 +148,6 @@ public class Tool {
                 }
             }
         });
+
     }
 }
