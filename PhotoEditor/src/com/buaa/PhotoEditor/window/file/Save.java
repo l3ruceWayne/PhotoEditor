@@ -87,7 +87,8 @@ public class Save {
                     "Please open an image and edit it first");
             return;
         }
-        MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
+        // bug
+//        MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
         getNewImg();
 
         if (path == null) {
@@ -96,6 +97,12 @@ public class Save {
         MatUtil.save(path, window.img);
         JOptionPane.showMessageDialog(null,
                 "Success");
+        /* 打开图片，添加小组件，保存，然后再选择区域，会报错，加上下面这行代码才行
+            详细原因等待了解
+         */
+
+        window.add.widget.widgetLabelList.clear();
+
     }
     /**
     * @param e : 事件
@@ -111,7 +118,8 @@ public class Save {
             return;
         }
         // 为了避免保存到zoom的图片，所以保存前先resize回之前的大小
-        MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
+        // bug
+//        MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save As");

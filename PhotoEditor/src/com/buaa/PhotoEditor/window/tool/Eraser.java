@@ -6,9 +6,14 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 /**
 * @Description: 为橡皮添加图标和光标，增添调节橡皮擦粗细的设置
  * 存在的bug是和pen的粗细同步调节，原因是共用了一个Tool.model
@@ -24,12 +29,13 @@ public class Eraser {
     public static ImageIcon eraserItemIcon;
     public JSpinner eraserSizeSpinner;
     public int eraserSize;
+    public boolean clearScreen;
     public Window window;
     static {
         eraserCursorIcon = new ImageIcon(
-                "PhotoEditor/resources/eraserCursorImage.png");
+                "resources/eraserCursorImage.png");
         eraserItemIcon = new ImageIcon(
-                "PhotoEditor/resources/eraserItemImage.png"
+                "resources/eraserItemImage.png"
         );
         Image image = eraserCursorIcon.getImage();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -37,8 +43,20 @@ public class Eraser {
     }
 
     public Eraser(Window window) {
+        clearScreen = false;
         this.window = window;
         eraserItem = new JCheckBoxMenuItem(eraserItemIcon);
+        // 增加计时器，当长按橡皮2000毫秒后，清除全屏
+        Timer timer = new Timer(2000 , e ->{
+            window.last.push(window.img);
+            clearScreen = true;
+            window.paintingImg = MatUtil.copy(window.originalImg);
+            // 更新“上一个图片”img
+            window.img = MatUtil.copy(window.originalImg);
+            MatUtil.show(window.paintingImg, window.showImgRegionLabel);
+            window.paintingImg = null;
+        });
+        timer.setRepeats(false);
 
         eraserItem.addItemListener(new ItemListener() {
             /**
@@ -59,15 +77,47 @@ public class Eraser {
 
                     window.tool.drag.dragItem.setSelected(false);
 
+                }else{
+                    // 恢复默认光标
+                    window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
+            }
+
+
+        });
+        /*
+                lsw
+                添加长按清屏功能 按压开始计时，松开计时结束，如果计时超过2s，则清屏
+                否则无事发生
+                待实现：清除全屏后，所有属性参数需要恢复成原始状态
+             */
+        eraserItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                timer.start();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                timer.stop();
             }
         });
         eraserSizeSpinner = new JSpinner(Tool.eraserModel);
-
+        // 初始化
+        eraserSize = (int)eraserSizeSpinner.getValue();
+        /*
+            lsw
+            增加事件捕获器
+         */
+        eraserSizeSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                eraserSize = (int)eraserSizeSpinner.getValue();
+            }
+        });
     }
 
 
-    // pending 加一个erase的大小调节功能
     // 一键清除功能
     /*
     * @param x, y:鼠标位置
@@ -82,7 +132,9 @@ public class Eraser {
         // pending
         int newX = window.tool.drag.newX;
         int newY = window.tool.drag.newY;
-        if (x > window.img.width()+newX || x < newX || y > window.img.height()+newY || y < newY) return;
+        // lsw 修复了擦除到窗口外报错的问题，和修复pen类的paint方法一样
+        if (x > (window.img.width() - eraserSize)+newX || x < newX
+                || y > (window.img.height() - eraserSize) +newY || y < newY) return;
 
         if (window.paintingImg == null) {
             window.paintingImg = MatUtil.copy(window.img);
