@@ -33,11 +33,11 @@ public class Rotate {
 
         rotateItem.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
-                rotateActionPerformed(evt);
+                rotateActionPerformed();
             }
         });
     }
-    public void rotateActionPerformed(java.awt.event.MouseEvent evt) {
+    public void rotateActionPerformed() {
         rotate(window.img);
     }
 

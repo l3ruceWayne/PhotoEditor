@@ -7,6 +7,7 @@ package com.buaa.PhotoEditor.window.tool;
  * @date: 11/27/2023 12:57 PM
  * @version: 1.0
  */
+
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.CvType;
@@ -22,6 +23,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 public class Drag {
     public Window window;
     public JCheckBoxMenuItem dragItem;
@@ -52,14 +54,17 @@ public class Drag {
             }
         });
     }
+
     public void dragListener() {
 //        JLabel imgLabel = window.showImgRegionLabel;
         /*
          下面这两行代码是不是等价于MatUtil.show(window.img, window.showImgRegionLabel);
          是不是不写也行？
          */
-        ImageIcon imgIcon = new ImageIcon(MatUtil.bufferedImg(window.img));
-        window.showImgRegionLabel.setIcon(imgIcon);
+//        ImageIcon imgIcon = new ImageIcon(MatUtil.bufferedImg(window.img));
+//        window.showImgRegionLabel.setIcon(imgIcon);
+        // 设置成null才能拖动，否则布局管理器在管理
+        window.panel.setLayout(null);
         MouseInputAdapter mia = new MouseInputAdapter() {
             int ex;
             int ey;

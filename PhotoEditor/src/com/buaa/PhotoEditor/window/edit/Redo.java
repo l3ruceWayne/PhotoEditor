@@ -72,7 +72,7 @@ public class Redo {
             } else {
 
 
-                Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel);
+                Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]);
 
 
                 Mat newImg = MatUtil.copy(window.img);

@@ -8,10 +8,6 @@ import com.buaa.PhotoEditor.modal.EColor;
 import com.buaa.PhotoEditor.modal.ESloopFaceDirection;
 
 
-
-import java.awt.*;
-
-
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
@@ -27,7 +23,6 @@ import javax.swing.JLabel;
 
 
 import com.buaa.PhotoEditor.window.Window;
-import com.buaa.PhotoEditor.window.add.Text;
 
 import org.opencv.core.*;
 import org.opencv.core.Point;
@@ -64,7 +59,6 @@ public abstract class MatUtil extends JFrame {
      *END URL IMAGES
      */
     /**
-    * @param u : 此时counter为u
     * @param x : u时的坐标值
     * @param i : 转换成i时的坐标值
     * @return
@@ -73,11 +67,11 @@ public abstract class MatUtil extends JFrame {
     * @date: 12/1/2023 4:15 PM
     * @version: 1.0
     **/
-    public static int getPointAfterZoom(Window window, double x, int u, int i){
-        if(u == i)return (int)x;
+    public static int getValueAfterZoom(Window window, double x, int i){
+        if(i == window.counter)return (int)x;
         double iWidth = window.zoomImg[i].width();
-        double uWidth = window.zoomImg[u].width();
-        return (int)(x * iWidth / uWidth);
+        double uWidth = window.zoomImg[window.counter].width();
+        return (int)Math.round(x * iWidth / uWidth);
     }
     public static void show(Mat img, String title) {
 
