@@ -132,9 +132,11 @@ public class Window extends JFrame {
 
         this.title  = title;
         initComponents();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //LYX 设置窗口大小为不可调整
+        this.setResizable(false);
 
         addMouseListeners();
-        setResizable(true);
         setLocationRelativeTo(null);
         // 按下每个按键会弹出一个对应窗口
         // 设置窗口的大小
@@ -149,11 +151,10 @@ public class Window extends JFrame {
     }
 
     public void initComponents() {
+        counter = AUTO_SIZE_COUNTER;
 
-        // 5是原尺寸，点击一次放大+1， 点击一次缩小-1，放大缩小各五档
-        counter = ORIGINAL_SIZE_COUNTER;
         // 对应zoomImg
-        paintingImg = new Mat[MAX_SIZE_COUNTER + 1];
+        paintingImg = new Mat[NUM_FOR_NEW];
 
         // 一定要先初始化panel，之后再调用tool类构造方法
         panel = new JPanel();
@@ -171,7 +172,6 @@ public class Window extends JFrame {
             layer = new Layer(this);
         }
 
-        showImgRegionLabel = new JLabel();
         menuBar = new JMenuBar();
 
         filter = new Filter(this);
@@ -313,8 +313,8 @@ public class Window extends JFrame {
             @Override
             public void mouseMoved(MouseEvent e) {
                 if (pasting) {
-                    tool.region.selectedRegionLabel.setLocation(e.getPoint());
-                    tool.region.selectedRegionLabel.repaint();
+                    tool.region.selectedRegionLabel[counter].setLocation(e.getPoint());
+                    tool.region.selectedRegionLabel[counter].repaint();
                 }
             }
         });

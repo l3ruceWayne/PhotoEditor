@@ -27,7 +27,7 @@ public class Focus {
         if (window.tool.region.selectRegionItem.isSelected()) {
 
             Mat newImg = MatUtil.copy(window.img);
-            MatUtil.focus(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel));
+            MatUtil.focus(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
             MatUtil.show(newImg, window.showImgRegionLabel);
 
             // 当前property的值入栈

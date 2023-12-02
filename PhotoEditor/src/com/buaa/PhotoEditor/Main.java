@@ -4,8 +4,7 @@ package com.buaa.PhotoEditor;
 import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.Core;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 
 
 public class Main {

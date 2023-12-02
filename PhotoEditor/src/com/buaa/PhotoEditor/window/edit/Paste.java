@@ -18,7 +18,7 @@ public class Paste {
     }
     public void disablePasteMode() {
         window.tool.region.removeRegionSelected();
-        window.tool.region.selectedRegionLabel.removeAll();
+        window.tool.region.selectedRegionLabel[window.counter].removeAll();
         window.tool.region.copyRegionMat = null;
     }
     public void paste() {
@@ -27,7 +27,7 @@ public class Paste {
         // newImg 的 selectRegion 被 copyRegionMat的内容覆盖
         MatUtil.copyToRegion(newImg,
                 window.tool.region.copyRegionMat,
-                MatUtil.getRect(window.tool.region.selectedRegionLabel));
+                MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
 
         MatUtil.show(newImg, window.showImgRegionLabel);
 
