@@ -2,33 +2,42 @@ package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import com.buaa.PhotoEditor.window.thread.EraserThread;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
+
+import static com.buaa.PhotoEditor.window.Constant.*;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
-* @Description: 为橡皮添加图标和光标，增添调节橡皮擦粗细的设置
+ * @Description: 为橡皮添加图标和光标，增添调节橡皮擦粗细的设置
  * 存在的bug是和pen的粗细同步调节，原因是共用了一个Tool.model
  * 未来增加一键清除功能
-* @author: 卢思文
-* @date: 11/26/2023 10:06 PM
-* @version: 1.0
-**/
+ * @author: 卢思文
+ * @date: 11/26/2023 10:06 PM
+ * @version: 1.0
+ **/
 public class Eraser {
+    public EraserThread[] eraserThread;
     public JCheckBoxMenuItem eraserItem;
     public static Cursor eraserCursor;
     public static ImageIcon eraserCursorIcon;
     public static ImageIcon eraserItemIcon;
     public JSpinner eraserSizeSpinner;
-    public int eraserSize;
+    public int[] eraserSize;
     public Window window;
     private boolean flag;
+    public boolean clearScreen;
+
     static {
         eraserCursorIcon = new ImageIcon(
                 "resources/eraserCursorImage.png");
@@ -42,6 +51,12 @@ public class Eraser {
 
     public Eraser(Window window) {
         this.window = window;
+
+        eraserThread = new EraserThread[NUM_FOR_NEW];
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            eraserThread[i] = new EraserThread(window, i);
+        }
+        clearScreen = false;
         eraserItem = new JCheckBoxMenuItem(eraserItemIcon);
 
         eraserItem.addItemListener(new ItemListener() {
@@ -68,13 +83,59 @@ public class Eraser {
                         flag = true;
                     }
 
+                } else {
+                    // 恢复默认光标
+                    window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                }
+            }
+
+
+        });
+
+        eraserSizeSpinner = new JSpinner(Tool.eraserModel);
+        // 橡皮尺寸初始化
+
+        /*
+            lsw
+            增加事件捕获器
+         */
+        eraserSizeSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int size = (int) window.tool.eraser.eraserSizeSpinner.getValue();
+                int offset = size - window.tool.eraser.eraserSize[window.counter];
+                for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+                    eraserSize[i] += offset;
+                    if (eraserSize[i] > MAX_ERASER_SIZE) {
+                        eraserSize[i] = MAX_ERASER_SIZE;
+                    } else if (eraserSize[i] < MIN_ERASER_SIZE) {
+                        eraserSize[i] = MIN_ERASER_SIZE;
+                    }
                 }
             }
         });
-        eraserSizeSpinner = new JSpinner(Tool.eraserModel);
 
 
+    }
 
+    public void initEraserSize(){
+        eraserSize = new int[NUM_FOR_NEW];
+        for (int i = 0; i < ORIGINAL_SIZE_COUNTER; i++) {
+            eraserSize[i] = i * 3  + 13;
+        }
+        // 从最大的开始，找到第一个小于它的
+        for (int i = MAX_SIZE_COUNTER; i >= 0; i--) {
+            if (window.size[i][0] < window.size[ORIGINAL_SIZE_COUNTER][0]){
+                eraserSize[ORIGINAL_SIZE_COUNTER]
+                        = Math.min(MAX_PEN_SIZE, eraserSize[i] + 2);
+                break;
+            }
+        }
+        // 如果没找到, 那么它是最小的
+        if(eraserSize[ORIGINAL_SIZE_COUNTER] == 0){
+            eraserSize[ORIGINAL_SIZE_COUNTER]
+                    = Math.max(MIN_PEN_SIZE, eraserSize[0] - 2);
+        }
     }
 
     /*
@@ -87,72 +148,21 @@ public class Eraser {
      * @version: 1.0
      */
     public void eraserListener() {
-        ImageIcon imgIcon = new ImageIcon(MatUtil.bufferedImg(window.img));
-        window.showImgRegionLabel.setIcon(imgIcon);
-        MouseInputAdapter mia = new MouseInputAdapter() {
-
-            public void mouseDragged(MouseEvent e) {
-                if (eraserItem.isSelected()) {
-                    if (e.getX() < 0 || e.getY() < 0 || e.getX()>window.img.width()-5 || e.getY()>window.img.height()-5) {
-                        return;
-                    }
-                    eraserSize = (Integer) eraserSizeSpinner.getValue();
-                    erase(e.getX(), e.getY());
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // pending
-                /*
-                画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，当松开的时候我们将上一个状态入栈，然后更改img
-                 */
-                if (eraserItem.isSelected()) {
-                    // 当前property的值入栈
-                    window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-                    window.last.add(window.img);
-                    if (window.paintingImg != null) {
-                        window.img = MatUtil.copy(window.paintingImg);
-                    }
-                    // 下面这行代码是必须的，这样可以保证每次绘画的时候是在现在图像的基础上进画
-                    // 如果没有这行代码，paintImg保持的只是上一个画好的状态，如果之后做了其他操作，将不会显示
-                    window.paintingImg = null;
-                }
-            }
-        };
-
-        window.showImgRegionLabel.addMouseListener(mia);
-        window.showImgRegionLabel.addMouseMotionListener(mia);
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            eraserThread[i].start();
+        }
     }
 
 
-    // pending 加一个erase的大小调节功能
     // 一键清除功能
     /*
-    * @param x, y:鼠标位置
-    * @return
-    * @Description: 换成在window.showImgRegionLabel上监听鼠标，所以不需要重新定位
-    * @author: 张旖霜
-    * @date: 11/27/2023 3:30 PM
-    * @version: 1.0
-    */
-
-    public void erase(int x, int y) {
-        if (window.paintingImg == null) {
-            window.paintingImg = MatUtil.copy(window.img);
-        }
+     * @param x, y:鼠标位置
+     * @return
+     * @Description: 换成在window.showImgRegionLabel上监听鼠标，所以不需要重新定位
+     * @author: 张旖霜
+     * @date: 11/27/2023 3:30 PM
+     * @version: 1.0
+     */
 
 
-        Mat eraseRegion = window.paintingImg.submat(new Rect(x, y, window.tool.eraser.eraserSize,
-                window.tool.eraser.eraserSize));
-
-        
-        Mat originalRegion = window.originalImg.submat(new Rect(x, y, window.tool.eraser.eraserSize, window.tool.eraser.eraserSize));
-
-        // 拿原图覆盖现在正在画的图，就相当于橡皮擦操作
-        MatUtil.overlay(eraseRegion, originalRegion);
-
-        MatUtil.show(window.paintingImg, window.showImgRegionLabel);
-
-    }
 }

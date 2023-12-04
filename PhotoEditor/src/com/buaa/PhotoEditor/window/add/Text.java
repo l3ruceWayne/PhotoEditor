@@ -48,7 +48,7 @@ public class Text {
 
         this.window = window;
 
-        addTextItem = new JMenuItem("Add Text");
+        addTextItem = new JMenuItem("Text");
         dialogAddText = new JDialog();
         panelTextColor = new JPanel();
         labelAddTextContents = new JLabel("Contents");
@@ -256,8 +256,8 @@ public class Text {
     */
     public void writeText() {
         window.temp = MatUtil.copy(window.img);
-        int x = window.tool.region.selectedRegionLabel.getX();
-        int y = window.tool.region.selectedRegionLabel.getY();
+        int x = window.tool.region.selectedRegionLabel[window.counter].getX();
+        int y = window.tool.region.selectedRegionLabel[window.counter].getY();
 
 
         BufferedImage bufImg = MatUtil.bufferedImg(window.temp);

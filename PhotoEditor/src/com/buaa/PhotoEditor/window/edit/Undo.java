@@ -58,8 +58,12 @@ public class Undo {
     private void undo (ActionEvent e){
         if (!window.last.isEmpty()) {
 
+
             window.next.push(window.img);
             window.nextPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+
+
+
 
             if (!window.tool.region.selectRegionItem.isSelected()) {
                 window.img = window.last.pop();
@@ -75,7 +79,7 @@ public class Undo {
                 window.property.getMySize().txtHeight.setText(window.currentPropertyValue[5]+"");
 
             } else {
-                Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel);
+                Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]);
                 Mat newImg = MatUtil.copy(window.img);
                 // last.peek()是栈顶Mat，即前一个版本，作用为把上一次改变的区域还原
                 window.last.peek().submat(selectedRegionRect).copyTo(newImg.submat(selectedRegionRect));

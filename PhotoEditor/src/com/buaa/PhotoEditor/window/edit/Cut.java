@@ -49,12 +49,12 @@ public class Cut {
         //在原函数基础上修了点bug。原函数为勾选框勾选就不报错，现改为需要勾选框勾选且选择区域才不报错，且在执行cut的同时取消勾选框勾选
         window.tool.region.selectRegionItem.setSelected(false);
         // 如果还没有选择区域，弹出提示框
-        if (window.tool.region.selectedRegionLabel.getBorder() == null) {
+        if (window.tool.region.selectedRegionLabel[window.counter].getBorder() == null) {
             JOptionPane.showMessageDialog(null,
                     "Please select region first");
         } else {
-            //从window.img图像中裁剪出window.region.selectedRegionLabel标识的区域，并将裁剪后的图像赋值给新的Mat对象newImg
-            Mat newImg = MatUtil.cut(window.img, MatUtil.getRect(window.tool.region.selectedRegionLabel));
+            //从window.img图像中裁剪出window.region.selectedRegionLabel[window.counter]标识的区域，并将裁剪后的图像赋值给新的Mat对象newImg
+            Mat newImg = MatUtil.cut(window.img, MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
             MatUtil.show(newImg, window.showImgRegionLabel);
             //调整图片、窗口大小与窗口位置
             window.showImgRegionLabel.setSize(newImg.width(),newImg.height());

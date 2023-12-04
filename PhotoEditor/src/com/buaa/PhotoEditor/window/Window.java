@@ -5,14 +5,16 @@ GitHub: https://github.com/igor036
 package com.buaa.PhotoEditor.window;
 
 import com.buaa.PhotoEditor.util.MatUtil;
+import static com.buaa.PhotoEditor.window.Constant.*;
 
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.PathIterator;
+
 import java.util.Stack;
+import java.util.zip.CheckedOutputStream;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import javax.swing.text.JTextComponent;
 
 import com.buaa.PhotoEditor.window.edit.Edit;
 import com.buaa.PhotoEditor.window.file.Save;
@@ -35,7 +37,6 @@ import com.buaa.PhotoEditor.window.layer.Layer;
 
 import org.opencv.core.Mat;
 
-import static javax.security.auth.callback.ConfirmationCallback.YES;
 
 /**
 * @Description: menuBar的显示效果不好（各项之间的距离等），需改进
@@ -46,17 +47,24 @@ import static javax.security.auth.callback.ConfirmationCallback.YES;
 * @version: 1.0
 **/
 public class Window extends JFrame {
-
+    // 掌管尺寸的计数器
+    public int counter;
+    // 掌管尺寸的数组 在打开图片后进行初始化
+    public int[][] size;
+    // 掌管放大缩小图片的数组和对应尺寸的原图数组
+    public Mat[] zoomImg;
+    public Mat[] originalZoomImg;
+    public Mat[] paintingImg;
     public Property property;
+    // 为设置panel的布局增添的布局管理器
+    public GridBagLayout gridBagLayout;
 
 
     public Save save;
-
     // tool
     public Tool tool;
     // add
     public Add add;
-
     public Filter filter;
 
     public MyFile myFile;
@@ -65,24 +73,25 @@ public class Window extends JFrame {
         所以是static
     * */
     public static Layer layer;
-
     //control of photo
     public Mat img;              //actually
+    // 谨慎更改originalImg
     public Mat originalImg;
     public String originalImgPath;
     // temp的作用？
     public Mat temp;             //temp
-    public Mat zoomImg;
     public static Mat copy;
     public Stack<Mat> last; //ctrl+z
     public Stack<Mat> next;     //ctrl+y`
+
     public Stack<int[]> lastPropertyValue;
     public Stack<int[]> nextPropertyValue;
     public int[] currentPropertyValue;
 
-    public Mat paintingImg;            //image paint
     public Mat nexLayerImg;           //image use to paint
     public boolean flag;
+
+
 
     public JPanel panel;
     // 总菜单栏
@@ -90,36 +99,17 @@ public class Window extends JFrame {
     // 图片显示区域
     public JLabel showImgRegionLabel;
     // options
-
     public boolean pasting = false;
 
     public String title;
     public int imgWidth;
     public int imgHeight;
 
-    //LYX 因为open时是先根据屏幕大小resize，所以打开后图片size可能会改变，这里存储图片原size
-    public int srcImgWidth;
-    public int srcImgHeight;
-
-
-
-
-
-    // Property
-
-
 
     public Window(Mat img, String title) {
         this(title);
         this.title  = title;
         this.img = img;
-        //LYX 设置窗口的大小为全屏尺寸
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize(screenSize.width, screenSize.height);
-        //LYX 设置窗口为全屏显示
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //LYX 设置窗口大小为不可调整
-        this.setResizable(false);
 
         // 将当前的property的初始值暂存起来（如同img）
         currentPropertyValue[0] = property.getContrastAndBrightness().contrastSlide.getValue();
@@ -133,6 +123,7 @@ public class Window extends JFrame {
 //        this.imgHeight = img.height();
         MatUtil.show(img, showImgRegionLabel);
         showImgRegionLabel.setSize(img.width(), img.height());
+        this.setSize(img.width(), img.height());
         setResizable(true);
         setLocationRelativeTo(null);
     }
@@ -141,27 +132,14 @@ public class Window extends JFrame {
 
         this.title  = title;
         initComponents();
-
-        //LYX 调整文字大小
-        Font iniText=new Font("", Font.PLAIN, 35);
-        showImgRegionLabel.setFont(iniText);
-
-        //LYX 设置窗口的大小为全屏尺寸
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setSize(screenSize.width, screenSize.height);
-        //LYX 设置窗口为全屏显示
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         //LYX 设置窗口大小为不可调整
-        setResizable(false);
+        this.setResizable(false);
 
         addMouseListeners();
-        setResizable(true);
         setLocationRelativeTo(null);
         // 按下每个按键会弹出一个对应窗口
         // 设置窗口的大小
-
-
-
         // 撤销和反撤销操作用的栈
         last = new Stack<>();
         next = new Stack<>();
@@ -173,13 +151,19 @@ public class Window extends JFrame {
     }
 
     public void initComponents() {
+        counter = AUTO_SIZE_COUNTER;
+
+        // 对应zoomImg
+        paintingImg = new Mat[NUM_FOR_NEW];
+
         // 一定要先初始化panel，之后再调用tool类构造方法
         panel = new JPanel();
-        showImgRegionLabel = new JLabel();
         save = new Save(this);
-
+        gridBagLayout = new GridBagLayout();
         // add
         add = new Add(this);
+
+        showImgRegionLabel = new JLabel();
         // tool
         tool = new Tool(this);
 
@@ -199,28 +183,37 @@ public class Window extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
+
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent evt) {
                 ESCKeyPress(evt);
             }
         });
-        //LYX 改变初始文字，增强提示性
-        showImgRegionLabel.setText("  ↑ Start by selecting a photo via 'File-Open' ");
-        // pending
-        GroupLayout panelLayout = new GroupLayout(panel);
-        panel.setLayout(panelLayout);
-        panelLayout.setHorizontalGroup(
-                panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(panelLayout.createSequentialGroup()
-                                .addComponent(showImgRegionLabel)
-                                .addGap(0, 307, Short.MAX_VALUE))
-        );
-        panelLayout.setVerticalGroup(
-                panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(panelLayout.createSequentialGroup()
-                                .addComponent(showImgRegionLabel)
-                                .addContainerGap(306, Short.MAX_VALUE))
-        );
+
+        showImgRegionLabel.setText("Please select photo");
+
+        /*
+            让showImgRegionLabel显示在panel的中央，新添了下面3行代码，注释了原布局代码
+            但是这会让程序刚启动的时候界面很小
+         */
+        panel.setLayout(gridBagLayout);
+//        GridBagConstraints gbc = new GridBagConstraints();
+        panel.add(showImgRegionLabel);
+//        GroupLayout panelLayout = new GroupLayout(panel);
+//        panel.setLayout(panelLayout);
+//        panelLayout.setHorizontalGroup(
+//                panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//                        .addGroup(panelLayout.createSequentialGroup()
+//                                .addComponent(showImgRegionLabel)
+//                                .addGap(0, 307, Short.MAX_VALUE))
+//        );
+//        panelLayout.setVerticalGroup(
+//                panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//                        .addGroup(panelLayout.createSequentialGroup()
+//                                .addComponent(showImgRegionLabel)
+//                                .addContainerGap(306, Short.MAX_VALUE))
+//        );
+
 
         menuBar.add(myFile.fileMenu);
         menuBar.add(edit.editMenu);
@@ -241,19 +234,17 @@ public class Window extends JFrame {
         menuBar.add(tool.drag.dragItem);
 
 
-
         setJMenuBar(menuBar);
-
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addComponent(panel, GroupLayout.DEFAULT_SIZE,
                                 GroupLayout.DEFAULT_SIZE,
                                 Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addComponent(panel,
                                 GroupLayout.DEFAULT_SIZE,
                                 GroupLayout.DEFAULT_SIZE,
@@ -267,6 +258,7 @@ public class Window extends JFrame {
     /**
      * @param evt : 键盘事件
      * @Description: ESC按键的功能设置
+     * 未来：选择copy功能后，将selectRegion置false
      * @author: 卢思文
      * @date: 11/26/2023 9:09 PM
      * @version: 1.0
@@ -279,7 +271,9 @@ public class Window extends JFrame {
                 tool.region.removeRegionSelected();
             } else if (add.widget.selectedWidgetLabel != null) {
                 add.widget.removeWidget();
-            } else if (pasting) {
+            }
+            // else if 写成if
+            if (pasting) {
                 pasting = false;
                 edit.getPaste().disablePasteMode();
             }
@@ -289,10 +283,9 @@ public class Window extends JFrame {
     }
 
 
-
-
     public void addMouseListeners() {
-        showImgRegionLabel.addMouseListener(new MouseAdapter() {
+
+        panel.addMouseListener(new MouseAdapter() {
             /**
             * @Description: 粘贴状态下，鼠标点击会进行粘贴
             * @author: 卢思文
@@ -310,7 +303,7 @@ public class Window extends JFrame {
 
         });
 
-        showImgRegionLabel.addMouseMotionListener(new MouseAdapter() {
+        panel.addMouseMotionListener(new MouseAdapter() {
             /**
             * @Description: 粘贴模式下，粘贴框随鼠标一起移动
             * @author: 卢思文
@@ -320,8 +313,8 @@ public class Window extends JFrame {
             @Override
             public void mouseMoved(MouseEvent e) {
                 if (pasting) {
-                    tool.region.selectedRegionLabel.setLocation(e.getPoint());
-                    tool.region.selectedRegionLabel.repaint();
+                    tool.region.selectedRegionLabel[counter].setLocation(e.getPoint());
+                    tool.region.selectedRegionLabel[counter].repaint();
                 }
             }
         });

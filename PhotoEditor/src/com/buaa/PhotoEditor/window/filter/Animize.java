@@ -27,7 +27,7 @@ public class Animize {
         Mat newImg = MatUtil.copy(window.img);
 
         if (window.tool.region.selectRegionItem.isSelected()) {
-            MatUtil.cartoon(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel));
+            MatUtil.cartoon(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
             window.tool.region.removeRegionSelected();
         } else
             MatUtil.cartoon(newImg);

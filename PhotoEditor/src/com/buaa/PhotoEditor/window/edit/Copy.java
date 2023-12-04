@@ -46,11 +46,11 @@ public class Copy {
     private void copySelectedRegion(ActionEvent e) {
         window.tool.region.selectRegionItem.setSelected(false);
         // 如果还没有选择区域，弹出提示框
-        if (window.tool.region.selectedRegionLabel.getBorder() == null) {
+        if (window.tool.region.selectedRegionLabel[window.counter].getBorder() == null) {
             JOptionPane.showMessageDialog(null, "Please select region first");
             return;
         }
-        window.tool.region.copyRegionMat = window.img.submat(MatUtil.getRect(window.tool.region.selectedRegionLabel));
+        window.tool.region.copyRegionMat = window.img.submat(MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
         // pasting状态置1
         window.pasting = true;
     }

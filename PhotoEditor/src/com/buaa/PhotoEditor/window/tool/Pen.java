@@ -2,12 +2,23 @@ package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-import org.opencv.core.Mat;
+import com.buaa.PhotoEditor.window.layer.Layer;
+import com.buaa.PhotoEditor.window.thread.PaintThread;
+
+import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
+import static com.buaa.PhotoEditor.util.MatUtil.widget;
+import static com.buaa.PhotoEditor.window.Constant.*;
 
 import javax.swing.*;
+
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
+import java.security.KeyStore;
+import java.util.Arrays;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 
 /**
  * @Description: 增添选择画笔颜色/选择画笔粗细/选择画笔后光标变成画笔样式
@@ -20,12 +31,28 @@ import java.awt.event.*;
 public class Pen {
     public JCheckBoxMenuItem penItem;
     public Window window;
+    public PaintThread[] paintThread;
+    /*
+
+     */
+    public Point[] lastPoint;
+    /*
+        实现画笔颜色选择：
+            JPanel其实就是一个画板，我们让它显示颜色，然后画画的时候从中提取颜色作为画笔
+            的颜色
+            “提取颜色”的代码见本类的paint方法中的new int[]{
+                        penColorPanel.getBackground().getBlue(),
+                        penColorPanel.getBackground().getGreen(),
+                        penColorPanel.getBackground().getRed()}
+     */
+
     public JPanel penColorPanel;
     public JSpinner penSizeSpinner;
-    public int penSize;
+    public int[] penSize;
     public static Cursor penCursor;
     public static ImageIcon penCursorIcon;
     public static ImageIcon penItemIcon;
+
 
     private boolean flag;
 
@@ -50,27 +77,25 @@ public class Pen {
 
     public Pen(Window window) {
         this.window = window;
+
+        paintThread = new PaintThread[NUM_FOR_NEW];
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            paintThread[i] = new PaintThread(window, i);
+        }
+        lastPoint = new Point[NUM_FOR_NEW];
         // menubar
 
         penItem = new JCheckBoxMenuItem(penItemIcon);
-        // shortcut
-//        penItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
-//                InputEvent.ALT_MASK
-//                        | InputEvent.SHIFT_MASK
-//                        | InputEvent.CTRL_MASK)
-//        );
-        // onclick event
-
-
         penItem.addItemListener(new ItemListener() {
             /**
-            * @param e : 事件
-            * @Description: 点击画笔之后，取消使用选择区域、橡皮功能，光标变成画笔
+             * @param e : 事件
+             * @Description: 点击画笔之后，取消使用选择区域、橡皮功能，光标变成画笔
              * 取消画笔之后，光标恢复原样
-            * @author: 卢思文
-            * @date: 11/26/2023 8:05 PM
-            * @version: 1.0
-            **/
+             * @author: 卢思文
+             * @date: 11/26/2023 8:05 PM
+             * @version: 1.0
+             **/
+
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -78,10 +103,12 @@ public class Pen {
                     window.tool.eraser.eraserItem.setSelected(false);
                     window.showImgRegionLabel.setCursor(penCursor);
                     window.tool.drag.dragItem.setSelected(false);
+
                     if (flag == false) {
                         penListener();
                         flag = true;
                     }
+
                 } else {
                     window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
@@ -96,99 +123,76 @@ public class Pen {
             }
         });
         penSizeSpinner = new JSpinner(Tool.penModel);
-
-    }
-
-    /*
-    * @param:
-    * @return
-    * @Description:监听鼠标状态（从tool类换到这里主要是为了修改drag后无法使用画笔的bug）
-    * （在tool类是在window.panel上进行监听，换到Pen类，在window.showImgRegionLabel进行监听）
-    * @author: 张旖霜
-    * @date: 11/27/2023 7:53 PM
-    * @version: 1.0
-    */
-    public void penListener() {
-        ImageIcon imgIcon = new ImageIcon(MatUtil.bufferedImg(window.img));
-        window.showImgRegionLabel.setIcon(imgIcon);
-        MouseInputAdapter mia = new MouseInputAdapter() {
-
-            public void mouseDragged(MouseEvent e) {
-                if (penItem.isSelected()) {
-                    if (e.getX() < 0 || e.getY() < 0 || e.getX()>window.img.width()-5 || e.getY()>window.img.height()-5) {
-                        return;
-                    }
-                    penSize = (Integer) penSizeSpinner.getValue();
-                    paint(e.getX(), e.getY());
-                }
-            }
-
+        /*
+            lsw
+            增加事件捕获器,更改画笔尺寸
+         */
+        penSizeSpinner.addChangeListener(new ChangeListener() {
             @Override
-            public void mouseReleased(MouseEvent e) {
-                // pending
-                /*
-                画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，当松开的时候我们将上一个状态入栈，然后更改img
-                 */
-                if (penItem.isSelected()) {
-                    // 当前property的值入栈
-                    window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-                    window.last.add(window.img);
-                    if (window.paintingImg != null) {
-                        window.img = MatUtil.copy(window.paintingImg);
+            public void stateChanged(ChangeEvent e) {
+                int size = (int) window.tool.pen.penSizeSpinner.getValue();
+                int offset = size - window.tool.pen.penSize[window.counter];
+                for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+                    penSize[i] += offset;
+                    if (penSize[i] > MAX_PEN_SIZE) {
+                        penSize[i] = MAX_PEN_SIZE;
+                    } else if (penSize[i] < MIN_PEN_SIZE) {
+                        penSize[i] = MIN_PEN_SIZE;
                     }
-                    // 下面这行代码是必须的，这样可以保证每次绘画的时候是在现在图像的基础上进画
-                    // 如果没有这行代码，paintImg保持的只是上一个画好的状态，如果之后做了其他操作，将不会显示
-                    window.paintingImg = null;
                 }
             }
-        };
+        });
 
-        window.showImgRegionLabel.addMouseListener(mia);
-        window.showImgRegionLabel.addMouseMotionListener(mia);
     }
-    
+
+    public void initPenSize() {
+        // 注意Spinner模型边界和MAX_SIZE_COUNTER的限制
+        penSize = new int[NUM_FOR_NEW];
+        for (int i = 0; i < ORIGINAL_SIZE_COUNTER; i++) {
+            penSize[i] = i / 2 + 1;
+        }
+        // 从最大的开始，找到第一个小于它的
+        for (int i = MAX_SIZE_COUNTER; i >= 0; i--) {
+            if (window.size[i][0] < window.size[ORIGINAL_SIZE_COUNTER][0]){
+                penSize[ORIGINAL_SIZE_COUNTER] = Math.min(MAX_PEN_SIZE, penSize[i] + 2);
+                break;
+            }
+        }
+        // 如果没找到, 那么它是最小的
+        if(penSize[ORIGINAL_SIZE_COUNTER] == 0){
+            penSize[ORIGINAL_SIZE_COUNTER] = Math.max(MIN_PEN_SIZE, penSize[0] - 2);
+        }
+
+    }
+
     /*
-     * @param x, y:鼠标位置
+     * @param:
      * @return
-     * @Description: 换成在window.showImgRegionLabel上监听鼠标，所以不需要重新定位
-     * 实现画笔功能，原理是将指定像素块染成指定的颜色
-     * @author: 张旖霜、卢思文
-     * @date: 11/27/2023 3:30 PM
+     * @Description:监听鼠标状态（从tool类换到这里主要是为了修改drag后无法使用画笔的bug）
+     * （在tool类是在window.panel上进行监听，换到Pen类，在window.showImgRegionLabel进行监听）
+     * @author: 张旖霜
+     * @date: 11/27/2023 7:53 PM
      * @version: 1.0
      */
-    public void paint(int x, int y) {
-
-        if (window.paintingImg == null) {
-            window.paintingImg = MatUtil.copy(window.img);
+    public void penListener() {
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            paintThread[i].start();
         }
-        
-        MatUtil.paint(new int[]{
-
-                        penColorPanel.getBackground().getBlue(),
-                        penColorPanel.getBackground().getGreen(),
-                        penColorPanel.getBackground().getRed()},
-                penSize,
-                penSize,
-                x,
-                y,
-
-                window.paintingImg);
-
-        MatUtil.show(window.paintingImg, window.showImgRegionLabel);
-
     }
+
+
     /**
-    * @param evt : 事件
-    * @Description: 有bug，修改方法是用栈
+     * @param evt : 事件
+     * @Description: 有bug，修改方法是用栈
      * 需要记录上一次选择的是什么颜色，下次打开选择窗口后默认是该颜色
-    * @author: 卢思文
-    * @date: 11/26/2023 8:09 PM
-    * @version: 1.0
-    **/
+     * @author: 卢思文
+     * @date: 11/26/2023 8:09 PM
+     * @version: 1.0
+     **/
     public void selectPenColor(MouseEvent evt) {
         Color color = JColorChooser
                 .showDialog(null,
-                        "选择颜色",
+                        "Select Color",
                         // bug
                         Color.BLACK);
 

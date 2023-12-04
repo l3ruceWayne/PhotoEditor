@@ -2,11 +2,18 @@ package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import static com.buaa.PhotoEditor.window.Constant.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import java.util.zip.CheckedOutputStream;
+
+
 /**
  * @Description: 使用画笔的时候，鼠标按下->拖拽->松开是一个行为的完成，
  * 当松开的时候我们将上一个状态入栈，然后更改img
@@ -19,6 +26,9 @@ import java.awt.event.MouseEvent;
  **/
 public class Tool {
 
+
+
+
     public Window window;
 
     public Eraser eraser;
@@ -29,13 +39,20 @@ public class Tool {
     public Rotate rotate;
     public Drag drag;
 
-    public static  SpinnerNumberModel penModel = new SpinnerNumberModel(5, 1, 30, 1);
-    public static  SpinnerNumberModel eraserModel = new SpinnerNumberModel(5, 1, 30, 1);
 
-    public int ex, ey;
+    public static  SpinnerNumberModel penModel
+            = new SpinnerNumberModel(INIT_PEN_SIZE,
+            MIN_PEN_SIZE,
+            MAX_PEN_SIZE,
+            PEN_STEP_SIZE);
+
+    public static  SpinnerNumberModel eraserModel
+            = new SpinnerNumberModel(INIT_ERASER_SIZE,
+            MIN_ERASER_SIZE,
+            MAX_ERASER_SIZE,
+            ERASER_STEP_SIZE);
 
 
-    public JPanel zoomRegion;
 
     public Tool(Window window) {
         this.window = window;
@@ -46,6 +63,16 @@ public class Tool {
         this.zoomIn = new ZoomIn(window);
         this.rotate = new Rotate(window);
         this.drag = new Drag(window);
-
+        window.panel.addMouseWheelListener(e -> {
+            if((e.getModifiers() & InputEvent.CTRL_MASK) != 0){
+                if(e.getWheelRotation() < 0){
+                    zoomIn.zoomIn();
+                }else{
+                    zoomOut.zoomOut();
+                }
+            }
+        });
     }
+
+
 }

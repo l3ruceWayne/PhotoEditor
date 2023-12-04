@@ -44,6 +44,7 @@ public class Redo {
      * @param e 触发操作
      * @return void
      * @Description:利用栈操作实现重做操作
+
      * 实现了property值的redo操作
      * @author: 罗雨曦 张旖霜
      * @date: 2023/11/27 14:05
@@ -58,6 +59,7 @@ public class Redo {
             if (!window.tool.region.selectRegionItem.isSelected()) {
                 window.img = window.next.pop();
 
+
                 // 还原property的值
                 window.currentPropertyValue = MatUtil.copyPropertyValue(window.nextPropertyValue.pop());
                 window.property.getContrastAndBrightness().contrastSlide.setValue(window.currentPropertyValue[0]);
@@ -70,10 +72,13 @@ public class Redo {
             } else {
 
 
-                Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel);
+                Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]);
+
+
                 Mat newImg = MatUtil.copy(window.img);
                 // last.peek()是栈顶Mat，即上一次撤销前的版本，作用为恢复上一次撤销前改变的区域
-                window.next.peek().submat(selectedRegionRect).copyTo(newImg.submat(selectedRegionRect));
+                window.next.peek().submat(selectedRegionRect)
+                        .copyTo(newImg.submat(selectedRegionRect));
                 //更新
                 window.img = newImg;
                 //取消区域选择复选框

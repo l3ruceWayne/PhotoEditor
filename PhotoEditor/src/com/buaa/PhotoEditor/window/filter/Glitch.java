@@ -79,7 +79,7 @@ public class Glitch {
                 Mat newImg = MatUtil.copy(window.img);
                 if (window.tool.region.selectRegionItem.isSelected()) {
                     MatUtil.glitchWave(newImg, waveLength, color, MatUtil.
-                            getRect(window.tool.region.selectedRegionLabel));
+                            getRect(window.tool.region.selectedRegionLabel[window.counter]));
                     window.tool.region.removeRegionSelected();
                 } else {
                     MatUtil.glitchWave(newImg, waveLength, color);
