@@ -50,6 +50,11 @@ public class Rotate {
     * @version: 1.0
     */
     private void rotate(Mat img) {
+        // 如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
         int temp;
         center = new Point(img.width()/2, img.height()/2);
         angle = 90;

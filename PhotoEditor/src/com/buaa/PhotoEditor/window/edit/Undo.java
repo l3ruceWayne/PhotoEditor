@@ -51,11 +51,17 @@ public class Undo {
      * @return void
      * @Description:利用栈操作实现撤销操作
      * 实现了property值的undo操作
+     * 增加未选择图片弹窗
      * @author: 罗雨曦 张旖霜
-     * @date: 2023/11/27 14:07
-     * @version: 1.0
+     * @date: 2023/12/5 3:40
+     * @version: 2.0
      **/
     private void undo (ActionEvent e){
+        //如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
         if (!window.last.isEmpty()) {
 
 

@@ -36,6 +36,13 @@ public class Drag {
 
 
         flag = false;
+        // 如果未选择图片，弹窗提示并return
+        dragItem.addActionListener(e -> {
+            if (window.img == null) {
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                dragItem.setSelected(false);
+            }
+        });
 
         dragItem.addItemListener(new ItemListener() {
             @Override

@@ -86,6 +86,13 @@ public class Pen {
         // menubar
 
         penItem = new JCheckBoxMenuItem(penItemIcon);
+        // 如果未选择图片，弹窗提示并return
+        penItem.addActionListener(e -> {
+            if (window.img == null) {
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                penItem.setSelected(false);
+            }
+        });
         penItem.addItemListener(new ItemListener() {
             /**
              * @param e : 事件
@@ -130,6 +137,15 @@ public class Pen {
         penSizeSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
+                //LYX 如果未选择图片，弹窗提示并使数值不可编辑
+                if (window.img == null) {
+                    //LYX 设置编辑框为不可编辑，但暂未找到使增加减小按钮失效的方法
+                    JComponent editor = penSizeSpinner.getEditor();
+                    JFormattedTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
+                    textField.setEditable(false);
+                    JOptionPane.showMessageDialog(null, "Please open an image first");
+                    return;
+                }
                 int size = (int) window.tool.pen.penSizeSpinner.getValue();
                 int offset = size - window.tool.pen.penSize[window.counter];
                 for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
@@ -190,6 +206,11 @@ public class Pen {
      * @version: 1.0
      **/
     public void selectPenColor(MouseEvent evt) {
+        // 如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
         Color color = JColorChooser
                 .showDialog(null,
                         "Select Color",

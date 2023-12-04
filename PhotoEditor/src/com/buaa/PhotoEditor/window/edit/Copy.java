@@ -39,12 +39,18 @@ public class Copy {
      * @param e 触发操作
      * @return void
      * @Description:获取选区并将pasting状态置1
+     * 增加未选择图片弹窗
      * @author: 罗雨曦
-     * @date: 2023/11/27 14:14
-     * @version: 1.0
+     * @date: 12/5/2023 3:28 PM
+     * @version: 2.0
      **/
     private void copySelectedRegion(ActionEvent e) {
         window.tool.region.selectRegionItem.setSelected(false);
+        //如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
         // 如果还没有选择区域，弹出提示框
         if (window.tool.region.selectedRegionLabel[window.counter].getBorder() == null) {
             JOptionPane.showMessageDialog(null, "Please select region first");

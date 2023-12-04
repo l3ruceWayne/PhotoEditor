@@ -63,6 +63,11 @@ public class Glitch {
 
     }
     public void OKButtonActionPerformed(ActionEvent evt) {
+        // 如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
         if (!offsetLabel.isVisible() && !offsetValueTextField.isVisible())
             glitchItemDialog.dispose();
         else {

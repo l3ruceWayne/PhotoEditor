@@ -41,13 +41,19 @@ public class Cut {
      * @param evt 触发操作
      * @return void
      * @Description:利用MatUtil实现图片的剪切与展示
+     * 增加未选择图片弹窗
      * @author: 罗雨曦
-     * @date: 2023/11/27 14:11
-     * @version: 1.0
+     * @date: 2023/12/5 3:39
+     * @version: 2.0
      **/
     private void cutActionPerformed(ActionEvent evt) {
         //在原函数基础上修了点bug。原函数为勾选框勾选就不报错，现改为需要勾选框勾选且选择区域才不报错，且在执行cut的同时取消勾选框勾选
         window.tool.region.selectRegionItem.setSelected(false);
+        //如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
         // 如果还没有选择区域，弹出提示框
         if (window.tool.region.selectedRegionLabel[window.counter].getBorder() == null) {
             JOptionPane.showMessageDialog(null,

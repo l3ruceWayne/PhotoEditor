@@ -203,6 +203,11 @@ public class Property {
      * @version: 1.0
      **/
     public void propertysMouseClicked(java.awt.event.MouseEvent evt) {
+        // 如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
         window.temp = MatUtil.copy(window.img);
         propertyMenuDialog.setModal(true);
         propertyMenuDialog.setVisible(true);

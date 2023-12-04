@@ -44,13 +44,18 @@ public class Redo {
      * @param e 触发操作
      * @return void
      * @Description:利用栈操作实现重做操作
-
      * 实现了property值的redo操作
+     * 增加未选择图片弹窗
      * @author: 罗雨曦 张旖霜
-     * @date: 2023/11/27 14:05
-     * @version: 1.0
+     * @date: 2023/12/5 3:40
+     * @version: 2.0
      **/
     private void redo(ActionEvent e) {
+        //如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
         if (!window.next.isEmpty()) {
             window.last.push(window.img);
             // 当前property的值入栈

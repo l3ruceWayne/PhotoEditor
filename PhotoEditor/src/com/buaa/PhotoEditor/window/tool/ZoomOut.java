@@ -42,6 +42,11 @@ public class ZoomOut {
      * @version: 1.0
      */
     public void zoomOut() {
+        // 如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
 // 不能再放大了，return，后期加弹窗
         if (window.counter == 0) {
             return;

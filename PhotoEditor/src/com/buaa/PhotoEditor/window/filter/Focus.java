@@ -23,6 +23,11 @@ public class Focus {
         });
     }
     public void focusActionPerformed(ActionEvent evt) {
+        // 如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
 
         if (window.tool.region.selectRegionItem.isSelected()) {
 

@@ -30,6 +30,11 @@ public class Gray {
         });
     }
     public void grayActionPerformed(ActionEvent evt) {
+        // 如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
 
         Mat newImg = copy(window.zoomImg[window.counter]);
 

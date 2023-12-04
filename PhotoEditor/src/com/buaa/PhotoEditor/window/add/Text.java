@@ -221,12 +221,17 @@ public class Text {
     * @param:
     * @return
     * @Description:选好位置（框选区域）后，显示字体设置面板
-    * @author: 张旖霜
-    * @date: 11/27/2023 12:51 PM
-    * @version: 1.0
+    * 增加未选择图片弹窗
+    * @author: 张旖霜,罗雨曦
+    * @date: 12/5/2023 3:28 PM
+    * @version: 2.0
     */
     public void writeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeTextActionPerformed
-
+        //如果未选择图片，弹窗提示并return
+        if (window.img == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
         if (window.tool.region.selectRegionItem.isSelected()) {
             window.tool.region.removeRegionSelected();
             dialogAddText.setModal(true);
