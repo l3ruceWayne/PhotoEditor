@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 
 /**
 * @Description: 重做上一步操作； 目前对于是重做操作还是恢复图片下一状态还没有设置明确，后将改进
@@ -52,7 +54,7 @@ public class Redo {
      **/
     private void redo(ActionEvent e) {
         //如果未选择图片，弹窗提示并return
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }

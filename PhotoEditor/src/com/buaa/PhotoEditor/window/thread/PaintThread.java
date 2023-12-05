@@ -83,8 +83,7 @@ public class PaintThread extends Thread{
      * 实现画笔功能，原理是将指定像素块染成指定的颜色
      * 解决了“快速移动导致笔迹断续”的问题，思想：在离散的点之间插值
      * newX和newY是drag后的重新定位
-     * 多线程处理之后更新window.img
-     * @author: 张旖霜、卢思文、罗雨曦
+     * @author: 张旖霜、卢思文
      * @date: 12/5/2023 3:42 AM
      * @version: 1.0
      */
@@ -135,8 +134,6 @@ public class PaintThread extends Thread{
         }
         if (i == window.counter) {
             show(window.paintingImg[window.counter], window.showImgRegionLabel);
-            //多线程处理之后更新window.img
-            window.img= MatUtil.copy(window.paintingImg[window.counter]);
         }
 
         // 更新上一个点为当前点

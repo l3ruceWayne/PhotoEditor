@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 public class Glitch {
     public int waveLength;
     public ButtonGroup colors;
@@ -64,7 +66,7 @@ public class Glitch {
     }
     public void OKButtonActionPerformed(ActionEvent evt) {
         // 如果未选择图片，弹窗提示并return
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }

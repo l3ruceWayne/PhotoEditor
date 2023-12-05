@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 /**
 * @Description: 剪切图片
 * @author 罗雨曦
@@ -50,7 +52,7 @@ public class Cut {
         //在原函数基础上修了点bug。原函数为勾选框勾选就不报错，现改为需要勾选框勾选且选择区域才不报错，且在执行cut的同时取消勾选框勾选
         window.tool.region.selectRegionItem.setSelected(false);
         //如果未选择图片，弹窗提示并return
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }

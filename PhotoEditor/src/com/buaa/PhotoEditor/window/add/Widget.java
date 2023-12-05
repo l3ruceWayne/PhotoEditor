@@ -12,6 +12,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 /**
 * @Description:
  * 1. 解决了添加widget图片不能为中文的问题，并且支持矢量图
@@ -54,7 +57,7 @@ public class Widget {
 
     public void addWidget(ActionEvent evt) {
         //如果未选择图片，弹窗提示并return
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }

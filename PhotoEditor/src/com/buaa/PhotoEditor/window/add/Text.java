@@ -15,6 +15,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 /*
 * @Description:选择区域后写入文字（特别说明：用户选择区域后才能写字，写文字后不能修改位置）
 * （但是其实不用到选择一个区域，因为是根据选择时点击的第一个位置来定位的，不受选择框限制）
@@ -228,7 +230,7 @@ public class Text {
     */
     public void writeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeTextActionPerformed
         //如果未选择图片，弹窗提示并return
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }

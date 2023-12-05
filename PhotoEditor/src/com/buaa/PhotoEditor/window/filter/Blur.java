@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 public class Blur {
     public JMenuItem blurItem;
     public Window window;
@@ -27,7 +29,7 @@ public class Blur {
     }
     public void blurActionPerformed(ActionEvent evt) {
         // 如果未选择图片，弹窗提示并return
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }

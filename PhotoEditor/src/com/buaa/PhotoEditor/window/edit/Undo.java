@@ -11,6 +11,8 @@ import org.opencv.core.Size;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 /**
 * @Description: 撤销上一步操作； 目前对于是撤销操作还是恢复图片上一状态还没有设置明确，后将改进
 * @author 罗雨曦
@@ -58,7 +60,7 @@ public class Undo {
      **/
     private void undo (ActionEvent e){
         //如果未选择图片，弹窗提示并return
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }

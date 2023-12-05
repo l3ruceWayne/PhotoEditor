@@ -1,6 +1,7 @@
 package com.buaa.PhotoEditor.window.filter;
 
 import static com.buaa.PhotoEditor.util.MatUtil.*;
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
@@ -31,7 +32,7 @@ public class Gray {
     }
     public void grayActionPerformed(ActionEvent evt) {
         // 如果未选择图片，弹窗提示并return
-        if (window.img == null) {
+        if (window.zoomImg[ORIGINAL_SIZE_COUNTER]==null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }

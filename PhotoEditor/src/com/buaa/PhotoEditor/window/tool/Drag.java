@@ -24,6 +24,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 public class Drag {
     public Window window;
     public JCheckBoxMenuItem dragItem;
@@ -38,7 +40,7 @@ public class Drag {
         flag = false;
         // 如果未选择图片，弹窗提示并return
         dragItem.addActionListener(e -> {
-            if (window.img == null) {
+            if (window.originalImg == null) {
                 JOptionPane.showMessageDialog(null, "Please open an image first");
                 dragItem.setSelected(false);
             }

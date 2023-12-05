@@ -51,7 +51,7 @@ public class ZoomIn {
      **/
     public void zoomIn() {
         // 如果未选择图片，弹窗提示并return
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }

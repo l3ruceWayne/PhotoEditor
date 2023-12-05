@@ -19,6 +19,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 /**
  * @Description: 负责修改后图片的保存和另存为功能
  * @author: 卢思文
@@ -56,14 +58,16 @@ public class Save {
             }
         });
     }
+
     /**
      * @Description: 更新window.img为保存后的img，以便后续再进行编辑
-     * @author: 卢思文
-     * @date: 11/27/2023 4:44 PM
-     * @version: 1.0
+     * 根据设计更改更新newImg的获取对象与相关细节操作
+     * @author: 卢思文，罗雨曦
+     * @date: 12/5/2023 4:18 PM
+     * @version: 2.0
      **/
     private void getNewImg() {
-        Mat newImg = MatUtil.copy(window.img);
+        Mat newImg = MatUtil.copy(window.zoomImg[ORIGINAL_SIZE_COUNTER]);
         // 保存后，小组件和图片融为一体，所以把小组件删除
         for (JLabel widgetLabel : window.add.widget.widgetLabelList) {
             MatUtil.widget(newImg,
@@ -71,14 +75,16 @@ public class Save {
                     widgetLabel.getX(), widgetLabel.getY());
             window.panel.remove(widgetLabel);
         }
+        // LYX 因为不再使用resize实现编辑时的放大缩小，故不需要更新屏幕显示内容
         // 显示融为一体的图片
-        MatUtil.show(newImg, window.showImgRegionLabel);
+//        MatUtil.show(newImg, window.showImgRegionLabel);
         if (window.last.size() != 0 && window.img != window.last.peek()) {
             // 当前property的值入栈
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             window.last.push(window.img);
         }
-        window.img = newImg;
+        // window.img弃用，暂时注释掉下行
+//        window.img = newImg;
     }
 
 
@@ -88,13 +94,14 @@ public class Save {
      * @Description:保存图片，如果用户点击了save as，保存路径改为save as的保存路径
      * 修复save后显示出错的bug
      * 修复保存路径中含有中文而无法正确保存的bug
+     * 同时，通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
      * @author: 张旖霜、卢思文、罗雨曦
      * @date: 12/5/2023 3:58 AM
      * @version: 1.0
      */
 
     private void saveImg(ActionEvent e) {
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null,
                     "Please open an image and edit it first");
             return;
@@ -109,9 +116,9 @@ public class Save {
         if (path == null) {
             path = window.originalImgPath;
         }
-        //LYX 修复保存路径中含有中文而无法正确保存的bug
+        //LYX 修复保存路径中含有中文而无法正确保存的bug；同时，通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
 //        MatUtil.save(path, window.img);
-        SaveMatToJpg(path,window.img);
+        SaveMatToJpg(path, window.zoomImg[ORIGINAL_SIZE_COUNTER]);
         JOptionPane.showMessageDialog(null,
                 "Success");
 
@@ -130,12 +137,13 @@ public class Save {
      * 修改因为图片放缩、显示相关功能修改而过时的resize代码
      * 将输出文件格式修改为JPG，与原文件格式相同
      * 修复保存路径中含有中文而无法正确保存的bug
+     * 同时，通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
      * @author: 卢思文，罗雨曦
      * @date: 12/5/2023 2:52 PM
      * @version: 2.0
      **/
     private void saveAsNewImg(ActionEvent e) {
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null,
                     "Please open an image and edit it first");
             return;
@@ -162,9 +170,9 @@ public class Save {
                 path += ".jpg";
             }
             getNewImg();
-            //LYX 修复保存路径中含有中文而无法正确保存的bug
+            //LYX 修复保存路径中含有中文而无法正确保存的bug，同时，通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
 //            MatUtil.save(path, window.img);
-            SaveMatToJpg(path,window.img);
+            SaveMatToJpg(path, window.zoomImg[ORIGINAL_SIZE_COUNTER]);
 //                ImageIO.write(MatUtil.bufferedImg(window.img), "png", fileToSave);
             JOptionPane.showMessageDialog(null,
                     "Success");
@@ -174,10 +182,10 @@ public class Save {
     }
 
     /**
-     * @param imgPath 图片要保存到的路径的字符串形式
+     * @param imgPath  图片要保存到的路径的字符串形式
      * @param dstImage 要保存的图片
      * @return boolean 是否保存成功
-     * @Description: 重新写将Mat保存为JPG图片的方法,以避开Matutil.save保存路径中含有中文就无法正确保存的bug
+     * @Description: 重新写将Mat保存为JPG图片的方法, 以避开Matutil.save保存路径中含有中文就无法正确保存的bug
      * @author: 罗雨曦
      * @date: 2023/12/5 4:01
      * @version: 1.0
@@ -191,8 +199,8 @@ public class Save {
 
     /**
      * @param fileName 图片要保存到的路径的字符串形式
-     * @param bytes Mat图片转为byte[]形式
-     * @param append 此处恒为false，即FileOutputStream都是从头开始输出图片，设置目的为与FileOutputStream参数保持一致
+     * @param bytes    Mat图片转为byte[]形式
+     * @param append   此处恒为false，即FileOutputStream都是从头开始输出图片，设置目的为与FileOutputStream参数保持一致
      * @return boolean 操作是否成功
      * @Description: 将byte[]形式的图片通过流输入到指定路径
      * @author: 罗雨曦

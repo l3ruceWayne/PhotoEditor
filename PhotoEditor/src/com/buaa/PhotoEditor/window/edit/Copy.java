@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 /**
 * @Description: 选择某个选区后复制该选区，通过在画布上点击鼠标实现该选区的剪贴
 * @author 罗雨曦
@@ -47,7 +49,7 @@ public class Copy {
     private void copySelectedRegion(ActionEvent e) {
         window.tool.region.selectRegionItem.setSelected(false);
         //如果未选择图片，弹窗提示并return
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }

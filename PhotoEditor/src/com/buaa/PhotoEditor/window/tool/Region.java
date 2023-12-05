@@ -52,7 +52,7 @@ public class Region {
         selectRegionItem = new JCheckBoxMenuItem("Region");
         // 如果未选择图片，弹窗提示并return
         selectRegionItem.addActionListener(e->{
-            if (window.img == null) {
+            if (window.originalImg == null) {
                 JOptionPane.showMessageDialog(null, "Please open an image first");
                 selectRegionItem.setSelected(false);
                 return;

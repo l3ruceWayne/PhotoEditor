@@ -88,7 +88,7 @@ public class Pen {
         penItem = new JCheckBoxMenuItem(penItemIcon);
         // 如果未选择图片，弹窗提示并return
         penItem.addActionListener(e -> {
-            if (window.img == null) {
+            if (window.originalImg == null) {
                 JOptionPane.showMessageDialog(null, "Please open an image first");
                 penItem.setSelected(false);
             }
@@ -138,7 +138,7 @@ public class Pen {
             @Override
             public void stateChanged(ChangeEvent e) {
                 //LYX 如果未选择图片，弹窗提示并使数值不可编辑
-                if (window.img == null) {
+                if (window.originalImg == null) {
                     //LYX 设置编辑框为不可编辑，但暂未找到使增加减小按钮失效的方法
                     JComponent editor = penSizeSpinner.getEditor();
                     JFormattedTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
@@ -207,7 +207,7 @@ public class Pen {
      **/
     public void selectPenColor(MouseEvent evt) {
         // 如果未选择图片，弹窗提示并return
-        if (window.img == null) {
+        if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }
