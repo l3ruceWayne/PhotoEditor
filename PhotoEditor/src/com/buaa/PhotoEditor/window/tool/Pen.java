@@ -1,16 +1,21 @@
 package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
-import com.buaa.PhotoEditor.window.Constant;
 import com.buaa.PhotoEditor.window.Window;
-import org.opencv.core.Mat;
+import com.buaa.PhotoEditor.window.layer.Layer;
+import com.buaa.PhotoEditor.window.thread.PaintThread;
+
+import static com.buaa.PhotoEditor.util.MatUtil.*;
+import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.window.Constant.*;
+
 import javax.swing.*;
 
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Collections;
+import java.security.KeyStore;
+import java.util.Arrays;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -26,11 +31,11 @@ import javax.swing.event.ChangeListener;
 public class Pen {
     public JCheckBoxMenuItem penItem;
     public Window window;
-
+    public PaintThread[] paintThread;
     /*
 
      */
-    public Point lastPoint = null;
+    public Point[] lastPoint;
     /*
         实现画笔颜色选择：
             JPanel其实就是一个画板，我们让它显示颜色，然后画画的时候从中提取颜色作为画笔
@@ -43,7 +48,7 @@ public class Pen {
 
     public JPanel penColorPanel;
     public JSpinner penSizeSpinner;
-    public int penSize;
+    public int[] penSize;
     public static Cursor penCursor;
     public static ImageIcon penCursorIcon;
     public static ImageIcon penItemIcon;
@@ -72,11 +77,15 @@ public class Pen {
 
     public Pen(Window window) {
         this.window = window;
+
+        paintThread = new PaintThread[NUM_FOR_NEW];
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            paintThread[i] = new PaintThread(window, i);
+        }
+        lastPoint = new Point[NUM_FOR_NEW];
         // menubar
 
         penItem = new JCheckBoxMenuItem(penItemIcon);
-
-
         penItem.addItemListener(new ItemListener() {
             /**
              * @param e : 事件
@@ -90,6 +99,7 @@ public class Pen {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
+
                     window.tool.region.removeRegionSelected();
                     window.tool.eraser.eraserItem.setSelected(false);
                     window.showImgRegionLabel.setCursor(penCursor);
@@ -114,22 +124,47 @@ public class Pen {
             }
         });
         penSizeSpinner = new JSpinner(Tool.penModel);
-
-        // 初始化
-        penSize = (int)penSizeSpinner.getValue();
         /*
             lsw
-            增加事件捕获器
+            增加事件捕获器,更改画笔尺寸
          */
         penSizeSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                penSize = (int)penSizeSpinner.getValue();
+                int size = (int) window.tool.pen.penSizeSpinner.getValue();
+                int offset = size - window.tool.pen.penSize[window.counter];
+                for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+                    penSize[i] += offset;
+                    if (penSize[i] > MAX_PEN_SIZE) {
+                        penSize[i] = MAX_PEN_SIZE;
+                    } else if (penSize[i] < MIN_PEN_SIZE) {
+                        penSize[i] = MIN_PEN_SIZE;
+                    }
+                }
             }
         });
 
     }
-    
+
+    public void initPenSize() {
+        // 注意Spinner模型边界和MAX_SIZE_COUNTER的限制
+        penSize = new int[NUM_FOR_NEW];
+        for (int i = 0; i < ORIGINAL_SIZE_COUNTER; i++) {
+            penSize[i] = i / 2 + 1;
+        }
+        // 从最大的开始，找到第一个小于它的
+        for (int i = MAX_SIZE_COUNTER; i >= 0; i--) {
+            if (window.size[i][0] < window.size[ORIGINAL_SIZE_COUNTER][0]){
+                penSize[ORIGINAL_SIZE_COUNTER] = Math.min(MAX_PEN_SIZE, penSize[i] + 2);
+                break;
+            }
+        }
+        // 如果没找到, 那么它是最小的
+        if(penSize[ORIGINAL_SIZE_COUNTER] == 0){
+            penSize[ORIGINAL_SIZE_COUNTER] = Math.max(MIN_PEN_SIZE, penSize[0] - 2);
+        }
+
+    }
 
     /*
      * @param:
@@ -141,135 +176,27 @@ public class Pen {
      * @version: 1.0
      */
     public void penListener() {
-        ImageIcon imgIcon = new ImageIcon(MatUtil.bufferedImg(window.zoomImg[window.counter]));
-        window.showImgRegionLabel.setIcon(imgIcon);
-        MouseInputAdapter mia = new MouseInputAdapter() {
-
-            public void mouseDragged(MouseEvent e) {
-                if (penItem.isSelected()) {
-                    if (e.getX() < 0 || e.getY() < 0 || e.getX() > window.img.width() - 5 || e.getY() > window.img.height() - 5) {
-                        return;
-                    }
-                    penSize = (Integer) penSizeSpinner.getValue();
-                    paint(e.getX(), e.getY());
-                }
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            paintThread[i].start();
+            // 等待线程完成，让线程可以顺序执行（方便线程中的操作）
+            try {
+                paintThread[i].join();
+            }catch (InterruptedException e)
+            {
+                e.printStackTrace();
             }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // pending
-                /*
-                画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，当松开的时候我们将上一个状态入栈，然后更改img
-                 */
-                if (penItem.isSelected()) {
-                    // 当前property的值入栈
-                    window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-                    window.last.add(window.zoomImg[window.counter]);
-                    for (int i = 0; i <= MAX_SIZE_COUNTER; i++) {
-                        if (window.paintingImg[i] != null) {
-                            window.zoomImg[i] = MatUtil.copy(window.paintingImg[i]);
-                        }
-                        // 下面这行代码是必须的，这样可以保证每次绘画的时候是在现在图像的基础上进画
-                        // 如果没有这行代码，paintImg保持的只是上一个画好的状态，如果之后做了其他操作，将不会显示
-                        window.paintingImg[i] = null;
-                    }
-                }
-            }
-        };
-
-        window.showImgRegionLabel.addMouseListener(mia);
-        window.showImgRegionLabel.addMouseMotionListener(mia);
+        }
     }
 
-   
-     * @Description:
-        * 实现画笔功能，原理是将指定像素块染成指定的颜色
-        * 解决了“快速移动导致笔迹断续”的问题，思想：在离散的点之间插值
-        * newX和newY是drag后的重新定位
 
-     * @author: 张旖霜、卢思文
-     * @date: 11/27/2023 3:30 PM
-     * @version: 1.0
-     */
-
-    public void paint(int x, int y) {
-
-        for (int i = 0; i <= MAX_SIZE_COUNTER; i++) {
-            if (window.paintingImg[i] == null) {
-                window.paintingImg[i] = MatUtil.copy(window.zoomImg[i]);
-            }
-        }
-        System.out.println(x);
-        System.out.println(y);
-        for (int i = 0; i <= MAX_SIZE_COUNTER; i++) {
-            System.out.print(i + " ");
-            System.out.print(MatUtil.getPointAfterZoom(window, x, window.counter, i) + " ");
-            System.out.println(MatUtil.getPointAfterZoom(window, y, window.counter, i));
-            MatUtil.paint(new int[]{
-
-                            penColorPanel.getBackground().getBlue(),
-                            penColorPanel.getBackground().getGreen(),
-                            penColorPanel.getBackground().getRed()},
-                    penSize,
-                    penSize,
-                    MatUtil.getPointAfterZoom(window, x, window.counter, i),
-                    MatUtil.getPointAfterZoom(window, y, window.counter, i),
-
-                    window.paintingImg[i]);
-        }
-
-        MatUtil.show(window.paintingImg[window.counter], window.showImgRegionLabel);
-      // 12/1
-        /* lsw 解决了画到图片外报错的问题：让width和height分别减去penSize,
-            因为x只是鼠标的点，而画的时候是penSize大小的矩形块
-            所以当x在图片边界的时候，画的区域已经超过了边界，导致报错
-         */
-        // 下面这行代码作用是，当所画区域在图片外，return，这样避免报错
-        if (x > (window.img.width() - penSize)+newX ||
-                x < newX ||
-                y > (window.img.height()-penSize)+newY ||
-                y < newY) {
-            // 如果画在区域外，上一个点要置null
-            lastPoint = null;
-            return;
-        }
-
-        if (window.paintingImg == null) {
-            window.paintingImg = MatUtil.copy(window.img);
-        }
-
-        int[] color = {penColorPanel.getBackground().getBlue(),
-                penColorPanel.getBackground().getGreen(),
-                penColorPanel.getBackground().getRed()
-        };
-        /*
-            lsw
-            将当前点与上一个点连线，顺利解决笔迹断续的问题！
-         */
-        if(lastPoint != null){
-            MatUtil.drawLine(lastPoint.x,
-                            lastPoint.y,
-                            x - newX,
-                            y - newY,
-                            color,
-                            penSize, window.paintingImg);
-        }else{
-            MatUtil.paint(color, penSize, penSize, x - newX, y - newY, window.paintingImg);
-        }
-        MatUtil.show(window.paintingImg, window.showImgRegionLabel);
-        // 更新上一个点为当前点
-        lastPoint = new Point(x, y);
-
-
-    }
     /**
-    * @param evt : 事件
-    * @Description: 有bug，修改方法是用栈
+     * @param evt : 事件
+     * @Description: 有bug，修改方法是用栈
      * 需要记录上一次选择的是什么颜色，下次打开选择窗口后默认是该颜色
-    * @author: 卢思文
-    * @date: 11/26/2023 8:09 PM
-    * @version: 1.0
-    **/
+     * @author: 卢思文
+     * @date: 11/26/2023 8:09 PM
+     * @version: 1.0
+     **/
     public void selectPenColor(MouseEvent evt) {
         Color color = JColorChooser
                 .showDialog(null,
