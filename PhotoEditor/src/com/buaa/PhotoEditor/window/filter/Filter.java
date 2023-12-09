@@ -1,20 +1,16 @@
 package com.buaa.PhotoEditor.window.filter;
 
 import com.buaa.PhotoEditor.window.Window;
-
-import static com.buaa.PhotoEditor.window.Constant.*;
-
-import com.buaa.PhotoEditor.window.thread.FilterThread;
+import com.buaa.PhotoEditor.window.add.Widget;
 
 import javax.swing.*;
-import java.io.File;
-
+import java.awt.event.WindowStateListener;
 /**
- * @Description: 滤镜类，只需要在Window类里面new Filter(),即可实现所有滤镜相关内容初始化
- * @author: 卢思文
- * @date: 11/26/2023 8:58 PM
- * @version: 1.0
- **/
+* @Description: 滤镜类，只需要在Window类里面new Filter(),即可实现所有滤镜相关内容初始化
+* @author: 卢思文
+* @date: 11/26/2023 8:58 PM
+* @version: 1.0
+**/
 public class Filter {
     public JMenu filterMenu;
     public Window window;
@@ -24,8 +20,6 @@ public class Filter {
     private Animize animize;
     private Focus focus;
     private Glitch glitch;
-    public FilterThread[] filterThread;
-
     public Filter(Window window) {
         this.window = window;
         filterMenu = new JMenu("Filter");
@@ -41,17 +35,5 @@ public class Filter {
         filterMenu.add(animize.animizeItem);
         filterMenu.add(focus.focusItem);
         filterMenu.add(glitch.glitchItem);
-        filterThread = new FilterThread[NUM_FOR_NEW];
-        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-            filterThread[i] = new FilterThread(window,
-                    gray,
-                    blur,
-                    invert,
-                    animize,
-                    focus,
-                    glitch,
-                    i);
-            filterThread[i].start();
-        }
     }
 }

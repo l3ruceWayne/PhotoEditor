@@ -1,20 +1,17 @@
+
 package com.buaa.PhotoEditor.window.thread;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 
-
 import javax.swing.*;
-
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
 import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
-
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
-
 
 /**
  * ClassName: paintThread
@@ -62,7 +59,6 @@ public class PaintThread extends Thread{
                 当松开的时候我们将上一个状态入栈，然后更改img
                  */
                 if (window.tool.pen.penItem.isSelected()) {
-
                     // 当前property的值入栈，第一层将zoomImg数组入栈（这时仅zoomImg[0]是入栈的，其他的还没更新好）
                     if (i == 0) {
                         window.lastPropertyValue
@@ -76,7 +72,6 @@ public class PaintThread extends Thread{
 //                    {
 //                        window.last.peek()[i] = copy(window.zoomImg[i]);
 //                    }
-
 
                     if (window.paintingImg[i] != null) {
                         window.zoomImg[i] = copy(window.paintingImg[i]);

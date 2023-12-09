@@ -2,10 +2,13 @@ package com.buaa.PhotoEditor.window.property;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-import com.buaa.PhotoEditor.window.thread.PropertyThread;
-import static com.buaa.PhotoEditor.window.Constant.*;
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -19,7 +22,7 @@ import java.awt.event.MouseEvent;
 public class Property {
     public JMenu propertyMenu;
     public JDialog propertyMenuDialog;
-    public PropertyThread[] propertyThread;
+
     private Window window;
     private ContrastAndBrightness contrastAndBrightness;
     private Saturation saturation;
@@ -44,7 +47,7 @@ public class Property {
         propertyMenu = new JMenu("Property");
         propertyMenu.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
-                propertyMouseClicked(evt);
+                propertysMouseClicked(evt);
             }
         });
 
@@ -54,12 +57,6 @@ public class Property {
         propertyMenuDialog.setSize(400, 600);
         propertyMenuDialog.setLocationRelativeTo(null);
         initLayout();
-
-        propertyThread = new PropertyThread[NUM_FOR_NEW];
-        for(int i = 0;i<=ORIGINAL_SIZE_COUNTER;i++){
-            propertyThread[i] = new PropertyThread(window, contrastAndBrightness, saturation, i);
-            propertyThread[i].start();
-        }
     }
 
     /**
@@ -74,13 +71,19 @@ public class Property {
         JLabel jLabel3 = new JLabel("Contrast");
         JLabel jLabel4 = new JLabel("Width:");
         JLabel jLabel5 = new JLabel("Height:");
+//        JLabel jLabel6 = new JLabel("Noise");
         JLabel jLabel6 = new JLabel("");
         JLabel jLabel7 = new JLabel("Size");
 
 
         JButton resizeButton = new JButton("Resize");
 
-        resizeButton.addActionListener(evt -> window.property.mySize.Resize(evt));
+        resizeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                window.property.mySize.Resize(evt);
+
+            }
+        });
 
         JSeparator jSeparator2 = new JSeparator();
         JSeparator jSeparator3 = new JSeparator();
@@ -199,7 +202,7 @@ public class Property {
      * @date: 2023/11/27 14:03
      * @version: 1.0
      **/
-    public void propertyMouseClicked(java.awt.event.MouseEvent evt) {
+    public void propertysMouseClicked(java.awt.event.MouseEvent evt) {
         window.temp = MatUtil.copy(window.img);
         propertyMenuDialog.setModal(true);
         propertyMenuDialog.setVisible(true);
@@ -207,7 +210,7 @@ public class Property {
 
         // 当前property的值入栈
         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-        window.last.push(window.img);
+        window.last.push(window.zoomImg);
 
         // 更新property现在的值
         window.currentPropertyValue[0] = contrastAndBrightness.contrastSlide.getValue();
@@ -232,7 +235,7 @@ public class Property {
      * @date: 2023/11/27 14:04
      * @version: 1.0
      **/
-    private void restartPropertyComponentsValues() {
+    private void restartPorpertyComponentsValues() {
         Component[] components = propertyMenuDialog.getContentPane().getComponents();
         for (Component c : components) {
             if (c instanceof JScrollBar) {
