@@ -48,7 +48,6 @@ public class Redo {
     public Redo(Window window) {
         this.window = window;
         redoItem = new JMenuItem("Redo");
-
         redoThread = new RedoThread[NUM_FOR_NEW];
 
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
@@ -60,8 +59,6 @@ public class Redo {
             } catch (InterruptedException e)
             {
                 e.printStackTrace();
-
-
             }
         }
 

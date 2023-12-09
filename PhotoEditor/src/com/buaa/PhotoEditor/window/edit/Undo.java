@@ -47,7 +47,6 @@ public class Undo {
     public Undo(Window window) {
         this.window = window;
         undoItem = new JMenuItem("Undo");
-
         undoThread = new UndoThread[NUM_FOR_NEW];
 
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
@@ -59,8 +58,6 @@ public class Undo {
             } catch (InterruptedException e)
             {
                 e.printStackTrace();
-
-        
             }
         }
 

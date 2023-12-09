@@ -38,6 +38,7 @@ public class Tool {
     public ZoomIn zoomIn;
     public Rotate rotate;
     public Drag drag;
+    public Preview preview;
 
 
     public static  SpinnerNumberModel penModel
@@ -63,6 +64,7 @@ public class Tool {
         this.zoomIn = new ZoomIn(window);
         this.rotate = new Rotate(window);
         this.drag = new Drag(window);
+        this.preview = new Preview(window);
         window.panel.addMouseWheelListener(e -> {
             if((e.getModifiers() & InputEvent.CTRL_MASK) != 0){
                 if(e.getWheelRotation() < 0){

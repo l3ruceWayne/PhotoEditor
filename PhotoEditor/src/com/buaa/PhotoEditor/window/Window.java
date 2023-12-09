@@ -144,10 +144,6 @@ public class Window extends JFrame {
         //LYX 设置窗口大小为不可调整
         this.setResizable(false);
 
-
-//          conflict
-//         addMouseListeners();
-
         setLocationRelativeTo(null);
         // 按下每个按键会弹出一个对应窗口
         // 设置窗口的大小
@@ -169,9 +165,7 @@ public class Window extends JFrame {
 
         // 对应zoomImg
         paintingImg = new Mat[NUM_FOR_NEW];
-
         copyRegionImg = new Mat[NUM_FOR_NEW];
-
 
         // 一定要先初始化panel，之后再调用tool类构造方法
         panel = new JPanel();
@@ -286,7 +280,6 @@ public class Window extends JFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
 
             if (tool.region.selectRegionItem.isSelected()) {
-                // pending
                 tool.region.removeRegionSelected();
             } else if (add.widget.selectedWidgetLabel != null) {
                 add.widget.removeWidget();
@@ -300,48 +293,5 @@ public class Window extends JFrame {
             MatUtil.show(nexLayerImg, "");
         }
     }
-
-
-//     conflict
-
-//     public void addMouseListeners() {
-
-//         panel.addMouseListener(new MouseAdapter() {
-//             /**
-//             * @Description: 粘贴状态下，鼠标点击会进行粘贴
-//             * @author: 卢思文
-//             * @date: 11/26/2023 9:14 PM
-//             * @version: 1.0
-//             **/
-//             @Override
-//             public void mouseClicked(MouseEvent e) {
-
-//                 if (pasting) {
-//                     edit.getPaste().paste();
-//                 }
-//             }
-
-
-//         });
-
-//         panel.addMouseMotionListener(new MouseAdapter() {
-//             /**
-//             * @Description: 粘贴模式下，粘贴框随鼠标一起移动
-//             * @author: 卢思文
-//             * @date: 11/26/2023 9:14 PM
-//             * @version: 1.0
-//             **/
-//             @Override
-//             public void mouseMoved(MouseEvent e) {
-//                 if (pasting) {
-//                     tool.region.selectedRegionLabel[counter].setLocation(e.getPoint());
-//                     tool.region.selectedRegionLabel[counter].repaint();
-//                 }
-//             }
-//         });
-
-
-//     }
-
 
 }
