@@ -40,6 +40,7 @@ public class PropertyThread extends Thread {
 //                contrastAndBrightness();
 //            }
 //        });
+
 //        contrastAndBrightness.contrastSlide.addChangeListener(new ChangeListener() {
 //            public void stateChanged(ChangeEvent evt) {
 //                contrastAndBrightness();
