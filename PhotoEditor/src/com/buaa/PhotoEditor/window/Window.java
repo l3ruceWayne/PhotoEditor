@@ -55,6 +55,8 @@ public class Window extends JFrame {
     public Mat[] zoomImg;
     public Mat[] originalZoomImg;
     public Mat[] paintingImg;
+    // 存放copy的区域
+    public Mat[] copyRegionImg;
     public Property property;
     // 为设置panel的布局增添的布局管理器
     public GridBagLayout gridBagLayout;
@@ -81,15 +83,20 @@ public class Window extends JFrame {
     // temp的作用？
     public Mat temp;             //temp
     public static Mat copy;
-    public Stack<Mat> last; //ctrl+z
-    public Stack<Mat> next;     //ctrl+y`
+    public Stack<Mat[]> last; //ctrl+z
+    public Stack<Mat[]> next;     //ctrl+y`
 
+    // 存储originalImg的栈
+    public Stack<Mat[]> lastOriginalImg;
+    public Stack<Mat[]> nextOriginalImg;
+
+    // 存储property值的栈
     public Stack<int[]> lastPropertyValue;
     public Stack<int[]> nextPropertyValue;
     public int[] currentPropertyValue;
 
     public Mat nexLayerImg;           //image use to paint
-    public boolean flag;
+    public int cnt;
 
 
 
@@ -110,6 +117,7 @@ public class Window extends JFrame {
         this(title);
         this.title  = title;
         this.img = img;
+        cnt = 0;
 
         // 将当前的property的初始值暂存起来（如同img）
         currentPropertyValue[0] = property.getContrastAndBrightness().contrastSlide.getValue();
@@ -136,13 +144,19 @@ public class Window extends JFrame {
         //LYX 设置窗口大小为不可调整
         this.setResizable(false);
 
-        addMouseListeners();
+
+//          conflict
+//         addMouseListeners();
+
         setLocationRelativeTo(null);
         // 按下每个按键会弹出一个对应窗口
         // 设置窗口的大小
         // 撤销和反撤销操作用的栈
         last = new Stack<>();
         next = new Stack<>();
+        // 初始化originalImg的undo redo用的栈
+        lastOriginalImg = new Stack<>();
+        nextOriginalImg = new Stack<>();
         // 初始化property的undo redo的栈
         lastPropertyValue = new Stack<>();
         nextPropertyValue = new Stack<>();
@@ -155,6 +169,9 @@ public class Window extends JFrame {
 
         // 对应zoomImg
         paintingImg = new Mat[NUM_FOR_NEW];
+
+        copyRegionImg = new Mat[NUM_FOR_NEW];
+
 
         // 一定要先初始化panel，之后再调用tool类构造方法
         panel = new JPanel();
@@ -232,6 +249,7 @@ public class Window extends JFrame {
         menuBar.add(tool.zoomIn.zoomInItem);
         menuBar.add(tool.zoomOut.zoomOutItem);
         menuBar.add(tool.drag.dragItem);
+        menuBar.add(tool.preview.previewItem);
 
 
         setJMenuBar(menuBar);
@@ -284,43 +302,46 @@ public class Window extends JFrame {
     }
 
 
-    public void addMouseListeners() {
+//     conflict
 
-        panel.addMouseListener(new MouseAdapter() {
-            /**
-            * @Description: 粘贴状态下，鼠标点击会进行粘贴
-            * @author: 卢思文
-            * @date: 11/26/2023 9:14 PM
-            * @version: 1.0
-            **/
-            @Override
-            public void mouseClicked(MouseEvent e) {
+//     public void addMouseListeners() {
 
-                if (pasting) {
-                    edit.getPaste().paste();
-                }
-            }
+//         panel.addMouseListener(new MouseAdapter() {
+//             /**
+//             * @Description: 粘贴状态下，鼠标点击会进行粘贴
+//             * @author: 卢思文
+//             * @date: 11/26/2023 9:14 PM
+//             * @version: 1.0
+//             **/
+//             @Override
+//             public void mouseClicked(MouseEvent e) {
 
-
-        });
-
-        panel.addMouseMotionListener(new MouseAdapter() {
-            /**
-            * @Description: 粘贴模式下，粘贴框随鼠标一起移动
-            * @author: 卢思文
-            * @date: 11/26/2023 9:14 PM
-            * @version: 1.0
-            **/
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                if (pasting) {
-                    tool.region.selectedRegionLabel[counter].setLocation(e.getPoint());
-                    tool.region.selectedRegionLabel[counter].repaint();
-                }
-            }
-        });
+//                 if (pasting) {
+//                     edit.getPaste().paste();
+//                 }
+//             }
 
 
-    }
+//         });
+
+//         panel.addMouseMotionListener(new MouseAdapter() {
+//             /**
+//             * @Description: 粘贴模式下，粘贴框随鼠标一起移动
+//             * @author: 卢思文
+//             * @date: 11/26/2023 9:14 PM
+//             * @version: 1.0
+//             **/
+//             @Override
+//             public void mouseMoved(MouseEvent e) {
+//                 if (pasting) {
+//                     tool.region.selectedRegionLabel[counter].setLocation(e.getPoint());
+//                     tool.region.selectedRegionLabel[counter].repaint();
+//                 }
+//             }
+//         });
+
+
+//     }
+
 
 }
