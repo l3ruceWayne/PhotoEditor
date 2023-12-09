@@ -150,19 +150,15 @@ public class Eraser {
     public void eraserListener() {
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             eraserThread[i].start();
+
+            // 等待线程完成，让线程可以顺序执行（方便线程中的操作）
+            try {
+                eraserThread[i].join();
+            }catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
-
-
-    // 一键清除功能
-    /*
-     * @param x, y:鼠标位置
-     * @return
-     * @Description: 换成在window.showImgRegionLabel上监听鼠标，所以不需要重新定位
-     * @author: 张旖霜
-     * @date: 11/27/2023 3:30 PM
-     * @version: 1.0
-     */
-
 
 }
