@@ -1,4 +1,3 @@
-
 package com.buaa.PhotoEditor.window.thread;
 
 import com.buaa.PhotoEditor.util.MatUtil;
@@ -90,4 +89,3 @@ public class CutThread extends Thread{
 
     }
 }
-
