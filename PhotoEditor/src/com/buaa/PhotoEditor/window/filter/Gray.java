@@ -1,5 +1,7 @@
 package com.buaa.PhotoEditor.window.filter;
 
+import static com.buaa.PhotoEditor.util.MatUtil.*;
+
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.Mat;
@@ -21,30 +23,7 @@ public class Gray {
         grayItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
                 InputEvent.CTRL_MASK));
 
-        grayItem.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                grayActionPerformed(evt);
-            }
-        });
+
     }
-    public void grayActionPerformed(ActionEvent evt) {
 
-        Mat newImg = MatUtil.copy(window.img);
-
-        if (window.tool.region.selectRegionItem.isSelected()) {
-
-            MatUtil.grayScale(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel));
-            window.tool.region.removeRegionSelected();
-
-        } else {
-            MatUtil.grayScale(newImg);
-        }
-
-        MatUtil.show(newImg, window.showImgRegionLabel);
-
-        // 当前property的值入栈
-        window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-        window.last.push(window.img);
-        window.img = newImg;
-    }
 }
