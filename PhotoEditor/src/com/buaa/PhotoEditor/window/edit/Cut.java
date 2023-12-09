@@ -67,7 +67,7 @@ public class Cut {
             window.last.push(window.img);
             //更新
             window.img = newImg;
-
+            // pending
             window.tool.region.removeRegionSelected();
         }
     }
