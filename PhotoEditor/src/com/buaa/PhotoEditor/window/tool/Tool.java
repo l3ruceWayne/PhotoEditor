@@ -4,9 +4,10 @@ import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
-
+import static com.buaa.PhotoEditor.window.Constant.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -37,16 +38,22 @@ public class Tool {
     public ZoomIn zoomIn;
     public Rotate rotate;
     public Drag drag;
+    public Preview preview;
 
 
-    public static  SpinnerNumberModel penModel = new SpinnerNumberModel(5, 1, 30, 1);
-    public static  SpinnerNumberModel eraserModel = new SpinnerNumberModel(5, 1, 30, 1);
+    public static  SpinnerNumberModel penModel
+            = new SpinnerNumberModel(INIT_PEN_SIZE,
+            MIN_PEN_SIZE,
+            MAX_PEN_SIZE,
+            PEN_STEP_SIZE);
+
+    public static  SpinnerNumberModel eraserModel
+            = new SpinnerNumberModel(INIT_ERASER_SIZE,
+            MIN_ERASER_SIZE,
+            MAX_ERASER_SIZE,
+            ERASER_STEP_SIZE);
 
 
-    public int ex, ey;
-
-
-    public JPanel zoomRegion;
 
     public Tool(Window window) {
         this.window = window;
@@ -57,97 +64,17 @@ public class Tool {
         this.zoomIn = new ZoomIn(window);
         this.rotate = new Rotate(window);
         this.drag = new Drag(window);
-
-
-
-        addMouseListeners();
-    }
-
-    public void addMouseListeners() {
-        // 静态鼠标事件捕获：点击、按压、释放
-        window.panel.addMouseListener(new MouseAdapter() {
-            /*
-                lsw
-                新添，绘画点击的笔迹
-                应该还需要添加橡皮擦除的点击事件处理
-             */
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (pen.penItem.isSelected()) {
-                    pen.penSize = (Integer) pen.penSizeSpinner.getValue();
-                    pen.paint(e.getX(), e.getY());
-                    pen.lastPoint = null;
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-//                int newX = window.tool.drag.newX;
-//                int newY = window.tool.drag.newY;
-                ex = e.getX();
-                ey = e.getY();
-//                if (x < window.img.width()+newX || x > newX || y < window.img.height()+newY || y > newY) return;
-                if (region.selectRegionItem.isSelected()) {
-                    region.addRegion(e.getPoint());
-                }
-            }
-
-            /*
-                使用Eraser或者Pen，当松开鼠标之后，上一个图片（img）入栈，刚编辑好的图片是paintingImg
-                然后把“上一个图片”img 更新成 paintingImg
-             */
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (pen.penItem.isSelected()
-                        || eraser.eraserItem.isSelected()
-                        ) {
-                    window.isProperty.push(0);
-                    // 有问题，画笔之后使用一键清空，撤销无法恢复，反撤销才恢复
-                    window.last.add(window.img);
-                    if (window.paintingImg != null) {
-                        window.img = MatUtil.copy(window.paintingImg);
-                    }
-                    /*
-                    lsw
-                     松开鼠标之后，意味着一次画笔行为的完成，将lastPoint置为null
-                     否则下一次笔迹将和上一次笔迹相连
-                     */
-                    pen.lastPoint = null;
-                    window.paintingImg = null;
+        this.preview = new Preview(window);
+        window.panel.addMouseWheelListener(e -> {
+            if((e.getModifiers() & InputEvent.CTRL_MASK) != 0){
+                if(e.getWheelRotation() < 0){
+                    zoomIn.zoomIn();
+                }else{
+                    zoomOut.zoomOut();
                 }
             }
         });
-        // 动态鼠标事件捕获：拖拽
-        /*
-            lsw
-            移动了pen.penSize = 和 eraser.eraserSize = 的代码位置
-            因为这两行代码只有当我们改变xxxSize大小之后才需要执行，拖拽时执行做了很多重复工作
-         */
-        window.panel.addMouseMotionListener(new MouseAdapter() {
-            /**
-             * @param e : 鼠标事件
-             * @Description: 当按下选择区域或者画笔或者橡皮后，鼠标拖拽时会触发下列动作
-             * @author: 卢思文
-             * @date: 11/26/2023 8:25 PM
-             * @version: 1.0
-             **/
-            // 移动了pen.penSize = 和eraser.eraserSize =的位置，因为不用每次都获取粗细大小
-            @Override
-            public void mouseDragged(MouseEvent e) {
-//                int newX = window.tool.drag.newX;
-//                int newY = window.tool.drag.newY;
-//                int x = e.getX();
-//                int y = e.getY();
-//                if (x >= window.img.width() || y >= window.img.height()) return;
-                if (region.selectRegionItem.isSelected()) {
-                    region.setRegionSize(e.getX(), e.getY());
-                } else if (pen.penItem.isSelected()) {
-                    pen.paint(e.getX(), e.getY());
-                } else if (eraser.eraserItem.isSelected()) {
-                    eraser.erase(e.getX(), e.getY());
-                }
-            }
-        });
-
     }
+
+
 }

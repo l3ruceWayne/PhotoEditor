@@ -8,10 +8,6 @@ import com.buaa.PhotoEditor.modal.EColor;
 import com.buaa.PhotoEditor.modal.ESloopFaceDirection;
 
 
-
-import java.awt.*;
-
-
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
@@ -27,7 +23,6 @@ import javax.swing.JLabel;
 
 
 import com.buaa.PhotoEditor.window.Window;
-import com.buaa.PhotoEditor.window.add.Text;
 
 import org.opencv.core.*;
 import org.opencv.core.Point;
@@ -64,7 +59,6 @@ public abstract class MatUtil extends JFrame {
      *END URL IMAGES
      */
     /**
-    * @param u : 此时counter为u
     * @param x : u时的坐标值
     * @param i : 转换成i时的坐标值
     * @return
@@ -73,11 +67,11 @@ public abstract class MatUtil extends JFrame {
     * @date: 12/1/2023 4:15 PM
     * @version: 1.0
     **/
-    public static int getPointAfterZoom(Window window, double x, int u, int i){
-        if(u == i)return (int)x;
+    public static int getValueAfterZoom(Window window, double x, int i){
+        if(i == window.counter)return (int)x;
         double iWidth = window.zoomImg[i].width();
-        double uWidth = window.zoomImg[u].width();
-        return (int)(x * iWidth / uWidth);
+        double uWidth = window.zoomImg[window.counter].width();
+        return (int)Math.round(x * iWidth / uWidth);
     }
     public static void show(Mat img, String title) {
 
@@ -502,6 +496,24 @@ public abstract class MatUtil extends JFrame {
         return newPropertyValue;
     }
 
+    /*
+    * @param imgArray: 当前要使用的img数组
+    * @return 以新的数组返回（其中的元素是imgArray的值）
+    * @Description:为了让栈里保存的是新的数组，而不仅仅是对zoomImg数组的引用
+    * @author: 张旖霜
+    * @date: 12/5/2023 10:53 PM
+    * @version: 1.0
+    */
+    public static Mat[] copyImgArray(Mat[] imgArray)
+    {
+        Mat[] newImgArray = new Mat[12];
+        for (int i=0; i<=11; i++)
+        {
+            newImgArray[i] = imgArray[i];
+        }
+        return newImgArray;
+    }
+
 
     public static Mat copy(Mat img) {
         Mat imgCopy = new Mat();
@@ -678,13 +690,6 @@ public abstract class MatUtil extends JFrame {
     public static void sepia(Mat img, Rect region) {
         sepia(img.submat(region));
     }
-
-
-//    public static void writeText(Text text, Mat img, Rect region ) {
-//        img = img.submat(region);
-//        Point point = new Point(0, text.getScale()*25);
-//        Imgproc.putText(img, text.getStr(), point, Core.FONT_HERSHEY_SIMPLEX, text.getScale(), text.getColor(),text.getScale());
-//    }
 
 
     /*

@@ -88,7 +88,7 @@ public class ContrastAndBrightness {
         //修改亮度和对比度
         if (window.tool.region.selectRegionItem.isSelected())
             MatUtil.contrastAndBrightness(window.temp, brightnessSlider.getValue(), -contrastSlide.getValue(),
-                    MatUtil.getRect(window.tool.region.selectedRegionLabel));
+                    MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
         else
             MatUtil.contrastAndBrightness(window.temp, brightnessSlider.getValue(), -contrastSlide.getValue());
 

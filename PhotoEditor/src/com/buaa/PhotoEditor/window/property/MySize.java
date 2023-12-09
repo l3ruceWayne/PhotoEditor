@@ -55,7 +55,7 @@ public class MySize {
 
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
 
-            window.last.push(window.img);
+            window.last.push(window.zoomImg);
 
             window.img = window.temp = newImg;
             MatUtil.show(window.temp, window.showImgRegionLabel);

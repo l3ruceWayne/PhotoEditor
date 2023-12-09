@@ -27,7 +27,7 @@ public class Animize {
         Mat newImg = MatUtil.copy(window.img);
 
         if (window.tool.region.selectRegionItem.isSelected()) {
-            MatUtil.cartoon(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel));
+            MatUtil.cartoon(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
             window.tool.region.removeRegionSelected();
         } else
             MatUtil.cartoon(newImg);
@@ -36,7 +36,7 @@ public class Animize {
 
         // 当前property的值入栈
         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-        window.last.push(window.img);
+        window.last.push(window.zoomImg);
         window.img = newImg;
 
     }

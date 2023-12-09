@@ -233,7 +233,7 @@ public class Text {
             dialogAddText.setVisible(true);
 
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-            window.last.push(window.img);
+            window.last.push(window.zoomImg);
             window.img = window.temp;
             initPanel();
         } else
@@ -256,8 +256,8 @@ public class Text {
     */
     public void writeText() {
         window.temp = MatUtil.copy(window.img);
-        int x = window.tool.region.selectedRegionLabel.getX();
-        int y = window.tool.region.selectedRegionLabel.getY();
+        int x = window.tool.region.selectedRegionLabel[window.counter].getX();
+        int y = window.tool.region.selectedRegionLabel[window.counter].getY();
 
 
         BufferedImage bufImg = MatUtil.bufferedImg(window.temp);

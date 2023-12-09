@@ -79,7 +79,7 @@ public class Glitch {
                 Mat newImg = MatUtil.copy(window.img);
                 if (window.tool.region.selectRegionItem.isSelected()) {
                     MatUtil.glitchWave(newImg, waveLength, color, MatUtil.
-                            getRect(window.tool.region.selectedRegionLabel));
+                            getRect(window.tool.region.selectedRegionLabel[window.counter]));
                     window.tool.region.removeRegionSelected();
                 } else {
                     MatUtil.glitchWave(newImg, waveLength, color);
@@ -89,7 +89,7 @@ public class Glitch {
 
                 // 当前property的值入栈
                 window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-                window.last.push(window.img);
+                window.last.push(window.zoomImg);
                 window.img = newImg;
                 // 执行完之后再关闭窗口
                 glitchItemDialog.dispose();

@@ -33,11 +33,11 @@ public class Rotate {
 
         rotateItem.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
-                rotateActionPerformed(evt);
+                rotateActionPerformed();
             }
         });
     }
-    public void rotateActionPerformed(java.awt.event.MouseEvent evt) {
+    public void rotateActionPerformed() {
         rotate(window.img);
     }
 
@@ -73,7 +73,7 @@ public class Rotate {
 
         // 当前property的值入栈
         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-        window.last.push(window.img);
+        window.last.push(window.zoomImg);
         window.img = newImg;
 
         // 更新eraser需要的原图

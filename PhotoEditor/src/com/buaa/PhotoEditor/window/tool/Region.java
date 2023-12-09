@@ -2,7 +2,11 @@ package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import com.buaa.PhotoEditor.window.thread.PaintThread;
+import com.buaa.PhotoEditor.window.thread.RegionThread;
 import org.opencv.core.Mat;
+
+import static com.buaa.PhotoEditor.window.Constant.*;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -13,20 +17,20 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 /*
 
-* @Description:drag后重新定位的bug已修改
-* 点击选择区域功能后，光标暂且设置成默认
-* （如果上一个状态是画笔，如果不设置成默认，就一直是画笔了）
-* @author: 张旖霜、卢思文
-* @date: 11/27/2023 3:31 PM
-* @version: 1.0
-*/
+ * @Description:drag后重新定位的bug已修改
+ * 点击选择区域功能后，光标暂且设置成默认
+ * （如果上一个状态是画笔，如果不设置成默认，就一直是画笔了）
+ * @author: 张旖霜、卢思文
+ * @date: 11/27/2023 3:31 PM
+ * @version: 1.0
+ */
 
 public class Region {
-    public int selectedRegionX, selectedRegionY;
-    public Mat copyRegionMat;
-    public JLabel selectedRegionLabel;
+    public RegionThread[] regionThread;
+    public JLabel[] selectedRegionLabel;
     public Window window;
     public JCheckBoxMenuItem selectRegionItem;
+    public int selectedRegionX[], selectedRegionY[];
 
     public Point pointRegion;
 
@@ -34,26 +38,32 @@ public class Region {
 
     public Region(Window window) {
         this.window = window;
-        selectedRegionLabel = new JLabel();
+        selectedRegionX = new int[NUM_FOR_NEW];
+        selectedRegionY = new int[NUM_FOR_NEW];
+        selectedRegionLabel = new JLabel[NUM_FOR_NEW];
+        for (int i = 0; i < NUM_FOR_NEW; i++) {
+            selectedRegionLabel[i] = new JLabel();
+        }
+        regionThread = new RegionThread[NUM_FOR_NEW];
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            regionThread[i] = new RegionThread(window, i);
+        }
         selectRegionItem = new JCheckBoxMenuItem("Region");
-        selectRegionItem.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    window.tool.pen.penItem.setSelected(false);
-                    window.tool.eraser.eraserItem.setSelected(false);
+        selectRegionItem.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                window.tool.pen.penItem.setSelected(false);
+                window.tool.eraser.eraserItem.setSelected(false);
 
-                    window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
-                    window.tool.drag.dragItem.setSelected(false);
+                window.tool.drag.dragItem.setSelected(false);
 
 
-                    if (flag == false) {
-                        regionListener();
-                        flag = true;
-                    }
-
+                if (flag == false) {
+                    regionListener();
+                    flag = true;
                 }
+
             }
         });
     }
@@ -68,90 +78,16 @@ public class Region {
      * @version: 1.0
      */
     public void regionListener() {
-        ImageIcon imgIcon = new ImageIcon(MatUtil.bufferedImg(window.img));
-        window.showImgRegionLabel.setIcon(imgIcon);
-        MouseInputAdapter mia = new MouseInputAdapter() {
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (selectRegionItem.isSelected()) {
-                    addRegion(e.getPoint());
-                }
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                if (selectRegionItem.isSelected()) {
-                    setRegionSize(e.getX(), e.getY());
-                }
-            }
-        };
-
-        window.showImgRegionLabel.addMouseListener(mia);
-        window.showImgRegionLabel.addMouseMotionListener(mia);
-    }
-
-    public void removeRegionSelected() {
-        window.panel.setLayout(null);
-        window.showImgRegionLabel.remove(selectedRegionLabel);
-        window.panel.revalidate();
-        window.panel.repaint();
-        selectRegionItem.setSelected(false);
-    }
-
-    public void copySelectedRegion(ActionEvent evt) {
-
-        selectRegionItem.setSelected(false);
-        // 如果还没有选择区域，弹出对话框
-        if(selectedRegionLabel.getBorder() == null) {
-            // pending 对话框的位置？
-            JOptionPane.showMessageDialog(null,
-                    "Please select region first");
-            return;
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            regionThread[i].start();
         }
-        copyRegionMat = window.img.submat(MatUtil.getRect(selectedRegionLabel));
-
-        // 进入pasting模式
-        window.pasting = true;
+    }
+    public void removeRegionSelected() {
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            regionThread[i].removeRegionSelected();
+        }
     }
 
-
-
-    public void addRegion(Point p) {
-        selectedRegionLabel.setLocation(p);
-        selectedRegionLabel.setSize(1, 1);
-        selectedRegionLabel.setBorder(BorderFactory
-                .createLineBorder(Color.cyan));
-
-
-        window.showImgRegionLabel.setLayout(null);
-        window.showImgRegionLabel.add(selectedRegionLabel);
-//        // 可能过后改bug会用
-//        // 在panel的z轴视角上设置各组件的优先级/遮盖关系：index小的，优先级高
-        window.showImgRegionLabel.setComponentZOrder(selectedRegionLabel, 0);
-//        for (int i = 0; i < window.add.widget.widgetLabelList.size(); i++) {
-//            window.panel.setComponentZOrder(window.add.widget.widgetLabelList.get(i), i + 1);
-//        }
-//        window.panel.setComponentZOrder(window.showImgRegionLabel,
-//                window.add.widget.widgetLabelList.size() + 1);
-//
-        window.showImgRegionLabel.revalidate();
-        window.showImgRegionLabel.repaint();
-
-
-
-        selectedRegionX = selectedRegionLabel.getX();
-        selectedRegionY = selectedRegionLabel.getY();
-    }
-
-    public void setRegionSize(int x, int y) {
-        int width = Math.abs(selectedRegionX - x);
-        int height = Math.abs(selectedRegionY - y);
-        x = Math.min(x, selectedRegionX);
-        y = Math.min(y, selectedRegionY);
-        selectedRegionLabel.setBounds(x, y, width, height);
-        pointRegion = new Point(x+width, y-height);
-    }
 
     public void disableListeners() {
         selectRegionItem.setSelected(false);
