@@ -34,17 +34,18 @@ public class PropertyThread extends Thread {
 
     @Override
     public void run() {
-        saturation.saturationSlider.addChangeListener(evt -> changeSaturation());
-        contrastAndBrightness.brightnessSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                contrastAndBrightness();
-            }
-        });
-        contrastAndBrightness.contrastSlide.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                contrastAndBrightness();
-            }
-        });
+//        saturation.saturationSlider.addChangeListener(evt -> changeSaturation());
+//        contrastAndBrightness.brightnessSlider.addChangeListener(new ChangeListener() {
+//            public void stateChanged(ChangeEvent evt) {
+//                contrastAndBrightness();
+//            }
+//        });
+        
+//        contrastAndBrightness.contrastSlide.addChangeListener(new ChangeListener() {
+//            public void stateChanged(ChangeEvent evt) {
+//                contrastAndBrightness();
+//            }
+//        });
     }
 
     /**

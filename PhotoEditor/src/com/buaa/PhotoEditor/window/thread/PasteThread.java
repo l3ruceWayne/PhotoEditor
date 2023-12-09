@@ -68,7 +68,7 @@ public class PasteThread extends Thread {
                 int tempY = getValueAfterZoom(window, e.getY(), i);
                 if (window.pasting) {
                     if (tempX + window.tool.region.selectedRegionLabel[i].getSize().width > window.showImgRegionLabel.getSize().width
-                                || tempY + window.tool.region.selectedRegionLabel[i].getSize().height > window.showImgRegionLabel.getSize().height) {
+                            || tempY + window.tool.region.selectedRegionLabel[i].getSize().height > window.showImgRegionLabel.getSize().height) {
                         return;
                     }
 

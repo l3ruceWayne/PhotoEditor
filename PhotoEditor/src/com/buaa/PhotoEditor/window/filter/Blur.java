@@ -45,23 +45,41 @@ public class Blur {
 
         blurItemDialog.getContentPane().setLayout(blurDialogLayout);
 
-        Mat newImg = MatUtil.copy(window.img);
-
-        if (window.tool.region.selectRegionItem.isSelected()) {
-
-            MatUtil.blur(newImg, blurLevel, MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
-            window.tool.region.removeRegionSelected();
-
-        } else {
-            MatUtil.blur(newImg, blurLevel);
-        }
-
-        MatUtil.show(newImg, window.showImgRegionLabel);
-
-        // 当前property的值入栈
-        window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-        window.last.push(window.zoomImg);
-        window.img = newImg;
+        // 水平布局
+        blurDialogLayout.setHorizontalGroup(blurDialogLayout
+                .createParallelGroup(GroupLayout.Alignment.CENTER)
+                .addGroup(blurDialogLayout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(blurDialogLayout
+                                .createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(GroupLayout.Alignment.TRAILING,
+                                        blurDialogLayout.createSequentialGroup()
+                                                .addComponent(blurLevelLabel)
+                                                .addPreferredGap(javax.swing
+                                                        .LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(blurLevelTextField,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addGroup(blurDialogLayout.createParallelGroup(javax.swing
+                                        .GroupLayout.Alignment.TRAILING)
+                                .addComponent(blurItemDialogOKButton))
+                        .addContainerGap(29, Short.MAX_VALUE)
+                )
+        );
+        // 设置垂直布局
+        blurDialogLayout.setVerticalGroup(
+                blurDialogLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addGroup(blurDialogLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addGap(18, 18, 18)
+                                .addGroup(blurDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(blurLevelTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(blurItemDialogOKButton)
+                                        .addComponent(blurLevelLabel))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
     }
 }

@@ -19,17 +19,17 @@ import static com.buaa.PhotoEditor.window.Constant.*;
 import static com.buaa.PhotoEditor.window.Constant.AUTO_SIZE_COUNTER;
 
 /**
-* @Description: 撤销上一步操作； 目前对于是撤销操作还是恢复图片上一状态还没有设置明确，后将改进
-* @author 罗雨曦
-* @date 2023/11/27 14:06
-* @version: 1.0
-**/
+ * @Description: 撤销上一步操作； 目前对于是撤销操作还是恢复图片上一状态还没有设置明确，后将改进
+ * @author 罗雨曦
+ * @date 2023/11/27 14:06
+ * @version: 1.0
+ **/
 /*
-* @Description:实现了undo的多线程
-* @author: 张旖霜
-* @date: 12/5/2023 9:36 PM
-* @version: 1.0
-*/
+ * @Description:实现了undo的多线程
+ * @author: 张旖霜
+ * @date: 12/5/2023 9:36 PM
+ * @version: 1.0
+ */
 public class Undo {
     public JMenuItem undoItem;
     private Window window;
@@ -47,7 +47,6 @@ public class Undo {
     public Undo(Window window) {
         this.window = window;
         undoItem = new JMenuItem("Undo");
-
         undoThread = new UndoThread[NUM_FOR_NEW];
 
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
@@ -59,8 +58,6 @@ public class Undo {
             } catch (InterruptedException e)
             {
                 e.printStackTrace();
-
-        
             }
         }
 

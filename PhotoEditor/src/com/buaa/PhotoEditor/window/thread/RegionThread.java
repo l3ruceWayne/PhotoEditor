@@ -87,12 +87,4 @@ public class RegionThread extends Thread{
         window.tool.region.selectedRegionLabel[i].setBounds(x, y, width, height);
 //        window.tool.region.pointRegion = new Point(x+width, y-height);
     }
-    public void removeRegionSelected() {
-        window.panel.setLayout(null);
-        window.tool.region.selectedRegionLabel[i].setBorder(null);
-        window.showImgRegionLabel.remove(window.tool.region.selectedRegionLabel[i]);
-        window.panel.revalidate();
-        window.panel.repaint();
-        window.tool.region.selectRegionItem.setSelected(false);
-    }
 }

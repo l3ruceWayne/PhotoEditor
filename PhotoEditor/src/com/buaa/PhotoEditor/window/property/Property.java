@@ -44,7 +44,7 @@ public class Property {
         propertyMenu = new JMenu("Property");
         propertyMenu.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
-                propertyMouseClicked(evt);
+                propertysMouseClicked(evt);
             }
         });
 
@@ -199,7 +199,7 @@ public class Property {
      * @date: 2023/11/27 14:03
      * @version: 1.0
      **/
-    public void propertyMouseClicked(java.awt.event.MouseEvent evt) {
+    public void propertysMouseClicked(java.awt.event.MouseEvent evt) {
         window.temp = MatUtil.copy(window.img);
         propertyMenuDialog.setModal(true);
         propertyMenuDialog.setVisible(true);

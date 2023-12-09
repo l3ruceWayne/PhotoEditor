@@ -20,17 +20,17 @@ import static com.buaa.PhotoEditor.window.Constant.AUTO_SIZE_COUNTER;
 
 
 /**
-* @Description: 重做上一步操作； 目前对于是重做操作还是恢复图片下一状态还没有设置明确，后将改进
-* @author 罗雨曦
-* @date 2023/11/27 14:05
-* @version: 1.0
-**/
+ * @Description: 重做上一步操作； 目前对于是重做操作还是恢复图片下一状态还没有设置明确，后将改进
+ * @author 罗雨曦
+ * @date 2023/11/27 14:05
+ * @version: 1.0
+ **/
 /*
-* @Description:实现了redo的多线程
-* @author: 张旖霜
-* @date: 12/5/2023 9:37 PM
-* @version: 1.0
-*/
+ * @Description:实现了redo的多线程
+ * @author: 张旖霜
+ * @date: 12/5/2023 9:37 PM
+ * @version: 1.0
+ */
 public class Redo {
     public JMenuItem redoItem;
     private Window window;
@@ -48,7 +48,6 @@ public class Redo {
     public Redo(Window window) {
         this.window = window;
         redoItem = new JMenuItem("Redo");
-
         redoThread = new RedoThread[NUM_FOR_NEW];
 
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
@@ -60,8 +59,6 @@ public class Redo {
             } catch (InterruptedException e)
             {
                 e.printStackTrace();
-
-
             }
         }
 

@@ -12,17 +12,17 @@ import static com.buaa.PhotoEditor.window.Constant.*;
 import static com.buaa.PhotoEditor.window.Constant.AUTO_SIZE_COUNTER;
 
 /**
-* @Description: 剪切图片
-* @author 罗雨曦
-* @date 2023/11/27 14:09
-* @version: 1.0
-**/
+ * @Description: 剪切图片
+ * @author 罗雨曦
+ * @date 2023/11/27 14:09
+ * @version: 1.0
+ **/
 /*
-* @Description:实现剪切图片的多线程执行
-* @author: 张旖霜
-* @date: 12/9/2023 9:46 AM
-* @version: 1.0
-*/
+ * @Description:实现剪切图片的多线程执行
+ * @author: 张旖霜
+ * @date: 12/9/2023 9:46 AM
+ * @version: 1.0
+ */
 public class Cut {
     public JMenuItem cutItem;
     private Window window;
@@ -40,7 +40,6 @@ public class Cut {
     public Cut(Window window) {
         this.window = window;
         cutItem = new JMenuItem("Cut");
-
         cutThread = new CutThread[NUM_FOR_NEW];
 
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
@@ -53,9 +52,6 @@ public class Cut {
             {
                 e.printStackTrace();
             }
-
-
-
         }
 
     }
