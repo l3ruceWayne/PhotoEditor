@@ -531,7 +531,6 @@ public abstract class MatUtil extends JFrame {
     }
 
     public static void blur(Mat mat, int size, Rect region) {
-
         if (size % 3 != 0) {
             size += 3;
         }

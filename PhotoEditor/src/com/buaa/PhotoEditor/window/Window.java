@@ -268,6 +268,7 @@ public class Window extends JFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
 
             if (tool.region.selectRegionItem.isSelected()) {
+                // pending
                 tool.region.removeRegionSelected();
             } else if (add.widget.selectedWidgetLabel != null) {
                 add.widget.removeWidget();

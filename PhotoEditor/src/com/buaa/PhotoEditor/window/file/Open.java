@@ -146,6 +146,9 @@ public class Open {
             window.showImgRegionLabel.setText("");
 
             window.property.updateProperty();
+
+
+
         }
     }
 
