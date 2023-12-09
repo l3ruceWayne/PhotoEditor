@@ -2,8 +2,16 @@ package com.buaa.PhotoEditor.window.property;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import com.buaa.PhotoEditor.window.tool.ZoomIn;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.lang.invoke.ConstantCallSite;
 
 /**
 * @Description: 调节图片对比度与亮度
@@ -33,65 +41,15 @@ public class ContrastAndBrightness {
         brightnessSlider = new JSlider();
         brightnessSlider.setMinimum(1);
         brightnessSlider.setToolTipText("");
-        brightnessSlider.setValue(1);
-        brightnessSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                brightnessSliderStateChanged(evt);
-            }
-        });
-
+        brightnessSlider.setValue(10);
+        brightnessSlider.setMaximum(20);
         contrastLabel = new JLabel("Contrast");
         contrastSlide = new JSlider();
-        contrastSlide.setMinimum(-100);
+        contrastSlide.setMinimum(-10);
         contrastSlide.setToolTipText("");
         contrastSlide.setValue(0);
-        contrastSlide.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                contrastSlideStateChanged(evt);
-            }
-        });
-    }
-    /**
-     * @param evt 触发操作
-     * @return void
-     * @Description:调用执行重设亮度参数的操作
-     * @author: 罗雨曦
-     * @date: 2023/11/27 13:54
-     * @version: 1.0
-     **/
-    private void brightnessSliderStateChanged(javax.swing.event.ChangeEvent evt) {
-        contrastAndBrightness();
+        contrastSlide.setMaximum(10);
     }
 
-    /**
-     * @param evt 触发操作
-     * @return void
-     * @Description:调用执行重设对比度参数的操作
-     * @author: 罗雨曦
-     * @date: 2023/11/27 13:55
-     * @version: 1.0
-     **/
-    private void contrastSlideStateChanged(javax.swing.event.ChangeEvent evt) {
-        contrastAndBrightness();
-    }
 
-    /**
-     * @param
-     * @return void
-     * @Description:重设对比度与亮度参数
-     * @author: 罗雨曦
-     * @date: 2023/11/27 13:55
-     * @version: 1.0
-     **/
-    private void contrastAndBrightness() {
-        window.temp = MatUtil.copy(window.img);
-        //修改亮度和对比度
-        if (window.tool.region.selectRegionItem.isSelected())
-            MatUtil.contrastAndBrightness(window.temp, brightnessSlider.getValue(), -contrastSlide.getValue(),
-                    MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
-        else
-            MatUtil.contrastAndBrightness(window.temp, brightnessSlider.getValue(), -contrastSlide.getValue());
-
-        MatUtil.show(window.temp, window.showImgRegionLabel);
-    }
 }

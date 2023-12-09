@@ -145,10 +145,8 @@ public class Window extends JFrame {
         this.setResizable(false);
 
 
-
 //          conflict
 //         addMouseListeners();
-
 
         setLocationRelativeTo(null);
         // 按下每个按键会弹出一个对应窗口
@@ -171,7 +169,6 @@ public class Window extends JFrame {
 
         // 对应zoomImg
         paintingImg = new Mat[NUM_FOR_NEW];
-        copyRegionImg = new Mat[NUM_FOR_NEW];
 
         copyRegionImg = new Mat[NUM_FOR_NEW];
 
@@ -289,6 +286,7 @@ public class Window extends JFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
 
             if (tool.region.selectRegionItem.isSelected()) {
+                // pending
                 tool.region.removeRegionSelected();
             } else if (add.widget.selectedWidgetLabel != null) {
                 add.widget.removeWidget();
@@ -302,7 +300,6 @@ public class Window extends JFrame {
             MatUtil.show(nexLayerImg, "");
         }
     }
-
 
 
 //     conflict

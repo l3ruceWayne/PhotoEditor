@@ -495,15 +495,14 @@ public abstract class MatUtil extends JFrame {
         }
         return newPropertyValue;
     }
-
     /*
-    * @param imgArray: 当前要使用的img数组
-    * @return 以新的数组返回（其中的元素是imgArray的值）
-    * @Description:为了让栈里保存的是新的数组，而不仅仅是对zoomImg数组的引用
-    * @author: 张旖霜
-    * @date: 12/5/2023 10:53 PM
-    * @version: 1.0
-    */
+     * @param imgArray: 当前要使用的img数组
+     * @return 以新的数组返回（其中的元素是imgArray的值）
+     * @Description:为了让栈里保存的是新的数组，而不仅仅是对zoomImg数组的引用
+     * @author: 张旖霜
+     * @date: 12/5/2023 10:53 PM
+     * @version: 1.0
+     */
     public static Mat[] copyImgArray(Mat[] imgArray)
     {
         Mat[] newImgArray = new Mat[12];
@@ -513,7 +512,6 @@ public abstract class MatUtil extends JFrame {
         }
         return newImgArray;
     }
-
 
     public static Mat copy(Mat img) {
         Mat imgCopy = new Mat();
@@ -549,7 +547,6 @@ public abstract class MatUtil extends JFrame {
     }
 
     public static void blur(Mat mat, int size, Rect region) {
-
         if (size % 3 != 0) {
             size += 3;
         }
@@ -690,6 +687,13 @@ public abstract class MatUtil extends JFrame {
     public static void sepia(Mat img, Rect region) {
         sepia(img.submat(region));
     }
+
+
+//    public static void writeText(Text text, Mat img, Rect region ) {
+//        img = img.submat(region);
+//        Point point = new Point(0, text.getScale()*25);
+//        Imgproc.putText(img, text.getStr(), point, Core.FONT_HERSHEY_SIMPLEX, text.getScale(), text.getColor(),text.getScale());
+//    }
 
 
     /*

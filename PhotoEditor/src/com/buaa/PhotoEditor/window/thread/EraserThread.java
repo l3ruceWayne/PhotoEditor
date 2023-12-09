@@ -1,4 +1,3 @@
-
 package com.buaa.PhotoEditor.window.thread;
 
 import com.buaa.PhotoEditor.util.MatUtil;
@@ -28,11 +27,13 @@ public class EraserThread extends Thread{
         this.i = i;
     }
 
+
     // 一键清除功能
     @Override
     public void run() {
         // 增加计时器，当长按橡皮2000毫秒后，清除全屏
         Timer timer = new Timer(2000, e -> {
+
 
             // 当前property的值入栈，第一层将zoomImg数组入栈（这时仅zoomImg[0]是入栈的，其他的还没更新好）
             if (i == 0) {
@@ -42,6 +43,8 @@ public class EraserThread extends Thread{
                 window.last.push(copyImgArray(window.zoomImg));
                 window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
             }
+
+
 
             window.paintingImg[i] = MatUtil.copy(window.originalZoomImg[i]);
             // 更新“上一个图片”img
@@ -91,6 +94,7 @@ public class EraserThread extends Thread{
                 画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，当松开的时候我们将上一个状态入栈，然后更改img
                  */
                 if (window.tool.eraser.eraserItem.isSelected()) {
+
                     // 当前property的值入栈，第一层将zoomImg数组入栈（这时仅zoomImg[0]是入栈的，其他的还没更新好）
                     if (i == 0) {
                         window.lastPropertyValue
@@ -99,6 +103,7 @@ public class EraserThread extends Thread{
                         window.last.push(copyImgArray(window.zoomImg));
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
+
 
                     if (window.paintingImg[i] != null) {
                         window.zoomImg[i] = copy(window.paintingImg[i]);
@@ -115,6 +120,7 @@ public class EraserThread extends Thread{
         window.showImgRegionLabel.addMouseListener(mia);
         window.showImgRegionLabel.addMouseMotionListener(mia);
     }
+
     /*
      * @param x, y:鼠标位置
      * @return
@@ -123,6 +129,7 @@ public class EraserThread extends Thread{
      * @date: 11/27/2023 3:30 PM
      * @version: 1.0
      */
+
     public void erase(int x, int y) {
         if (window.paintingImg[i] == null) {
             window.paintingImg[i] = copy(window.zoomImg[i]);

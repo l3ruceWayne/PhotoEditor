@@ -1,4 +1,3 @@
-
 package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
@@ -151,6 +150,7 @@ public class Eraser {
     public void eraserListener() {
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             eraserThread[i].start();
+
             // 等待线程完成，让线程可以顺序执行（方便线程中的操作）
             try {
                 eraserThread[i].join();
@@ -160,5 +160,5 @@ public class Eraser {
             }
         }
     }
-}
 
+}

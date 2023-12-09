@@ -27,9 +27,11 @@ import java.awt.event.MouseEvent;
 
 public class Region {
     public RegionThread[] regionThread;
+    public Mat copyRegionMat;
     public JLabel[] selectedRegionLabel;
     public Window window;
     public JCheckBoxMenuItem selectRegionItem;
+    public int removeRegionCounter = 0;
     public int selectedRegionX[], selectedRegionY[];
 
     public Point pointRegion;
@@ -82,10 +84,40 @@ public class Region {
             regionThread[i].start();
         }
     }
-    public void removeRegionSelected() {
-        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-            regionThread[i].removeRegionSelected();
+    public void removeRegionSelected(int i) {
+        window.panel.setLayout(null);
+        window.showImgRegionLabel.remove(selectedRegionLabel[i]);
+        window.panel.revalidate();
+        window.panel.repaint();
+        removeRegionCounter ++;
+        if(removeRegionCounter == NUM_FOR_NEW){
+            removeRegionCounter = 0;
+            selectRegionItem.setSelected(false);
         }
+    }
+
+    public void removeRegionSelected(){
+        window.panel.setLayout(null);
+        window.showImgRegionLabel.remove(selectedRegionLabel[window.counter]);
+        window.panel.revalidate();
+        window.panel.repaint();
+        selectRegionItem.setSelected(false);
+    }
+
+    public void copySelectedRegion(ActionEvent evt) {
+
+        selectRegionItem.setSelected(false);
+        // 如果还没有选择区域，弹出对话框
+        if (selectedRegionLabel[window.counter].getBorder() == null) {
+            // pending 对话框的位置？
+            JOptionPane.showMessageDialog(null,
+                    "Please select region first");
+            return;
+        }
+        copyRegionMat = window.img.submat(MatUtil.getRect(selectedRegionLabel[window.counter]));
+
+        // 进入pasting模式
+        window.pasting = true;
     }
 
 
