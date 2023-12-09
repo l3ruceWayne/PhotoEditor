@@ -23,32 +23,7 @@ public class Gray {
         grayItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
                 InputEvent.CTRL_MASK));
 
-        grayItem.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                grayActionPerformed(evt);
-            }
-        });
+
     }
-    public void grayActionPerformed(ActionEvent evt) {
 
-        Mat newImg = copy(window.zoomImg[window.counter]);
-
-        if (window.tool.region.selectRegionItem.isSelected()) {
-
-            MatUtil.grayScale(newImg,
-                    getRect(window.tool.region
-                            .selectedRegionLabel[window.counter]));
-            window.tool.region.removeRegionSelected();
-
-        } else {
-            MatUtil.grayScale(newImg);
-        }
-
-        MatUtil.show(newImg, window.showImgRegionLabel);
-
-        // 当前property的值入栈
-        window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-        window.last.push(window.zoomImg);
-        window.zoomImg[window.counter] = newImg;
-    }
 }

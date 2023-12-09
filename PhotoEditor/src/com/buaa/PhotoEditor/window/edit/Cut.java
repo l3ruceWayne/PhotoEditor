@@ -40,6 +40,7 @@ public class Cut {
     public Cut(Window window) {
         this.window = window;
         cutItem = new JMenuItem("Cut");
+
         cutThread = new CutThread[NUM_FOR_NEW];
 
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
@@ -52,6 +53,9 @@ public class Cut {
             {
                 e.printStackTrace();
             }
+
+
+
         }
 
     }

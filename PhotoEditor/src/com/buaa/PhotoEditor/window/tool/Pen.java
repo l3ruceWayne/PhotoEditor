@@ -5,8 +5,13 @@ import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.layer.Layer;
 import com.buaa.PhotoEditor.window.thread.PaintThread;
 
+
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
+
+import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
+import static com.buaa.PhotoEditor.util.MatUtil.widget;
+
 import static com.buaa.PhotoEditor.window.Constant.*;
 
 import javax.swing.*;
@@ -178,6 +183,7 @@ public class Pen {
     public void penListener() {
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             paintThread[i].start();
+
             // 等待线程完成，让线程可以顺序执行（方便线程中的操作）
             try {
                 paintThread[i].join();
@@ -185,6 +191,7 @@ public class Pen {
             {
                 e.printStackTrace();
             }
+
         }
     }
 
