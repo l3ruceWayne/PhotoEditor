@@ -1,3 +1,4 @@
+
 package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.util.MatUtil;
@@ -160,3 +161,4 @@ public class Eraser {
         }
     }
 }
+

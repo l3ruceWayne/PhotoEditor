@@ -1,3 +1,4 @@
+
 package com.buaa.PhotoEditor.window.file;
 
 import com.buaa.PhotoEditor.util.MatUtil;
@@ -150,6 +151,11 @@ public class Open {
             window.showImgRegionLabel.setText("");
 
             window.property.updateProperty();
+
+
+
         }
     }
+
 }
+
