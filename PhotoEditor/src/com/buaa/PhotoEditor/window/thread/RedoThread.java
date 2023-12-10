@@ -8,6 +8,7 @@ import org.opencv.core.Rect;
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -49,8 +50,17 @@ public class RedoThread extends Thread {
              **/
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (window.zoomImg == null) {
+                    if(i == window.counter){
+                        JOptionPane.showMessageDialog(null, "Please open an image first");
+                    }
+                    return;
+                }
+                // 取消 drag
+                window.tool.drag.dragItem.setSelected(false);
+                window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 if (!window.next.isEmpty()) {
-                    if (i == window.counter) {
+                    if (i == ORIGINAL_SIZE_COUNTER) {
                         window.last.push(copyImgArray(window.zoomImg));
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
@@ -85,6 +95,7 @@ public class RedoThread extends Thread {
                         Mat img = MatUtil.copy(window.zoomImg[i]);
                         window.next.peek()[i].submat(selectedRegionRect).copyTo(img.submat(selectedRegionRect));
                         window.zoomImg[i] = MatUtil.copy(img);
+                        window.tool.region.removeRegionSelected(i);
                     }
                     if (i == window.counter)
                     {
@@ -94,8 +105,6 @@ public class RedoThread extends Thread {
                         window.showImgRegionLabel.setSize(window.zoomImg[window.counter].width(),
                                 window.zoomImg[window.counter].height());
                         window.panel.setLayout(window.gridBagLayout);
-                        //取消区域选择复选框
-                        window.tool.region.removeRegionSelected();
                     }
 
                 } else {

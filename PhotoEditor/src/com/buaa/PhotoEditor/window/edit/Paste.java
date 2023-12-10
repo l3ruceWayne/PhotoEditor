@@ -29,14 +29,6 @@ public class Paste {
         pasteThread = new PasteThread[NUM_FOR_NEW];
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             pasteThread[i] = new PasteThread(window, i);
-        }
-    }
-    public void disablePasteMode() {
-        window.tool.region.removeRegionSelected();
-        window.copyRegionImg = new Mat[NUM_FOR_NEW];
-    }
-    public void paste() {
-        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             pasteThread[i].start();
             // 等待线程完成
             try {
@@ -45,5 +37,9 @@ public class Paste {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void disablePasteMode() {
+        window.tool.region.removeRegionSelected();
     }
 }

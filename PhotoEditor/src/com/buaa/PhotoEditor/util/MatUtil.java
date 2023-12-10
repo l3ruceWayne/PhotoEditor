@@ -508,7 +508,7 @@ public abstract class MatUtil extends JFrame {
         Mat[] newImgArray = new Mat[12];
         for (int i=0; i<=11; i++)
         {
-            newImgArray[i] = imgArray[i];
+            newImgArray[i] = copy(imgArray[i]);
         }
         return newImgArray;
     }

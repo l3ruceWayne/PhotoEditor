@@ -5,6 +5,7 @@ GitHub: https://github.com/igor036
 package com.buaa.PhotoEditor.window;
 
 import com.buaa.PhotoEditor.util.MatUtil;
+
 import static com.buaa.PhotoEditor.window.Constant.*;
 
 
@@ -23,7 +24,6 @@ import com.buaa.PhotoEditor.window.file.MyFile;
 import com.buaa.PhotoEditor.window.property.Property;
 
 
-
 // add
 import com.buaa.PhotoEditor.window.add.Add;
 // tool
@@ -39,13 +39,14 @@ import org.opencv.core.Mat;
 
 
 /**
-* @Description: menuBar的显示效果不好（各项之间的距离等），需改进
+ * @Description: menuBar的显示效果不好（各项之间的距离等），需改进
  * 后续在关闭窗口的时候检查是否保存，未保存则提醒。相关代码如下
  * setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-* @author: 卢思文
-* @date: 11/26/2023 9:01 PM
-* @version: 1.0
-**/
+ * 通过插入自适应块与分割线改进menuBar布局
+ * @author: 卢思文、罗雨曦
+ * @date: 12/5/2023 3:49 AM
+ * @version: 2.0
+ **/
 public class Window extends JFrame {
     // 掌管尺寸的计数器
     public int counter;
@@ -99,7 +100,6 @@ public class Window extends JFrame {
     public int cnt;
 
 
-
     public JPanel panel;
     // 总菜单栏
     public JMenuBar menuBar;
@@ -111,11 +111,13 @@ public class Window extends JFrame {
     public String title;
     public int imgWidth;
     public int imgHeight;
+    //新增UI菜单
+    public UI ui;
 
 
     public Window(Mat img, String title) {
         this(title);
-        this.title  = title;
+        this.title = title;
         this.img = img;
         cnt = 0;
 
@@ -138,14 +140,14 @@ public class Window extends JFrame {
 
     public Window(String title) {
 
-        this.title  = title;
+        this.title = title;
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         //LYX 设置窗口大小为不可调整
         this.setResizable(false);
 
 
-//          conflict
+//          pending
 //         addMouseListeners();
 
         setLocationRelativeTo(null);
@@ -185,7 +187,7 @@ public class Window extends JFrame {
         tool = new Tool(this);
 
         // 只有一个layer，所以layer赋值之后就不再赋值
-        if(layer == null){
+        if (layer == null) {
             layer = new Layer(this);
         }
 
@@ -199,7 +201,7 @@ public class Window extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-
+        ui = new UI(this);
 
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent evt) {
@@ -230,29 +232,44 @@ public class Window extends JFrame {
 //                                .addComponent(showImgRegionLabel)
 //                                .addContainerGap(306, Short.MAX_VALUE))
 //        );
-
-
+        //LYX 通过插入自适应块与分割线调整menuBar布局，新增UI菜单
+        menuBar.add(Box.createHorizontalGlue());
         menuBar.add(myFile.fileMenu);
+        separateMenu(menuBar);
         menuBar.add(edit.editMenu);
+        separateMenu(menuBar);
         menuBar.add(add.addMenu);
+        separateMenu(menuBar);
         menuBar.add(filter.filterMenu);
         menuBar.add(filter.filterMenu);
+        separateMenu(menuBar);
         menuBar.add(property.propertyMenu);
+        separateMenu(menuBar);
+        menuBar.add(ui.uiMenu);
+        separateMenu(menuBar);
         menuBar.add(layer.layerItem);
+        separateMenu(menuBar);
         menuBar.add(tool.region.selectRegionItem);
+        separateMenu(menuBar);
         menuBar.add(tool.pen.penItem);
         menuBar.add(tool.pen.penColorPanel);
         menuBar.add(tool.pen.penSizeSpinner);
+        separateMenu(menuBar);
         menuBar.add(tool.eraser.eraserItem);
         menuBar.add(tool.eraser.eraserSizeSpinner);
+        separateMenu(menuBar);
         menuBar.add(tool.rotate.rotateItem);
+        separateMenu(menuBar);
         menuBar.add(tool.zoomIn.zoomInItem);
+        separateMenu(menuBar);
         menuBar.add(tool.zoomOut.zoomOutItem);
+        separateMenu(menuBar);
         menuBar.add(tool.drag.dragItem);
+        separateMenu(menuBar);
         menuBar.add(tool.preview.previewItem);
-
-
+        menuBar.add(Box.createHorizontalGlue());
         setJMenuBar(menuBar);
+
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -294,7 +311,10 @@ public class Window extends JFrame {
             // else if 写成if
             if (pasting) {
                 pasting = false;
-                edit.getPaste().disablePasteMode();
+//                edit.getPaste().disablePasteMode();
+                for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+                    this.tool.region.removeRegionSelected(i);
+                }
             }
         } else if (evt.getKeyCode() == KeyEvent.VK_F12) {
             MatUtil.show(nexLayerImg, "");
@@ -302,9 +322,12 @@ public class Window extends JFrame {
     }
 
 
-//     conflict
+//     pending
+//      待转成多线程
+
 
 //     public void addMouseListeners() {
+
 
 //         panel.addMouseListener(new MouseAdapter() {
 //             /**
@@ -322,7 +345,25 @@ public class Window extends JFrame {
 //             }
 
 
+//          pending
+//         panel.addMouseMotionListener(new MouseAdapter() {
+//             /**
+//              * @Description: 粘贴模式下，粘贴框随鼠标一起移动
+//              * @author: 卢思文
+//              * @date: 11/26/2023 9:14 PM
+//              * @version: 1.0
+//              **/
+//             @Override
+//             public void mouseMoved(MouseEvent e) {
+//                 if (pasting) {
+//                     tool.region.selectedRegionLabel[counter].setLocation(e.getPoint());
+//                     tool.region.selectedRegionLabel[counter].repaint();
+//                 }
+//             }
 //         });
+
+//         });
+
 
 //         panel.addMouseMotionListener(new MouseAdapter() {
 //             /**
@@ -342,6 +383,20 @@ public class Window extends JFrame {
 
 
 //     }
+
+
+    /**
+     * @param menuBar 当前菜单栏
+     * @return void
+     * @Description: 因为会多次复用，故将插入自适应块和垂直分隔线进行简单封装
+     * @author: 罗雨曦
+     * @date: 2023/12/5 3:51
+     * @version: 1.0
+     **/
+    public void separateMenu(JMenuBar menuBar) {
+        menuBar.add(Box.createHorizontalGlue());
+        menuBar.add(new JSeparator(SwingConstants.VERTICAL));
+    }
 
 
 }

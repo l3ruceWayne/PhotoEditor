@@ -19,6 +19,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 /*
  * @Description:选择区域后写入文字（特别说明：用户选择区域后才能写字，写文字后不能修改位置）
  * （但是其实不用到选择一个区域，因为是根据选择时点击的第一个位置来定位的，不受选择框限制）
@@ -134,14 +136,21 @@ public class Text {
     }
 
     /*
-     * @param:
-     * @return
-     * @Description:选好位置（框选区域）后，显示字体设置面板
-     * @author: 张旖霜
-     * @date: 11/27/2023 12:51 PM
-     * @version: 1.0
-     */
-    public void writeTextActionPerformed() {
+
+    * @param:
+    * @return
+    * @Description:选好位置（框选区域）后，显示字体设置面板
+    * 增加未选择图片弹窗
+    * @author: 张旖霜,罗雨曦
+    * @date: 12/5/2023 3:28 PM
+    * @version: 2.0
+    */
+    public void writeTextActionPerformed() {//GEN-FIRST:event_writeTextActionPerformed
+        //如果未选择图片，弹窗提示并return
+        if (window.originalImg == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
         if (window.tool.region.selectRegionItem.isSelected()) {
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
                 window.tool.region.removeRegionSelected(i);
@@ -151,14 +160,20 @@ public class Text {
                 for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
                     addTextThread[i] = new AddTextThread(window, this, i);
                     addTextThread[i].start();
+                    try {
+                        addTextThread[i].join();
+                    } catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
             addTextDialog.setModal(true);
             addTextDialog.setVisible(true);
 
-            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-            window.last.push(window.zoomImg);
-            window.img = window.temp;
+//            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+//            window.last.push(window.zoomImg);
+//            window.img = window.temp;
             initPanel();
 
         } else {

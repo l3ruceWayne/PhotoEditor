@@ -12,11 +12,10 @@ import org.opencv.core.Size;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-
 import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.util.MatUtil.resize;
 import static com.buaa.PhotoEditor.window.Constant.*;
-import static com.buaa.PhotoEditor.window.Constant.AUTO_SIZE_COUNTER;
+
 
 /**
  * @Description: 撤销上一步操作； 目前对于是撤销操作还是恢复图片上一状态还没有设置明确，后将改进
@@ -59,8 +58,7 @@ public class Undo {
             {
                 e.printStackTrace();
             }
-        }
 
+        };
     }
-
 }

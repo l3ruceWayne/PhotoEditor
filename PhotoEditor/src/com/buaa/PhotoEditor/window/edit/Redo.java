@@ -7,16 +7,15 @@ import com.buaa.PhotoEditor.window.thread.UndoThread;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Size;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-
 import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.util.MatUtil.resize;
 import static com.buaa.PhotoEditor.window.Constant.*;
-import static com.buaa.PhotoEditor.window.Constant.AUTO_SIZE_COUNTER;
+
+
 
 
 /**
@@ -60,7 +59,8 @@ public class Redo {
             {
                 e.printStackTrace();
             }
-        }
 
+        };
     }
+
 }

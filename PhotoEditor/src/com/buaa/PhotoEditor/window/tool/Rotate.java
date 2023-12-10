@@ -4,6 +4,9 @@ import com.buaa.PhotoEditor.window.Window;
 import static com.buaa.PhotoEditor.window.Constant.*;
 import com.buaa.PhotoEditor.window.thread.RotateThread;
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 /*
 * @Description:图片旋转功能（顺时针旋转90°），后期可能可以添加图片翻转功能（镜面）
 * @author: 卢思文，张旖霜
@@ -18,10 +21,18 @@ public class Rotate {
     public Rotate(Window window) {
         this.window = window;
         rotateItem = new JMenu("Rotate");
+
         rotateThread = new RotateThread[NUM_FOR_NEW];
         for(int i = 0;i<=ORIGINAL_SIZE_COUNTER;i++){
             rotateThread[i] = new RotateThread(window, rotateItem, i);
             rotateThread[i].start();
+            // 等待线程完成，让线程可以顺序执行（方便线程中的操作）
+            try{
+                rotateThread[i].join();
+            }catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }

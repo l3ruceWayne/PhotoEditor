@@ -50,6 +50,14 @@ public class ZoomIn {
      * @version: 1.0
      **/
     public void zoomIn() {
+        // 如果未选择图片，弹窗提示并return
+        if (window.originalImg == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
+        // 取消 drag
+        window.tool.drag.dragItem.setSelected(false);
+        window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         // 不能再放大了，return，后期加弹窗
         if (window.counter == MAX_SIZE_COUNTER) {
             return;

@@ -1,6 +1,7 @@
 package com.buaa.PhotoEditor.window.filter;
 
 import static com.buaa.PhotoEditor.util.MatUtil.*;
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
@@ -22,7 +23,6 @@ public class Gray {
 
         grayItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
                 InputEvent.CTRL_MASK));
-
 
     }
 

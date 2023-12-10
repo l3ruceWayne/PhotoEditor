@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 public class Animize {
     public JMenuItem animizeItem;
     public Window window;
@@ -16,7 +18,5 @@ public class Animize {
         this.window = window;
         animizeItem = new JMenuItem("Animize");
         animizeItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
-
     }
-
 }

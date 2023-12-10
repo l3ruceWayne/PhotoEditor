@@ -11,9 +11,11 @@ import static com.buaa.PhotoEditor.util.MatUtil.*;
 import static com.buaa.PhotoEditor.window.Constant.*;
 import static com.buaa.PhotoEditor.window.Constant.AUTO_SIZE_COUNTER;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 /**
- * @Description: 剪切图片
  * @author 罗雨曦
+ * @Description: 剪切图片
  * @date 2023/11/27 14:09
  * @version: 1.0
  **/
@@ -41,17 +43,16 @@ public class Cut {
         this.window = window;
         cutItem = new JMenuItem("Cut");
         cutThread = new CutThread[NUM_FOR_NEW];
-
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             cutThread[i] = new CutThread(window, i, cutItem); // 创建线程
             cutThread[i].start(); // 执行线程
-            // 等待线程完成，让线程可以顺序执行（方便线程中的操作）
+//             等待线程完成，让线程可以顺序执行（方便线程中的操作）
             try {
                 cutThread[i].join(); // 等待上一个线程执行完毕才开始下一个线程
-            }catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
 
     }

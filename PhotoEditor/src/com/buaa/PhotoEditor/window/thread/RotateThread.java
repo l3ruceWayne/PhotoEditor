@@ -1,5 +1,6 @@
 package com.buaa.PhotoEditor.window.thread;
 
+import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.Mat;
 
@@ -7,7 +8,9 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.util.MatUtil.show;
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 import static org.opencv.core.Core.flip;
 import static org.opencv.core.Core.transpose;
 
@@ -41,6 +44,19 @@ public class RotateThread extends Thread {
     }
 
     private void rotate() {
+        if (window.zoomImg == null) {
+            if(i == window.counter){
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+            }
+            return;
+        }
+        if (i == 0) {
+            // 当前property的值入栈
+            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+            // 将当前的window.img压入window.last中，保存上一张图片
+            window.last.push(copyImgArray(window.zoomImg));
+            window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
+        }
         /*
             transpose是矩阵转置，window.zoomImg[i]是Mat的实例化对象，而Mat是用
             矩阵来存储图像信息的，所以对该矩阵转置就是对图像进行旋转。
@@ -87,14 +103,6 @@ public class RotateThread extends Thread {
         } else {
             window.panel.setLayout(window.gridBagLayout);
         }
-
-
-        // 当前property的值入栈
-//        window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-//        window.last.push(window.img);
-//        window.img = newImg;
-//
-//
 
     }
 }

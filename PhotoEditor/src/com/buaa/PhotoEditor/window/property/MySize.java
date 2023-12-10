@@ -57,7 +57,6 @@ public class MySize {
 
             window.last.push(window.zoomImg);
 
-            window.img = window.temp = newImg;
             MatUtil.show(window.temp, window.showImgRegionLabel);
             window.property.updateProperty();
         } catch (Exception ex) {

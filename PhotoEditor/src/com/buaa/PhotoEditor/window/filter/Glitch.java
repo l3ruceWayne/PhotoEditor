@@ -5,6 +5,8 @@ import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 public class Glitch {
     public int waveLength;
     public ButtonGroup colors;
@@ -24,6 +26,10 @@ public class Glitch {
         glitchItem = new JMenuItem("Glitch");
 
         glitchItem.addActionListener(evt -> {
+            if (window.zoomImg == null) {
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                return;
+            }
             glitchItemDialog.setModal(true);
             glitchItemDialog.setVisible(true);
         });
@@ -52,7 +58,6 @@ public class Glitch {
         setLayout();
 
     }
-
 
     private void setLayout() {
         GroupLayout glitchDialogLayout = new GroupLayout(

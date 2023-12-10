@@ -6,8 +6,10 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
 import static com.buaa.PhotoEditor.util.MatUtil.*;
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -48,8 +50,17 @@ public class UndoThread extends Thread {
              **/
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!window.last.isEmpty()) {
+                if (window.zoomImg == null) {
                     if (i == window.counter) {
+                        JOptionPane.showMessageDialog(null, "Please open an image first");
+                    }
+                    return;
+                }
+                // 取消 drag
+                window.tool.drag.dragItem.setSelected(false);
+                window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                if (!window.last.isEmpty()) {
+                    if (i == ORIGINAL_SIZE_COUNTER) {
                         window.next.push(copyImgArray(window.zoomImg));
                         window.nextOriginalImg.push(copyImgArray(window.originalZoomImg));
                         window.nextPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
@@ -84,23 +95,21 @@ public class UndoThread extends Thread {
                         Mat img = MatUtil.copy(window.zoomImg[i]);
                         window.last.peek()[i].submat(selectedRegionRect).copyTo(img.submat(selectedRegionRect));
                         window.zoomImg[i] = MatUtil.copy(img);
+                        window.tool.region.removeRegionSelected(i);
                     }
-                    if (i == window.counter)
-                    {
+                    if (i == window.counter) {
                         window.property.updateProperty();
                         // 显示当前大小的图片
-                        MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
+                        window.panel.setLayout(null);
                         window.showImgRegionLabel.setSize(window.zoomImg[window.counter].width(),
                                 window.zoomImg[window.counter].height());
+                        MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
                         window.panel.setLayout(window.gridBagLayout);
-                        //取消区域选择复选框
-                        window.tool.region.removeRegionSelected();
                     }
 
                 } else {
                     //个人认为需要保留弹窗，后期可删
-                    if (i == window.counter)
-                    {
+                    if (i == window.counter) {
                         JOptionPane.showMessageDialog(null, "There's nothing left to undo!");
                     }
                 }

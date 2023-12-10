@@ -52,6 +52,13 @@ public class Filter {
                     glitch,
                     i);
             filterThread[i].start();
+            // 等待线程完成，让线程可以顺序执行（方便线程中的操作）
+            try{
+                filterThread[i].join();
+            }catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }

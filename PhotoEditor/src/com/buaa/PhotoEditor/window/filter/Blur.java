@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 public class Blur {
     public JMenuItem blurItem;
     public Window window;
@@ -20,6 +22,10 @@ public class Blur {
         blurItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
                 InputEvent.CTRL_MASK));
         blurItem.addActionListener(evt -> {
+            if (window.zoomImg == null) {
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                return;
+            }
             blurItemDialog.setModal(true);
             blurItemDialog.setVisible(true);
         });
@@ -29,16 +35,16 @@ public class Blur {
         blurItemDialog.setSize(270, 150);
         blurItemDialog.setLocationRelativeTo(null);
         blurItemDialog.setResizable(false);
-        
+
         blurLevelLabel = new JLabel("Blur Level:");
         blurLevelTextField = new JTextField();
-        
+
         blurItemDialogOKButton = new JButton("OK");
-        
+
         setLayout();
-        
+
     }
-    
+
     public void setLayout(){
         GroupLayout blurDialogLayout = new GroupLayout(
                 blurItemDialog.getContentPane());

@@ -13,17 +13,19 @@ import java.awt.event.ActionListener;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 import static com.buaa.PhotoEditor.window.Constant.AUTO_SIZE_COUNTER;
+
 /*
-* @Description:实现了cut的多线程
-* @author: 张旖霜
-* @date: 12/9/2023 10:21 AM
-* @version: 1.0
-*/
-public class CutThread extends Thread{
+ * @Description:实现了cut的多线程
+ * @author: 张旖霜
+ * @date: 12/9/2023 10:21 AM
+ * @version: 1.0
+ */
+public class CutThread extends Thread {
     public Window window;
     public int i;
     public JMenuItem cutItem;
-    public CutThread(Window window, int i, JMenuItem cutItem){
+
+    public CutThread(Window window, int i, JMenuItem cutItem) {
         this.window = window;
         this.i = i;
         this.cutItem = cutItem;
@@ -43,7 +45,12 @@ public class CutThread extends Thread{
              * @version: 1.0
              **/
             public void actionPerformed(ActionEvent evt) {
-
+                if (window.zoomImg == null) {
+                    if(i == window.counter){
+                        JOptionPane.showMessageDialog(null, "Please open an image first");
+                    }
+                    return;
+                }
                 if (i == window.counter) {
                     window.tool.region.selectRegionItem.setSelected(false);
                 }
@@ -54,8 +61,7 @@ public class CutThread extends Thread{
                                 "Please select region first");
                     }
                 } else {
-                    if (i == ORIGINAL_SIZE_COUNTER)
-                    {
+                    if (i == ORIGINAL_SIZE_COUNTER) {
                         // 当前property的值入栈
                         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                         // 将当前的window.img压入window.last中，保存上一张图片
@@ -69,7 +75,8 @@ public class CutThread extends Thread{
                     window.size[i][0] = window.zoomImg[i].width();
                     window.size[i][1] = window.zoomImg[i].height();
 
-                    if(i == window.counter) {
+                    if (i == window.counter) {
+                        window.panel.setLayout(null);
                         // 显示图片
                         MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
                         window.showImgRegionLabel.setSize(window.zoomImg[window.counter].width(),
@@ -78,7 +85,8 @@ public class CutThread extends Thread{
                     }
 
                     // remove region
-                    window.panel.setLayout(null);
+                    // lsw 注释了下面这一行代码后解决cut后图片不居中的问题
+//                    window.panel.setLayout(null);
                     window.tool.region.selectedRegionLabel[i].setBorder(null);
                     window.showImgRegionLabel.remove(window.tool.region.selectedRegionLabel[i]);
                     window.panel.revalidate();

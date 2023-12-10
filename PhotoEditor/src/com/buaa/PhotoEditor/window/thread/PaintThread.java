@@ -1,5 +1,6 @@
 package com.buaa.PhotoEditor.window.thread;
 
+import com.buaa.PhotoEditor.Main;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import static com.buaa.PhotoEditor.util.MatUtil.*;
@@ -63,7 +64,7 @@ public class PaintThread extends Thread{
                  */
                 if (window.tool.pen.penItem.isSelected()) {
 
-                    // 当前property的值入栈，第一层将zoomImg数组入栈（这时仅zoomImg[0]是入栈的，其他的还没更新好）
+                    // 在第一个线程入栈
                     if (i == 0) {
                         window.lastPropertyValue
                                 .push(copyPropertyValue(window
@@ -71,11 +72,6 @@ public class PaintThread extends Thread{
                         window.last.push(copyImgArray(window.zoomImg));
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
-                    // 这时其他的值更新好了，就入栈（修改栈顶的值）
-//                    else
-//                    {
-//                        window.last.peek()[i] = copy(window.zoomImg[i]);
-//                    }
 
 
                     if (window.paintingImg[i] != null) {
@@ -99,7 +95,7 @@ public class PaintThread extends Thread{
      * 解决了“快速移动导致笔迹断续”的问题，思想：在离散的点之间插值
      * newX和newY是drag后的重新定位
      * @author: 张旖霜、卢思文
-     * @date: 11/27/2023 3:30 PM
+     * @date: 12/5/2023 3:42 AM
      * @version: 1.0
      */
         /*  lsw
