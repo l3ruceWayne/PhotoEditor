@@ -68,13 +68,14 @@ public class UndoThread extends Thread {
 
                     if (!window.tool.region.selectRegionItem.isSelected()) {
                         // 将栈顶的上一步每个大小的图片复制到当前图片zoomImg中（undo操作）
-                        window.zoomImg[i] = copy(window.last.peek()[i]);
+//                        window.zoomImg[i] = copy(window.last.peek()[i]);
                         // 将栈顶的上一步每个大小的原图复制到当前大小的原图OriginalImg中（undo操作）
-                        window.originalZoomImg[i] = copy(window.lastOriginalImg.peek()[i]);
-                        // 在线程执行最后一步时，出栈
-                        if (i == 0) {
-                            window.last.pop();
-                            window.lastOriginalImg.pop();
+//                        window.originalZoomImg[i] = copy(window.lastOriginalImg.peek()[i]);
+                        if (i == ORIGINAL_SIZE_COUNTER)
+                        {
+                            window.zoomImg = copyImgArray(window.last.peek());
+                            window.originalZoomImg = copyImgArray(window.lastOriginalImg.peek());
+
                             // 当前property的值入栈
                             window.currentPropertyValue = MatUtil.copyPropertyValue(window.lastPropertyValue.pop());
 
@@ -85,6 +86,11 @@ public class UndoThread extends Thread {
                             window.property.getGraininess().grainBar.setValue(window.currentPropertyValue[3]);
                             window.property.getMySize().txtWidth.setText(window.currentPropertyValue[4] + "");
                             window.property.getMySize().txtHeight.setText(window.currentPropertyValue[5] + "");
+                        }
+                        // 在线程执行最后一步时，出栈
+                        if (i == 0) {
+                            window.last.pop();
+                            window.lastOriginalImg.pop();
                         }
                         // 当前大小恢复成undo后的图片大小（因为cut会改变图片大小）
                         window.size[i][0] = window.zoomImg[i].width();

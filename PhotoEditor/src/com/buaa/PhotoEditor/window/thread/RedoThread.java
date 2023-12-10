@@ -67,16 +67,12 @@ public class RedoThread extends Thread {
                     }
 
                     if (!window.tool.region.selectRegionItem.isSelected()) {
-                        // 将栈顶的每个大小的图片复制到当前图片zoomImg中（redo操作）
-                        window.zoomImg[i] = copy(window.next.peek()[i]);
-                        // 将栈顶的上一步每个大小的原图复制到当前大小的原图OriginalImg中（undo操作）
-                        window.originalZoomImg[i] = copy(window.nextOriginalImg.peek()[i]);
-                        // 在线程执行最后一步时，出栈
-                        if (i == 0) {
-                            window.next.pop();
-                            window.nextOriginalImg.pop();
-                            // 当前property的值入栈
-                            window.currentPropertyValue = MatUtil.copyPropertyValue(window.nextPropertyValue.pop());
+                        if (i == ORIGINAL_SIZE_COUNTER){
+                            // 将栈顶的每个大小的图片复制到当前图片zoomImg中（redo操作）
+                            window.zoomImg = copyImgArray(window.next.peek());
+                            // 将栈顶的上一步每个大小的原图复制到当前大小的原图OriginalImg中（undo操作）
+                            window.originalZoomImg = copyImgArray(window.nextOriginalImg.peek());
+                            window.currentPropertyValue = MatUtil.copyPropertyValue(window.nextPropertyValue.peek());
 
                             // 还原property的值
                             window.property.getContrastAndBrightness().contrastSlide.setValue(window.currentPropertyValue[0]);
@@ -85,6 +81,13 @@ public class RedoThread extends Thread {
                             window.property.getGraininess().grainBar.setValue(window.currentPropertyValue[3]);
                             window.property.getMySize().txtWidth.setText(window.currentPropertyValue[4] + "");
                             window.property.getMySize().txtHeight.setText(window.currentPropertyValue[5] + "");
+                        }
+
+                        // 在线程执行最后一步时，出栈
+                        if (i == 0) {
+                            window.next.pop();
+                            window.nextOriginalImg.pop();
+                            window.nextPropertyValue.pop();
                         }
                         // 当前大小恢复成redo后的图片大小（因为cut会改变图片大小）
                         window.size[i][0] = window.zoomImg[i].width();

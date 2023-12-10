@@ -159,9 +159,11 @@ public class Open {
             window.nextPropertyValue.clear();
             window.showImgRegionLabel.setText("");
 
+            // 将当前的property的初始值暂存起来
+            window.currentPropertyValue[4] = originalWidth;
+            window.currentPropertyValue[5] = originalHeight;
+
             window.property.updateProperty();
-
-
 
         }
     }
