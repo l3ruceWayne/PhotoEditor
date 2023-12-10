@@ -94,7 +94,7 @@ public class Save {
      */
 
     private void saveImg(ActionEvent e) {
-        if (window.originalImg == null) {
+        if (window.zoomImg == null) {
             JOptionPane.showMessageDialog(null,
                     "Please open an image and edit it first");
             return;
@@ -136,7 +136,7 @@ public class Save {
      * @version: 2.0
      **/
     private void saveAsNewImg(ActionEvent e) {
-        if (window.originalImg == null) {
+        if (window.zoomImg == null) {
             JOptionPane.showMessageDialog(null,
                     "Please open an image and edit it first");
             return;

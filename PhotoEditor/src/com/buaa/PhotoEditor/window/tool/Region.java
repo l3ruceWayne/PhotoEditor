@@ -27,7 +27,7 @@ import java.awt.event.MouseEvent;
 
 public class Region {
     public RegionThread[] regionThread;
-    public Mat copyRegionMat;
+    public Mat[] copyRegionMat;
     public JLabel[] selectedRegionLabel;
     public Window window;
     public JCheckBoxMenuItem selectRegionItem;
@@ -110,22 +110,6 @@ public class Region {
         window.panel.revalidate();
         window.panel.repaint();
         selectRegionItem.setSelected(false);
-    }
-
-    public void copySelectedRegion(ActionEvent evt) {
-
-        selectRegionItem.setSelected(false);
-        // 如果还没有选择区域，弹出对话框
-        if (selectedRegionLabel[window.counter].getBorder() == null) {
-            // pending 对话框的位置？
-            JOptionPane.showMessageDialog(null,
-                    "Please select region first");
-            return;
-        }
-        copyRegionMat = window.img.submat(MatUtil.getRect(selectedRegionLabel[window.counter]));
-
-        // 进入pasting模式
-        window.pasting = true;
     }
 
 

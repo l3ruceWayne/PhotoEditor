@@ -10,6 +10,7 @@ import static com.buaa.PhotoEditor.util.MatUtil.*;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
@@ -17,7 +18,8 @@ import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
 public class PasteThread extends Thread {
     public Window window;
     public int i;
-    public PasteThread(Window window, int i){
+
+    public PasteThread(Window window, int i) {
         this.window = window;
         this.i = i;
     }
@@ -33,14 +35,20 @@ public class PasteThread extends Thread {
              * @version: 1.0
              **/
             public void mouseClicked(MouseEvent e) {
-                int tempX = getValueAfterZoom(window, e.getX(), i);
-                int tempY = getValueAfterZoom(window, e.getY(), i);
-                if (tempX + window.tool.region.selectedRegionLabel[i].getSize().width > window.showImgRegionLabel.getSize().width
-                        || tempY + window.tool.region.selectedRegionLabel[i].getSize().height > window.showImgRegionLabel.getSize().height) {
+                if (window.zoomImg == null) {
                     return;
                 }
+                int tempX = getValueAfterZoom(window, e.getX(), i);
+                int tempY = getValueAfterZoom(window, e.getY(), i);
 
+                if (tempX + window.tool.region.selectedRegionLabel[i].getSize().width
+                        > getValueAfterZoom(window, window.showImgRegionLabel.getSize().width, i)
+                        || tempY + window.tool.region.selectedRegionLabel[i].getSize().height
+                        > getValueAfterZoom(window, window.showImgRegionLabel.getSize().height, i)) {
+                    return;
+                }
                 if (window.pasting) {
+
                     // 当前property的值入栈，第一层将zoomImg数组入栈（这时仅zoomImg[0]是入栈的，其他的还没更新好）
                     if (i == 0) {
                         window.lastPropertyValue
@@ -50,10 +58,10 @@ public class PasteThread extends Thread {
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
                     Mat img = MatUtil.copy(window.zoomImg[i]);
+                    window.tool.region.selectedRegionLabel[i].setLocation(tempX,tempY);
                     MatUtil.copyToRegion(img,
                             window.copyRegionImg[i],
                             MatUtil.getRect(window.tool.region.selectedRegionLabel[i]));
-
                     window.zoomImg[i] = MatUtil.copy(img);
 
                     if (i == window.counter) {
@@ -64,23 +72,21 @@ public class PasteThread extends Thread {
 
             @Override
             public void mouseMoved(MouseEvent e) {
+                if (window.zoomImg == null) {
+                    return;
+                }
                 int tempX = getValueAfterZoom(window, e.getX(), i);
                 int tempY = getValueAfterZoom(window, e.getY(), i);
                 if (window.pasting) {
-                    if (tempX + window.tool.region.selectedRegionLabel[i].getSize().width > window.showImgRegionLabel.getSize().width
-                            || tempY + window.tool.region.selectedRegionLabel[i].getSize().height > window.showImgRegionLabel.getSize().height) {
-                        return;
-                    }
-
                     window.tool.region.selectedRegionLabel[i].setLocation(tempX, tempY);
                     window.tool.region.selectedRegionLabel[i].repaint();
                     window.tool.region.selectedRegionLabel[i].setVisible(false);
-                    if (i == window.counter)
-                    {
+                    if (i == window.counter) {
                         window.tool.region.selectedRegionLabel[i].setVisible(true);
                     }
                 }
             }
+
         };
 
         window.showImgRegionLabel.addMouseListener(mia);
