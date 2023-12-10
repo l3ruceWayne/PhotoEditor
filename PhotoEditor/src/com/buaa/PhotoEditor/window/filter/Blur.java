@@ -22,38 +22,29 @@ public class Blur {
         blurItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
                 InputEvent.CTRL_MASK));
         blurItem.addActionListener(evt -> {
+            if (window.zoomImg == null) {
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                return;
+            }
             blurItemDialog.setModal(true);
             blurItemDialog.setVisible(true);
         });
-// conflict
-//     }
-//     public void blurActionPerformed(ActionEvent evt) {
-//         // 如果未选择图片，弹窗提示并return
-//         if (window.originalImg == null) {
-//             JOptionPane.showMessageDialog(null, "Please open an image first");
-//             return;
-//         }
-
-//         int blurLevel = Integer.parseInt(JOptionPane.showInputDialog(null, "Nível de desfoque", JOptionPane.WARNING_MESSAGE));
-
-//         Mat newImg = MatUtil.copy(window.img);
-
 
         blurItemDialog = new JDialog();
         blurItemDialog.setTitle("Blur");
         blurItemDialog.setSize(270, 150);
         blurItemDialog.setLocationRelativeTo(null);
         blurItemDialog.setResizable(false);
-        
+
         blurLevelLabel = new JLabel("Blur Level:");
         blurLevelTextField = new JTextField();
-        
+
         blurItemDialogOKButton = new JButton("OK");
-        
+
         setLayout();
-        
+
     }
-    
+
     public void setLayout(){
         GroupLayout blurDialogLayout = new GroupLayout(
                 blurItemDialog.getContentPane());

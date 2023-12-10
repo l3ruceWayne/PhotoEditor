@@ -44,7 +44,7 @@ public class Cut {
         cutItem = new JMenuItem("Cut");
         cutThread = new CutThread[NUM_FOR_NEW];
 
-// conflict
+        // pending
 //     /**
 //      * @param evt 触发操作
 //      * @return void

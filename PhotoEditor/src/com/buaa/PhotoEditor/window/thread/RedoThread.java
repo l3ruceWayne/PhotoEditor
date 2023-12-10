@@ -49,6 +49,12 @@ public class RedoThread extends Thread {
              **/
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (window.zoomImg == null) {
+                    if(i == window.counter){
+                        JOptionPane.showMessageDialog(null, "Please open an image first");
+                    }
+                    return;
+                }
                 if (!window.next.isEmpty()) {
                     if (i == window.counter) {
                         window.last.push(copyImgArray(window.zoomImg));

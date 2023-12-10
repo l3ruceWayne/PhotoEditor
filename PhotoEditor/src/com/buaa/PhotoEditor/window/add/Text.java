@@ -145,7 +145,7 @@ public class Text {
     * @date: 12/5/2023 3:28 PM
     * @version: 2.0
     */
-    public void writeTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeTextActionPerformed
+    public void writeTextActionPerformed() {//GEN-FIRST:event_writeTextActionPerformed
         //如果未选择图片，弹窗提示并return
         if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
