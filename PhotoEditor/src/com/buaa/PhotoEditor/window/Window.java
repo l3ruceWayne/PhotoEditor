@@ -253,6 +253,7 @@ public class Window extends JFrame {
         separateMenu(menuBar);
         menuBar.add(tool.pen.penItem);
         menuBar.add(tool.pen.penColorPanel);
+        menuBar.add(Box.createHorizontalGlue());
         menuBar.add(tool.pen.penSizeSpinner);
         separateMenu(menuBar);
         menuBar.add(tool.eraser.eraserItem);
