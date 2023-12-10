@@ -2,6 +2,9 @@ package com.buaa.PhotoEditor.window.property;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import static com.buaa.PhotoEditor.window.Constant.*;
+
+import com.buaa.PhotoEditor.window.tool.ZoomIn;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import javax.swing.*;
@@ -49,17 +52,16 @@ public class MySize {
             double newWidth = Double.parseDouble(window.property.getMySize().txtWidth.getText());
             double newHeight = Double.parseDouble(window.property.getMySize().txtHeight.getText());
 
-            Mat newImg = MatUtil.copy(window.temp);
-            MatUtil.resize(newImg, new Size(newWidth, newHeight));
+            MatUtil.resize(window.zoomImg[ORIGINAL_SIZE_COUNTER], new Size(newWidth, newHeight));
+            MatUtil.resize(window.originalZoomImg[ORIGINAL_SIZE_COUNTER], new Size(newWidth, newHeight));
 
+//            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+//
+//            window.last.push(window.zoomImg);
 
-            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+//            window.property.updateProperty();
+            JOptionPane.showMessageDialog(null, "Success");
 
-            window.last.push(window.zoomImg);
-
-            window.img = window.temp = newImg;
-            MatUtil.show(window.temp, window.showImgRegionLabel);
-            window.property.updateProperty();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Please prefill the data correctly!");
         }
