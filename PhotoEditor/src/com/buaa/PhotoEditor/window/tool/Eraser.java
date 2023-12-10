@@ -58,6 +58,13 @@ public class Eraser {
         }
         clearScreen = false;
         eraserItem = new JCheckBoxMenuItem(eraserItemIcon);
+        // 如果未选择图片，弹窗提示并return
+        eraserItem.addActionListener(e -> {
+            if (window.originalImg == null) {
+                eraserItem.setSelected(false);
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+            }
+        });
 
         eraserItem.addItemListener(new ItemListener() {
             /**
@@ -102,6 +109,15 @@ public class Eraser {
         eraserSizeSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
+                //LYX 如果未选择图片，弹窗提示并使数值不可编辑
+                if (window.originalImg == null) {
+                    //LYX 设置编辑框为不可编辑，但暂未找到使增加减小按钮失效的方法
+                    JComponent editor = eraserSizeSpinner.getEditor();
+                    JFormattedTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
+                    textField.setEditable(false);
+                    JOptionPane.showMessageDialog(null, "Please open an image first");
+                    return;
+                }
                 int size = (int) window.tool.eraser.eraserSizeSpinner.getValue();
                 int offset = size - window.tool.eraser.eraserSize[window.counter];
                 for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {

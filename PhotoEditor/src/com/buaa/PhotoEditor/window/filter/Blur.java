@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
+
 public class Blur {
     public JMenuItem blurItem;
     public Window window;
@@ -23,6 +25,19 @@ public class Blur {
             blurItemDialog.setModal(true);
             blurItemDialog.setVisible(true);
         });
+// conflict
+//     }
+//     public void blurActionPerformed(ActionEvent evt) {
+//         // 如果未选择图片，弹窗提示并return
+//         if (window.originalImg == null) {
+//             JOptionPane.showMessageDialog(null, "Please open an image first");
+//             return;
+//         }
+
+//         int blurLevel = Integer.parseInt(JOptionPane.showInputDialog(null, "Nível de desfoque", JOptionPane.WARNING_MESSAGE));
+
+//         Mat newImg = MatUtil.copy(window.img);
+
 
         blurItemDialog = new JDialog();
         blurItemDialog.setTitle("Blur");

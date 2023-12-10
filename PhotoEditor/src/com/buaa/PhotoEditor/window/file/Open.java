@@ -14,6 +14,7 @@ import org.opencv.core.Size;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.file.Path;
 
 
 /*
@@ -64,6 +65,14 @@ public class Open {
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(this.window)
                 == JFileChooser.APPROVE_OPTION) {
+            //LYX 判断是否为JPG图片
+            Path selectPath= fileChooser.getSelectedFile().toPath();
+            boolean checkFormat=checkImageFormat(selectPath);
+            if(!checkFormat){
+                JOptionPane.showMessageDialog(null,
+                        "Please select a JPG/JPEG format image");
+                return;
+            }
             window.originalImgPath = fileChooser.getSelectedFile().getAbsolutePath();
             window.img = MatUtil.readImg(window.originalImgPath);
             window.nexLayerImg = MatUtil.copy(window.img);
@@ -86,14 +95,14 @@ public class Open {
             window.originalZoomImg[ORIGINAL_SIZE_COUNTER] = MatUtil.copy(window.originalImg);
             // 找到自适应缩放的最佳尺寸
             int autoWidth, autoHeight;
-            if(originalHeight * (((double)window.panel.getWidth()) / (double)
-                    originalWidth) > window.panel.getHeight()){
+            if (originalHeight * (((double) window.panel.getWidth()) / (double)
+                    originalWidth) > window.panel.getHeight()) {
                 autoHeight = window.panel.getHeight();
-                autoWidth = (int) (originalWidth * (((double)window.panel.getHeight()) / (double)
+                autoWidth = (int) (originalWidth * (((double) window.panel.getHeight()) / (double)
                         originalHeight));
-            }else{
+            } else {
                 autoWidth = window.panel.getWidth();
-                autoHeight =(int) (originalHeight * (((double)window.panel.getWidth()) / (double)
+                autoHeight = (int) (originalHeight * (((double) window.panel.getWidth()) / (double)
                         originalWidth));
             }
             window.size[AUTO_SIZE_COUNTER] = new int[2];
@@ -155,5 +164,16 @@ public class Open {
 
         }
     }
-
+    /**
+     * @param imagePath 选择文件的路径
+     * @return boolean 是否为可处理图片
+     * @Description: 若是JPEG或JPG图片，返回true，代表可处理；反之返回false，代表不可处理
+     * @author: 罗雨曦
+     * @date: 2023/12/4 21:26
+     * @version: 1.0
+     **/
+    public static boolean checkImageFormat(Path imagePath) {
+        String fileName = imagePath.getFileName().toString();
+        return fileName.endsWith(".jpg") || fileName.endsWith(".jpeg");
+    }
 }

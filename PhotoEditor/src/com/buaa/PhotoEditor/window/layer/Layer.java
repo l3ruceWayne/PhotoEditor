@@ -45,6 +45,12 @@ public class Layer {
     }
 
     public void layerActionPerformed(ActionEvent evt){
+        if (window.originalImg == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            layerFrame.setVisible(false);
+            layerItem.setSelected(false);
+            return;
+        }
         layerFrame.setLayersList(layerList);
         layerFrame.setVisible(true);
     }
