@@ -31,6 +31,7 @@ public class Region {
     public JLabel[] selectedRegionLabel;
     public Window window;
     public JCheckBoxMenuItem selectRegionItem;
+    public int removeRegionCounter = 0;
     public int selectedRegionX[], selectedRegionY[];
 
     public Point pointRegion;
@@ -91,7 +92,19 @@ public class Region {
             regionThread[i].start();
         }
     }
-    public void removeRegionSelected() {
+    public void removeRegionSelected(int i) {
+        window.panel.setLayout(null);
+        window.showImgRegionLabel.remove(selectedRegionLabel[i]);
+        window.panel.revalidate();
+        window.panel.repaint();
+        removeRegionCounter ++;
+        if(removeRegionCounter == NUM_FOR_NEW){
+            removeRegionCounter = 0;
+            selectRegionItem.setSelected(false);
+        }
+    }
+
+    public void removeRegionSelected(){
         window.panel.setLayout(null);
         window.showImgRegionLabel.remove(selectedRegionLabel[window.counter]);
         window.panel.revalidate();

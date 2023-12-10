@@ -138,6 +138,7 @@ public class Open {
             }
             window.tool.pen.initPenSize();
             window.tool.eraser.initEraserSize();
+
             //图片缩放
             MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
             window.showImgRegionLabel.setSize(window.zoomImg[window.counter].width(),
@@ -149,12 +150,18 @@ public class Open {
             this.window.setLocationRelativeTo(null);
             window.last.clear();
             window.next.clear();
+            // 清空存储originalImg的栈
+            window.lastOriginalImg.clear();
+            window.nextOriginalImg.clear();
             // 清空property值的栈
             window.lastPropertyValue.clear();
             window.nextPropertyValue.clear();
             window.showImgRegionLabel.setText("");
 
             window.property.updateProperty();
+
+
+
         }
     }
     /**

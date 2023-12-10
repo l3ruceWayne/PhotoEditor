@@ -8,11 +8,11 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 /**
-* @Description: 调节图片大小（分辨率）
-* @author 罗雨曦
-* @date 2023/11/27 14:00
-* @version: 1.0
-**/
+ * @Description: 调节图片大小（分辨率）
+ * @author 罗雨曦
+ * @date 2023/11/27 14:00
+ * @version: 1.0
+ **/
 public class MySize {
     //与openCV里的size类冲突，所以改了类名
     public javax.swing.JTextField txtHeight;
@@ -55,7 +55,7 @@ public class MySize {
 
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
 
-            window.last.push(window.img);
+            window.last.push(window.zoomImg);
 
             window.img = window.temp = newImg;
             MatUtil.show(window.temp, window.showImgRegionLabel);

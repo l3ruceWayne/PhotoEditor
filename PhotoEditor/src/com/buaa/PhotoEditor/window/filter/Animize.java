@@ -24,27 +24,29 @@ public class Animize {
             }
         });
     }
-    public void animizeActionPerformed(ActionEvent evt) {
-        // 如果未选择图片，弹窗提示并return
-        if (window.originalImg == null) {
-            JOptionPane.showMessageDialog(null, "Please open an image first");
-            return;
-        }
+// conflict
+//     public void animizeActionPerformed(ActionEvent evt) {
+//         // 如果未选择图片，弹窗提示并return
+//         if (window.originalImg == null) {
+//             JOptionPane.showMessageDialog(null, "Please open an image first");
+//             return;
+//         }
 
-        Mat newImg = MatUtil.copy(window.img);
+//         Mat newImg = MatUtil.copy(window.img);
 
-        if (window.tool.region.selectRegionItem.isSelected()) {
-            MatUtil.cartoon(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
-            window.tool.region.removeRegionSelected();
-        } else
-            MatUtil.cartoon(newImg);
+//         if (window.tool.region.selectRegionItem.isSelected()) {
+//             MatUtil.cartoon(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
+//             window.tool.region.removeRegionSelected();
+//         } else
+//             MatUtil.cartoon(newImg);
 
-        MatUtil.show(newImg, window.showImgRegionLabel);
+//         MatUtil.show(newImg, window.showImgRegionLabel);
 
-        // 当前property的值入栈
-        window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-        window.last.push(window.img);
-        window.img = newImg;
+//         // 当前property的值入栈
+//         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+//         window.last.push(window.img);
+//         window.img = newImg;
 
-    }
+//     }
+
 }

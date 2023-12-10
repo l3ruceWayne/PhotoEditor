@@ -2,7 +2,16 @@ package com.buaa.PhotoEditor.window.edit;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import com.buaa.PhotoEditor.window.thread.PaintThread;
+import com.buaa.PhotoEditor.window.thread.PasteThread;
 import org.opencv.core.Mat;
+
+import javax.swing.event.MouseInputAdapter;
+import java.awt.event.MouseEvent;
+
+import static com.buaa.PhotoEditor.util.MatUtil.copy;
+import static com.buaa.PhotoEditor.window.Constant.NUM_FOR_NEW;
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /**
  * @Description: 实现粘贴功能的Paste类
@@ -11,31 +20,30 @@ import org.opencv.core.Mat;
  * @Version 1.0
  */
 public class Paste {
+
+    public PasteThread[] pasteThread;
     private Window window;
 
     public Paste(Window window) {
         this.window = window;
+        pasteThread = new PasteThread[NUM_FOR_NEW];
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            pasteThread[i] = new PasteThread(window, i);
+        }
     }
     public void disablePasteMode() {
         window.tool.region.removeRegionSelected();
-        window.tool.region.selectedRegionLabel[window.counter].removeAll();
-        window.tool.region.copyRegionMat = null;
+        window.copyRegionImg = new Mat[NUM_FOR_NEW];
     }
     public void paste() {
-
-        Mat newImg = MatUtil.copy(window.img);
-        // newImg 的 selectRegion 被 copyRegionMat的内容覆盖
-        MatUtil.copyToRegion(newImg,
-                window.tool.region.copyRegionMat,
-                MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
-
-        MatUtil.show(newImg, window.showImgRegionLabel);
-
-
-        // 当前property的值入栈
-        window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-
-        window.last.push(window.img);
-        window.img = newImg;
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            pasteThread[i].start();
+            // 等待线程完成
+            try {
+                pasteThread[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

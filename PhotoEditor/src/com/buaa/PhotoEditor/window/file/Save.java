@@ -61,6 +61,7 @@ public class Save {
 
     /**
      * @Description: 更新window.img为保存后的img，以便后续再进行编辑
+
      * 根据设计更改更新newImg的获取对象与相关细节操作
      * @author: 卢思文，罗雨曦
      * @date: 12/5/2023 4:18 PM
@@ -81,7 +82,7 @@ public class Save {
         if (window.last.size() != 0 && window.img != window.last.peek()) {
             // 当前property的值入栈
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-            window.last.push(window.img);
+            window.last.push(window.zoomImg);
         }
         // window.img弃用，暂时注释掉下行
 //        window.img = newImg;
@@ -92,6 +93,7 @@ public class Save {
      * @param:
      * @return
      * @Description:保存图片，如果用户点击了save as，保存路径改为save as的保存路径
+
      * 修复save后显示出错的bug
      * 修复保存路径中含有中文而无法正确保存的bug
      * 同时，通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
