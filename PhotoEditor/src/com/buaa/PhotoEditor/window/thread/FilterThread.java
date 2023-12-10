@@ -5,7 +5,7 @@ import com.buaa.PhotoEditor.modal.EColor;
 import com.buaa.PhotoEditor.util.MatUtil;
 
 import static com.buaa.PhotoEditor.util.MatUtil.*;
-
+import static com.buaa.PhotoEditor.window.Constant.*;
 import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.add.Widget;
 import com.buaa.PhotoEditor.window.filter.*;
@@ -58,7 +58,12 @@ public class FilterThread extends Thread {
     }
 
     public void gray() {
-
+        if (window.zoomImg == null) {
+            if(i == window.counter){
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+            }
+            return;
+        }
         if (window.tool.region.selectRegionItem.isSelected()) {
 
             MatUtil.grayScale(window.zoomImg[i],
@@ -81,6 +86,7 @@ public class FilterThread extends Thread {
     }
     // lsw 只能输入整数，部分整数例如30,1也不能输入，即有bug待改
     public void blur() {
+
         if (!blur.blurLevelLabel.isVisible()
                 && !blur.blurLevelTextField.isVisible()) {
             blur.blurItemDialog.dispose();
@@ -122,7 +128,12 @@ public class FilterThread extends Thread {
     }
 
     public void invert() {
-
+        if (window.zoomImg == null) {
+            if(i == window.counter){
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+            }
+            return;
+        }
         if (window.tool.region.selectRegionItem.isSelected()) {
             MatUtil.inversor(window.zoomImg[i], getRect(window.tool.region.selectedRegionLabel[i]));
             window.tool.region.removeRegionSelected(i);
@@ -142,7 +153,12 @@ public class FilterThread extends Thread {
     }
     // 这个滤镜计算量很大，耗时长，可以选择一小块区域之后进行测试
     public void animize() {
-
+        if (window.zoomImg == null) {
+            if(i == window.counter){
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+            }
+            return;
+        }
 
         if (window.tool.region.selectRegionItem.isSelected()) {
             MatUtil.cartoon(window.zoomImg[i], getRect(window.tool.region.selectedRegionLabel[i]));
@@ -164,7 +180,12 @@ public class FilterThread extends Thread {
     }
 
     public void focus() {
-
+        if (window.zoomImg == null) {
+            if(i == window.counter){
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+            }
+            return;
+        }
         if (window.tool.region.selectRegionItem.isSelected()) {
 
             MatUtil.focus(window.zoomImg[i], getRect(window.tool.region.selectedRegionLabel[i]));
@@ -187,6 +208,7 @@ public class FilterThread extends Thread {
     }
 
     public void glitch() {
+
         if (!glitch.offsetLabel.isVisible()
                 && !glitch.offsetValueTextField.isVisible()) {
             glitch.glitchItemDialog.dispose();

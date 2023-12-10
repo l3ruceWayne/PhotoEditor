@@ -40,23 +40,13 @@ public class Save {
         saveItem = new JMenuItem("Save");
         saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 KeyEvent.CTRL_DOWN_MASK));
-        saveItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveImg(e);
-            }
-        });
+        saveItem.addActionListener(e -> saveImg(e));
 
         saveAsItem = new JMenuItem("Save As");
         saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 KeyEvent.CTRL_DOWN_MASK
                         | KeyEvent.SHIFT_DOWN_MASK));
-        saveAsItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                saveAsNewImg(e);
-            }
-        });
+        saveAsItem.addActionListener(e -> saveAsNewImg(e));
     }
 
     /**
@@ -79,11 +69,12 @@ public class Save {
         // LYX 因为不再使用resize实现编辑时的放大缩小，故不需要更新屏幕显示内容
         // 显示融为一体的图片
 //        MatUtil.show(newImg, window.showImgRegionLabel);
-        if (window.last.size() != 0 && window.img != window.last.peek()) {
-            // 当前property的值入栈
-            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-            window.last.push(window.zoomImg);
-        }
+        // pending
+//        if (window.last.size() != 0 && window.img != window.last.peek()) {
+//            // 当前property的值入栈
+//            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+//            window.last.push(window.zoomImg);
+//        }
         // window.img弃用，暂时注释掉下行
 //        window.img = newImg;
     }
@@ -103,7 +94,7 @@ public class Save {
      */
 
     private void saveImg(ActionEvent e) {
-        if (window.originalImg == null) {
+        if (window.zoomImg == null) {
             JOptionPane.showMessageDialog(null,
                     "Please open an image and edit it first");
             return;
@@ -145,7 +136,7 @@ public class Save {
      * @version: 2.0
      **/
     private void saveAsNewImg(ActionEvent e) {
-        if (window.originalImg == null) {
+        if (window.zoomImg == null) {
             JOptionPane.showMessageDialog(null,
                     "Please open an image and edit it first");
             return;

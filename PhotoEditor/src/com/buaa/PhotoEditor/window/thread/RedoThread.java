@@ -49,6 +49,12 @@ public class RedoThread extends Thread {
              **/
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (window.zoomImg == null) {
+                    if(i == window.counter){
+                        JOptionPane.showMessageDialog(null, "Please open an image first");
+                    }
+                    return;
+                }
                 if (!window.next.isEmpty()) {
                     if (i == window.counter) {
                         window.last.push(copyImgArray(window.zoomImg));
@@ -93,9 +99,9 @@ public class RedoThread extends Thread {
                         MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
                         window.showImgRegionLabel.setSize(window.zoomImg[window.counter].width(),
                                 window.zoomImg[window.counter].height());
-                        window.panel.setLayout(window.gridBagLayout);
                         //取消区域选择复选框
                         window.tool.region.removeRegionSelected();
+                        window.panel.setLayout(window.gridBagLayout);
                     }
 
                 } else {

@@ -117,7 +117,7 @@ public class Window extends JFrame {
 
     public Window(Mat img, String title) {
         this(title);
-        this.title  = title;
+        this.title = title;
         this.img = img;
         cnt = 0;
 
@@ -140,14 +140,14 @@ public class Window extends JFrame {
 
     public Window(String title) {
 
-        this.title  = title;
+        this.title = title;
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         //LYX 设置窗口大小为不可调整
         this.setResizable(false);
 
 
-//          conflict
+//          pending
 //         addMouseListeners();
 
         setLocationRelativeTo(null);
@@ -247,8 +247,8 @@ public class Window extends JFrame {
         separateMenu(menuBar);
         menuBar.add(ui.uiMenu);
         separateMenu(menuBar);
-        menuBar.add(layer.layerItem);
-        separateMenu(menuBar);
+//        menuBar.add(layer.layerItem);
+//        separateMenu(menuBar);
         menuBar.add(tool.region.selectRegionItem);
         separateMenu(menuBar);
         menuBar.add(tool.pen.penItem);
@@ -265,14 +265,12 @@ public class Window extends JFrame {
         menuBar.add(tool.zoomOut.zoomOutItem);
         separateMenu(menuBar);
         menuBar.add(tool.drag.dragItem);
-
-        menuBar.add(Box.createHorizontalGlue());
-
+        separateMenu(menuBar);
         menuBar.add(tool.preview.previewItem);
-
-
-
+        separateMenu(menuBar);
+        menuBar.add(Box.createHorizontalGlue());
         setJMenuBar(menuBar);
+
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -314,7 +312,10 @@ public class Window extends JFrame {
             // else if 写成if
             if (pasting) {
                 pasting = false;
-                edit.getPaste().disablePasteMode();
+//                edit.getPaste().disablePasteMode();
+                for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+                    this.tool.region.removeRegionSelected(i);
+                }
             }
         } else if (evt.getKeyCode() == KeyEvent.VK_F12) {
             MatUtil.show(nexLayerImg, "");
@@ -322,8 +323,8 @@ public class Window extends JFrame {
     }
 
 
-//     conflict
-
+//     pending
+//      待转成多线程
 
 
 //     public void addMouseListeners() {
@@ -345,7 +346,7 @@ public class Window extends JFrame {
 //             }
 
 
-//          conflict
+//          pending
 //         panel.addMouseMotionListener(new MouseAdapter() {
 //             /**
 //              * @Description: 粘贴模式下，粘贴框随鼠标一起移动
@@ -385,7 +386,6 @@ public class Window extends JFrame {
 //     }
 
 
-    }
     /**
      * @param menuBar 当前菜单栏
      * @return void
@@ -398,7 +398,6 @@ public class Window extends JFrame {
         menuBar.add(Box.createHorizontalGlue());
         menuBar.add(new JSeparator(SwingConstants.VERTICAL));
     }
-
 
 
 }

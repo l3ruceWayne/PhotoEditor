@@ -41,6 +41,12 @@ public class RotateThread extends Thread {
     }
 
     private void rotate() {
+        if (window.zoomImg == null) {
+            if(i == window.counter){
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+            }
+            return;
+        }
         /*
             transpose是矩阵转置，window.zoomImg[i]是Mat的实例化对象，而Mat是用
             矩阵来存储图像信息的，所以对该矩阵转置就是对图像进行旋转。

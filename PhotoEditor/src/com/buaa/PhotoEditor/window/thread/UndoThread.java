@@ -48,6 +48,12 @@ public class UndoThread extends Thread {
              **/
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (window.zoomImg == null) {
+                    if (i == window.counter) {
+                        JOptionPane.showMessageDialog(null, "Please open an image first");
+                    }
+                    return;
+                }
                 if (!window.last.isEmpty()) {
                     if (i == window.counter) {
                         window.next.push(copyImgArray(window.zoomImg));
@@ -85,22 +91,21 @@ public class UndoThread extends Thread {
                         window.last.peek()[i].submat(selectedRegionRect).copyTo(img.submat(selectedRegionRect));
                         window.zoomImg[i] = MatUtil.copy(img);
                     }
-                    if (i == window.counter)
-                    {
+                    if (i == window.counter) {
                         window.property.updateProperty();
                         // 显示当前大小的图片
-                        MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
+                        window.panel.setLayout(null);
                         window.showImgRegionLabel.setSize(window.zoomImg[window.counter].width(),
                                 window.zoomImg[window.counter].height());
-                        window.panel.setLayout(window.gridBagLayout);
+                        MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
                         //取消区域选择复选框
                         window.tool.region.removeRegionSelected();
+                        window.panel.setLayout(window.gridBagLayout);
                     }
 
                 } else {
                     //个人认为需要保留弹窗，后期可删
-                    if (i == window.counter)
-                    {
+                    if (i == window.counter) {
                         JOptionPane.showMessageDialog(null, "There's nothing left to undo!");
                     }
                 }
