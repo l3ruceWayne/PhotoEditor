@@ -117,7 +117,7 @@ public class Window extends JFrame {
 
     public Window(Mat img, String title) {
         this(title);
-        this.title  = title;
+        this.title = title;
         this.img = img;
         cnt = 0;
 
@@ -140,7 +140,7 @@ public class Window extends JFrame {
 
     public Window(String title) {
 
-        this.title  = title;
+        this.title = title;
         initComponents();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         //LYX 设置窗口大小为不可调整
@@ -311,7 +311,10 @@ public class Window extends JFrame {
             // else if 写成if
             if (pasting) {
                 pasting = false;
-                edit.getPaste().disablePasteMode();
+//                edit.getPaste().disablePasteMode();
+                for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+                    this.tool.region.removeRegionSelected(i);
+                }
             }
         } else if (evt.getKeyCode() == KeyEvent.VK_F12) {
             MatUtil.show(nexLayerImg, "");
@@ -382,7 +385,6 @@ public class Window extends JFrame {
 //     }
 
 
-
     /**
      * @param menuBar 当前菜单栏
      * @return void
@@ -395,7 +397,6 @@ public class Window extends JFrame {
         menuBar.add(Box.createHorizontalGlue());
         menuBar.add(new JSeparator(SwingConstants.VERTICAL));
     }
-
 
 
 }
