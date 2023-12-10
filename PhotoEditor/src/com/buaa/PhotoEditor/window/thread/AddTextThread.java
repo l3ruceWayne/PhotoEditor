@@ -6,6 +6,9 @@ import static com.buaa.PhotoEditor.util.MatUtil.*;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.add.Text;
+
+import static com.buaa.PhotoEditor.window.Constant.*;
+
 import org.opencv.core.Scalar;
 
 import javax.swing.*;
@@ -59,28 +62,34 @@ public class AddTextThread extends Thread {
             } else {
                 text.addTextSpinner.setValue(1);
             }
+            /*
+             等实现了undo之后，如果改变字号大小，利用undo一次+重新绘制新字号的string
+             来实现实时改变字号大小
+             */
+
+//            writeText(i);
         });
         text.textField.getDocument()
                 .addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                text.setStr(text.textField.getText());
-                writeText();
-            }
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        text.setStr(text.textField.getText());
+                        writeText(i);
+                    }
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                text.setStr(text.textField.getText());
-                writeText();
-            }
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        text.setStr(text.textField.getText());
+                        writeText(i);
+                    }
 
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                text.setStr(text.textField.getText());
-                writeText();
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+                        text.setStr(text.textField.getText());
+                        writeText(i);
 
-            }
-        });
+                    }
+                });
     }
 
     /*
@@ -97,8 +106,12 @@ public class AddTextThread extends Thread {
 
             text.setColor(new Scalar(color.getBlue(), color.getGreen(), color.getRed()));
             text.textColorPanel.setBackground(color);
+            // 下面画的时候还是单线程，因为画必须等选择颜色结束
+            // 要想实现真正的多线程，必须自己实现选择颜色窗口
+            for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+                writeText(i);
+            }
         }
-        writeText();
     }
 
     /*
@@ -110,7 +123,7 @@ public class AddTextThread extends Thread {
      * @date: 11/27/2023 12:52 PM
      * @version: 1.0
      */
-    public void writeText() {
+    public void writeText(int i) {
         int x = window.tool.region.selectedRegionLabel[i].getX();
         int y = window.tool.region.selectedRegionLabel[i].getY();
 
@@ -132,6 +145,7 @@ public class AddTextThread extends Thread {
         }
         MatUtil.show(window.zoomImg[i], window.showImgRegionLabel);
     }
+
     public void textScaleStateChanged() {
         text.setScale((int) text.addTextSpinner.getValue());
     }
