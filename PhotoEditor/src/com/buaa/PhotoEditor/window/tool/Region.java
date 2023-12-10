@@ -51,6 +51,14 @@ public class Region {
             regionThread[i] = new RegionThread(window, i);
         }
         selectRegionItem = new JCheckBoxMenuItem("Region");
+        // 如果未选择图片，弹窗提示并return
+        selectRegionItem.addActionListener(e->{
+            if (window.originalImg == null) {
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                selectRegionItem.setSelected(false);
+                return;
+            }
+        });
         selectRegionItem.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 window.tool.pen.penItem.setSelected(false);

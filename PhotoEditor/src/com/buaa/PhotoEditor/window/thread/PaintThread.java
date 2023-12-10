@@ -1,5 +1,6 @@
 package com.buaa.PhotoEditor.window.thread;
 
+import com.buaa.PhotoEditor.Main;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import static com.buaa.PhotoEditor.util.MatUtil.*;
@@ -99,7 +100,7 @@ public class PaintThread extends Thread{
      * 解决了“快速移动导致笔迹断续”的问题，思想：在离散的点之间插值
      * newX和newY是drag后的重新定位
      * @author: 张旖霜、卢思文
-     * @date: 11/27/2023 3:30 PM
+     * @date: 12/5/2023 3:42 AM
      * @version: 1.0
      */
         /*  lsw
