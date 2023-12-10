@@ -147,7 +147,7 @@ public class Window extends JFrame {
         this.setResizable(false);
 
 
-//          conflict
+//          pending
 //         addMouseListeners();
 
         setLocationRelativeTo(null);
@@ -265,14 +265,11 @@ public class Window extends JFrame {
         menuBar.add(tool.zoomOut.zoomOutItem);
         separateMenu(menuBar);
         menuBar.add(tool.drag.dragItem);
-
-        menuBar.add(Box.createHorizontalGlue());
-
+        separateMenu(menuBar);
         menuBar.add(tool.preview.previewItem);
-
-
-
+        menuBar.add(Box.createHorizontalGlue());
         setJMenuBar(menuBar);
+
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -322,8 +319,8 @@ public class Window extends JFrame {
     }
 
 
-//     conflict
-
+//     pending
+//      待转成多线程
 
 
 //     public void addMouseListeners() {
@@ -345,7 +342,7 @@ public class Window extends JFrame {
 //             }
 
 
-//          conflict
+//          pending
 //         panel.addMouseMotionListener(new MouseAdapter() {
 //             /**
 //              * @Description: 粘贴模式下，粘贴框随鼠标一起移动

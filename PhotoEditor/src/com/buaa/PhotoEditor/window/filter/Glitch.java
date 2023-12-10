@@ -26,6 +26,10 @@ public class Glitch {
         glitchItem = new JMenuItem("Glitch");
 
         glitchItem.addActionListener(evt -> {
+            if (window.zoomImg == null) {
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                return;
+            }
             glitchItemDialog.setModal(true);
             glitchItemDialog.setVisible(true);
         });
@@ -54,50 +58,6 @@ public class Glitch {
         setLayout();
 
     }
-// conflict
-//     public void OKButtonActionPerformed(ActionEvent evt) {
-//         // 如果未选择图片，弹窗提示并return
-//         if (window.originalImg == null) {
-//             JOptionPane.showMessageDialog(null, "Please open an image first");
-//             return;
-//         }
-//         if (!offsetLabel.isVisible() && !offsetValueTextField.isVisible())
-//             glitchItemDialog.dispose();
-//         else {
-//             try {
-//                 waveLength = Integer.parseInt(offsetValueTextField.getText());
-//                 /* !! ALERT: improve, make dynamic verification */
-//                 if (green.isSelected()) {
-//                     color = EColor.GREEN;
-//                 } else if (blue.isSelected()) {
-//                     color = EColor.BLUE;
-//                 } else if (red.isSelected()) {
-//                     color = EColor.RED;
-//                 }
-//                 Mat newImg = MatUtil.copy(window.img);
-//                 if (window.tool.region.selectRegionItem.isSelected()) {
-//                     MatUtil.glitchWave(newImg, waveLength, color, MatUtil.
-//                             getRect(window.tool.region.selectedRegionLabel[window.counter]));
-//                     window.tool.region.removeRegionSelected();
-//                 } else {
-//                     MatUtil.glitchWave(newImg, waveLength, color);
-//                 }
-
-//                 MatUtil.show(newImg, window.showImgRegionLabel);
-
-//                 // 当前property的值入栈
-//                 window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-//                 window.last.push(window.img);
-//                 window.img = newImg;
-//                 // 执行完之后再关闭窗口
-//                 glitchItemDialog.dispose();
-//             } catch (Exception ex) {
-//                 JOptionPane.showMessageDialog(null,
-//                         "填写错误！");
-//             }
-
-//         }
-//     }
 
     private void setLayout() {
         GroupLayout glitchDialogLayout = new GroupLayout(

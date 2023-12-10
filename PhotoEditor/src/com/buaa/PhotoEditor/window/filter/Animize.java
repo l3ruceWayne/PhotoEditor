@@ -18,35 +18,5 @@ public class Animize {
         this.window = window;
         animizeItem = new JMenuItem("Animize");
         animizeItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
-//            animizeItem.addActionListener(new ActionListener() {
-//                public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                    animizeActionPerformed(evt);
-//                }
-//            });
     }
-// conflict
-//     public void animizeActionPerformed(ActionEvent evt) {
-//         // 如果未选择图片，弹窗提示并return
-//         if (window.originalImg == null) {
-//             JOptionPane.showMessageDialog(null, "Please open an image first");
-//             return;
-//         }
-
-//         Mat newImg = MatUtil.copy(window.img);
-
-//         if (window.tool.region.selectRegionItem.isSelected()) {
-//             MatUtil.cartoon(newImg, MatUtil.getRect(window.tool.region.selectedRegionLabel[window.counter]));
-//             window.tool.region.removeRegionSelected();
-//         } else
-//             MatUtil.cartoon(newImg);
-
-//         MatUtil.show(newImg, window.showImgRegionLabel);
-
-//         // 当前property的值入栈
-//         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-//         window.last.push(window.img);
-//         window.img = newImg;
-
-//     }
-
 }

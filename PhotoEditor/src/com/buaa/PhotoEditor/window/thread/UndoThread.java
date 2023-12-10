@@ -48,6 +48,12 @@ public class UndoThread extends Thread {
              **/
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (window.zoomImg == null) {
+                    if(i == window.counter){
+                        JOptionPane.showMessageDialog(null, "Please open an image first");
+                    }
+                    return;
+                }
                 if (!window.last.isEmpty()) {
                     if (i == window.counter) {
                         window.next.push(copyImgArray(window.zoomImg));
