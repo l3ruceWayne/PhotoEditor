@@ -79,11 +79,12 @@ public class Save {
         // LYX 因为不再使用resize实现编辑时的放大缩小，故不需要更新屏幕显示内容
         // 显示融为一体的图片
 //        MatUtil.show(newImg, window.showImgRegionLabel);
-        if (window.last.size() != 0 && window.img != window.last.peek()) {
-            // 当前property的值入栈
-            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-            window.last.push(window.zoomImg);
-        }
+        // conflict
+//        if (window.last.size() != 0 && window.img != window.last.peek()) {
+//            // 当前property的值入栈
+//            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+//            window.last.push(window.zoomImg);
+//        }
         // window.img弃用，暂时注释掉下行
 //        window.img = newImg;
     }

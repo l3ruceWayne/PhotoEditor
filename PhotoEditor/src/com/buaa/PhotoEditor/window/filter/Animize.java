@@ -18,11 +18,11 @@ public class Animize {
         this.window = window;
         animizeItem = new JMenuItem("Animize");
         animizeItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
-        animizeItem.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                animizeActionPerformed(evt);
-            }
-        });
+//            animizeItem.addActionListener(new ActionListener() {
+//                public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                    animizeActionPerformed(evt);
+//                }
+//            });
     }
 // conflict
 //     public void animizeActionPerformed(ActionEvent evt) {

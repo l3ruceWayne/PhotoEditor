@@ -385,7 +385,7 @@ public class Window extends JFrame {
 //     }
 
 
-    }
+
     /**
      * @param menuBar 当前菜单栏
      * @return void

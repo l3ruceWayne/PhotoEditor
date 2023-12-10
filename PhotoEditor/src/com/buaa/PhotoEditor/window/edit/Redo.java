@@ -60,7 +60,7 @@ public class Redo {
                 e.printStackTrace();
             }
 
-        });
+        };
     }
 // conflict
 //     /**
@@ -127,5 +127,5 @@ public class Redo {
 
 //         }
 
-    }
+
 }
