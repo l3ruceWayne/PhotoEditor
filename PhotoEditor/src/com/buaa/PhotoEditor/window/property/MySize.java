@@ -70,9 +70,6 @@ public class MySize {
 //            window.last.push(window.zoomImg);
 
 
-            //conflict
-//            MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
-//            window.panel.setLayout(window.gridBagLayout);
 //
 //            window.property.updateProperty();
 

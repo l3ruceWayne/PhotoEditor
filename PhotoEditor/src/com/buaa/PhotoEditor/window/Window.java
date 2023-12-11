@@ -5,7 +5,6 @@ GitHub: https://github.com/igor036
 package com.buaa.PhotoEditor.window;
 
 
-
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 
 
@@ -306,11 +305,12 @@ public class Window extends JFrame {
             return;
         }
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-
+            add.widget.widgetIcon = null;
             if (tool.region.selectRegionItem.isSelected()) {
                 // pending
                 tool.region.removeRegionSelected();
-            } else if (add.widget.selectedWidgetLabel != null) {
+            }
+            if (add.widget.selectedWidgetLabel != null) {
                 add.widget.removeWidget();
             }
             // else if 写成if
@@ -326,35 +326,24 @@ public class Window extends JFrame {
         }
 
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (add.widget.widgetIcon == null) {
+                return;
+            }
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-                int x = add.widget.widgetLabel.getX();
-                int y = add.widget.widgetLabel.getY();
+                int x =(int) (add.widget.widgetLabel.getX() - ((double)panel.getWidth() - showImgRegionLabel.getWidth())/2);
+                int y =(int) (add.widget.widgetLabel.getY() - ((double)panel.getHeight() - showImgRegionLabel.getHeight())/2);
+                if(i == counter){
+                    System.out.println(x);
+                    System.out.println(y);
+                }
                 MatUtil.widget(zoomImg[i],
                         MatUtil.readImg(add.widget.widgetLabel.getIcon().toString()),
                         x, y, i, this);
-                if(i == counter){
+                if (i == counter) {
                     MatUtil.show(zoomImg[counter], showImgRegionLabel);
                 }
-//                int panelWidth = panel.getWidth();
-//                int panelHeight = panel.getHeight();
-//                if (width > panelWidth
-//                        || height > panelHeight) {
-//                    showImgRegionLabel.setLocation((panelWidth - width)/2,
-//                            (panelHeight - height)/2);
-//                } else{
-//                    panel.setLayout(gridBagLayout);
-//                }
-//                System.out.println(zoomImg[counter].width());
                 panel.remove(add.widget.widgetLabel);
-                System.out.println("yes");
             }
-            // pending1
-//            for (JLabel widgetLabel : add.widget.widgetLabelList) {
-//                MatUtil.widget(zoomImg[ORIGINAL_SIZE_COUNTER],
-//                        MatUtil.readImg(widgetLabel.getIcon().toString()),
-//                        widgetLabel.getX(), widgetLabel.getY());
-//                panel.remove(widgetLabel);
-//            }
         }
     }
 
@@ -364,8 +353,6 @@ public class Window extends JFrame {
 
 //     pending
 //      待转成多线程
-
-
 
 
 //     public void addMouseListeners() {

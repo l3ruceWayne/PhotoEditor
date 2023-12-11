@@ -89,8 +89,16 @@ public class RegionThread extends Thread {
         int height = Math.abs(window.tool.region.selectedRegionY[i] - y);
         x = Math.min(x, window.tool.region.selectedRegionX[i]);
         y = Math.min(y, window.tool.region.selectedRegionY[i]);
-        width = Math.min(getValueAfterZoom(window, window.showImgRegionLabel.getWidth(), i) - x, width );
-        height = Math.min(getValueAfterZoom(window, window.showImgRegionLabel.getHeight(), i) - y, height );
+        width = Math.min(getValueAfterZoom(window, window.showImgRegionLabel.getWidth(), i) - x, width);
+        height = Math.min(getValueAfterZoom(window, window.showImgRegionLabel.getHeight(), i) - y, height);
+        if (x < 0) {
+            width += x;
+            x = 0;
+        }
+        if (y < 0) {
+            height += y;
+            y = 0;
+        }
         window.tool.region.selectedRegionLabel[i].setBounds(x, y, width, height);
 //        window.tool.region.pointRegion = new Point(x+width, y-height);
     }

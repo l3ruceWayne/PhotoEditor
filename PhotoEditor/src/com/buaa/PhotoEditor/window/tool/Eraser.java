@@ -40,9 +40,9 @@ public class Eraser {
 
     static {
         eraserCursorIcon = new ImageIcon(
-                "PhotoEditor/resources/eraserCursorImage.png");
+                "resources/eraserCursorImage.png");
         eraserItemIcon = new ImageIcon(
-                "PhotoEditor/resources/eraserItemImage.png"
+                "resources/eraserItemImage.png"
         );
         Image image = eraserCursorIcon.getImage();
         Toolkit toolkit = Toolkit.getDefaultToolkit();

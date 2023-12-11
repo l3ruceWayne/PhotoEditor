@@ -109,12 +109,8 @@ public class RedoThread extends Thread {
                         MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
                         window.showImgRegionLabel.setSize(window.zoomImg[window.counter].width(),
                                 window.zoomImg[window.counter].height());
-
-
                         //取消区域选择复选框
-                        // conflict
-//                        window.tool.region.removeRegionSelected();
-
+                        window.tool.region.removeRegionSelected();
                         window.panel.setLayout(window.gridBagLayout);
                     }
 

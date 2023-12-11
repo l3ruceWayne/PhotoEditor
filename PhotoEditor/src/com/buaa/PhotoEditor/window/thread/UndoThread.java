@@ -56,7 +56,7 @@ public class UndoThread extends Thread {
                     }
                     return;
                 }
-                if (!window.last.isEmpty()) {
+                if (window.last.isEmpty()) {
                     if (i == window.counter) {
                         JOptionPane.showMessageDialog(null, "Please open an image first");
                     }
@@ -117,8 +117,7 @@ public class UndoThread extends Thread {
                                 window.zoomImg[window.counter].height());
                         MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
                         //取消区域选择复选框
-                        // conflict
-//                        window.tool.region.removeRegionSelected();
+                        window.tool.region.removeRegionSelected();
                         window.panel.setLayout(window.gridBagLayout);
                     }
 
