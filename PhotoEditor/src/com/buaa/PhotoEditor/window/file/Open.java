@@ -3,7 +3,6 @@ package com.buaa.PhotoEditor.window.file;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 
-import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 import static com.buaa.PhotoEditor.window.Constant.*;
 

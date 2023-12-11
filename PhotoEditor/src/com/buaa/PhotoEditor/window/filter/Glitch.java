@@ -5,8 +5,6 @@ import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
 
-import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
-
 public class Glitch {
     public int waveLength;
     public ButtonGroup colors;

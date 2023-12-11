@@ -22,6 +22,7 @@ import com.buaa.PhotoEditor.window.edit.Edit;
 import com.buaa.PhotoEditor.window.file.Save;
 import com.buaa.PhotoEditor.window.file.MyFile;
 
+import com.buaa.PhotoEditor.window.layer.Layer;
 import com.buaa.PhotoEditor.window.property.Property;
 
 
@@ -35,7 +36,6 @@ import com.buaa.PhotoEditor.window.filter.Filter;
 
 
 import org.opencv.core.Mat;
-import org.opencv.dnn.Layer;
 
 
 /**
@@ -69,7 +69,7 @@ public class Window extends JFrame {
     // add
     public Add add;
     public Filter filter;
-
+    public static Layer layer;
     public MyFile myFile;
     public Edit edit;
     /* Layer类的实例化对象只能有一个（因为不同的图层需要共用一个Layer，这样才能显示所有的图层列表）
@@ -160,6 +160,7 @@ public class Window extends JFrame {
         currentPropertyValue = new int[10];
         this.setTitle(title);
         addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent evt) {
                 KeyPress(evt);
             }
@@ -187,7 +188,9 @@ public class Window extends JFrame {
         tool = new Tool(this);
 
         // 只有一个layer，所以layer赋值之后就不再赋值
-
+        if(layer == null){
+            layer = new Layer(this);
+        }
         menuBar = new JMenuBar();
 
         filter = new Filter(this);
@@ -341,7 +344,7 @@ public class Window extends JFrame {
                     panel.remove(add.widget.widgetLabel);
                 }
             }
-            if(flagForWidget){
+            if (flagForWidget) {
                 add.widget.widgetIcon = null;
             }
         }

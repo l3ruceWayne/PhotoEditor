@@ -8,7 +8,6 @@ import com.buaa.PhotoEditor.modal.EColor;
 import com.buaa.PhotoEditor.modal.ESloopFaceDirection;
 
 
-import java.awt.event.HierarchyBoundsAdapter;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
@@ -22,7 +21,6 @@ import javax.swing.*;
 
 import com.buaa.PhotoEditor.window.Window;
 
-import com.buaa.PhotoEditor.window.add.Widget;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;

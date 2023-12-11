@@ -5,15 +5,9 @@ import com.buaa.PhotoEditor.window.Window;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 
-import org.opencv.core.Mat;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.PathIterator;
-import java.util.zip.CheckedOutputStream;
 
 public class ZoomIn {
 

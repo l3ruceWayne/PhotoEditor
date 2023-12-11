@@ -1,15 +1,8 @@
 package com.buaa.PhotoEditor.window.filter;
 
-import static com.buaa.PhotoEditor.util.MatUtil.*;
-import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
-
-import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-import org.opencv.core.Mat;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 

@@ -1,17 +1,10 @@
 package com.buaa.PhotoEditor.window.tool;
 
-import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-import org.opencv.core.Mat;
-import org.opencv.core.Size;
+
 import static com.buaa.PhotoEditor.window.Constant.*;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.InputEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import java.util.zip.CheckedOutputStream;
 
 
 /**
