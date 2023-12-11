@@ -4,7 +4,10 @@ GitHub: https://github.com/igor036
  */
 package com.buaa.PhotoEditor.window;
 
+
+
 import static com.buaa.PhotoEditor.util.MatUtil.*;
+
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 
@@ -208,7 +211,6 @@ public class Window extends JFrame {
 
         ui = new UI(this);
 
-
         showImgRegionLabel.setText("Please select photo");
 
         /*
@@ -247,8 +249,6 @@ public class Window extends JFrame {
         separateMenu(menuBar);
         menuBar.add(ui.uiMenu);
         separateMenu(menuBar);
-//        menuBar.add(layer.layerItem);
-//        separateMenu(menuBar);
         menuBar.add(tool.region.selectRegionItem);
         separateMenu(menuBar);
         menuBar.add(tool.pen.penItem);
@@ -360,6 +360,12 @@ public class Window extends JFrame {
 
 //     pending
 //      待转成多线程
+
+
+//     pending
+//      待转成多线程
+
+
 
 
 //     public void addMouseListeners() {

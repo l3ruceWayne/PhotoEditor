@@ -49,6 +49,9 @@ public class ZoomOut {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }
+        // 取消 drag
+        window.tool.drag.dragItem.setSelected(false);
+        window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 // 不能再放大了，return，后期加弹窗
         if (window.counter == 0) {
             return;

@@ -10,6 +10,11 @@ import org.opencv.core.Size;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
+import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
+import static com.buaa.PhotoEditor.util.MatUtil.resize;
+import static com.buaa.PhotoEditor.window.Constant.*;
+import static com.buaa.PhotoEditor.window.Constant.AUTO_SIZE_COUNTER;
+
 /**
  * @Description: 调节图片大小（分辨率）
  * @author 罗雨曦
@@ -49,8 +54,13 @@ public class MySize {
      **/
     public void Resize(ActionEvent evt) {
         try {
-            double newWidth = Double.parseDouble(window.property.getMySize().txtWidth.getText());
-            double newHeight = Double.parseDouble(window.property.getMySize().txtHeight.getText());
+            int newWidth = Integer.parseInt(window.property.getMySize().txtWidth.getText());
+            int newHeight = Integer.parseInt(window.property.getMySize().txtHeight.getText());
+
+
+            window.size[ORIGINAL_SIZE_COUNTER][0] = newWidth;
+            window.size[ORIGINAL_SIZE_COUNTER][1] = newHeight;
+
 
             MatUtil.resize(window.zoomImg[ORIGINAL_SIZE_COUNTER], new Size(newWidth, newHeight));
             MatUtil.resize(window.originalZoomImg[ORIGINAL_SIZE_COUNTER], new Size(newWidth, newHeight));
@@ -59,8 +69,17 @@ public class MySize {
 //
 //            window.last.push(window.zoomImg);
 
+
+            //conflict
+//            MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
+//            window.panel.setLayout(window.gridBagLayout);
+//
+//            window.property.updateProperty();
+
+
 //            window.property.updateProperty();
             JOptionPane.showMessageDialog(null, "Success");
+
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Please prefill the data correctly!");

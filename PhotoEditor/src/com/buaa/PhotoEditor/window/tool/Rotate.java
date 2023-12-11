@@ -21,18 +21,17 @@ public class Rotate {
     public Rotate(Window window) {
         this.window = window;
         rotateItem = new JMenu("Rotate");
-
-//         // 当前property的值入栈
-//         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-//         window.last.push(window.img);
-//         window.img = newImg;
-
-//         // 更新eraser需要的原图
-//         window.originalImg = MatUtil.copy(window.img);
         rotateThread = new RotateThread[NUM_FOR_NEW];
         for(int i = 0;i<=ORIGINAL_SIZE_COUNTER;i++){
             rotateThread[i] = new RotateThread(window, rotateItem, i);
             rotateThread[i].start();
+            // 等待线程完成，让线程可以顺序执行（方便线程中的操作）
+            try{
+                rotateThread[i].join();
+            }catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }

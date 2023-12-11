@@ -64,7 +64,7 @@ public class PaintThread extends Thread{
                  */
                 if (window.tool.pen.penItem.isSelected()) {
 
-                    // 当前property的值入栈，第一层将zoomImg数组入栈（这时仅zoomImg[0]是入栈的，其他的还没更新好）
+                    // 在第一个线程入栈
                     if (i == 0) {
                         window.lastPropertyValue
                                 .push(copyPropertyValue(window
@@ -72,11 +72,6 @@ public class PaintThread extends Thread{
                         window.last.push(copyImgArray(window.zoomImg));
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
-                    // 这时其他的值更新好了，就入栈（修改栈顶的值）
-//                    else
-//                    {
-//                        window.last.peek()[i] = copy(window.zoomImg[i]);
-//                    }
 
 
                     if (window.paintingImg[i] != null) {

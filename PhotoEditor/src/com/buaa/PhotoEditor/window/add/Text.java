@@ -175,6 +175,12 @@ public class Text {
                 for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
                     addTextThread[i] = new AddTextThread(window, this, i);
                     addTextThread[i].start();
+                    try {
+                        addTextThread[i].join();
+                    } catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
             addTextDialog.setModal(true);
