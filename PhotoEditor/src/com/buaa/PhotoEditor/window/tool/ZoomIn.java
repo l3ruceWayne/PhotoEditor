@@ -22,7 +22,7 @@ public class ZoomIn {
 
     public ZoomIn(Window window) {
         this.window = window;
-        zoomInItem = new JMenu("Zoom +");
+        zoomInItem = new JMenu("Zoom+");
 
 
         zoomInItem.addMouseListener(new MouseAdapter() {
@@ -64,9 +64,18 @@ public class ZoomIn {
         } else {
             window.counter++;
         }
-
-        window.tool.region.selectedRegionLabel[window.counter-1].setVisible(false);
-        window.tool.region.selectedRegionLabel[window.counter].setVisible(true);
+        if (window.tool.region.selectedRegionLabel[window.counter - 1] != null) {
+            window.tool.region.selectedRegionLabel[window.counter - 1].setVisible(false);
+        }
+        if (window.tool.region.selectedRegionLabel[window.counter] != null) {
+            window.tool.region.selectedRegionLabel[window.counter].setVisible(true);
+        }
+//        if (window.add.widget.widgetLabel[window.counter - 1] != null) {
+//            window.add.widget.widgetLabel[window.counter - 1].setVisible(false);
+//        }
+//        if (window.add.widget.widgetLabel[window.counter] != null) {
+//            window.add.widget.widgetLabel[window.counter].setVisible(true);
+//        }
 
         int counter = window.counter;
         int width = window.size[counter][0];

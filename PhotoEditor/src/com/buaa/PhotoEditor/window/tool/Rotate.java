@@ -21,7 +21,6 @@ public class Rotate {
     public Rotate(Window window) {
         this.window = window;
         rotateItem = new JMenu("Rotate");
-
         rotateThread = new RotateThread[NUM_FOR_NEW];
         for(int i = 0;i<=ORIGINAL_SIZE_COUNTER;i++){
             rotateThread[i] = new RotateThread(window, rotateItem, i);

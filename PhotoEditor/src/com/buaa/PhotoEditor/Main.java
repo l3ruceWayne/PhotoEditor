@@ -2,6 +2,8 @@
 package com.buaa.PhotoEditor;
 
 import com.buaa.PhotoEditor.window.Window;
+import com.buaa.PhotoEditor.window.custom.CustomColorChooser;
+import com.buaa.PhotoEditor.window.custom.CustomFileChooser;
 import org.opencv.core.Core;
 
 import javax.swing.*;

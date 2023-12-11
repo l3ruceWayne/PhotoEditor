@@ -8,16 +8,16 @@ import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.buaa.PhotoEditor.window.Constant.NUM_FOR_NEW;
+
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /**
-* @Description:
- * 1. 解决了添加widget图片不能为中文的问题，并且支持矢量图
+ * @Description: 1. 解决了添加widget图片不能为中文的问题，并且支持矢量图
  * 2. 增添了自由改变widget尺寸的功能及对应的光标显示
  * 3. 增添了移动widget的时候的光标显示
  * @author: 卢思文
@@ -27,32 +27,29 @@ import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 public class Widget {
 
     public Window window;
+    public JLabel widgetLabel;
+    public int i;
+    public ImageIcon widgetIcon;
     public JMenuItem widgetItem;
     public JLabel selectedWidgetLabel;
-
-    public final List<JLabel> widgetLabelList;
     public final List<String> WIDGET_SUPPORT_FILE_TYPES;
     public String widgetPath;
 
     public boolean flag;
+    public boolean threadStartFlag;
 
 
     public Widget(Window window) {
         this.window = window;
         widgetItem = new javax.swing.JMenuItem("Widget");
-        widgetLabelList = new ArrayList<>();
         WIDGET_SUPPORT_FILE_TYPES = new ArrayList<>();
-
-
+        threadStartFlag = true;
+        widgetLabel = new JLabel();
         WIDGET_SUPPORT_FILE_TYPES.add("JPG");
         WIDGET_SUPPORT_FILE_TYPES.add("JPEG");
         WIDGET_SUPPORT_FILE_TYPES.add("PNG");
 
-        widgetItem.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addWidget(evt);
-            }
-        });
+        widgetItem.addActionListener(evt -> addWidget(evt));
     }
 
     public void addWidget(ActionEvent evt) {
@@ -73,12 +70,13 @@ public class Widget {
             if (WIDGET_SUPPORT_FILE_TYPES.contains(widgetPath
                     .substring(widgetPath.lastIndexOf(".") + 1)
                     .toUpperCase())) {
-
+                i = window.counter;
                 Mat widget = MatUtil.readImg(widgetPath);
-                ImageIcon widgetIcon = new ImageIcon(widgetPath);
-                JLabel widgetLabel = new JLabel(widgetIcon);
+                widgetIcon = new ImageIcon(widgetPath);
 
-                addWidgetListener(widgetLabel, widgetIcon);
+                widgetLabel = new JLabel(widgetIcon);
+
+                addWidgetListener(widgetIcon);
 
                 widgetLabel.setBounds(window.getX() / 2, window.getY() / 2,
                         widget.width(), widget.height());
@@ -89,14 +87,8 @@ public class Widget {
 
                 // 设定各小组件优先级
                 window.panel.setComponentZOrder(widgetLabel, 0);
-                for (int i = 0; i < widgetLabelList.size(); i++) {
-                    window.panel.setComponentZOrder(widgetLabelList.get(i), i + 1);
-                }
-                window.panel.setComponentZOrder(window.showImgRegionLabel,
-                        widgetLabelList.size() + 1);
                 window.panel.revalidate();
                 window.panel.repaint();
-                widgetLabelList.add(widgetLabel);
 
 
             } else {
@@ -107,14 +99,13 @@ public class Widget {
     }
 
     public void removeWidget() {
-        widgetLabelList.remove(selectedWidgetLabel);
         window.panel.setLayout(null);
         window.panel.remove(selectedWidgetLabel);
         window.panel.repaint();
         window.panel.revalidate();
     }
 
-    public void addWidgetListener(JLabel widgetLabel, ImageIcon widgetIcon) {
+    public void addWidgetListener(ImageIcon widgetIcon) {
         flag = false;
 //        Window win = this;
         int width = widgetIcon.getIconWidth();
@@ -137,7 +128,6 @@ public class Widget {
             }
 
             public void mouseDragged(MouseEvent e) {
-
                 int lx = widgetLabel.getX();
                 int ly = widgetLabel.getY();
                 int x = e.getX() + lx;
@@ -192,15 +182,16 @@ public class Widget {
         widgetLabel.addMouseMotionListener(mia);
 
     }
+
     /**
-    * @param e 鼠标事件
-    * @param widgetLabel 添加的widget的JLabel对象
-    * @return boolean 是否在特定区域内
-    * @Description: 判断光标是否在widget的右下角（这里是改变widget大小的功能触发区）
-    * @author: 卢思文
-    * @date: 11/27/2023 4:38 PM
-    * @version: 1.0
-    **/
+     * @param e           鼠标事件
+     * @param widgetLabel 添加的widget的JLabel对象
+     * @return boolean 是否在特定区域内
+     * @Description: 判断光标是否在widget的右下角（这里是改变widget大小的功能触发区）
+     * @author: 卢思文
+     * @date: 11/27/2023 4:38 PM
+     * @version: 1.0
+     **/
     public static boolean isInResizeArea(MouseEvent e, JLabel widgetLabel) {
         int rx = widgetLabel.getWidth();
         int ry = widgetLabel.getHeight();

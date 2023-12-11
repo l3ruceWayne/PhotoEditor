@@ -56,9 +56,11 @@ public class RedoThread extends Thread {
                     }
                     return;
                 }
+
                 // 取消 drag
                 window.tool.drag.dragItem.setSelected(false);
                 window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
                 if (!window.next.isEmpty()) {
                     if (i == ORIGINAL_SIZE_COUNTER) {
                         window.last.push(copyImgArray(window.zoomImg));
@@ -107,6 +109,12 @@ public class RedoThread extends Thread {
                         MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
                         window.showImgRegionLabel.setSize(window.zoomImg[window.counter].width(),
                                 window.zoomImg[window.counter].height());
+
+
+                        //取消区域选择复选框
+                        // conflict
+//                        window.tool.region.removeRegionSelected();
+
                         window.panel.setLayout(window.gridBagLayout);
                     }
 

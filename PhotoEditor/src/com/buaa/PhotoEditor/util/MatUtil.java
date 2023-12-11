@@ -8,6 +8,7 @@ import com.buaa.PhotoEditor.modal.EColor;
 import com.buaa.PhotoEditor.modal.ESloopFaceDirection;
 
 
+import java.awt.event.HierarchyBoundsAdapter;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
@@ -24,6 +25,7 @@ import javax.swing.JLabel;
 
 import com.buaa.PhotoEditor.window.Window;
 
+import com.buaa.PhotoEditor.window.add.Widget;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -58,21 +60,23 @@ public abstract class MatUtil extends JFrame {
     /*-------------------------------------------------------->
      *END URL IMAGES
      */
+
     /**
-    * @param x : u时的坐标值
-    * @param i : 转换成i时的坐标值
-    * @return
-    * @Description:
-    * @author: 卢思文
-    * @date: 12/1/2023 4:15 PM
-    * @version: 1.0
-    **/
-    public static int getValueAfterZoom(Window window, double x, int i){
-        if(i == window.counter)return (int)x;
+     * @param x : u时的坐标值
+     * @param i : 转换成i时的坐标值
+     * @return
+     * @Description:
+     * @author: 卢思文
+     * @date: 12/1/2023 4:15 PM
+     * @version: 1.0
+     **/
+    public static int getValueAfterZoom(Window window, double x, int i) {
+        if (i == window.counter) return (int) x;
         double iWidth = window.zoomImg[i].width();
         double uWidth = window.zoomImg[window.counter].width();
-        return (int)Math.round(x * iWidth / uWidth);
+        return (int) Math.round(x * iWidth / uWidth);
     }
+
     public static void show(Mat img, String title) {
 
         JLabel lbImg = new JLabel("");
@@ -95,6 +99,7 @@ public abstract class MatUtil extends JFrame {
         ImageIcon imgIcon = new ImageIcon(bufferedImg(img));
         jLabel.setIcon(imgIcon);
     }
+
     /* Mat类型的img转化为BufferedImage类型的对象
     为什么要转化？因为Mat类型的对象适合图像处理，但是不适合展示处理好的结果
     而BufferedImage则相反
@@ -213,17 +218,21 @@ public abstract class MatUtil extends JFrame {
         }
     }
 
-    public static void widget(Mat img, Mat widget, int wx, int wy) {
-
-        final int width = wx + widget.width() > img.width() ? img.width() : wx + widget.width();
-        final int heigth = wy + widget.height() > img.height() ? img.height() : wy + widget.height();
-
-        Point a = new Point(wx, wy);
-        Point b = new Point(width, heigth);
-
+    public static void widget(Mat img, Mat widget, int wx, int wy, int i, Window window) {
+        int lx = getValueAfterZoom(window, wx, i);
+        int ly = getValueAfterZoom(window, wy, i);
+        int width = getValueAfterZoom(window, widget.width(), i);
+        int height = getValueAfterZoom(window, widget.height(), i);
+        // 当大小超过图片时，报错
+        int rx = lx + width;
+        int ry = ly + height;
+        Point a = new Point(lx, ly);
+        Point b = new Point(rx, ry);
         Mat widgetRegion = img.submat(new Rect(a, b));
+        Mat mat = copy(widget);
+        resize(mat, new Size(width, height));
 
-        overlay(widgetRegion, widget);
+        overlay(widgetRegion, mat);
     }
 
     // pending
@@ -479,18 +488,16 @@ public abstract class MatUtil extends JFrame {
 
 
     /*
-    * @param propertyValue: 当前要使用的property的值
-    * @return 以新的数组返回（其中的元素是property的值）
-    * @Description: 为了让栈里保存的是新的数组，而不仅仅是对currentPropertyValue数组的引用
-    * @author: 张旖霜
-    * @date: 11/30/2023 5:35 PM
-    * @version: 1.0
-    */
-    public static int[] copyPropertyValue(int[] propertyValue)
-    {
+     * @param propertyValue: 当前要使用的property的值
+     * @return 以新的数组返回（其中的元素是property的值）
+     * @Description: 为了让栈里保存的是新的数组，而不仅仅是对currentPropertyValue数组的引用
+     * @author: 张旖霜
+     * @date: 11/30/2023 5:35 PM
+     * @version: 1.0
+     */
+    public static int[] copyPropertyValue(int[] propertyValue) {
         int[] newPropertyValue = new int[10];
-        for (int i=0; i<=5; i++)
-        {
+        for (int i = 0; i <= 5; i++) {
             newPropertyValue[i] = propertyValue[i];
         }
         return newPropertyValue;
@@ -601,14 +608,15 @@ public abstract class MatUtil extends JFrame {
         Rect region = new Rect(x, y, size, size);
         img.submat(region).setTo(new Scalar(0, 0, 0));
     }
+
     /**
-    * @param url : 图片地址
-    * @return mat : 包含图片信息的Mat类实例化对象
-    * @Description: 修复了无法打开中文路径图片的问题
-    * @author: 卢思文
-    * @date: 11/26/2023 8:56 PM
-    * @version: 1.1
-    **/
+     * @param url : 图片地址
+     * @return mat : 包含图片信息的Mat类实例化对象
+     * @Description: 修复了无法打开中文路径图片的问题
+     * @author: 卢思文
+     * @date: 11/26/2023 8:56 PM
+     * @version: 1.1
+     **/
     public static Mat readImg(String url) {
         byte[] data = null;
         try {
@@ -642,20 +650,21 @@ public abstract class MatUtil extends JFrame {
                 .setTo(new Scalar(color[0], color[1], color[2]));
 
     }
+
     /**
-    * @param x1 : 上一个点的x坐标
-    * @param y1 : 上一个点的y坐标
-    * @param x2 : 当前点的x坐标
-    * @param y2 : 当前点的y坐标
-    * @param color : 画笔颜色
-    * @param penSize : 画笔粗细
-    * @param mat : 被画的图片
-    * @return
-    * @Description: 以画笔的颜色、画笔的粗细在mat上画出当前点和上一个点之间的连线
-    * @author: 卢思文
-    * @date: 11/29/2023 4:12 PM
-    * @version: 1.0
-    **/
+     * @param x1      : 上一个点的x坐标
+     * @param y1      : 上一个点的y坐标
+     * @param x2      : 当前点的x坐标
+     * @param y2      : 当前点的y坐标
+     * @param color   : 画笔颜色
+     * @param penSize : 画笔粗细
+     * @param mat     : 被画的图片
+     * @return
+     * @Description: 以画笔的颜色、画笔的粗细在mat上画出当前点和上一个点之间的连线
+     * @author: 卢思文
+     * @date: 11/29/2023 4:12 PM
+     * @version: 1.0
+     **/
     public static void drawLine(int x1, int y1, int x2, int y2, int[] color, int penSize, Mat mat) {
         Scalar scalarColor = new Scalar(color[0], color[1], color[2]);
         Imgproc.line(mat, new Point(x1, y1), new Point(x2, y2), scalarColor, penSize);
@@ -697,13 +706,13 @@ public abstract class MatUtil extends JFrame {
 
 
     /*
-    * @param bufImg: 要被转换的bufferedImage类型图片
-    * @return Mat类型图片
-    * @Description:bufferedImage类型转换成Mat类型（主要用在writeText）
-    * @author: 张旖霜
-    * @date: 11/27/2023 12:45 PM
-    * @version: 1.0
-    */
+     * @param bufImg: 要被转换的bufferedImage类型图片
+     * @return Mat类型图片
+     * @Description:bufferedImage类型转换成Mat类型（主要用在writeText）
+     * @author: 张旖霜
+     * @date: 11/27/2023 12:45 PM
+     * @version: 1.0
+     */
     public static Mat bufImgToMat(BufferedImage bufImg) {
         byte[] pixels = ((DataBufferByte) bufImg.getRaster().getDataBuffer())
                 .getData();

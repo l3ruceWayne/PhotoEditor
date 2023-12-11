@@ -1,7 +1,9 @@
 package com.buaa.PhotoEditor.window.thread;
 
 import com.buaa.PhotoEditor.window.Window;
+
 import static com.buaa.PhotoEditor.util.MatUtil.*;
+
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
@@ -16,10 +18,11 @@ import java.awt.event.MouseEvent;
  * @Create 12/2/2023 8:56 PM
  * @Version 1.0
  */
-public class RegionThread extends Thread{
+public class RegionThread extends Thread {
     public Window window;
     public int i;
-    public RegionThread(Window window, int i){
+
+    public RegionThread(Window window, int i) {
         this.window = window;
         this.i = i;
     }
@@ -31,7 +34,7 @@ public class RegionThread extends Thread{
             @Override
             public void mousePressed(MouseEvent e) {
                 if (window.tool.region.selectRegionItem.isSelected()) {
-                    addRegion(e.getX(),e.getY());
+                    addRegion(e.getX(), e.getY());
                 }
             }
 
@@ -46,7 +49,8 @@ public class RegionThread extends Thread{
         window.showImgRegionLabel.addMouseListener(mia);
         window.showImgRegionLabel.addMouseMotionListener(mia);
     }
-    public void addRegion(int x,int y) {
+
+    public void addRegion(int x, int y) {
         Point p = new Point(getValueAfterZoom(window, x, i),
                 getValueAfterZoom(window, y, i));
         window.tool.region.selectedRegionLabel[i].setLocation(p);
@@ -57,7 +61,7 @@ public class RegionThread extends Thread{
 //        window.showImgRegionLabel.setLayout(null);
         window.tool.region.selectedRegionLabel[i].setVisible(false);
         window.showImgRegionLabel.add(window.tool.region.selectedRegionLabel[i]);
-        if(i == window.counter){
+        if (i == window.counter) {
             window.tool.region.selectedRegionLabel[i].setVisible(true);
         }
 //        // 可能过后改bug会用
@@ -77,13 +81,16 @@ public class RegionThread extends Thread{
         window.tool.region.selectedRegionY[i]
                 = window.tool.region.selectedRegionLabel[i].getY();
     }
+
     public void setRegionSize(int x, int y) {
-        x = getValueAfterZoom(window, x ,i);
+        x = getValueAfterZoom(window, x, i);
         y = getValueAfterZoom(window, y, i);
         int width = Math.abs(window.tool.region.selectedRegionX[i] - x);
         int height = Math.abs(window.tool.region.selectedRegionY[i] - y);
         x = Math.min(x, window.tool.region.selectedRegionX[i]);
         y = Math.min(y, window.tool.region.selectedRegionY[i]);
+        width = Math.min(getValueAfterZoom(window, window.showImgRegionLabel.getWidth(), i) - x, width );
+        height = Math.min(getValueAfterZoom(window, window.showImgRegionLabel.getHeight(), i) - y, height );
         window.tool.region.selectedRegionLabel[i].setBounds(x, y, width, height);
 //        window.tool.region.pointRegion = new Point(x+width, y-height);
     }

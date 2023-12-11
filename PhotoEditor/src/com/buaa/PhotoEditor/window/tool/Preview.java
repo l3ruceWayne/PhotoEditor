@@ -7,15 +7,16 @@ import javax.swing.*;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.TreeSet;
 
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /*
-* @Description:查看编辑成果，长按preview按钮显示图片原本大小的效果，松开恢复
-* @author: 张旖霜
-* @date: 12/9/2023 9:59 AM
-* @version: 1.0
-*/
+ * @Description:查看编辑成果，长按preview按钮显示图片原本大小的效果，松开恢复
+ * @author: 张旖霜
+ * @date: 12/9/2023 9:59 AM
+ * @version: 1.0
+ */
 public class Preview {
     public Window window;
     public JMenu previewItem;
@@ -26,11 +27,19 @@ public class Preview {
         previewItem.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent evt) {
+                if (window.originalImg == null) {
+                    JOptionPane.showMessageDialog(null, "Please open an image first");
+                    previewItem.setSelected(false);
+                }
                 showOriginalImg();
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (window.originalImg == null) {
+                    JOptionPane.showMessageDialog(null, "Please open an image first");
+                    previewItem.setSelected(false);
+                }
                 showZoomImg();
             }
         });
@@ -44,8 +53,10 @@ public class Preview {
      * @date: 12/9/2023 10:00 AM
      * @version: 1.0
      */
-    public void showOriginalImg(){
-        window.tool.region.removeRegionSelected();
+    public void showOriginalImg() {
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            window.tool.region.removeRegionSelected(i);
+        }
         window.tool.pen.penItem.setSelected(false);
         window.tool.eraser.eraserItem.setSelected(false);
         window.tool.drag.dragItem.setSelected(false);
@@ -63,8 +74,7 @@ public class Preview {
      * @date: 12/9/2023 10:00 AM
      * @version: 1.0
      */
-    public void showZoomImg()
-    {
+    public void showZoomImg() {
         int counter = window.counter;
         int width = window.size[counter][0];
         int height = window.size[counter][1];
@@ -75,10 +85,11 @@ public class Preview {
         MatUtil.show(window.zoomImg[counter], window.showImgRegionLabel);
         if (width > panelWidth
                 || height > panelHeight) {
-            window.showImgRegionLabel.setLocation((panelWidth - width)/2,
-                    (panelHeight - height)/2);
-        } else{
+            window.showImgRegionLabel.setLocation((panelWidth - width) / 2,
+                    (panelHeight - height) / 2);
+        } else {
             window.panel.setLayout(window.gridBagLayout);
         }
     }
+
 }

@@ -209,15 +209,18 @@ public class Property {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }
+
         // 入栈
         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
         window.last.push(copyImgArray(window.zoomImg));
         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
 
+
         window.temp = MatUtil.copy(window.img);
         propertyMenuDialog.setModal(true);
         propertyMenuDialog.setVisible(true);
         propertyMenuDialog.setResizable(true);
+
 
         // 更新property现在的值
         window.currentPropertyValue[0] = contrastAndBrightness.contrastSlide.getValue();

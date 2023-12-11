@@ -4,19 +4,22 @@ GitHub: https://github.com/igor036
  */
 package com.buaa.PhotoEditor.window;
 
-import com.buaa.PhotoEditor.util.MatUtil;
+
+
+import static com.buaa.PhotoEditor.util.MatUtil.*;
+
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.PathIterator;
 
 import java.util.Stack;
 import java.util.zip.CheckedOutputStream;
 import javax.swing.*;
 
+import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.edit.Edit;
 import com.buaa.PhotoEditor.window.file.Save;
 import com.buaa.PhotoEditor.window.file.MyFile;
@@ -164,6 +167,11 @@ public class Window extends JFrame {
         nextPropertyValue = new Stack<>();
         currentPropertyValue = new int[10];
         this.setTitle(title);
+        addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent evt) {
+                KeyPress(evt);
+            }
+        });
     }
 
     public void initComponents() {
@@ -203,12 +211,6 @@ public class Window extends JFrame {
 
         ui = new UI(this);
 
-        addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent evt) {
-                ESCKeyPress(evt);
-            }
-        });
-
         showImgRegionLabel.setText("Please select photo");
 
         /*
@@ -247,12 +249,11 @@ public class Window extends JFrame {
         separateMenu(menuBar);
         menuBar.add(ui.uiMenu);
         separateMenu(menuBar);
-        menuBar.add(layer.layerItem);
-        separateMenu(menuBar);
         menuBar.add(tool.region.selectRegionItem);
         separateMenu(menuBar);
         menuBar.add(tool.pen.penItem);
         menuBar.add(tool.pen.penColorPanel);
+        menuBar.add(Box.createHorizontalGlue());
         menuBar.add(tool.pen.penSizeSpinner);
         separateMenu(menuBar);
         menuBar.add(tool.eraser.eraserItem);
@@ -267,6 +268,7 @@ public class Window extends JFrame {
         menuBar.add(tool.drag.dragItem);
         separateMenu(menuBar);
         menuBar.add(tool.preview.previewItem);
+        separateMenu(menuBar);
         menuBar.add(Box.createHorizontalGlue());
         setJMenuBar(menuBar);
 
@@ -298,8 +300,11 @@ public class Window extends JFrame {
      * @date: 11/26/2023 9:09 PM
      * @version: 1.0
      **/
-    public void ESCKeyPress(KeyEvent evt) {
-
+    public void KeyPress(KeyEvent evt) {
+        if (zoomImg == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
 
             if (tool.region.selectRegionItem.isSelected()) {
@@ -319,11 +324,48 @@ public class Window extends JFrame {
         } else if (evt.getKeyCode() == KeyEvent.VK_F12) {
             MatUtil.show(nexLayerImg, "");
         }
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+                int x = add.widget.widgetLabel.getX();
+                int y = add.widget.widgetLabel.getY();
+                MatUtil.widget(zoomImg[i],
+                        MatUtil.readImg(add.widget.widgetLabel.getIcon().toString()),
+                        x, y, i, this);
+                if(i == counter){
+                    MatUtil.show(zoomImg[counter], showImgRegionLabel);
+                }
+//                int panelWidth = panel.getWidth();
+//                int panelHeight = panel.getHeight();
+//                if (width > panelWidth
+//                        || height > panelHeight) {
+//                    showImgRegionLabel.setLocation((panelWidth - width)/2,
+//                            (panelHeight - height)/2);
+//                } else{
+//                    panel.setLayout(gridBagLayout);
+//                }
+//                System.out.println(zoomImg[counter].width());
+                panel.remove(add.widget.widgetLabel);
+                System.out.println("yes");
+            }
+            // pending1
+//            for (JLabel widgetLabel : add.widget.widgetLabelList) {
+//                MatUtil.widget(zoomImg[ORIGINAL_SIZE_COUNTER],
+//                        MatUtil.readImg(widgetLabel.getIcon().toString()),
+//                        widgetLabel.getX(), widgetLabel.getY());
+//                panel.remove(widgetLabel);
+//            }
+        }
     }
+
+//     pending
+//      待转成多线程
 
 
 //     pending
 //      待转成多线程
+
+
 
 
 //     public void addMouseListeners() {
