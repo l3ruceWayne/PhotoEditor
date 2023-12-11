@@ -6,6 +6,7 @@ import com.buaa.PhotoEditor.window.Window;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 
+import com.buaa.PhotoEditor.window.custom.CustomColorChooser;
 import com.buaa.PhotoEditor.window.thread.AddTextThread;
 import org.opencv.core.Scalar;
 
@@ -35,7 +36,8 @@ public class Text {
     private Scalar color;
     private int scale;
     private String str;
-
+    public JButton OKButton;
+    public CustomColorChooser customColorChooser;
     public JDialog addTextDialog;
     public JPanel textColorPanel;
     public JLabel addTextContentsLabel;
@@ -46,6 +48,8 @@ public class Text {
     public boolean flag;
 
     public Text(Window window) {
+        OKButton = new JButton("OK");
+        customColorChooser = new CustomColorChooser(window, OKButton);
         scale = 1;
         color = new Scalar(0, 0, 0);
         str = "";
@@ -83,7 +87,11 @@ public class Text {
         addTextDialog.setLocationRelativeTo(null);
 
         textColorPanel.setBackground(new Color(0, 0, 0));
-
+        textColorPanel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                customColorChooser.showDialog();
+            }
+        });
         // panelTextColor
         GroupLayout pnlTextColorLayout = new javax.swing.GroupLayout(textColorPanel);
         textColorPanel.setLayout(pnlTextColorLayout);
@@ -100,51 +108,58 @@ public class Text {
         GroupLayout addTextLayout = new GroupLayout(addTextDialog.getContentPane());
         addTextDialog.getContentPane().setLayout(addTextLayout);
         addTextLayout.setHorizontalGroup(
-                addTextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                addTextLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(addTextLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(addTextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                         .addGroup(addTextLayout.createSequentialGroup()
                                                 .addComponent(addTextColorLabel)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(textColorPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED,
+                                                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(textColorPanel, GroupLayout.PREFERRED_SIZE,
+                                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                         .addComponent(addTextContentsLabel)
                                         .addComponent(addTextSizeLabel))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(textField, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(addTextSpinner, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(textField, GroupLayout.PREFERRED_SIZE, 176,
+                                                GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(addTextSpinner, GroupLayout.PREFERRED_SIZE, 45,
+                                                GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(91, Short.MAX_VALUE))
         );
-        addTextLayout.setVerticalGroup(
-                addTextLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        addTextLayout.setVerticalGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(addTextLayout.createSequentialGroup()
                                 .addGap(27, 27, 27)
                                 .addGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(addTextContentsLabel)
-                                        .addComponent(textField, javax.swing.GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(textField, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(17, 17, 17)
                                 .addGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(addTextSizeLabel)
-                                        .addComponent(addTextSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(addTextSpinner, GroupLayout.PREFERRED_SIZE,
+                                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(addTextColorLabel)
-                                        .addComponent(textColorPanel, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(textColorPanel, GroupLayout.Alignment.TRAILING,
+                                                GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                                GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(82, Short.MAX_VALUE))
         );
     }
 
     /*
 
-    * @param:
-    * @return
-    * @Description:选好位置（框选区域）后，显示字体设置面板
-    * 增加未选择图片弹窗
-    * @author: 张旖霜,罗雨曦
-    * @date: 12/5/2023 3:28 PM
-    * @version: 2.0
-    */
+     * @param:
+     * @return
+     * @Description:选好位置（框选区域）后，显示字体设置面板
+     * 增加未选择图片弹窗
+     * @author: 张旖霜,罗雨曦
+     * @date: 12/5/2023 3:28 PM
+     * @version: 2.0
+     */
     public void writeTextActionPerformed() {//GEN-FIRST:event_writeTextActionPerformed
         //如果未选择图片，弹窗提示并return
         if (window.originalImg == null) {

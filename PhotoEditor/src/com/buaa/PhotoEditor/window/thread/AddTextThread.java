@@ -12,13 +12,11 @@ import static com.buaa.PhotoEditor.window.Constant.*;
 import org.opencv.core.Scalar;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 /**
@@ -43,10 +41,14 @@ public class AddTextThread extends Thread {
 
     @Override
     public void run() {
-        text.textColorPanel.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                selectColor();
+        text.OKButton.addActionListener(e -> {
+            Color color = text.customColorChooser.colorChooser.getColor();
+            text.setColor(new Scalar(color.getBlue(), color.getGreen(), color.getRed()));
+            text.textColorPanel.setBackground(color);
+            if(i == window.counter){
+                text.customColorChooser.dialog.dispose();
             }
+            writeText(i);
         });
         /*
          * @param:
@@ -103,7 +105,6 @@ public class AddTextThread extends Thread {
     public void selectColor() {
         if (i == window.counter) {
             Color color = JColorChooser.showDialog(null, "Color", Color.BLACK);
-
             text.setColor(new Scalar(color.getBlue(), color.getGreen(), color.getRed()));
             text.textColorPanel.setBackground(color);
             // 下面画的时候还是单线程，因为画必须等选择颜色结束
