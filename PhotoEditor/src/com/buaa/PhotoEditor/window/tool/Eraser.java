@@ -59,7 +59,7 @@ public class Eraser {
         clearScreen = false;
         eraserItem = new JCheckBoxMenuItem(eraserItemIcon);
         // 调整布局（原本图标后面会多一块无意义空白）
-        Dimension preferredSize = new Dimension(40, 40);
+        Dimension preferredSize = new Dimension(40, 30);
         eraserItem.setPreferredSize(preferredSize);
         // 如果未选择图片，弹窗提示并return
         eraserItem.addActionListener(e -> {
