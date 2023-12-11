@@ -58,7 +58,7 @@ public class Save {
      * @version: 2.0
      **/
     private void getNewImg() {
-        // conflict
+        // conflict can be handled after the resolve of add widget
 
 //        Mat newImg = MatUtil.copy(window.zoomImg[ORIGINAL_SIZE_COUNTER]);
 //        // 保存后，小组件和图片融为一体，所以把小组件删除

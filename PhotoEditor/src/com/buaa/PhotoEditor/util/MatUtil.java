@@ -223,7 +223,7 @@ public abstract class MatUtil extends JFrame {
         int ly = getValueAfterZoom(window, wy, i);
         int width = getValueAfterZoom(window, widget.width(), i);
         int height = getValueAfterZoom(window, widget.height(), i);
-        // 当大小超过图片时，报错
+        // pending 当大小超过图片时，报错
         int rx = lx + width;
         int ry = ly + height;
         Point a = new Point(lx, ly);
