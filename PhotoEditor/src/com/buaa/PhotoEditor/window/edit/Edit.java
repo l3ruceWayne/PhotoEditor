@@ -5,20 +5,20 @@ import com.buaa.PhotoEditor.window.Window;
 import javax.swing.*;
 
 /**
-* @Description: 主菜单栏上的一级菜单，整合编辑相关操作，下设copy cut undo redo四个功能子菜单
+* @Description 主菜单栏上的一级菜单，整合编辑相关操作，下设copy cut undo redo四个功能子菜单
 * @author 罗雨曦
 * @date 2023/11/27
 * @version: 1.0
 **/
 public class Edit {
     public JMenu editMenu;
-    private Window window;
-    private Copy copy;
+    private final Window window;
+    private final Copy copy;
 
     /**
      * @param window 当前窗口
      * @Description 构造方法——生成子菜单栏
-     * @author: 罗雨曦
+     * @author 罗雨曦
      * @date 2023/11/27
      * @version: 1.0
      **/
