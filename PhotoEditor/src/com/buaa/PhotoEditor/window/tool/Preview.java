@@ -31,6 +31,11 @@ public class Preview {
                     JOptionPane.showMessageDialog(null, "Please open an image first");
                     previewItem.setSelected(false);
                 }
+                if(window.add.widget.widgetIcon != null){
+                    JOptionPane.showMessageDialog(null,
+                            "Please handle widget first");
+                    return;
+                }
                 showOriginalImg();
             }
 
@@ -39,6 +44,11 @@ public class Preview {
                 if (window.originalImg == null) {
                     JOptionPane.showMessageDialog(null, "Please open an image first");
                     previewItem.setSelected(false);
+                }
+                if(window.add.widget.widgetIcon != null){
+                    JOptionPane.showMessageDialog(null,
+                            "Please handle widget first");
+                    return;
                 }
                 showZoomImg();
             }

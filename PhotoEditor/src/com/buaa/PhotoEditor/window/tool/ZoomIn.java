@@ -55,6 +55,11 @@ public class ZoomIn {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }
+        if(window.add.widget.widgetIcon != null){
+            JOptionPane.showMessageDialog(null,
+                    "Please handle widget first");
+            return;
+        }
         // 取消 drag
         window.tool.drag.dragItem.setSelected(false);
         window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));

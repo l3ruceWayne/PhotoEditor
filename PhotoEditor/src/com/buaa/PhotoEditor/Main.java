@@ -18,7 +18,7 @@ public class Main {
             ex.printStackTrace();
         }
 
-        new Window("Layer 1");
+        new Window("");
     }
 
 }

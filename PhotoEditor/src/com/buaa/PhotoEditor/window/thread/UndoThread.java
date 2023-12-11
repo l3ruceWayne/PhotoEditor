@@ -58,7 +58,7 @@ public class UndoThread extends Thread {
                 }
                 if (window.last.isEmpty()) {
                     if (i == window.counter) {
-                        JOptionPane.showMessageDialog(null, "Please open an image first");
+                        JOptionPane.showMessageDialog(null, "There's nothing left to undo!");
                     }
                     return;
                 }

@@ -59,13 +59,16 @@ public class Widget {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }
-
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            window.tool.region.removeRegionSelected(i);
+        }
         window.tool.region.disableListeners();
 
         JFileChooser fileChooser = new JFileChooser();
 
         if (fileChooser.showOpenDialog(window)
                 == JFileChooser.APPROVE_OPTION) {
+
             widgetPath = fileChooser.getSelectedFile().getAbsolutePath();
             // pending
             if (WIDGET_SUPPORT_FILE_TYPES.contains(widgetPath
@@ -77,8 +80,8 @@ public class Widget {
                 /*
                     增加防范措施，防止小组件的大小大过背景图片
                  */
-                if(widgetIcon.getIconWidth() > window.size[window.counter][0]
-                        ||widgetIcon.getIconHeight() > window.size[window.counter][1]){
+                if (widgetIcon.getIconWidth() > window.size[window.counter][0]
+                        || widgetIcon.getIconHeight() > window.size[window.counter][1]) {
                     JOptionPane.showMessageDialog(null,
                             "Please select a widget smaller than the photo");
                     widgetIcon = null;
@@ -88,8 +91,8 @@ public class Widget {
                 widgetLabel = new JLabel(widgetIcon);
 
                 addWidgetListener(widgetIcon);
-                widgetLabel.setBounds((window.panel.getWidth() - widget.width())/2,
-                        (window.panel.getHeight() - widget.height())/2,
+                widgetLabel.setBounds((window.panel.getWidth() - widget.width()) / 2,
+                        (window.panel.getHeight() - widget.height()) / 2,
                         widget.width(), widget.height());
                 window.panel.setLayout(null);
                 window.panel.add(widgetLabel);
@@ -140,8 +143,6 @@ public class Widget {
             public void mouseDragged(MouseEvent e) {
                 int lx = widgetLabel.getX();
                 int ly = widgetLabel.getY();
-                System.out.println("x is :" + lx);
-                System.out.println("y is :" + ly);
                 int x = e.getX() + lx;
                 int y = e.getY() + ly;
                 if (isInResizeArea(e, widgetLabel)) {

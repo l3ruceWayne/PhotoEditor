@@ -502,6 +502,7 @@ public abstract class MatUtil extends JFrame {
         }
         return newPropertyValue;
     }
+
     /*
      * @param imgArray: 当前要使用的img数组
      * @return 以新的数组返回（其中的元素是imgArray的值）
@@ -510,11 +511,9 @@ public abstract class MatUtil extends JFrame {
      * @date: 12/5/2023 10:53 PM
      * @version: 1.0
      */
-    public static Mat[] copyImgArray(Mat[] imgArray)
-    {
+    public static Mat[] copyImgArray(Mat[] imgArray) {
         Mat[] newImgArray = new Mat[12];
-        for (int i=0; i<=11; i++)
-        {
+        for (int i = 0; i <= 11; i++) {
             newImgArray[i] = copy(imgArray[i]);
         }
         return newImgArray;
