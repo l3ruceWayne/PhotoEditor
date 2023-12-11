@@ -151,15 +151,15 @@ public class Text {
     }
 
     /*
+    * @param:
+    * @return
+    * @Description:选好位置（框选区域）后，显示字体设置面板
+    * 增加未选择图片弹窗
+    * @author: 张旖霜,罗雨曦
+    * @date: 12/5/2023 3:28 PM
+    * @version: 2.0
+    */
 
-     * @param:
-     * @return
-     * @Description:选好位置（框选区域）后，显示字体设置面板
-     * 增加未选择图片弹窗
-     * @author: 张旖霜,罗雨曦
-     * @date: 12/5/2023 3:28 PM
-     * @version: 2.0
-     */
     public void writeTextActionPerformed() {//GEN-FIRST:event_writeTextActionPerformed
         //如果未选择图片，弹窗提示并return
         if (window.originalImg == null) {

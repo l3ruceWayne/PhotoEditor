@@ -40,9 +40,9 @@ public class Eraser {
 
     static {
         eraserCursorIcon = new ImageIcon(
-                "resources/eraserCursorImage.png");
+                "PhotoEditor/resources/eraserCursorImage.png");
         eraserItemIcon = new ImageIcon(
-                "resources/eraserItemImage.png"
+                "PhotoEditor/resources/eraserItemImage.png"
         );
         Image image = eraserCursorIcon.getImage();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -58,6 +58,9 @@ public class Eraser {
         }
         clearScreen = false;
         eraserItem = new JCheckBoxMenuItem(eraserItemIcon);
+        // 调整布局（原本图标后面会多一块无意义空白）
+        Dimension preferredSize = new Dimension(40, 40);
+        eraserItem.setPreferredSize(preferredSize);
         // 如果未选择图片，弹窗提示并return
         eraserItem.addActionListener(e -> {
             if (window.originalImg == null) {
@@ -100,6 +103,8 @@ public class Eraser {
         });
 
         eraserSizeSpinner = new JSpinner(Tool.eraserModel);
+        // 将Spinner设置为内嵌样式
+        eraserSizeSpinner.setBorder(BorderFactory.createLoweredBevelBorder());
         // 橡皮尺寸初始化
 
         /*

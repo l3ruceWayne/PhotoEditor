@@ -22,7 +22,7 @@ public class ZoomIn {
 
     public ZoomIn(Window window) {
         this.window = window;
-        zoomInItem = new JMenu("Zoom +");
+        zoomInItem = new JMenu("Zoom+");
 
 
         zoomInItem.addMouseListener(new MouseAdapter() {

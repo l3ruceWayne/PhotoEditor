@@ -27,11 +27,19 @@ public class Preview {
         previewItem.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent evt) {
+                if (window.originalImg == null) {
+                    JOptionPane.showMessageDialog(null, "Please open an image first");
+                    previewItem.setSelected(false);
+                }
                 showOriginalImg();
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (window.originalImg == null) {
+                    JOptionPane.showMessageDialog(null, "Please open an image first");
+                    previewItem.setSelected(false);
+                }
                 showZoomImg();
             }
         });

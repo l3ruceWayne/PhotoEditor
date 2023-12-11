@@ -24,7 +24,7 @@ public class ZoomOut {
 
     public ZoomOut(Window window) {
         this.window = window;
-        zoomOutItem = new JMenu("Zoom -");
+        zoomOutItem = new JMenu("Zoom-");
 
 //        zoomOutItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, java.awt.event.InputEvent.SHIFT_MASK));
         zoomOutItem.addMouseListener(new MouseAdapter() {

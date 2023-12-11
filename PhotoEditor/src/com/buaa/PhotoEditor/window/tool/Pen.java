@@ -16,6 +16,7 @@ import static com.buaa.PhotoEditor.window.Constant.*;
 
 import javax.swing.*;
 
+import javax.swing.border.Border;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
@@ -70,9 +71,9 @@ public class Pen {
      **/
     static {
         penCursorIcon = new ImageIcon(
-                "resources/penCursorImage.png");
+                "PhotoEditor/resources/penCursorImage.png");
         penItemIcon = new ImageIcon(
-                "resources/penItemImage.png"
+                "PhotoEditor/resources/penItemImage.png"
         );
         Image image = penCursorIcon.getImage();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -90,7 +91,10 @@ public class Pen {
         lastPoint = new Point[NUM_FOR_NEW];
         // menubar
 
+        // 调整布局（原本图标后面会多一块无意义空白）
         penItem = new JCheckBoxMenuItem(penItemIcon);
+        Dimension preferredSize = new Dimension(40, 40);
+        penItem.setPreferredSize(preferredSize);
         // 如果未选择图片，弹窗提示并return
         penItem.addActionListener(e -> {
             if (window.originalImg == null) {
@@ -129,6 +133,10 @@ public class Pen {
         });
 
         penColorPanel = new JPanel();
+        // 颜色选框（panel）美化:内嵌加白边（因为背景颜色为黑，为了在黑色背景下突出边界所以选择白色）
+        Border b1 = BorderFactory.createLineBorder(Color.white, 1);  //组合边框
+        Border b2 = BorderFactory.createLoweredBevelBorder();
+        penColorPanel.setBorder(BorderFactory.createCompoundBorder(b1, b2) );
         penColorPanel.setBackground(new java.awt.Color(0, 0, 0));
         penColorPanel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
@@ -136,6 +144,8 @@ public class Pen {
             }
         });
         penSizeSpinner = new JSpinner(Tool.penModel);
+        // 将Spinner设置为内嵌样式
+        penSizeSpinner.setBorder(BorderFactory.createLoweredBevelBorder());
         /*
             lsw
             增加事件捕获器,更改画笔尺寸

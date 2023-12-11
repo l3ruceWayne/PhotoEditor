@@ -247,12 +247,13 @@ public class Window extends JFrame {
         separateMenu(menuBar);
         menuBar.add(ui.uiMenu);
         separateMenu(menuBar);
-        menuBar.add(layer.layerItem);
-        separateMenu(menuBar);
+//        menuBar.add(layer.layerItem);
+//        separateMenu(menuBar);
         menuBar.add(tool.region.selectRegionItem);
         separateMenu(menuBar);
         menuBar.add(tool.pen.penItem);
         menuBar.add(tool.pen.penColorPanel);
+        menuBar.add(Box.createHorizontalGlue());
         menuBar.add(tool.pen.penSizeSpinner);
         separateMenu(menuBar);
         menuBar.add(tool.eraser.eraserItem);
@@ -267,6 +268,7 @@ public class Window extends JFrame {
         menuBar.add(tool.drag.dragItem);
         separateMenu(menuBar);
         menuBar.add(tool.preview.previewItem);
+        separateMenu(menuBar);
         menuBar.add(Box.createHorizontalGlue());
         setJMenuBar(menuBar);
 
@@ -355,7 +357,6 @@ public class Window extends JFrame {
 //            }
         }
     }
-
 
 //     pending
 //      待转成多线程
