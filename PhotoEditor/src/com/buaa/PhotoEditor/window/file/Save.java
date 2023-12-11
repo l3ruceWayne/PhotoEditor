@@ -62,6 +62,9 @@ public class Save {
         if (window.add.widget.widgetIcon == null) {
             return;
         }
+        window.next.clear();
+        window.nextOriginalImg.clear();
+        window.nextPropertyValue.clear();
         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
         window.last.push(copyImgArray(window.zoomImg));
         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));

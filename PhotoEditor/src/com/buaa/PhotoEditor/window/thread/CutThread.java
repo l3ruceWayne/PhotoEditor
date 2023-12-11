@@ -62,6 +62,9 @@ public class CutThread extends Thread {
                     }
                 } else {
                     if (i == ORIGINAL_SIZE_COUNTER) {
+                        window.next.clear();
+                        window.nextOriginalImg.clear();
+                        window.nextPropertyValue.clear();
                         // 当前property的值入栈
                         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                         // 将当前的window.img压入window.last中，保存上一张图片

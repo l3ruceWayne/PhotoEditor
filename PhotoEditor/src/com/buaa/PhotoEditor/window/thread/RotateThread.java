@@ -51,6 +51,9 @@ public class RotateThread extends Thread {
             return;
         }
         if (i == 0) {
+            window.next.clear();
+            window.nextOriginalImg.clear();
+            window.nextPropertyValue.clear();
             // 当前property的值入栈
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             // 将当前的window.img压入window.last中，保存上一张图片

@@ -4,16 +4,11 @@ import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import static com.buaa.PhotoEditor.window.Constant.*;
 
-import com.buaa.PhotoEditor.window.tool.ZoomIn;
-import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.util.MatUtil.resize;
-import static com.buaa.PhotoEditor.window.Constant.*;
-import static com.buaa.PhotoEditor.window.Constant.AUTO_SIZE_COUNTER;
 
 /**
  * @Description: 调节图片大小（分辨率）
@@ -25,7 +20,7 @@ public class MySize {
     //与openCV里的size类冲突，所以改了类名
     public javax.swing.JTextField txtHeight;
     public javax.swing.JTextField txtWidth;
-    public javax.swing.JLabel lbSize;
+    public javax.swing.JLabel sizeLabel;
     private Window window;
 
     /**
@@ -38,7 +33,7 @@ public class MySize {
      **/
     public MySize(Window window){
         this.window=window;
-        lbSize = new JLabel("Size");
+        sizeLabel = new JLabel("Size");
         txtWidth = new JTextField();
         txtHeight = new JTextField();
     }

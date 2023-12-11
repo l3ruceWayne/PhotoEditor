@@ -77,10 +77,6 @@ public class RedoThread extends Thread {
                             window.currentPropertyValue = MatUtil.copyPropertyValue(window.nextPropertyValue.peek());
 
                             // 还原property的值
-                            window.property.getContrastAndBrightness().contrastSlide.setValue(window.currentPropertyValue[0]);
-                            window.property.getContrastAndBrightness().brightnessSlider.setValue(window.currentPropertyValue[1]);
-                            window.property.getSaturation().saturationSlider.setValue(window.currentPropertyValue[2]);
-                            window.property.getGraininess().grainBar.setValue(window.currentPropertyValue[3]);
                             window.property.getMySize().txtWidth.setText(window.currentPropertyValue[4] + "");
                             window.property.getMySize().txtHeight.setText(window.currentPropertyValue[5] + "");
                         }
