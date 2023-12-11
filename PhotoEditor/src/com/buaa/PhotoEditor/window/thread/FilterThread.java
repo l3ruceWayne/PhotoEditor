@@ -7,9 +7,7 @@ import com.buaa.PhotoEditor.util.MatUtil;
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 import static com.buaa.PhotoEditor.window.Constant.*;
 import com.buaa.PhotoEditor.window.Window;
-import com.buaa.PhotoEditor.window.add.Widget;
 import com.buaa.PhotoEditor.window.filter.*;
-import org.opencv.core.Mat;
 
 import javax.swing.*;
 
@@ -154,10 +152,10 @@ public class FilterThread extends Thread {
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
         }
         if (window.tool.region.selectRegionItem.isSelected()) {
-            MatUtil.inversor(window.zoomImg[i], getRect(window.tool.region.selectedRegionLabel[i]));
+            MatUtil.inversion(window.zoomImg[i], getRect(window.tool.region.selectedRegionLabel[i]));
             window.tool.region.removeRegionSelected(i);
         } else {
-            MatUtil.inversor(window.zoomImg[i]);
+            MatUtil.inversion(window.zoomImg[i]);
         }
 
         if (i != window.counter) {

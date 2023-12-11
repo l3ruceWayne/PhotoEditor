@@ -4,6 +4,12 @@ import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
 
+/**
+ * @author 卢思文
+ * @version 1.0
+ * @Description 添加文字、小组件
+ * @date 2023/12/11
+ */
 public class Add {
     public JMenu addMenu;
     public Window window;
@@ -23,11 +29,4 @@ public class Add {
         return window;
     }
 
-    public Widget getWidget() {
-        return widget;
-    }
-
-    public Text getText() {
-        return text;
-    }
 }
