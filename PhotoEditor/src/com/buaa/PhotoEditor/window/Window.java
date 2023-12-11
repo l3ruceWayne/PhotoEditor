@@ -144,9 +144,32 @@ public class Window extends JFrame {
 
         this.title = title;
         initComponents();
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //LYX 设置窗口大小为不可调整
-        this.setResizable(false);
+        // LYX 设置全屏 方案1（个人觉得这个就OK，不用完全全屏，四边留一点我觉得也挺好）
+        setBounds(0, 0, getToolkit().getScreenSize().width, getToolkit().getScreenSize().height);
+        setResizable(false);
+        setVisible(true);
+
+//        // LYX 设置全屏方案2
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        setBounds(0, 0, screenSize.width, screenSize.height);
+//        setResizable(false);
+//        setUndecorated(true);
+//        setExtendedState(JFrame.MAXIMIZED_BOTH);
+//        setVisible(true);
+
+//        // LYX 设置全屏方案3（可能是全屏按钮的实现办法） 我的设备上还是四边会有空，而且无法关闭窗口
+//        getGraphicsConfiguration().getDevice().setFullScreenWindow(this);
+//        setVisible(true);
+
+//        // LYX 设置全屏方案4（可能是全屏按钮的实现办法）  我的设备上无法正常显示
+//        setResizable(false);
+//        setUndecorated(false);//我只要用这个操作就无法正常显示
+//        setVisible(true);
+//        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//        GraphicsDevice dev = env.getDefaultScreenDevice();
+//        dev.setFullScreenWindow(this);
+//        this.validate();
 
 
 //          pending
