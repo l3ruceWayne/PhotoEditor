@@ -58,6 +58,17 @@ public class Save {
      * @version: 2.0
      **/
     private void getNewImg() {
+        // conflict can be handled after the resolve of add widget
+
+//        Mat newImg = MatUtil.copy(window.zoomImg[ORIGINAL_SIZE_COUNTER]);
+//        // 保存后，小组件和图片融为一体，所以把小组件删除
+//        for (JLabel widgetLabel : window.add.widget.widgetLabelList) {
+//            MatUtil.widget(newImg,
+//                    MatUtil.readImg(widgetLabel.getIcon().toString()),
+//                    widgetLabel.getX(), widgetLabel.getY());
+//            window.panel.remove(widgetLabel);
+//        }
+
         // 保存后，小组件和图片融为一体，所以把小组件删除
         // pending1
 //        for (JLabel widgetLabel : window.add.widget.widgetLabelList) {
@@ -66,6 +77,7 @@ public class Save {
 //                    widgetLabel.getX(), widgetLabel.getY());
 //            window.panel.remove(widgetLabel);
 //        }
+
         // LYX 因为不再使用resize实现编辑时的放大缩小，故不需要更新屏幕显示内容
         // 显示融为一体的图片
 //        MatUtil.show(newImg, window.showImgRegionLabel);

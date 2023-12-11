@@ -53,7 +53,8 @@ public class Drag {
                     window.tool.region.removeRegionSelected();
                     window.tool.pen.penItem.setSelected(false);
                     window.tool.eraser.eraserItem.setSelected(false);
-                    window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    //设置拖动光标
+                    window.showImgRegionLabel.setCursor(new Cursor(Cursor.MOVE_CURSOR));
                     // flag 的作用是让监听器只启动一次，启动后将一直监听
                     if (flag == false) {
                         dragListener();

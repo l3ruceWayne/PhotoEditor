@@ -71,9 +71,9 @@ public class Pen {
      **/
     static {
         penCursorIcon = new ImageIcon(
-                "PhotoEditor/resources/penCursorImage.png");
+                "resources/penCursorImage.png");
         penItemIcon = new ImageIcon(
-                "PhotoEditor/resources/penItemImage.png"
+                "resources/penItemImage.png"
         );
         Image image = penCursorIcon.getImage();
         Toolkit toolkit = Toolkit.getDefaultToolkit();

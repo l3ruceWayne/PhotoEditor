@@ -68,9 +68,10 @@ public class Open {
             //LYX 判断是否为JPG图片
             Path selectPath= fileChooser.getSelectedFile().toPath();
             boolean checkFormat=checkImageFormat(selectPath);
+            // 增加了png
             if(!checkFormat){
                 JOptionPane.showMessageDialog(null,
-                        "Please select a JPG/JPEG format image");
+                        "Please select a JPG/JPEG/PNG format image");
                 return;
             }
             window.originalImgPath = fileChooser.getSelectedFile().getAbsolutePath();
@@ -158,9 +159,11 @@ public class Open {
             window.nextPropertyValue.clear();
             window.showImgRegionLabel.setText("");
 
+            // 将当前的property的初始值暂存起来
+            window.currentPropertyValue[4] = originalWidth;
+            window.currentPropertyValue[5] = originalHeight;
+
             window.property.updateProperty();
-
-
 
         }
     }
@@ -174,6 +177,7 @@ public class Open {
      **/
     public static boolean checkImageFormat(Path imagePath) {
         String fileName = imagePath.getFileName().toString();
-        return fileName.endsWith(".jpg") || fileName.endsWith(".jpeg");
+        // 增加了png
+        return fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png");
     }
 }

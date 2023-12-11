@@ -3,6 +3,8 @@ package com.buaa.PhotoEditor.window.property;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.thread.PropertyThread;
+
+import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.window.Constant.*;
 import javax.swing.*;
 import java.awt.*;
@@ -207,14 +209,18 @@ public class Property {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }
+
+        // 入栈
+        window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+        window.last.push(copyImgArray(window.zoomImg));
+        window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
+
+
         window.temp = MatUtil.copy(window.img);
         propertyMenuDialog.setModal(true);
         propertyMenuDialog.setVisible(true);
         propertyMenuDialog.setResizable(true);
 
-        // 当前property的值入栈
-        window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-        window.last.push(window.zoomImg);
 
         // 更新property现在的值
         window.currentPropertyValue[0] = contrastAndBrightness.contrastSlide.getValue();
@@ -252,9 +258,9 @@ public class Property {
 
     public void updateProperty() {
 
-        getMySize().txtWidth.setText(window.img.width() + "");
-        getMySize().txtHeight.setText(window.img.height() + "");
-        getMySize().lbSize.setText("Size: " + window.img.width() + "x" + window.img.height());
+        getMySize().txtWidth.setText(window.size[ORIGINAL_SIZE_COUNTER][0] + "");
+        getMySize().txtHeight.setText(window.size[ORIGINAL_SIZE_COUNTER][1] + "");
+        getMySize().lbSize.setText("Size: " + window.size[ORIGINAL_SIZE_COUNTER][0] + "x" + window.size[ORIGINAL_SIZE_COUNTER][1]);
 
 //        int width = window.img.width() >= 200 ? window.img.width() : 200;
 //        int height = window.img.height() >= 200 ? window.img.height() : 200;

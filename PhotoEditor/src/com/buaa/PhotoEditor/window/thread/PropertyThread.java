@@ -4,6 +4,8 @@ import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.property.ContrastAndBrightness;
 import com.buaa.PhotoEditor.window.property.Saturation;
+
+import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.window.Constant.*;
 import org.opencv.core.Mat;
 
@@ -56,6 +58,13 @@ public class PropertyThread extends Thread {
      * @version: 1.0
      **/
     private void changeSaturation() {
+        if (i == ORIGINAL_SIZE_COUNTER) {
+            // 当前property的值入栈
+            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+            // 将当前的window.img压入window.last中，保存上一张图片
+            window.last.push(copyImgArray(window.zoomImg));
+            window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
+        }
         int saturationValue = saturation.saturationSlider.getValue();
         if (window.tool.region.selectRegionItem.isSelected()) {
             MatUtil.saturation(window.zoomImg[i], saturationValue,
@@ -78,6 +87,13 @@ public class PropertyThread extends Thread {
      * @version: 1.0
      **/
     private void contrastAndBrightness() {
+        if (i == ORIGINAL_SIZE_COUNTER) {
+            // 当前property的值入栈
+            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+            // 将当前的window.img压入window.last中，保存上一张图片
+            window.last.push(copyImgArray(window.zoomImg));
+            window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
+        }
         //修改亮度和对比度
         int contrastValue = contrastAndBrightness.contrastSlide.getValue();
         int brightnessValue = contrastAndBrightness.brightnessSlider.getValue();

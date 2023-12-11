@@ -223,7 +223,7 @@ public abstract class MatUtil extends JFrame {
         int ly = getValueAfterZoom(window, wy, i);
         int width = getValueAfterZoom(window, widget.width(), i);
         int height = getValueAfterZoom(window, widget.height(), i);
-        // 当大小超过图片时，报错
+        // pending 当大小超过图片时，报错
         int rx = lx + width;
         int ry = ly + height;
         Point a = new Point(lx, ly);
@@ -502,7 +502,6 @@ public abstract class MatUtil extends JFrame {
         }
         return newPropertyValue;
     }
-
     /*
      * @param imgArray: 当前要使用的img数组
      * @return 以新的数组返回（其中的元素是imgArray的值）
@@ -511,10 +510,12 @@ public abstract class MatUtil extends JFrame {
      * @date: 12/5/2023 10:53 PM
      * @version: 1.0
      */
-    public static Mat[] copyImgArray(Mat[] imgArray) {
+    public static Mat[] copyImgArray(Mat[] imgArray)
+    {
         Mat[] newImgArray = new Mat[12];
-        for (int i = 0; i <= 11; i++) {
-            newImgArray[i] = imgArray[i];
+        for (int i=0; i<=11; i++)
+        {
+            newImgArray[i] = copy(imgArray[i]);
         }
         return newImgArray;
     }

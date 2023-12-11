@@ -2,7 +2,9 @@ package com.buaa.PhotoEditor.window.add;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import com.formdev.flatlaf.icons.FlatOptionPaneInformationIcon;
 import org.opencv.core.Mat;
+import org.opencv.ml.ANN_MLP_ANNEAL;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.buaa.PhotoEditor.window.Constant.NUM_FOR_NEW;
+
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /**
@@ -27,7 +30,6 @@ public class Widget {
 
     public Window window;
     public JLabel widgetLabel;
-    public int i;
     public ImageIcon widgetIcon;
     public JMenuItem widgetItem;
     public JLabel selectedWidgetLabel;
@@ -69,17 +71,26 @@ public class Widget {
             if (WIDGET_SUPPORT_FILE_TYPES.contains(widgetPath
                     .substring(widgetPath.lastIndexOf(".") + 1)
                     .toUpperCase())) {
-                i = window.counter;
                 Mat widget = MatUtil.readImg(widgetPath);
                 widgetIcon = new ImageIcon(widgetPath);
+
+                /*
+                    增加防范措施，防止小组件的大小大过背景图片
+                 */
+                if(widgetIcon.getIconWidth() > window.size[window.counter][0]
+                        ||widgetIcon.getIconHeight() > window.size[window.counter][1]){
+                    JOptionPane.showMessageDialog(null,
+                            "Please select a widget smaller than the photo");
+                    widgetIcon = null;
+                    return;
+                }
 
                 widgetLabel = new JLabel(widgetIcon);
 
                 addWidgetListener(widgetIcon);
-
-                widgetLabel.setBounds(window.getX() / 2, window.getY() / 2,
+                widgetLabel.setBounds((window.panel.getWidth() - widget.width())/2,
+                        (window.panel.getHeight() - widget.height())/2,
                         widget.width(), widget.height());
-
                 window.panel.setLayout(null);
                 window.panel.add(widgetLabel);
 
@@ -129,6 +140,8 @@ public class Widget {
             public void mouseDragged(MouseEvent e) {
                 int lx = widgetLabel.getX();
                 int ly = widgetLabel.getY();
+                System.out.println("x is :" + lx);
+                System.out.println("y is :" + ly);
                 int x = e.getX() + lx;
                 int y = e.getY() + ly;
                 if (isInResizeArea(e, widgetLabel)) {
