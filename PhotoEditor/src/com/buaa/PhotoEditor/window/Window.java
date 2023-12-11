@@ -15,7 +15,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 import java.util.Stack;
-import java.util.zip.CheckedOutputStream;
 import javax.swing.*;
 
 import com.buaa.PhotoEditor.util.MatUtil;
@@ -34,10 +33,9 @@ import com.buaa.PhotoEditor.window.tool.Tool;
 
 import com.buaa.PhotoEditor.window.filter.Filter;
 
-import com.buaa.PhotoEditor.window.layer.Layer;
-
 
 import org.opencv.core.Mat;
+import org.opencv.dnn.Layer;
 
 
 /**
@@ -63,7 +61,7 @@ public class Window extends JFrame {
     public Property property;
     // 为设置panel的布局增添的布局管理器
     public GridBagLayout gridBagLayout;
-
+    public boolean flagForWidget;
 
     public Save save;
     // tool
@@ -77,7 +75,6 @@ public class Window extends JFrame {
     /* Layer类的实例化对象只能有一个（因为不同的图层需要共用一个Layer，这样才能显示所有的图层列表）
         所以是static
     * */
-    public static Layer layer;
     //control of photo
     public Mat img;              //actually
     // 谨慎更改originalImg
@@ -124,10 +121,6 @@ public class Window extends JFrame {
         cnt = 0;
 
         // 将当前的property的初始值暂存起来（如同img）
-        currentPropertyValue[0] = property.getContrastAndBrightness().contrastSlide.getValue();
-        currentPropertyValue[1] = property.getContrastAndBrightness().brightnessSlider.getValue();
-        currentPropertyValue[2] = property.getSaturation().saturationSlider.getValue();
-        currentPropertyValue[3] = property.getGraininess().grainBar.getValue();
         currentPropertyValue[4] = Integer.parseInt(property.getMySize().txtWidth.getText());
         currentPropertyValue[5] = Integer.parseInt(property.getMySize().txtHeight.getText());
 
@@ -144,32 +137,9 @@ public class Window extends JFrame {
 
         this.title = title;
         initComponents();
-        // LYX 设置全屏 方案1（个人觉得这个就OK，不用完全全屏，四边留一点我觉得也挺好）
         setBounds(0, 0, getToolkit().getScreenSize().width, getToolkit().getScreenSize().height);
         setResizable(false);
         setVisible(true);
-
-//        // LYX 设置全屏方案2
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//        setBounds(0, 0, screenSize.width, screenSize.height);
-//        setResizable(false);
-//        setUndecorated(true);
-//        setExtendedState(JFrame.MAXIMIZED_BOTH);
-//        setVisible(true);
-
-//        // LYX 设置全屏方案3（可能是全屏按钮的实现办法） 我的设备上还是四边会有空，而且无法关闭窗口
-//        getGraphicsConfiguration().getDevice().setFullScreenWindow(this);
-//        setVisible(true);
-
-//        // LYX 设置全屏方案4（可能是全屏按钮的实现办法）  我的设备上无法正常显示
-//        setResizable(false);
-//        setUndecorated(false);//我只要用这个操作就无法正常显示
-//        setVisible(true);
-//        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-//        GraphicsDevice dev = env.getDefaultScreenDevice();
-//        dev.setFullScreenWindow(this);
-//        this.validate();
 
 
 //          pending
@@ -217,9 +187,6 @@ public class Window extends JFrame {
         tool = new Tool(this);
 
         // 只有一个layer，所以layer赋值之后就不再赋值
-        if (layer == null) {
-            layer = new Layer(this);
-        }
 
         menuBar = new JMenuBar();
 
@@ -228,9 +195,7 @@ public class Window extends JFrame {
         myFile = new MyFile(this);
         edit = new Edit(this);
         property = new Property(this);
-
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
         ui = new UI(this);
 
         showImgRegionLabel.setText("Please select photo");
@@ -272,8 +237,10 @@ public class Window extends JFrame {
         menuBar.add(ui.uiMenu);
         separateMenu(menuBar);
         menuBar.add(tool.region.selectRegionItem);
+        tool.region.selectRegionItem.setMaximumSize(new Dimension(0, tool.region.selectRegionItem.getPreferredSize().height));
         separateMenu(menuBar);
         menuBar.add(tool.pen.penItem);
+        tool.pen.penItem.setMaximumSize(new Dimension(0, tool.pen.penItem.getPreferredSize().height));
         menuBar.add(tool.pen.penColorPanel);
         menuBar.add(Box.createHorizontalGlue());
         menuBar.add(tool.pen.penSizeSpinner);
@@ -288,6 +255,7 @@ public class Window extends JFrame {
         menuBar.add(tool.zoomOut.zoomOutItem);
         separateMenu(menuBar);
         menuBar.add(tool.drag.dragItem);
+        tool.drag.dragItem.setMaximumSize(new Dimension(0, tool.drag.dragItem.getPreferredSize().height));
         separateMenu(menuBar);
         menuBar.add(tool.preview.previewItem);
         separateMenu(menuBar);
@@ -349,21 +317,33 @@ public class Window extends JFrame {
             if (add.widget.widgetIcon == null) {
                 return;
             }
+            next.clear();
+            nextOriginalImg.clear();
+            nextPropertyValue.clear();
             lastPropertyValue.push(MatUtil.copyPropertyValue(currentPropertyValue));
             last.push(copyImgArray(zoomImg));
             lastOriginalImg.push(copyImgArray(originalZoomImg));
+            flagForWidget = true;
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-                int x =(int) (add.widget.widgetLabel.getX() - ((double)panel.getWidth() - showImgRegionLabel.getWidth())/2);
-                int y =(int) (add.widget.widgetLabel.getY() - ((double)panel.getHeight() - showImgRegionLabel.getHeight())/2);
+                int x = (int) (add.widget.widgetLabel.getX() - ((double) panel.getWidth() - showImgRegionLabel.getWidth()) / 2);
+                int y = (int) (add.widget.widgetLabel.getY() - ((double) panel.getHeight() - showImgRegionLabel.getHeight()) / 2);
                 MatUtil.widget(zoomImg[i],
                         MatUtil.readImg(add.widget.widgetLabel.getIcon().toString()),
                         x, y, i, this);
+                if (!flagForWidget) {
+                    if (i == counter) {
+                        JOptionPane.showMessageDialog(null, "Please remove widget completely inside the photo");
+                    }
+                    continue;
+                }
                 if (i == counter) {
                     MatUtil.show(zoomImg[counter], showImgRegionLabel);
                     panel.remove(add.widget.widgetLabel);
                 }
             }
-            add.widget.widgetIcon = null;
+            if(flagForWidget){
+                add.widget.widgetIcon = null;
+            }
         }
     }
 

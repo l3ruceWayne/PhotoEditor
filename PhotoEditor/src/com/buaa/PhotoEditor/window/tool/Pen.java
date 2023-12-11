@@ -1,27 +1,16 @@
 package com.buaa.PhotoEditor.window.tool;
 
-import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-import com.buaa.PhotoEditor.window.layer.Layer;
 import com.buaa.PhotoEditor.window.thread.PaintThread;
 
-
-import static com.buaa.PhotoEditor.util.MatUtil.*;
-import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
-
-import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
-import static com.buaa.PhotoEditor.util.MatUtil.widget;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 
 import javax.swing.*;
 
 import javax.swing.border.Border;
-import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
-import java.security.KeyStore;
-import java.util.Arrays;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 

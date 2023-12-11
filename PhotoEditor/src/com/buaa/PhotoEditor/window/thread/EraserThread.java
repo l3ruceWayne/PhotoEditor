@@ -37,6 +37,9 @@ public class EraserThread extends Thread{
 
             // 当前property的值入栈，第一层将zoomImg数组入栈（这时仅zoomImg[0]是入栈的，其他的还没更新好）
             if (i == 0) {
+                window.next.clear();
+                window.nextOriginalImg.clear();
+                window.nextPropertyValue.clear();
                 window.lastPropertyValue
                         .push(copyPropertyValue(window
                                 .currentPropertyValue));
@@ -97,6 +100,9 @@ public class EraserThread extends Thread{
 
                     // 当前property的值入栈，第一层将zoomImg数组入栈（这时仅zoomImg[0]是入栈的，其他的还没更新好）
                     if (i == 0) {
+                        window.next.clear();
+                        window.nextOriginalImg.clear();
+                        window.nextPropertyValue.clear();
                         window.lastPropertyValue
                                 .push(copyPropertyValue(window
                                         .currentPropertyValue));

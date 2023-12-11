@@ -66,6 +66,9 @@ public class PaintThread extends Thread{
 
                     // 在第一个线程入栈
                     if (i == 0) {
+                        window.next.clear();
+                        window.nextOriginalImg.clear();
+                        window.nextPropertyValue.clear();
                         window.lastPropertyValue
                                 .push(copyPropertyValue(window
                                         .currentPropertyValue));
