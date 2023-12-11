@@ -52,7 +52,7 @@ public class Save {
 
     /**
      * @Description: 更新window.img为保存后的img，以便后续再进行编辑
-
+     * <p>
      * 根据设计更改更新newImg的获取对象与相关细节操作
      * @author: 卢思文，罗雨曦
      * @date: 12/5/2023 4:18 PM
@@ -65,18 +65,27 @@ public class Save {
         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
         window.last.push(copyImgArray(window.zoomImg));
         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
+        window.flagForWidget = true;
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-            int x =(int) (window.add.widget.widgetLabel.getX() - ((double)window.panel.getWidth() - window.showImgRegionLabel.getWidth())/2);
-            int y =(int) (window.add.widget.widgetLabel.getY() - ((double)window.panel.getHeight() - window.showImgRegionLabel.getHeight())/2);
+            int x = (int) (window.add.widget.widgetLabel.getX() - ((double) window.panel.getWidth() - window.showImgRegionLabel.getWidth()) / 2);
+            int y = (int) (window.add.widget.widgetLabel.getY() - ((double) window.panel.getHeight() - window.showImgRegionLabel.getHeight()) / 2);
             MatUtil.widget(window.zoomImg[i],
                     MatUtil.readImg(window.add.widget.widgetLabel.getIcon().toString()),
                     x, y, i, window);
+            if (!window.flagForWidget) {
+                if (i == window.counter) {
+                    JOptionPane.showMessageDialog(null, "Save failed\nPlease remove widget completely inside the photo");
+                }
+                continue;
+            }
             if (i == window.counter) {
                 MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
                 window.panel.remove(window.add.widget.widgetLabel);
             }
         }
-        window.add.widget.widgetIcon = null;
+        if (window.flagForWidget) {
+            window.add.widget.widgetIcon = null;
+        }
     }
 
 
@@ -105,7 +114,9 @@ public class Save {
 //        MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
 
         getNewImg();
-
+        if (!window.flagForWidget) {
+            return;
+        }
         if (path == null) {
             path = window.originalImgPath;
         }
@@ -163,6 +174,9 @@ public class Save {
                 path += ".jpg";
             }
             getNewImg();
+            if (!window.flagForWidget) {
+                return;
+            }
             //LYX 修复保存路径中含有中文而无法正确保存的bug，同时，通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
 //            MatUtil.save(path, window.img);
             SaveMatToJpg(path, window.zoomImg[ORIGINAL_SIZE_COUNTER]);

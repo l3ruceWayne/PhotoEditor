@@ -17,10 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
 
 
 import com.buaa.PhotoEditor.window.Window;
@@ -226,6 +223,14 @@ public abstract class MatUtil extends JFrame {
         // pending 当大小超过图片时，报错
         int rx = lx + width;
         int ry = ly + height;
+        if ((lx < 0 || rx > getValueAfterZoom(window, window.showImgRegionLabel.getWidth(), i))) {
+            window.flagForWidget = false;
+            return;
+        }
+        if ((ly < 0 || ry > getValueAfterZoom(window, window.showImgRegionLabel.getHeight(), i))) {
+            window.flagForWidget = false;
+            return;
+        }
         Point a = new Point(lx, ly);
         Point b = new Point(rx, ry);
         Mat widgetRegion = img.submat(new Rect(a, b));

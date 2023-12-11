@@ -63,7 +63,7 @@ public class Window extends JFrame {
     public Property property;
     // 为设置panel的布局增添的布局管理器
     public GridBagLayout gridBagLayout;
-
+    public boolean flagForWidget;
 
     public Save save;
     // tool
@@ -352,18 +352,27 @@ public class Window extends JFrame {
             lastPropertyValue.push(MatUtil.copyPropertyValue(currentPropertyValue));
             last.push(copyImgArray(zoomImg));
             lastOriginalImg.push(copyImgArray(originalZoomImg));
+            flagForWidget = true;
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-                int x =(int) (add.widget.widgetLabel.getX() - ((double)panel.getWidth() - showImgRegionLabel.getWidth())/2);
-                int y =(int) (add.widget.widgetLabel.getY() - ((double)panel.getHeight() - showImgRegionLabel.getHeight())/2);
+                int x = (int) (add.widget.widgetLabel.getX() - ((double) panel.getWidth() - showImgRegionLabel.getWidth()) / 2);
+                int y = (int) (add.widget.widgetLabel.getY() - ((double) panel.getHeight() - showImgRegionLabel.getHeight()) / 2);
                 MatUtil.widget(zoomImg[i],
                         MatUtil.readImg(add.widget.widgetLabel.getIcon().toString()),
                         x, y, i, this);
+                if (!flagForWidget) {
+                    if (i == counter) {
+                        JOptionPane.showMessageDialog(null, "Please remove widget completely inside the photo");
+                    }
+                    continue;
+                }
                 if (i == counter) {
                     MatUtil.show(zoomImg[counter], showImgRegionLabel);
                     panel.remove(add.widget.widgetLabel);
                 }
             }
-            add.widget.widgetIcon = null;
+            if(flagForWidget){
+                add.widget.widgetIcon = null;
+            }
         }
     }
 
