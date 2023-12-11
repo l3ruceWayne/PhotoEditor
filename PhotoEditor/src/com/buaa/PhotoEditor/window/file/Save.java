@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /**
@@ -58,37 +59,24 @@ public class Save {
      * @version: 2.0
      **/
     private void getNewImg() {
-        // conflict can be handled after the resolve of add widget
-
-//        Mat newImg = MatUtil.copy(window.zoomImg[ORIGINAL_SIZE_COUNTER]);
-//        // 保存后，小组件和图片融为一体，所以把小组件删除
-//        for (JLabel widgetLabel : window.add.widget.widgetLabelList) {
-//            MatUtil.widget(newImg,
-//                    MatUtil.readImg(widgetLabel.getIcon().toString()),
-//                    widgetLabel.getX(), widgetLabel.getY());
-//            window.panel.remove(widgetLabel);
-//        }
-
-        // 保存后，小组件和图片融为一体，所以把小组件删除
-        // pending1
-//        for (JLabel widgetLabel : window.add.widget.widgetLabelList) {
-//            MatUtil.widget(window.zoomImg[ORIGINAL_SIZE_COUNTER],
-//                    MatUtil.readImg(widgetLabel.getIcon().toString()),
-//                    widgetLabel.getX(), widgetLabel.getY());
-//            window.panel.remove(widgetLabel);
-//        }
-
-        // LYX 因为不再使用resize实现编辑时的放大缩小，故不需要更新屏幕显示内容
-        // 显示融为一体的图片
-//        MatUtil.show(newImg, window.showImgRegionLabel);
-        // pending
-//        if (window.last.size() != 0 && window.img != window.last.peek()) {
-//            // 当前property的值入栈
-//            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-//            window.last.push(window.zoomImg);
-//        }
-        // window.img弃用，暂时注释掉下行
-//        window.img = newImg;
+        if (window.add.widget.widgetIcon == null) {
+            return;
+        }
+        window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+        window.last.push(copyImgArray(window.zoomImg));
+        window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            int x =(int) (window.add.widget.widgetLabel.getX() - ((double)window.panel.getWidth() - window.showImgRegionLabel.getWidth())/2);
+            int y =(int) (window.add.widget.widgetLabel.getY() - ((double)window.panel.getHeight() - window.showImgRegionLabel.getHeight())/2);
+            MatUtil.widget(window.zoomImg[i],
+                    MatUtil.readImg(window.add.widget.widgetLabel.getIcon().toString()),
+                    x, y, i, window);
+            if (i == window.counter) {
+                MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
+                window.panel.remove(window.add.widget.widgetLabel);
+            }
+        }
+        window.add.widget.widgetIcon = null;
     }
 
 

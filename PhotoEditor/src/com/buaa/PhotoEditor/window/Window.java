@@ -321,29 +321,26 @@ public class Window extends JFrame {
                     this.tool.region.removeRegionSelected(i);
                 }
             }
-        } else if (evt.getKeyCode() == KeyEvent.VK_F12) {
-            MatUtil.show(nexLayerImg, "");
         }
-
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             if (add.widget.widgetIcon == null) {
                 return;
             }
+            lastPropertyValue.push(MatUtil.copyPropertyValue(currentPropertyValue));
+            last.push(copyImgArray(zoomImg));
+            lastOriginalImg.push(copyImgArray(originalZoomImg));
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
                 int x =(int) (add.widget.widgetLabel.getX() - ((double)panel.getWidth() - showImgRegionLabel.getWidth())/2);
                 int y =(int) (add.widget.widgetLabel.getY() - ((double)panel.getHeight() - showImgRegionLabel.getHeight())/2);
-                if(i == counter){
-                    System.out.println(x);
-                    System.out.println(y);
-                }
                 MatUtil.widget(zoomImg[i],
                         MatUtil.readImg(add.widget.widgetLabel.getIcon().toString()),
                         x, y, i, this);
                 if (i == counter) {
                     MatUtil.show(zoomImg[counter], showImgRegionLabel);
+                    panel.remove(add.widget.widgetLabel);
                 }
-                panel.remove(add.widget.widgetLabel);
             }
+            add.widget.widgetIcon = null;
         }
     }
 

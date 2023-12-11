@@ -95,6 +95,7 @@ public class Region {
     public void removeRegionSelected(int i) {
         window.panel.setLayout(null);
         window.showImgRegionLabel.remove(selectedRegionLabel[i]);
+        selectedRegionLabel[i].setVisible(false);
         window.panel.revalidate();
         window.panel.repaint();
         removeRegionCounter ++;

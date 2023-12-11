@@ -4,6 +4,8 @@ package com.buaa.PhotoEditor.window.add;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 
+import static com.buaa.PhotoEditor.util.MatUtil.copy;
+import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.window.Constant.*;
 
 import com.buaa.PhotoEditor.window.custom.CustomColorChooser;
@@ -18,6 +20,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
@@ -35,7 +39,7 @@ public class Text {
     public JMenuItem addTextItem;
     private Scalar color;
     private int scale;
-    private String str;
+    public String str;
     public JButton OKButton;
     public CustomColorChooser customColorChooser;
     public JDialog addTextDialog;
@@ -57,15 +61,20 @@ public class Text {
         this.window = window;
         addTextItem = new JMenuItem("Text");
         addTextDialog = new JDialog();
+        addTextDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         textColorPanel = new JPanel();
         addTextContentsLabel = new JLabel("Contents: ");
         addTextSizeLabel = new JLabel("Size: ");
         addTextColorLabel = new JLabel("Color: ");
         addTextSpinner = new JSpinner();
         textField = new JTextField();
+        addTextSpinner.setValue(1);
+        setStr("");
+        textField.setText(str);
+        setColor(new Scalar(0, 0, 0));
+        textColorPanel.setBackground(Color.BLACK);
 
         initAddTextDialog();
-
         flag = true;
         addTextItem.addActionListener(evt -> writeTextActionPerformed());
 
@@ -129,36 +138,36 @@ public class Text {
                                 .addContainerGap(91, Short.MAX_VALUE))
         );
         addTextLayout.setVerticalGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(addTextLayout.createSequentialGroup()
-                                .addGap(27, 27, 27)
-                                .addGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(addTextContentsLabel)
-                                        .addComponent(textField, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGap(17, 17, 17)
-                                .addGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(addTextSizeLabel)
-                                        .addComponent(addTextSpinner, GroupLayout.PREFERRED_SIZE,
-                                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(addTextColorLabel)
-                                        .addComponent(textColorPanel, GroupLayout.Alignment.TRAILING,
-                                                GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-                                                GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(82, Short.MAX_VALUE))
+                .addGroup(addTextLayout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(addTextContentsLabel)
+                                .addComponent(textField, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17)
+                        .addGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(addTextSizeLabel)
+                                .addComponent(addTextSpinner, GroupLayout.PREFERRED_SIZE,
+                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(addTextLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(addTextColorLabel)
+                                .addComponent(textColorPanel, GroupLayout.Alignment.TRAILING,
+                                        GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                        GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(82, Short.MAX_VALUE))
         );
     }
 
     /*
-    * @param:
-    * @return
-    * @Description:选好位置（框选区域）后，显示字体设置面板
-    * 增加未选择图片弹窗
-    * @author: 张旖霜,罗雨曦
-    * @date: 12/5/2023 3:28 PM
-    * @version: 2.0
-    */
+     * @param:
+     * @return
+     * @Description:选好位置（框选区域）后，显示字体设置面板
+     * 增加未选择图片弹窗
+     * @author: 张旖霜,罗雨曦
+     * @date: 12/5/2023 3:28 PM
+     * @version: 2.0
+     */
 
     public void writeTextActionPerformed() {//GEN-FIRST:event_writeTextActionPerformed
         //如果未选择图片，弹窗提示并return
@@ -177,19 +186,22 @@ public class Text {
                     addTextThread[i].start();
                     try {
                         addTextThread[i].join();
-                    } catch (InterruptedException e)
-                    {
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
+            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
+            window.last.push(copyImgArray(window.zoomImg));
+            window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
+            for(int i = 0;i<=ORIGINAL_SIZE_COUNTER;i++){
+                addTextThread[i].matForAddText = copy(window.zoomImg[i]);
+            }
+            setStr("");
+            textField.setText(str);
             addTextDialog.setModal(true);
             addTextDialog.setVisible(true);
 
-            window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
-            window.last.push(window.zoomImg);
-            window.img = window.temp;
-            initPanel();
 
         } else {
             JOptionPane.showMessageDialog(null, "Select an area to add text!");
@@ -205,13 +217,6 @@ public class Text {
      * @date: 11/27/2023 12:48 PM
      * @version: 1.0
      */
-    public void initPanel() {
-        setStr("");
-        textField.setText(str);
-        addTextSpinner.setValue(1);
-        setColor(new Scalar(0, 0, 0));
-        textColorPanel.setBackground(Color.BLACK);
-    }
 
     public Scalar getColor() {
         return color;
