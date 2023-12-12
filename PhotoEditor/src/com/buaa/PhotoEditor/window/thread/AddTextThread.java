@@ -2,22 +2,31 @@ package com.buaa.PhotoEditor.window.thread;
 
 
 import static com.buaa.PhotoEditor.util.MatUtil.*;
-
+import static com.buaa.PhotoEditor.window.Constant.*;
 import com.buaa.PhotoEditor.util.MatUtil;
+import com.buaa.PhotoEditor.window.Constant;
 import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.add.Text;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 
+import com.buaa.PhotoEditor.window.tool.ZoomIn;
+import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+import org.opencv.features2d.ORB;
 
+import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.net.SocketTimeoutException;
+import java.nio.channels.NonReadableChannelException;
 
 /**
  * ClassName: AddTextThread
@@ -32,8 +41,9 @@ public class AddTextThread extends Thread {
     public Window window;
     public Text text;
     public int i;
-
+    public Mat matForAddText;
     public AddTextThread(Window window, Text text, int i) {
+        matForAddText = new Mat();
         this.window = window;
         this.text = text;
         this.i = i;
@@ -41,6 +51,13 @@ public class AddTextThread extends Thread {
 
     @Override
     public void run() {
+        text.addTextDialog.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                matForAddText = copy(window.zoomImg[i]);
+            }
+        });
         text.OKButton.addActionListener(e -> {
             Color color = text.customColorChooser.colorChooser.getColor();
             text.setColor(new Scalar(color.getBlue(), color.getGreen(), color.getRed()));
@@ -68,51 +85,33 @@ public class AddTextThread extends Thread {
              等实现了undo之后，如果改变字号大小，利用undo一次+重新绘制新字号的string
              来实现实时改变字号大小
              */
-
-//            writeText(i);
+            window.zoomImg[i] = copy(matForAddText);
+            writeText(i);
         });
         text.textField.getDocument()
                 .addDocumentListener(new DocumentListener() {
                     @Override
                     public void insertUpdate(DocumentEvent e) {
                         text.setStr(text.textField.getText());
+                        window.zoomImg[i] = copy(matForAddText);
                         writeText(i);
                     }
 
                     @Override
                     public void removeUpdate(DocumentEvent e) {
                         text.setStr(text.textField.getText());
+                        window.zoomImg[i] = copy(matForAddText);
                         writeText(i);
                     }
 
                     @Override
                     public void changedUpdate(DocumentEvent e) {
                         text.setStr(text.textField.getText());
+                        window.zoomImg[i] = copy(matForAddText);
                         writeText(i);
 
                     }
                 });
-    }
-
-    /*
-     * @param:
-     * @return
-     * @Description:点击颜色框，显示颜色选择面板
-     * @author: 张旖霜
-     * @date: 11/27/2023 12:52 PM
-     * @version: 1.0
-     */
-    public void selectColor() {
-        if (i == window.counter) {
-            Color color = JColorChooser.showDialog(null, "Color", Color.BLACK);
-            text.setColor(new Scalar(color.getBlue(), color.getGreen(), color.getRed()));
-            text.textColorPanel.setBackground(color);
-            // 下面画的时候还是单线程，因为画必须等选择颜色结束
-            // 要想实现真正的多线程，必须自己实现选择颜色窗口
-            for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-                writeText(i);
-            }
-        }
     }
 
     /*
@@ -125,8 +124,8 @@ public class AddTextThread extends Thread {
      * @version: 1.0
      */
     public void writeText(int i) {
-        int x = window.tool.region.selectedRegionLabel[i].getX();
-        int y = window.tool.region.selectedRegionLabel[i].getY();
+        int x = window.tool.getRegion().selectedRegionLabel[i].getX();
+        int y = window.tool.getRegion().selectedRegionLabel[i].getY();
 
 
         BufferedImage bufImg = MatUtil.bufferedImg(window.zoomImg[i]);

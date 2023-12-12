@@ -1,41 +1,28 @@
 package com.buaa.PhotoEditor.window.tool;
 
-import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-import com.buaa.PhotoEditor.window.thread.PaintThread;
 import com.buaa.PhotoEditor.window.thread.RegionThread;
-import org.opencv.core.Mat;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 
 import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-/*
 
- * @Description:drag后重新定位的bug已修改
- * 点击选择区域功能后，光标暂且设置成默认
- * （如果上一个状态是画笔，如果不设置成默认，就一直是画笔了）
+/**
+ * @Description: 选择区域功能
  * @author: 张旖霜、卢思文
  * @date: 11/27/2023 3:31 PM
  * @version: 1.0
  */
-
 public class Region {
     public RegionThread[] regionThread;
-    public Mat[] copyRegionMat;
     public JLabel[] selectedRegionLabel;
     public Window window;
     public JCheckBoxMenuItem selectRegionItem;
-    public int removeRegionCounter = 0;
-    public int selectedRegionX[], selectedRegionY[];
-
-    public Point pointRegion;
-
+    private int removeRegionCounter = 0;
+    public int[] selectedRegionX;
+    public int[] selectedRegionY;
     private boolean flag;
 
     public Region(Window window) {
@@ -52,37 +39,38 @@ public class Region {
         }
         selectRegionItem = new JCheckBoxMenuItem("Region");
         // 如果未选择图片，弹窗提示并return
-        selectRegionItem.addActionListener(e->{
+        selectRegionItem.addActionListener(e -> {
             if (window.originalImg == null) {
                 JOptionPane.showMessageDialog(null, "Please open an image first");
                 selectRegionItem.setSelected(false);
-                return;
             }
         });
-        selectRegionItem.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                window.tool.pen.penItem.setSelected(false);
-                window.tool.eraser.eraserItem.setSelected(false);
-
-                window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-
-                window.tool.drag.dragItem.setSelected(false);
-
-
-                if (flag == false) {
-                    regionListener();
-                    flag = true;
-                }
-
-            }
-        });
+        selectRegionItem.addItemListener(e -> initRegionItem(e));
     }
 
-    /*
-     * @param:
-     * @return
-     * @Description:监听鼠标状态（从tool类换到这里主要是为了修改drag后无法使用画笔的bug）
-     * （在tool类是在window.panel上进行监听，换到Region类，在window.showImgRegionLabel进行监听）
+    /**
+     * @param e : 事件
+     * @Description: 初始化regionItem
+     * @author: 卢思文
+     * @date: 11/26/2023 8:05 PM
+     * @version: 1.0
+     */
+    private void initRegionItem(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+            window.tool.getPen().penItem.setSelected(false);
+            window.tool.getEraser().eraserItem.setSelected(false);
+            window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            window.tool.getDrag().dragItem.setSelected(false);
+
+            if (!flag) {
+                regionListener();
+                flag = true;
+            }
+        }
+    }
+
+    /**
+     * @Description: 执行多线程，监听鼠标状态
      * @author: 张旖霜
      * @date: 11/27/2023 7:53 PM
      * @version: 1.0
@@ -92,19 +80,33 @@ public class Region {
             regionThread[i].start();
         }
     }
+
+    /**
+     * @Description: 取消某图层的region
+     * @author: 卢思文
+     * @date: 11/27/2023 7:53 PM
+     * @version: 1.0
+     */
     public void removeRegionSelected(int i) {
         window.panel.setLayout(null);
         window.showImgRegionLabel.remove(selectedRegionLabel[i]);
+        selectedRegionLabel[i].setVisible(false);
         window.panel.revalidate();
         window.panel.repaint();
-        removeRegionCounter ++;
-        if(removeRegionCounter == NUM_FOR_NEW){
+        removeRegionCounter++;
+        if (removeRegionCounter == NUM_FOR_NEW) {
             removeRegionCounter = 0;
             selectRegionItem.setSelected(false);
         }
     }
 
-    public void removeRegionSelected(){
+    /**
+     * @Description: 取消所有图层的region
+     * @author: 张旖霜
+     * @date: 11/27/2023 7:53 PM
+     * @version: 1.0
+     */
+    public void removeRegionSelected() {
         window.panel.setLayout(null);
         window.showImgRegionLabel.remove(selectedRegionLabel[window.counter]);
         window.panel.revalidate();
@@ -112,10 +114,14 @@ public class Region {
         selectRegionItem.setSelected(false);
     }
 
-
+    /**
+     * @Description: 恢复选择region前的状态
+     * @author: 张旖霜
+     * @date: 11/27/2023 7:53 PM
+     * @version: 1.0
+     */
     public void disableListeners() {
         selectRegionItem.setSelected(false);
         window.pasting = false;
     }
-
 }

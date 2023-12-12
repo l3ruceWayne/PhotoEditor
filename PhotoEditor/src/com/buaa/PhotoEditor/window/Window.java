@@ -5,7 +5,6 @@ GitHub: https://github.com/igor036
 package com.buaa.PhotoEditor.window;
 
 
-
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 
 
@@ -16,7 +15,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 import java.util.Stack;
-import java.util.zip.CheckedOutputStream;
 import javax.swing.*;
 
 import com.buaa.PhotoEditor.util.MatUtil;
@@ -35,10 +33,9 @@ import com.buaa.PhotoEditor.window.tool.Tool;
 
 import com.buaa.PhotoEditor.window.filter.Filter;
 
-import com.buaa.PhotoEditor.window.layer.Layer;
-
 
 import org.opencv.core.Mat;
+import org.opencv.dnn.Layer;
 
 
 /**
@@ -64,7 +61,7 @@ public class Window extends JFrame {
     public Property property;
     // 为设置panel的布局增添的布局管理器
     public GridBagLayout gridBagLayout;
-
+    public boolean flagForWidget;
 
     public Save save;
     // tool
@@ -78,7 +75,6 @@ public class Window extends JFrame {
     /* Layer类的实例化对象只能有一个（因为不同的图层需要共用一个Layer，这样才能显示所有的图层列表）
         所以是static
     * */
-    public static Layer layer;
     //control of photo
     public Mat img;              //actually
     // 谨慎更改originalImg
@@ -112,8 +108,6 @@ public class Window extends JFrame {
     public boolean pasting = false;
 
     public String title;
-    public int imgWidth;
-    public int imgHeight;
     //新增UI菜单
     public UI ui;
 
@@ -125,10 +119,6 @@ public class Window extends JFrame {
         cnt = 0;
 
         // 将当前的property的初始值暂存起来（如同img）
-        currentPropertyValue[0] = property.getContrastAndBrightness().contrastSlide.getValue();
-        currentPropertyValue[1] = property.getContrastAndBrightness().brightnessSlider.getValue();
-        currentPropertyValue[2] = property.getSaturation().saturationSlider.getValue();
-        currentPropertyValue[3] = property.getGraininess().grainBar.getValue();
         currentPropertyValue[4] = Integer.parseInt(property.getMySize().txtWidth.getText());
         currentPropertyValue[5] = Integer.parseInt(property.getMySize().txtHeight.getText());
 
@@ -145,9 +135,9 @@ public class Window extends JFrame {
 
         this.title = title;
         initComponents();
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //LYX 设置窗口大小为不可调整
-        this.setResizable(false);
+        setBounds(0, 0, getToolkit().getScreenSize().width, getToolkit().getScreenSize().height);
+        setResizable(false);
+        setVisible(true);
 
 
 //          pending
@@ -195,9 +185,6 @@ public class Window extends JFrame {
         tool = new Tool(this);
 
         // 只有一个layer，所以layer赋值之后就不再赋值
-        if (layer == null) {
-            layer = new Layer(this);
-        }
 
         menuBar = new JMenuBar();
 
@@ -206,9 +193,7 @@ public class Window extends JFrame {
         myFile = new MyFile(this);
         edit = new Edit(this);
         property = new Property(this);
-
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
         ui = new UI(this);
 
         showImgRegionLabel.setText("Please select photo");
@@ -249,25 +234,28 @@ public class Window extends JFrame {
         separateMenu(menuBar);
         menuBar.add(ui.uiMenu);
         separateMenu(menuBar);
-        menuBar.add(tool.region.selectRegionItem);
+        menuBar.add(tool.getRegion().selectRegionItem);
+        tool.getRegion().selectRegionItem.setMaximumSize(new Dimension(0, tool.getRegion().selectRegionItem.getPreferredSize().height));
         separateMenu(menuBar);
-        menuBar.add(tool.pen.penItem);
-        menuBar.add(tool.pen.penColorPanel);
+        menuBar.add(tool.getPen().penItem);
+        tool.getPen().penItem.setMaximumSize(new Dimension(0, tool.getPen().penItem.getPreferredSize().height));
+        menuBar.add(tool.getPen().penColorPanel);
         menuBar.add(Box.createHorizontalGlue());
-        menuBar.add(tool.pen.penSizeSpinner);
+        menuBar.add(tool.getPen().penSizeSpinner);
         separateMenu(menuBar);
-        menuBar.add(tool.eraser.eraserItem);
-        menuBar.add(tool.eraser.eraserSizeSpinner);
+        menuBar.add(tool.getEraser().eraserItem);
+        menuBar.add(tool.getEraser().eraserSizeSpinner);
         separateMenu(menuBar);
-        menuBar.add(tool.rotate.rotateItem);
+        menuBar.add(tool.getRotate().rotateItem);
         separateMenu(menuBar);
-        menuBar.add(tool.zoomIn.zoomInItem);
+        menuBar.add(tool.getZoomIn().zoomInItem);
         separateMenu(menuBar);
-        menuBar.add(tool.zoomOut.zoomOutItem);
+        menuBar.add(tool.getZoomOut().zoomOutItem);
         separateMenu(menuBar);
-        menuBar.add(tool.drag.dragItem);
+        menuBar.add(tool.getDrag().dragItem);
+        tool.getDrag().dragItem.setMaximumSize(new Dimension(0, tool.getDrag().dragItem.getPreferredSize().height));
         separateMenu(menuBar);
-        menuBar.add(tool.preview.previewItem);
+        menuBar.add(tool.getPreview().previewItem);
         separateMenu(menuBar);
         menuBar.add(Box.createHorizontalGlue());
         setJMenuBar(menuBar);
@@ -306,11 +294,12 @@ public class Window extends JFrame {
             return;
         }
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-
-            if (tool.region.selectRegionItem.isSelected()) {
+            add.widget.widgetIcon = null;
+            if (tool.getRegion().selectRegionItem.isSelected()) {
                 // pending
-                tool.region.removeRegionSelected();
-            } else if (add.widget.selectedWidgetLabel != null) {
+                tool.getRegion().removeRegionSelected();
+            }
+            if (add.widget.selectedWidgetLabel != null) {
                 add.widget.removeWidget();
             }
             // else if 写成if
@@ -318,43 +307,41 @@ public class Window extends JFrame {
                 pasting = false;
 //                edit.getPaste().disablePasteMode();
                 for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-                    this.tool.region.removeRegionSelected(i);
+                    this.tool.getRegion().removeRegionSelected(i);
                 }
             }
-        } else if (evt.getKeyCode() == KeyEvent.VK_F12) {
-            MatUtil.show(nexLayerImg, "");
         }
-
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (add.widget.widgetIcon == null) {
+                return;
+            }
+            next.clear();
+            nextOriginalImg.clear();
+            nextPropertyValue.clear();
+            lastPropertyValue.push(MatUtil.copyPropertyValue(currentPropertyValue));
+            last.push(copyImgArray(zoomImg));
+            lastOriginalImg.push(copyImgArray(originalZoomImg));
+            flagForWidget = true;
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-                int x = add.widget.widgetLabel.getX();
-                int y = add.widget.widgetLabel.getY();
+                int x = (int) (add.widget.widgetLabel.getX() - ((double) panel.getWidth() - showImgRegionLabel.getWidth()) / 2);
+                int y = (int) (add.widget.widgetLabel.getY() - ((double) panel.getHeight() - showImgRegionLabel.getHeight()) / 2);
                 MatUtil.widget(zoomImg[i],
                         MatUtil.readImg(add.widget.widgetLabel.getIcon().toString()),
                         x, y, i, this);
-                if(i == counter){
-                    MatUtil.show(zoomImg[counter], showImgRegionLabel);
+                if (!flagForWidget) {
+                    if (i == counter) {
+                        JOptionPane.showMessageDialog(null, "Please remove widget completely inside the photo");
+                    }
+                    continue;
                 }
-//                int panelWidth = panel.getWidth();
-//                int panelHeight = panel.getHeight();
-//                if (width > panelWidth
-//                        || height > panelHeight) {
-//                    showImgRegionLabel.setLocation((panelWidth - width)/2,
-//                            (panelHeight - height)/2);
-//                } else{
-//                    panel.setLayout(gridBagLayout);
-//                }
-//                System.out.println(zoomImg[counter].width());
-                panel.remove(add.widget.widgetLabel);
-                System.out.println("yes");
+                if (i == counter) {
+                    MatUtil.show(zoomImg[counter], showImgRegionLabel);
+                    panel.remove(add.widget.widgetLabel);
+                }
             }
-            // pending1
-//            for (JLabel widgetLabel : add.widget.widgetLabelList) {
-//                MatUtil.widget(zoomImg[ORIGINAL_SIZE_COUNTER],
-//                        MatUtil.readImg(widgetLabel.getIcon().toString()),
-//                        widgetLabel.getX(), widgetLabel.getY());
-//                panel.remove(widgetLabel);
-//            }
+            if(flagForWidget){
+                add.widget.widgetIcon = null;
+            }
         }
     }
 
@@ -364,8 +351,6 @@ public class Window extends JFrame {
 
 //     pending
 //      待转成多线程
-
-
 
 
 //     public void addMouseListeners() {

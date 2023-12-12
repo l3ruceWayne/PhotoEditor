@@ -5,8 +5,12 @@ import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
 
-import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
-
+/**
+ * @Description: 设置 Glitch 效果
+ * @author: 卢思文
+ * @date: 11/26/2023 8:58 PM
+ * @version: 1.0
+ */
 public class Glitch {
     public int waveLength;
     public ButtonGroup colors;
@@ -18,22 +22,39 @@ public class Glitch {
     public static JRadioButton green;
     public JMenuItem glitchItem;
     public JDialog glitchItemDialog;
-    public JButton glitchItemDialogOKButton;
+    public JButton glitchItemDialogOkButton;
     public Window window;
 
     public Glitch(Window window) {
         this.window = window;
         glitchItem = new JMenuItem("Glitch");
 
-        glitchItem.addActionListener(evt -> {
-            if (window.zoomImg == null) {
-                JOptionPane.showMessageDialog(null, "Please open an image first");
-                return;
-            }
-            glitchItemDialog.setModal(true);
-            glitchItemDialog.setVisible(true);
-        });
+        glitchItem.addActionListener(evt -> glitch());
+        initGlitchItem();
+    }
 
+    /**
+     * @Description: 点击glitch后触发，打开glitch设置面板
+     * @author: 卢思文
+     * @date: 12/12/2023 10:28 AM
+     * @version: 1.0
+     */
+    private void glitch() {
+        if (window.zoomImg == null) {
+            JOptionPane.showMessageDialog(null, "Please open an image first");
+            return;
+        }
+        glitchItemDialog.setModal(true);
+        glitchItemDialog.setVisible(true);
+    }
+
+    /**
+     * @Description: 初始化 glitchItem以及其设置面板
+     * @author: 卢思文
+     * @date: 12/12/2023 10:29 AM
+     * @version: 1.0
+     */
+    private void initGlitchItem() {
         glitchItemDialog = new JDialog();
         glitchItemDialog.setTitle("Glitch");
         glitchItemDialog.setSize(400, 200);
@@ -52,17 +73,20 @@ public class Glitch {
         offsetLabel = new JLabel("Offset:");
         offsetValueTextField = new JTextField();
 
-        glitchItemDialogOKButton = new JButton("OK");
-
+        glitchItemDialogOkButton = new JButton("OK");
 
         setLayout();
-
     }
 
+    /**
+     * @Description: 设置面板的水平和垂直布局
+     * @author: 卢思文
+     * @date: 12/12/2023 10:30 AM
+     * @version: 1.0
+     */
     private void setLayout() {
         GroupLayout glitchDialogLayout = new GroupLayout(
                 glitchItemDialog.getContentPane());
-
         glitchItemDialog.getContentPane().setLayout(glitchDialogLayout);
 
         // 水平布局
@@ -88,7 +112,7 @@ public class Glitch {
                         .addGroup(glitchDialogLayout.createParallelGroup(javax.swing
                                         .GroupLayout.Alignment.TRAILING)
                                 .addComponent(red)
-                                .addComponent(glitchItemDialogOKButton))
+                                .addComponent(glitchItemDialogOkButton))
                         .addContainerGap(29, Short.MAX_VALUE)
                 )
         );
@@ -106,12 +130,9 @@ public class Glitch {
                                         .addComponent(offsetValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(glitchItemDialogOKButton)
+                                        .addComponent(glitchItemDialogOkButton)
                                         .addComponent(offsetLabel))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
     }
-
-
 }

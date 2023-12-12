@@ -17,10 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
 
 
 import com.buaa.PhotoEditor.window.Window;
@@ -223,9 +220,17 @@ public abstract class MatUtil extends JFrame {
         int ly = getValueAfterZoom(window, wy, i);
         int width = getValueAfterZoom(window, widget.width(), i);
         int height = getValueAfterZoom(window, widget.height(), i);
-        // 当大小超过图片时，报错
+        // pending 当大小超过图片时，报错
         int rx = lx + width;
         int ry = ly + height;
+        if ((lx < 0 || rx > getValueAfterZoom(window, window.showImgRegionLabel.getWidth(), i))) {
+            window.flagForWidget = false;
+            return;
+        }
+        if ((ly < 0 || ry > getValueAfterZoom(window, window.showImgRegionLabel.getHeight(), i))) {
+            window.flagForWidget = false;
+            return;
+        }
         Point a = new Point(lx, ly);
         Point b = new Point(rx, ry);
         Mat widgetRegion = img.submat(new Rect(a, b));
@@ -502,6 +507,7 @@ public abstract class MatUtil extends JFrame {
         }
         return newPropertyValue;
     }
+
     /*
      * @param imgArray: 当前要使用的img数组
      * @return 以新的数组返回（其中的元素是imgArray的值）
@@ -510,11 +516,9 @@ public abstract class MatUtil extends JFrame {
      * @date: 12/5/2023 10:53 PM
      * @version: 1.0
      */
-    public static Mat[] copyImgArray(Mat[] imgArray)
-    {
+    public static Mat[] copyImgArray(Mat[] imgArray) {
         Mat[] newImgArray = new Mat[12];
-        for (int i=0; i<=11; i++)
-        {
+        for (int i = 0; i <= 11; i++) {
             newImgArray[i] = copy(imgArray[i]);
         }
         return newImgArray;

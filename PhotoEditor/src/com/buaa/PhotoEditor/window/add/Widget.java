@@ -2,7 +2,9 @@ package com.buaa.PhotoEditor.window.add;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import com.formdev.flatlaf.icons.FlatOptionPaneInformationIcon;
 import org.opencv.core.Mat;
+import org.opencv.ml.ANN_MLP_ANNEAL;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -28,7 +30,6 @@ public class Widget {
 
     public Window window;
     public JLabel widgetLabel;
-    public int i;
     public ImageIcon widgetIcon;
     public JMenuItem widgetItem;
     public JLabel selectedWidgetLabel;
@@ -58,29 +59,41 @@ public class Widget {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }
-
-        window.tool.region.disableListeners();
+        for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+            window.tool.getRegion().removeRegionSelected(i);
+        }
+        window.tool.getRegion().disableListeners();
 
         JFileChooser fileChooser = new JFileChooser();
 
         if (fileChooser.showOpenDialog(window)
                 == JFileChooser.APPROVE_OPTION) {
+
             widgetPath = fileChooser.getSelectedFile().getAbsolutePath();
             // pending
             if (WIDGET_SUPPORT_FILE_TYPES.contains(widgetPath
                     .substring(widgetPath.lastIndexOf(".") + 1)
                     .toUpperCase())) {
-                i = window.counter;
                 Mat widget = MatUtil.readImg(widgetPath);
                 widgetIcon = new ImageIcon(widgetPath);
+
+                /*
+                    增加防范措施，防止小组件的大小大过背景图片
+                 */
+                if (widgetIcon.getIconWidth() > window.size[window.counter][0]
+                        || widgetIcon.getIconHeight() > window.size[window.counter][1]) {
+                    JOptionPane.showMessageDialog(null,
+                            "Please select a widget smaller than the photo");
+                    widgetIcon = null;
+                    return;
+                }
 
                 widgetLabel = new JLabel(widgetIcon);
 
                 addWidgetListener(widgetIcon);
-
-                widgetLabel.setBounds(window.getX() / 2, window.getY() / 2,
+                widgetLabel.setBounds((window.panel.getWidth() - widget.width()) / 2,
+                        (window.panel.getHeight() - widget.height()) / 2,
                         widget.width(), widget.height());
-
                 window.panel.setLayout(null);
                 window.panel.add(widgetLabel);
 

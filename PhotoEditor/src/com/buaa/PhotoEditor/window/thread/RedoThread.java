@@ -58,7 +58,7 @@ public class RedoThread extends Thread {
                 }
 
                 // 取消 drag
-                window.tool.drag.dragItem.setSelected(false);
+                window.tool.getDrag().dragItem.setSelected(false);
                 window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
                 if (!window.next.isEmpty()) {
@@ -68,7 +68,7 @@ public class RedoThread extends Thread {
                         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                     }
 
-                    if (!window.tool.region.selectRegionItem.isSelected()) {
+                    if (!window.tool.getRegion().selectRegionItem.isSelected()) {
                         if (i == ORIGINAL_SIZE_COUNTER){
                             // 将栈顶的每个大小的图片复制到当前图片zoomImg中（redo操作）
                             window.zoomImg = copyImgArray(window.next.peek());
@@ -77,10 +77,6 @@ public class RedoThread extends Thread {
                             window.currentPropertyValue = MatUtil.copyPropertyValue(window.nextPropertyValue.peek());
 
                             // 还原property的值
-                            window.property.getContrastAndBrightness().contrastSlide.setValue(window.currentPropertyValue[0]);
-                            window.property.getContrastAndBrightness().brightnessSlider.setValue(window.currentPropertyValue[1]);
-                            window.property.getSaturation().saturationSlider.setValue(window.currentPropertyValue[2]);
-                            window.property.getGraininess().grainBar.setValue(window.currentPropertyValue[3]);
                             window.property.getMySize().txtWidth.setText(window.currentPropertyValue[4] + "");
                             window.property.getMySize().txtHeight.setText(window.currentPropertyValue[5] + "");
                         }
@@ -96,11 +92,11 @@ public class RedoThread extends Thread {
                         window.size[i][1] = window.zoomImg[i].height();
                     } else {
                         // last.peek()是栈顶Mat，即前一个版本，作用为把上一次改变的区域还原
-                        Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel[i]);
+                        Rect selectedRegionRect = MatUtil.getRect(window.tool.getRegion().selectedRegionLabel[i]);
                         Mat img = MatUtil.copy(window.zoomImg[i]);
                         window.next.peek()[i].submat(selectedRegionRect).copyTo(img.submat(selectedRegionRect));
                         window.zoomImg[i] = MatUtil.copy(img);
-                        window.tool.region.removeRegionSelected(i);
+                        window.tool.getRegion().removeRegionSelected(i);
                     }
                     if (i == window.counter)
                     {
@@ -109,12 +105,8 @@ public class RedoThread extends Thread {
                         MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
                         window.showImgRegionLabel.setSize(window.zoomImg[window.counter].width(),
                                 window.zoomImg[window.counter].height());
-
-
                         //取消区域选择复选框
-                        // conflict
-//                        window.tool.region.removeRegionSelected();
-
+                        window.tool.getRegion().removeRegionSelected();
                         window.panel.setLayout(window.gridBagLayout);
                     }
 

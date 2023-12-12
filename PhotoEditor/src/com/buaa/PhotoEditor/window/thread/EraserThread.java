@@ -37,6 +37,9 @@ public class EraserThread extends Thread{
 
             // 当前property的值入栈，第一层将zoomImg数组入栈（这时仅zoomImg[0]是入栈的，其他的还没更新好）
             if (i == 0) {
+                window.next.clear();
+                window.nextOriginalImg.clear();
+                window.nextPropertyValue.clear();
                 window.lastPropertyValue
                         .push(copyPropertyValue(window
                                 .currentPropertyValue));
@@ -61,7 +64,7 @@ public class EraserThread extends Thread{
                 否则无事发生
                 待实现：清除全屏后，所有属性参数需要恢复成原始状态
              */
-        window.tool.eraser.eraserItem.addMouseListener(new MouseAdapter() {
+        window.tool.getEraser().eraserItem.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 timer.start();
@@ -82,7 +85,7 @@ public class EraserThread extends Thread{
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (window.tool.eraser.eraserItem.isSelected()) {
+                if (window.tool.getEraser().eraserItem.isSelected()) {
                     erase(e.getX(), e.getY());
                 }
             }
@@ -93,10 +96,13 @@ public class EraserThread extends Thread{
                 /*
                 画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，当松开的时候我们将上一个状态入栈，然后更改img
                  */
-                if (window.tool.eraser.eraserItem.isSelected()) {
+                if (window.tool.getEraser().eraserItem.isSelected()) {
 
                     // 当前property的值入栈，第一层将zoomImg数组入栈（这时仅zoomImg[0]是入栈的，其他的还没更新好）
                     if (i == 0) {
+                        window.next.clear();
+                        window.nextOriginalImg.clear();
+                        window.nextPropertyValue.clear();
                         window.lastPropertyValue
                                 .push(copyPropertyValue(window
                                         .currentPropertyValue));
@@ -137,25 +143,25 @@ public class EraserThread extends Thread{
 
         int tempX = getValueAfterZoom(window, x, i);
         int tempY = getValueAfterZoom(window, y, i);
-        if (tempX + window.tool.eraser.eraserSize[i] > window.paintingImg[i].width()) {
-            tempX = window.paintingImg[i].width() - window.tool.eraser.eraserSize[i];
+        if (tempX + window.tool.getEraser().eraserSize[i] > window.paintingImg[i].width()) {
+            tempX = window.paintingImg[i].width() - window.tool.getEraser().eraserSize[i];
         }
-        if (tempY + window.tool.eraser.eraserSize[i] > window.paintingImg[i].height()) {
-            tempY = window.paintingImg[i].height() - window.tool.eraser.eraserSize[i];
+        if (tempY + window.tool.getEraser().eraserSize[i] > window.paintingImg[i].height()) {
+            tempY = window.paintingImg[i].height() - window.tool.getEraser().eraserSize[i];
         }
-        tempX = Math.max(tempX, window.tool.eraser.eraserSize[i]);
-        tempY = Math.max(tempY, window.tool.eraser.eraserSize[i]);
+        tempX = Math.max(tempX, window.tool.getEraser().eraserSize[i]);
+        tempY = Math.max(tempY, window.tool.getEraser().eraserSize[i]);
 
         Mat eraseRegion = window.paintingImg[i].submat(new Rect(
                 tempX, tempY,
-                window.tool.eraser.eraserSize[i],
-                window.tool.eraser.eraserSize[i]));
+                window.tool.getEraser().eraserSize[i],
+                window.tool.getEraser().eraserSize[i]));
 
 
         Mat originalRegion = window.originalZoomImg[i]
                 .submat(new Rect(tempX, tempY,
-                        window.tool.eraser.eraserSize[i],
-                        window.tool.eraser.eraserSize[i]));
+                        window.tool.getEraser().eraserSize[i],
+                        window.tool.getEraser().eraserSize[i]));
 
 
         // 拿原图覆盖现在正在画的图，就相当于橡皮擦操作

@@ -52,16 +52,19 @@ public class CutThread extends Thread {
                     return;
                 }
                 if (i == window.counter) {
-                    window.tool.region.selectRegionItem.setSelected(false);
+                    window.tool.getRegion().selectRegionItem.setSelected(false);
                 }
                 // 如果还没有选择区域，弹出提示框
-                if (window.tool.region.selectedRegionLabel[i].getBorder() == null) {
+                if (window.tool.getRegion().selectedRegionLabel[i].getBorder() == null) {
                     if (i == window.counter) {
                         JOptionPane.showMessageDialog(null,
                                 "Please select region first");
                     }
                 } else {
                     if (i == ORIGINAL_SIZE_COUNTER) {
+                        window.next.clear();
+                        window.nextOriginalImg.clear();
+                        window.nextPropertyValue.clear();
                         // 当前property的值入栈
                         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                         // 将当前的window.img压入window.last中，保存上一张图片
@@ -69,8 +72,8 @@ public class CutThread extends Thread {
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
                     //从window.img图像中裁剪出window.region.selectedRegionLabel[window.counter]标识的区域，并将裁剪后的图像赋值给新的Mat对象newImg
-                    window.zoomImg[i] = MatUtil.cut(window.zoomImg[i], MatUtil.getRect(window.tool.region.selectedRegionLabel[i]));
-                    window.originalZoomImg[i] = MatUtil.cut(window.originalZoomImg[i], MatUtil.getRect(window.tool.region.selectedRegionLabel[i]));
+                    window.zoomImg[i] = MatUtil.cut(window.zoomImg[i], MatUtil.getRect(window.tool.getRegion().selectedRegionLabel[i]));
+                    window.originalZoomImg[i] = MatUtil.cut(window.originalZoomImg[i], MatUtil.getRect(window.tool.getRegion().selectedRegionLabel[i]));
                     // 当前大小改成cut后的图片大小
                     window.size[i][0] = window.zoomImg[i].width();
                     window.size[i][1] = window.zoomImg[i].height();
@@ -87,8 +90,8 @@ public class CutThread extends Thread {
                     // remove region
                     // lsw 注释了下面这一行代码后解决cut后图片不居中的问题
 //                    window.panel.setLayout(null);
-                    window.tool.region.selectedRegionLabel[i].setBorder(null);
-                    window.showImgRegionLabel.remove(window.tool.region.selectedRegionLabel[i]);
+                    window.tool.getRegion().selectedRegionLabel[i].setBorder(null);
+                    window.showImgRegionLabel.remove(window.tool.getRegion().selectedRegionLabel[i]);
                     window.panel.revalidate();
                     window.panel.repaint();
                 }

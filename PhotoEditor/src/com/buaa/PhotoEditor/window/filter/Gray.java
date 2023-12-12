@@ -1,18 +1,17 @@
 package com.buaa.PhotoEditor.window.filter;
 
-import static com.buaa.PhotoEditor.util.MatUtil.*;
-import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
-
-import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-import org.opencv.core.Mat;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+/**
+ * @Description: 设置 Gray 滤镜
+ * @author: 卢思文
+ * @date: 11/26/2023 8:58 PM
+ * @version: 1.0
+ */
 public class Gray {
     public JMenuItem grayItem;
     public Window window;
@@ -22,7 +21,7 @@ public class Gray {
         grayItem = new JMenuItem("Gray");
 
         grayItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
-                InputEvent.CTRL_MASK));
+                InputEvent.CTRL_DOWN_MASK));
 
     }
 

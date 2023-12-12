@@ -58,12 +58,12 @@ public class UndoThread extends Thread {
                 }
                 if (window.last.isEmpty()) {
                     if (i == window.counter) {
-                        JOptionPane.showMessageDialog(null, "Please open an image first");
+                        JOptionPane.showMessageDialog(null, "There's nothing left to undo!");
                     }
                     return;
                 }
                 // 取消 drag
-                window.tool.drag.dragItem.setSelected(false);
+                window.tool.getDrag().dragItem.setSelected(false);
                 window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 if (!window.last.isEmpty()) {
                     if (i == ORIGINAL_SIZE_COUNTER) {
@@ -72,7 +72,7 @@ public class UndoThread extends Thread {
                         window.nextPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                     }
 
-                    if (!window.tool.region.selectRegionItem.isSelected()) {
+                    if (!window.tool.getRegion().selectRegionItem.isSelected()) {
                         // 将栈顶的上一步每个大小的图片复制到当前图片zoomImg中（undo操作）
 //                        window.zoomImg[i] = copy(window.last.peek()[i]);
                         // 将栈顶的上一步每个大小的原图复制到当前大小的原图OriginalImg中（undo操作）
@@ -86,10 +86,6 @@ public class UndoThread extends Thread {
                             window.currentPropertyValue = MatUtil.copyPropertyValue(window.lastPropertyValue.pop());
 
                             // 还原property的值
-                            window.property.getContrastAndBrightness().contrastSlide.setValue(window.currentPropertyValue[0]);
-                            window.property.getContrastAndBrightness().brightnessSlider.setValue(window.currentPropertyValue[1]);
-                            window.property.getSaturation().saturationSlider.setValue(window.currentPropertyValue[2]);
-                            window.property.getGraininess().grainBar.setValue(window.currentPropertyValue[3]);
                             window.property.getMySize().txtWidth.setText(window.currentPropertyValue[4] + "");
                             window.property.getMySize().txtHeight.setText(window.currentPropertyValue[5] + "");
                         }
@@ -103,11 +99,11 @@ public class UndoThread extends Thread {
                         window.size[i][1] = window.zoomImg[i].height();
                     } else {
                         // last.peek()是栈顶Mat，即前一个版本，作用为把上一次改变的区域还原
-                        Rect selectedRegionRect = MatUtil.getRect(window.tool.region.selectedRegionLabel[i]);
+                        Rect selectedRegionRect = MatUtil.getRect(window.tool.getRegion().selectedRegionLabel[i]);
                         Mat img = MatUtil.copy(window.zoomImg[i]);
                         window.last.peek()[i].submat(selectedRegionRect).copyTo(img.submat(selectedRegionRect));
                         window.zoomImg[i] = MatUtil.copy(img);
-                        window.tool.region.removeRegionSelected(i);
+                        window.tool.getRegion().removeRegionSelected(i);
                     }
                     if (i == window.counter) {
                         window.property.updateProperty();
@@ -117,8 +113,7 @@ public class UndoThread extends Thread {
                                 window.zoomImg[window.counter].height());
                         MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
                         //取消区域选择复选框
-                        // conflict
-//                        window.tool.region.removeRegionSelected();
+                        window.tool.getRegion().removeRegionSelected();
                         window.panel.setLayout(window.gridBagLayout);
                     }
 

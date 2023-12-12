@@ -7,14 +7,13 @@ import static com.buaa.PhotoEditor.window.Constant.*;
 import com.buaa.PhotoEditor.window.thread.FilterThread;
 
 import javax.swing.*;
-import java.io.File;
 
 /**
  * @Description: 滤镜类，只需要在Window类里面new Filter(),即可实现所有滤镜相关内容初始化
  * @author: 卢思文
  * @date: 11/26/2023 8:58 PM
- * @version: 1.0
- **/
+ * @version: 3.0
+ */
 public class Filter {
     public JMenu filterMenu;
     public Window window;
@@ -41,6 +40,7 @@ public class Filter {
         filterMenu.add(animize.animizeItem);
         filterMenu.add(focus.focusItem);
         filterMenu.add(glitch.glitchItem);
+        // 执行多线程
         filterThread = new FilterThread[NUM_FOR_NEW];
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             filterThread[i] = new FilterThread(window,
@@ -53,10 +53,9 @@ public class Filter {
                     i);
             filterThread[i].start();
             // 等待线程完成，让线程可以顺序执行（方便线程中的操作）
-            try{
+            try {
                 filterThread[i].join();
-            }catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

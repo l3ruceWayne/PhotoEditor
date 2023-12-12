@@ -40,6 +40,6 @@ public class Paste {
     }
 
     public void disablePasteMode() {
-        window.tool.region.removeRegionSelected();
+        window.tool.getRegion().removeRegionSelected();
     }
 }

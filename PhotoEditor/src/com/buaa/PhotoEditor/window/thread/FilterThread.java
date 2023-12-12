@@ -49,11 +49,11 @@ public class FilterThread extends Thread {
     @Override
     public void run() {
         gray.grayItem.addActionListener(evt -> gray());
-        blur.blurItemDialogOKButton.addActionListener(evt -> blur());
+        blur.blurItemDialogOkButton.addActionListener(evt -> blur());
         invert.invertItem.addActionListener(evt -> invert());
         animize.animizeItem.addActionListener(evt -> animize());
         focus.focusItem.addActionListener(evt -> focus());
-        glitch.glitchItemDialogOKButton.addActionListener(evt -> glitch());
+        glitch.glitchItemDialogOkButton.addActionListener(evt -> glitch());
 
     }
 
@@ -65,18 +65,21 @@ public class FilterThread extends Thread {
             return;
         }
         if (i == ORIGINAL_SIZE_COUNTER) {
+            window.next.clear();
+            window.nextOriginalImg.clear();
+            window.nextPropertyValue.clear();
             // 当前property的值入栈
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             // 将当前的window.img压入window.last中，保存上一张图片
             window.last.push(copyImgArray(window.zoomImg));
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
         }
-        if (window.tool.region.selectRegionItem.isSelected()) {
+        if (window.tool.getRegion().selectRegionItem.isSelected()) {
 
             MatUtil.grayScale(window.zoomImg[i],
-                    getRect(window.tool.region
+                    getRect(window.tool.getRegion()
                             .selectedRegionLabel[i]));
-            window.tool.region.removeRegionSelected(i);
+            window.tool.getRegion().removeRegionSelected(i);
 
         } else {
             MatUtil.grayScale(window.zoomImg[i]);
@@ -96,6 +99,9 @@ public class FilterThread extends Thread {
             blur.blurItemDialog.dispose();
         } else {
             if (i == ORIGINAL_SIZE_COUNTER) {
+                window.next.clear();
+                window.nextOriginalImg.clear();
+                window.nextPropertyValue.clear();
                 // 当前property的值入栈
                 window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                 // 将当前的window.img压入window.last中，保存上一张图片
@@ -104,10 +110,10 @@ public class FilterThread extends Thread {
             }
             try {
                 int blurLevel = Integer.parseInt(blur.blurLevelTextField.getText());
-                if (window.tool.region.selectRegionItem.isSelected()) {
+                if (window.tool.getRegion().selectRegionItem.isSelected()) {
 
-                    MatUtil.blur(window.zoomImg[i], blurLevel, getRect(window.tool.region.selectedRegionLabel[i]));
-                    window.tool.region.removeRegionSelected(i);
+                    MatUtil.blur(window.zoomImg[i], blurLevel, getRect(window.tool.getRegion().selectedRegionLabel[i]));
+                    window.tool.getRegion().removeRegionSelected(i);
 
                 } else {
                     MatUtil.blur(window.zoomImg[i], blurLevel);
@@ -138,15 +144,18 @@ public class FilterThread extends Thread {
             return;
         }
         if (i == ORIGINAL_SIZE_COUNTER) {
+            window.next.clear();
+            window.nextOriginalImg.clear();
+            window.nextPropertyValue.clear();
             // 当前property的值入栈
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             // 将当前的window.img压入window.last中，保存上一张图片
             window.last.push(copyImgArray(window.zoomImg));
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
         }
-        if (window.tool.region.selectRegionItem.isSelected()) {
-            MatUtil.inversor(window.zoomImg[i], getRect(window.tool.region.selectedRegionLabel[i]));
-            window.tool.region.removeRegionSelected(i);
+        if (window.tool.getRegion().selectRegionItem.isSelected()) {
+            MatUtil.inversor(window.zoomImg[i], getRect(window.tool.getRegion().selectedRegionLabel[i]));
+            window.tool.getRegion().removeRegionSelected(i);
         } else {
             MatUtil.inversor(window.zoomImg[i]);
         }
@@ -166,15 +175,18 @@ public class FilterThread extends Thread {
             return;
         }
         if (i == ORIGINAL_SIZE_COUNTER) {
+            window.next.clear();
+            window.nextOriginalImg.clear();
+            window.nextPropertyValue.clear();
             // 当前property的值入栈
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             // 将当前的window.img压入window.last中，保存上一张图片
             window.last.push(copyImgArray(window.zoomImg));
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
         }
-        if (window.tool.region.selectRegionItem.isSelected()) {
-            MatUtil.cartoon(window.zoomImg[i], getRect(window.tool.region.selectedRegionLabel[i]));
-            window.tool.region.removeRegionSelected(i);
+        if (window.tool.getRegion().selectRegionItem.isSelected()) {
+            MatUtil.cartoon(window.zoomImg[i], getRect(window.tool.getRegion().selectedRegionLabel[i]));
+            window.tool.getRegion().removeRegionSelected(i);
         } else {
             MatUtil.cartoon(window.zoomImg[i]);
         }
@@ -194,16 +206,19 @@ public class FilterThread extends Thread {
             return;
         }
         if (i == ORIGINAL_SIZE_COUNTER) {
+            window.next.clear();
+            window.nextOriginalImg.clear();
+            window.nextPropertyValue.clear();
             // 当前property的值入栈
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             // 将当前的window.img压入window.last中，保存上一张图片
             window.last.push(copyImgArray(window.zoomImg));
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
         }
-        if (window.tool.region.selectRegionItem.isSelected()) {
+        if (window.tool.getRegion().selectRegionItem.isSelected()) {
 
-            MatUtil.focus(window.zoomImg[i], getRect(window.tool.region.selectedRegionLabel[i]));
-            window.tool.region.removeRegionSelected(i);
+            MatUtil.focus(window.zoomImg[i], getRect(window.tool.getRegion().selectedRegionLabel[i]));
+            window.tool.getRegion().removeRegionSelected(i);
             if (i != window.counter) {
                 return;
             }
@@ -224,6 +239,9 @@ public class FilterThread extends Thread {
             glitch.glitchItemDialog.dispose();
         } else {
             if (i == ORIGINAL_SIZE_COUNTER) {
+                window.next.clear();
+                window.nextOriginalImg.clear();
+                window.nextPropertyValue.clear();
                 // 当前property的值入栈
                 window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                 // 将当前的window.img压入window.last中，保存上一张图片
@@ -239,10 +257,10 @@ public class FilterThread extends Thread {
                 } else if (glitch.red.isSelected()) {
                     glitch.color = EColor.RED;
                 }
-                if (window.tool.region.selectRegionItem.isSelected()) {
+                if (window.tool.getRegion().selectRegionItem.isSelected()) {
                     MatUtil.glitchWave(window.zoomImg[i], glitch.waveLength, glitch.color, MatUtil.
-                            getRect(window.tool.region.selectedRegionLabel[i]));
-                    window.tool.region.removeRegionSelected(i);
+                            getRect(window.tool.getRegion().selectedRegionLabel[i]));
+                    window.tool.getRegion().removeRegionSelected(i);
                 } else {
                     MatUtil.glitchWave(window.zoomImg[i], glitch.waveLength, glitch.color);
                 }
