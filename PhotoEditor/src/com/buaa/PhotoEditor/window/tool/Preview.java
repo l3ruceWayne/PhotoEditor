@@ -31,7 +31,7 @@ public class Preview {
                     JOptionPane.showMessageDialog(null, "Please open an image first");
                     previewItem.setSelected(false);
                 }
-                if(window.add.widget.widgetIcon != null){
+                if(window.add.getWidget().widgetIcon != null){
                     JOptionPane.showMessageDialog(null,
                             "Please handle widget first");
                     return;
@@ -45,7 +45,7 @@ public class Preview {
                     JOptionPane.showMessageDialog(null, "Please open an image first");
                     previewItem.setSelected(false);
                 }
-                if(window.add.widget.widgetIcon != null){
+                if(window.add.getWidget().widgetIcon != null){
                     JOptionPane.showMessageDialog(null,
                             "Please handle widget first");
                     return;

@@ -70,9 +70,10 @@ public class Text {
         addTextItem.addActionListener(evt -> writeTextActionPerformed());
     }
 
+
     /**
-     * @return
-     * @param:
+     * @param
+     * @return void
      * @Description 创建文字设置的面板
      * @author 张旖霜
      * @date 2023/11/27
@@ -150,6 +151,8 @@ public class Text {
     }
 
     /**
+     * @param
+     * @return void
      * @Description 选好位置（框选区域）后，显示字体设置面板
      * 增加未选择图片弹窗
      * @author 张旖霜, 罗雨曦

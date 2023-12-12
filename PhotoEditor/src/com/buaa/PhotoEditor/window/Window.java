@@ -229,12 +229,12 @@ public class Window extends JFrame {
             return;
         }
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            add.widget.widgetIcon = null;
+            add.getWidget().widgetIcon = null;
             if (tool.region.selectRegionItem.isSelected()) {
                 tool.region.removeRegionSelected();
             }
-            if (add.widget.selectedWidgetLabel != null) {
-                add.widget.removeWidget();
+            if (add.getWidget().selectedWidgetLabel != null) {
+                add.getWidget().removeWidget();
             }
             if (pasting) {
                 pasting = false;
@@ -244,7 +244,7 @@ public class Window extends JFrame {
             }
         }
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (add.widget.widgetIcon == null) {
+            if (add.getWidget().widgetIcon == null) {
                 return;
             }
             next.clear();
@@ -255,10 +255,10 @@ public class Window extends JFrame {
             lastOriginalImg.push(copyImgArray(originalZoomImg));
             flagForWidget = true;
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-                int x = (int) (add.widget.widgetLabel.getX() - ((double) panel.getWidth() - showImgRegionLabel.getWidth()) / 2);
-                int y = (int) (add.widget.widgetLabel.getY() - ((double) panel.getHeight() - showImgRegionLabel.getHeight()) / 2);
+                int x = (int) (add.getWidget().widgetLabel.getX() - ((double) panel.getWidth() - showImgRegionLabel.getWidth()) / 2);
+                int y = (int) (add.getWidget().widgetLabel.getY() - ((double) panel.getHeight() - showImgRegionLabel.getHeight()) / 2);
                 MatUtil.widget(zoomImg[i],
-                        MatUtil.readImg(add.widget.widgetLabel.getIcon().toString()),
+                        MatUtil.readImg(add.getWidget().widgetLabel.getIcon().toString()),
                         x, y, i, this);
                 if (!flagForWidget) {
                     if (i == counter) {
@@ -268,11 +268,11 @@ public class Window extends JFrame {
                 }
                 if (i == counter) {
                     MatUtil.show(zoomImg[counter], showImgRegionLabel);
-                    panel.remove(add.widget.widgetLabel);
+                    panel.remove(add.getWidget().widgetLabel);
                 }
             }
             if (flagForWidget) {
-                add.widget.widgetIcon = null;
+                add.getWidget().widgetIcon = null;
             }
         }
     }

@@ -13,8 +13,8 @@ import javax.swing.*;
 public class Add {
     public JMenu addMenu;
     public Window window;
-    public Widget widget;
-    public Text text;
+    private Widget widget;
+    private Text text;
 
     public Add(Window window) {
         this.window = window;
@@ -29,4 +29,7 @@ public class Add {
         return window;
     }
 
+    public Widget getWidget() {
+        return widget;
+    }
 }
