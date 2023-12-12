@@ -42,7 +42,7 @@ public class PaintThread extends Thread {
             **/
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (window.tool.pen.penItem.isSelected()) {
+                if (window.tool.getPen().penItem.isSelected()) {
                     paint(e.getX(), e.getY(), true);
                     initLastPoint();
                 }
@@ -55,7 +55,7 @@ public class PaintThread extends Thread {
             **/
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (window.tool.pen.penItem.isSelected()) {
+                if (window.tool.getPen().penItem.isSelected()) {
                     paint(e.getX(), e.getY(), false);
                 }
             }
@@ -66,7 +66,7 @@ public class PaintThread extends Thread {
                 画笔的时候，鼠标按下->拖拽->松开是一个画画行为的完成，
                 当松开的时候我们将上一个状态入栈，然后更改img
                  */
-                if (window.tool.pen.penItem.isSelected()) {
+                if (window.tool.getPen().penItem.isSelected()) {
                     // 在第一个线程入栈
                     if (i == 0) {
                         window.next.clear();
@@ -108,48 +108,49 @@ public class PaintThread extends Thread {
         if (window.paintingImg[i] == null) {
             window.paintingImg[i] = copy(window.zoomImg[i]);
         }
-        int[] color = {window.tool.pen.penColorPanel.getBackground().getBlue(),
-            window.tool.pen.penColorPanel.getBackground().getGreen(),
-            window.tool.pen.penColorPanel.getBackground().getRed()
+        int[] color = {window.tool.getPen().penColorPanel.getBackground().getBlue(),
+                window.tool.getPen().penColorPanel.getBackground().getGreen(),
+                window.tool.getPen().penColorPanel.getBackground().getRed()
         };
         int tempX = getValueAfterZoom(window, x, i);
         int tempY = getValueAfterZoom(window, y, i);
-        if (window.tool.pen.lastPoint[i] != null && !flag) {
+        if (window.tool.getPen().lastPoint[i] != null && !flag) {
             /*
                 将当前点与上一个点连线，解决笔迹断续的问题
             */
-            MatUtil.drawLine(window.tool.pen.lastPoint[i].x,
-                window.tool.pen.lastPoint[i].y,
-                tempX,
-                tempY,
-                color,
-                window.tool.pen.penSize[i], window.paintingImg[i]);
+            MatUtil.drawLine(window.tool.getPen().lastPoint[i].x,
+                    window.tool.getPen().lastPoint[i].y,
+                    tempX,
+                    tempY,
+                    color,
+                    window.tool.getPen().penSize[i], window.paintingImg[i]);
         } else {
             /*
                 解决无法画到边界的问题
              */
-            if (tempX + window.tool.pen.penSize[i] > window.paintingImg[i].width()) {
-                tempX = window.paintingImg[i].width() - window.tool.pen.penSize[i];
+            if (tempX + window.tool.getPen().penSize[i] > window.paintingImg[i].width()) {
+                tempX = window.paintingImg[i].width() - window.tool.getPen().penSize[i];
             }
-            if (tempY + window.tool.pen.penSize[i] > window.paintingImg[i].height()) {
-                tempY = window.paintingImg[i].height() - window.tool.pen.penSize[i];
+            if (tempY + window.tool.getPen().penSize[i] > window.paintingImg[i].height()) {
+                tempY = window.paintingImg[i].height() - window.tool.getPen().penSize[i];
             }
             MatUtil.paint(color,
-                window.tool.pen.penSize[i],
-                window.tool.pen.penSize[i],
-                tempX,
-                tempY,
-                window.paintingImg[i]);
+                    window.tool.getPen().penSize[i],
+                    window.tool.getPen().penSize[i],
+                    tempX,
+                    tempY,
+                    window.paintingImg[i]);
         }
         if (i == window.counter) {
             show(window.paintingImg[window.counter], window.showImgRegionLabel);
         }
         // 更新上一个点为当前点
-        window.tool.pen.lastPoint[i] = new Point(getValueAfterZoom(window, x, i),
-            getValueAfterZoom(window, y, i));
+        window.tool.getPen().lastPoint[i] = new Point(getValueAfterZoom(window, x, i),
+                getValueAfterZoom(window, y, i));
+
     }
 
     private void initLastPoint() {
-        window.tool.pen.lastPoint[i] = null;
+        window.tool.getPen().lastPoint[i] = null;
     }
 }

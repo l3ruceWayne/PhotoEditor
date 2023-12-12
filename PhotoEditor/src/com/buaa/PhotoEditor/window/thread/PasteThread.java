@@ -42,10 +42,10 @@ public class PasteThread extends Thread {
                 int tempX = getValueAfterZoom(window, e.getX(), i);
                 int tempY = getValueAfterZoom(window, e.getY(), i);
 
-                if (tempX + window.tool.region.selectedRegionLabel[i].getSize().width
-                    > getValueAfterZoom(window, window.showImgRegionLabel.getSize().width, i)
-                    || tempY + window.tool.region.selectedRegionLabel[i].getSize().height
-                    > getValueAfterZoom(window, window.showImgRegionLabel.getSize().height, i)) {
+                if (tempX + window.tool.getRegion().selectedRegionLabel[i].getSize().width
+                        > getValueAfterZoom(window, window.showImgRegionLabel.getSize().width, i)
+                        || tempY + window.tool.getRegion().selectedRegionLabel[i].getSize().height
+                        > getValueAfterZoom(window, window.showImgRegionLabel.getSize().height, i)) {
                     return;
                 }
                 if (window.pasting) {
@@ -61,10 +61,10 @@ public class PasteThread extends Thread {
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
                     Mat img = MatUtil.copy(window.zoomImg[i]);
-                    window.tool.region.selectedRegionLabel[i].setLocation(tempX, tempY);
+                    window.tool.getRegion().selectedRegionLabel[i].setLocation(tempX,tempY);
                     MatUtil.copyToRegion(img,
-                        window.copyRegionImg[i],
-                        MatUtil.getRect(window.tool.region.selectedRegionLabel[i]));
+                            window.copyRegionImg[i],
+                            MatUtil.getRect(window.tool.getRegion().selectedRegionLabel[i]));
                     window.zoomImg[i] = MatUtil.copy(img);
                     if (i == window.counter) {
                         MatUtil.show(window.zoomImg[i], window.showImgRegionLabel);
@@ -85,11 +85,11 @@ public class PasteThread extends Thread {
                 int tempX = getValueAfterZoom(window, e.getX(), i);
                 int tempY = getValueAfterZoom(window, e.getY(), i);
                 if (window.pasting) {
-                    window.tool.region.selectedRegionLabel[i].setLocation(tempX, tempY);
-                    window.tool.region.selectedRegionLabel[i].repaint();
-                    window.tool.region.selectedRegionLabel[i].setVisible(false);
+                    window.tool.getRegion().selectedRegionLabel[i].setLocation(tempX, tempY);
+                    window.tool.getRegion().selectedRegionLabel[i].repaint();
+                    window.tool.getRegion().selectedRegionLabel[i].setVisible(false);
                     if (i == window.counter) {
-                        window.tool.region.selectedRegionLabel[i].setVisible(true);
+                        window.tool.getRegion().selectedRegionLabel[i].setVisible(true);
                     }
                 }
             }

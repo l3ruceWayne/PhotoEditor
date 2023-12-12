@@ -8,6 +8,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.BufferedOutputStream;
@@ -18,16 +19,15 @@ import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /**
- * @Description: 负责修改后图片的保存和另存为功能
+ * @Description: 修改后图片的保存和另存为功能
  * @author: 卢思文
  * @date: 11/27/2023 4:44 PM
- * @version: 1.0
- **/
+ * @version: 2.0
+ */
 public class Save {
     public JMenuItem saveItem;
     public JMenuItem saveAsItem;
     private Window window;
-
     private String path;
 
     public Save(Window window) {
@@ -36,39 +36,112 @@ public class Save {
         saveItem = new JMenuItem("Save");
         saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 KeyEvent.CTRL_DOWN_MASK));
-        saveItem.addActionListener(e -> saveImg(e));
+        saveItem.addActionListener(e -> saveImg());
 
         saveAsItem = new JMenuItem("Save As");
         saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 KeyEvent.CTRL_DOWN_MASK
                         | KeyEvent.SHIFT_DOWN_MASK));
-        saveAsItem.addActionListener(e -> saveAsNewImg(e));
+        saveAsItem.addActionListener(e -> saveAsNewImg());
+    }
+
+
+    /**
+     * @Description: 保存图片，如果用户点击了save as，保存路径改为save as的保存路径
+     * 通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
+     * @author: 张旖霜 卢思文 罗雨曦
+     * @date: 12/5/2023 3:58 AM
+     * @version: 3.0
+     */
+    private void saveImg() {
+        if (window.zoomImg == null) {
+            JOptionPane.showMessageDialog(null,
+                    "Please open an image and edit it first");
+            return;
+        }
+        updateStack();
+        mergeWidget();
+        if (!window.flagForWidget) {
+            return;
+        }
+        if (path == null) {
+            path = window.originalImgPath;
+        }
+        saveMatToJpg(path, window.zoomImg[ORIGINAL_SIZE_COUNTER]);
+        JOptionPane.showMessageDialog(null,
+                "Success");
     }
 
     /**
-     * @Description: 更新window.img为保存后的img，以便后续再进行编辑
-     * <p>
-     * 根据设计更改更新newImg的获取对象与相关细节操作
-     * @author: 卢思文，罗雨曦
-     * @date: 12/5/2023 4:18 PM
+     * @Description: 对修改后的图片进行另存为操作
+     * @author: 卢思文 罗雨曦
+     * @date: 12/5/2023 2:52 PM
      * @version: 2.0
-     **/
-    private void getNewImg() {
-        if (window.add.getWidget().widgetIcon == null) {
+     */
+    private void saveAsNewImg() {
+        int userSelection;
+        if (window.zoomImg == null) {
+            JOptionPane.showMessageDialog(null,
+                    "Please open an image and edit it first");
             return;
         }
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save As");
+        fileChooser.setFileFilter(new FileNameExtensionFilter("JPEG file", "jpg", "jpeg", "png"));
+        userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            path = fileChooser.getSelectedFile().getPath();
+            String jpgExtension = ".jpg";
+            if (!path.contains(jpgExtension)) {
+                path += jpgExtension;
+            }
+            updateStack();
+            mergeWidget();
+            if (!window.flagForWidget) {
+                return;
+            }
+            saveMatToJpg(path, window.zoomImg[ORIGINAL_SIZE_COUNTER]);
+            JOptionPane.showMessageDialog(null,
+                    "Success");
+        }
+    }
+
+    /**
+     * @Description: 更新 undo redo 用到的栈
+     * @author: 卢思文 张旖霜
+     * @date: 2023/12/5 4:03
+     * @version: 1.0
+     */
+    private void updateStack() {
         window.next.clear();
         window.nextOriginalImg.clear();
         window.nextPropertyValue.clear();
         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
         window.last.push(copyImgArray(window.zoomImg));
         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
+    }
+
+    /**
+     * @Description: 处理添加了 widget 的情况
+     * @author: 卢思文，罗雨曦
+     * @date: 12/5/2023 4:18 PM
+     * @version: 3.0
+     */
+    private void mergeWidget() {
+        int x;
+        int y;
+
+        if (window.add.widget.widgetIcon == null) {
+            return;
+        }
+
         window.flagForWidget = true;
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-            int x = (int) (window.add.getWidget().widgetLabel.getX() - ((double) window.panel.getWidth() - window.showImgRegionLabel.getWidth()) / 2);
-            int y = (int) (window.add.getWidget().widgetLabel.getY() - ((double) window.panel.getHeight() - window.showImgRegionLabel.getHeight()) / 2);
+            x = (int) (window.add.widget.widgetLabel.getX() - ((double) window.panel.getWidth() - window.showImgRegionLabel.getWidth()) / 2);
+            y = (int) (window.add.widget.widgetLabel.getY() - ((double) window.panel.getHeight() - window.showImgRegionLabel.getHeight()) / 2);
             MatUtil.widget(window.zoomImg[i],
-                    MatUtil.readImg(window.add.getWidget().widgetLabel.getIcon().toString()),
+                    MatUtil.readImg(window.add.widget.widgetLabel.getIcon().toString()),
                     x, y, i, window);
             if (!window.flagForWidget) {
                 if (i == window.counter) {
@@ -78,112 +151,12 @@ public class Save {
             }
             if (i == window.counter) {
                 MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
-                window.panel.remove(window.add.getWidget().widgetLabel);
+                window.panel.remove(window.add.widget.widgetLabel);
             }
         }
         if (window.flagForWidget) {
-            window.add.getWidget().widgetIcon = null;
+            window.add.widget.widgetIcon = null;
         }
-    }
-
-
-    /*
-     * @param:
-     * @return
-     * @Description:保存图片，如果用户点击了save as，保存路径改为save as的保存路径
-
-     * 修复save后显示出错的bug
-     * 修复保存路径中含有中文而无法正确保存的bug
-     * 同时，通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
-     * @author: 张旖霜、卢思文、罗雨曦
-     * @date: 12/5/2023 3:58 AM
-     * @version: 1.0
-     */
-
-    private void saveImg(ActionEvent e) {
-        if (window.zoomImg == null) {
-            JOptionPane.showMessageDialog(null,
-                    "Please open an image and edit it first");
-            return;
-        }
-
-        //LYX 因为图片放缩相关功能修改过，所以以下代码已经过时了
-        // 为了避免保存到zoom的图片，所以保存前先resize回之前的大小
-//        MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
-
-        getNewImg();
-        if (!window.flagForWidget) {
-            return;
-        }
-        if (path == null) {
-            path = window.originalImgPath;
-        }
-        //LYX 修复保存路径中含有中文而无法正确保存的bug；同时，通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
-//        MatUtil.save(path, window.img);
-        SaveMatToJpg(path, window.zoomImg[ORIGINAL_SIZE_COUNTER]);
-        JOptionPane.showMessageDialog(null,
-                "Success");
-
-
-        /* 打开图片，添加小组件，保存，然后再选择区域，会报错，加上下面这行代码才行
-            详细原因等待了解
-         */
-        // pending1
-//        window.add.widget.widgetLabelList.clear();
-
-    }
-
-    /**
-     * @param e : 事件
-     * @Description: 对修改后的图片进行另存为操作
-     * 修改因为图片放缩、显示相关功能修改而过时的resize代码
-     * 将输出文件格式修改为JPG，与原文件格式相同
-     * 修复保存路径中含有中文而无法正确保存的bug
-     * 同时，通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
-     * @author: 卢思文，罗雨曦
-     * @date: 12/5/2023 2:52 PM
-     * @version: 2.0
-     **/
-    private void saveAsNewImg(ActionEvent e) {
-        if (window.zoomImg == null) {
-            JOptionPane.showMessageDialog(null,
-                    "Please open an image and edit it first");
-            return;
-        }
-        // 为了避免保存到zoom的图片，所以保存前先resize回之前的大小
-        // bug
-        //因为图片放缩相关功能修改过，所以以下这行代码已经过时了
-//        MatUtil.resize(window.img, new Size(window.imgWidth, window.imgHeight));
-
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Save As");
-        //LYX 将输出文件格式限定改为JPG，与原文件格式相同
-//        fileChooser.setFileFilter(new FileNameExtensionFilter("PNG Images", "png"));
-        fileChooser.setFileFilter(new FileNameExtensionFilter("JPEG file", "jpg", "jpeg"));
-        int userSelection = fileChooser.showSaveDialog(null);
-        // 如果用户点击保存
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            path = fileChooser.getSelectedFile().getPath();
-            //LYX 将输出文件格式修改为JPG，与原文件格式相同
-//            if (!path.contains(".png")) {
-//                path += ".png";
-//            }
-            if (!path.contains(".jpg")) {
-                path += ".jpg";
-            }
-            getNewImg();
-            if (!window.flagForWidget) {
-                return;
-            }
-            //LYX 修复保存路径中含有中文而无法正确保存的bug，同时，通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
-//            MatUtil.save(path, window.img);
-            SaveMatToJpg(path, window.zoomImg[ORIGINAL_SIZE_COUNTER]);
-//                ImageIO.write(MatUtil.bufferedImg(window.img), "png", fileToSave);
-            JOptionPane.showMessageDialog(null,
-                    "Success");
-        }
-        // 否则就是取消另存为
-
     }
 
     /**
@@ -194,8 +167,8 @@ public class Save {
      * @author: 罗雨曦
      * @date: 2023/12/5 4:01
      * @version: 1.0
-     **/
-    public static boolean SaveMatToJpg(String imgPath, Mat dstImage) {
+     */
+    private static boolean saveMatToJpg(String imgPath, Mat dstImage) {
         MatOfByte mob = new MatOfByte();
         Imgcodecs.imencode(".jpg", dstImage, mob);
         byte[] imageByte = mob.toArray();
@@ -204,22 +177,21 @@ public class Save {
 
     /**
      * @param fileName 图片要保存到的路径的字符串形式
-     * @param bytes    Mat图片转为byte[]形式
-     * @param append   此处恒为false，即FileOutputStream都是从头开始输出图片，设置目的为与FileOutputStream参数保持一致
+     * @param bytes Mat图片转为byte[]形式
+     * @param append 此处恒为false，即FileOutputStream都是从头开始输出图片，设置目的为与FileOutputStream参数保持一致
      * @return boolean 操作是否成功
      * @Description: 将byte[]形式的图片通过流输入到指定路径
      * @author: 罗雨曦
      * @date: 2023/12/5 4:03
      * @version: 1.0
-     **/
-    public static boolean writeFileByBytes(String fileName, byte[] bytes, boolean append) {
+     */
+    private static boolean writeFileByBytes(String fileName, byte[] bytes, boolean append) {
         try (OutputStream out = new BufferedOutputStream(new FileOutputStream(fileName, append))) {
             out.write(bytes);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
         return false;
     }
-
 }

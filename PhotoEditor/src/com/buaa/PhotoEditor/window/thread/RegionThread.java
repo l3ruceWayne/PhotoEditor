@@ -37,7 +37,7 @@ public class RegionThread extends Thread {
             **/
             @Override
             public void mousePressed(MouseEvent e) {
-                if (window.tool.region.selectRegionItem.isSelected()) {
+                if (window.tool.getRegion().selectRegionItem.isSelected()) {
                     addRegion(e.getX(), e.getY());
                 }
             }
@@ -49,7 +49,7 @@ public class RegionThread extends Thread {
             **/
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (window.tool.region.selectRegionItem.isSelected()) {
+                if (window.tool.getRegion().selectRegionItem.isSelected()) {
                     setRegionSize(e.getX(), e.getY());
                 }
             }
@@ -65,20 +65,23 @@ public class RegionThread extends Thread {
     **/
     public void addRegion(int x, int y) {
         Point p = new Point(getValueAfterZoom(window, x, i),
-            getValueAfterZoom(window, y, i));
-        window.tool.region.selectedRegionLabel[i].setLocation(p);
-        window.tool.region.selectedRegionLabel[i].setSize(1, 1);
-        window.tool.region.selectedRegionLabel[i].setBorder(BorderFactory
-            .createLineBorder(Color.cyan));
-        window.tool.region.selectedRegionLabel[i].setVisible(false);
-        window.showImgRegionLabel.add(window.tool.region.selectedRegionLabel[i]);
+                getValueAfterZoom(window, y, i));
+        window.tool.getRegion().selectedRegionLabel[i].setLocation(p);
+        window.tool.getRegion().selectedRegionLabel[i].setSize(1, 1);
+        window.tool.getRegion().selectedRegionLabel[i].setBorder(BorderFactory
+                .createLineBorder(Color.cyan));
+
+//        window.showImgRegionLabel.setLayout(null);
+        window.tool.getRegion().selectedRegionLabel[i].setVisible(false);
+        window.showImgRegionLabel.add(window.tool.getRegion().selectedRegionLabel[i]);
+
         if (i == window.counter) {
-            window.tool.region.selectedRegionLabel[i].setVisible(true);
+            window.tool.getRegion().selectedRegionLabel[i].setVisible(true);
         }
-        window.tool.region.selectedRegionX[i]
-            = window.tool.region.selectedRegionLabel[i].getX();
-        window.tool.region.selectedRegionY[i]
-            = window.tool.region.selectedRegionLabel[i].getY();
+        window.tool.getRegion().selectedRegionX[i]
+                = window.tool.getRegion().selectedRegionLabel[i].getX();
+        window.tool.getRegion().selectedRegionY[i]
+                = window.tool.getRegion().selectedRegionLabel[i].getY();
     }
     /**
     * @Description: 鼠标拖拽过程中，确定区域大小，同时防止区域超过图片之外
@@ -89,10 +92,10 @@ public class RegionThread extends Thread {
     public void setRegionSize(int x, int y) {
         x = getValueAfterZoom(window, x, i);
         y = getValueAfterZoom(window, y, i);
-        int width = Math.abs(window.tool.region.selectedRegionX[i] - x);
-        int height = Math.abs(window.tool.region.selectedRegionY[i] - y);
-        x = Math.min(x, window.tool.region.selectedRegionX[i]);
-        y = Math.min(y, window.tool.region.selectedRegionY[i]);
+        int width = Math.abs(window.tool.getRegion().selectedRegionX[i] - x);
+        int height = Math.abs(window.tool.getRegion().selectedRegionY[i] - y);
+        x = Math.min(x, window.tool.getRegion().selectedRegionX[i]);
+        y = Math.min(y, window.tool.getRegion().selectedRegionY[i]);
         width = Math.min(getValueAfterZoom(window, window.showImgRegionLabel.getWidth(), i) - x, width);
         height = Math.min(getValueAfterZoom(window, window.showImgRegionLabel.getHeight(), i) - y, height);
         if (x < 0) {
@@ -103,6 +106,7 @@ public class RegionThread extends Thread {
             height += y;
             y = 0;
         }
-        window.tool.region.selectedRegionLabel[i].setBounds(x, y, width, height);
+        window.tool.getRegion().selectedRegionLabel[i].setBounds(x, y, width, height);
+
     }
 }

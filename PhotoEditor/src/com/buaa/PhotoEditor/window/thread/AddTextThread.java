@@ -1,20 +1,42 @@
 package com.buaa.PhotoEditor.window.thread;
 
 import static com.buaa.PhotoEditor.util.MatUtil.*;
+
+import static com.buaa.PhotoEditor.window.Constant.*;
+
+
 import com.buaa.PhotoEditor.util.MatUtil;
+import com.buaa.PhotoEditor.window.Constant;
 import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.add.Text;
 
 
+
+import com.buaa.PhotoEditor.window.tool.ZoomIn;
+
+
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+import org.opencv.features2d.ORB;
+
+
+import javax.print.attribute.standard.OrientationRequested;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.net.SocketTimeoutException;
+import java.nio.channels.NonReadableChannelException;
 
 /**
  * ClassName: AddTextThread

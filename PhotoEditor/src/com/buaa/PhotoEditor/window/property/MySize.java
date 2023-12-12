@@ -4,8 +4,17 @@ import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.window.Constant.*;
+
+
 import org.opencv.core.Size;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+
+import static com.buaa.PhotoEditor.util.MatUtil.resize;
+
+import org.opencv.core.Size;
+import javax.swing.*;
+
 
 /**
  * @Description: 调节图片大小（分辨率）
@@ -27,6 +36,7 @@ public class MySize {
      * @date: 2023/11/27 14:00
      * @version: 1.0
      **/
+
     public MySize(Window window) {
         this.window = window;
         sizeLabel = new JLabel("Size");
@@ -57,6 +67,7 @@ public class MySize {
 
             MatUtil.resize(window.zoomImg[ORIGINAL_SIZE_COUNTER], new Size(newWidth, newHeight));
             MatUtil.resize(window.originalZoomImg[ORIGINAL_SIZE_COUNTER], new Size(newWidth, newHeight));
+
 
             JOptionPane.showMessageDialog(null, "Success");
 

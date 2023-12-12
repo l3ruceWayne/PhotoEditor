@@ -53,10 +53,10 @@ public class CutThread extends Thread {
                     return;
                 }
                 if (i == window.counter) {
-                    window.tool.region.selectRegionItem.setSelected(false);
+                    window.tool.getRegion().selectRegionItem.setSelected(false);
                 }
                 // 如果还没有选择区域，弹出提示框
-                if (window.tool.region.selectedRegionLabel[i].getBorder() == null) {
+                if (window.tool.getRegion().selectedRegionLabel[i].getBorder() == null) {
                     if (i == window.counter) {
                         JOptionPane.showMessageDialog(null,
                                 "Please select region first");
@@ -73,8 +73,8 @@ public class CutThread extends Thread {
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
                     //从window.img图像中裁剪出window.region.selectedRegionLabel[window.counter]标识的区域，并将裁剪后的图像赋值给新的Mat对象newImg
-                    window.zoomImg[i] = MatUtil.cut(window.zoomImg[i], MatUtil.getRect(window.tool.region.selectedRegionLabel[i]));
-                    window.originalZoomImg[i] = MatUtil.cut(window.originalZoomImg[i], MatUtil.getRect(window.tool.region.selectedRegionLabel[i]));
+                    window.zoomImg[i] = MatUtil.cut(window.zoomImg[i], MatUtil.getRect(window.tool.getRegion().selectedRegionLabel[i]));
+                    window.originalZoomImg[i] = MatUtil.cut(window.originalZoomImg[i], MatUtil.getRect(window.tool.getRegion().selectedRegionLabel[i]));
                     // 当前大小改成cut后的图片大小
                     window.size[i][0] = window.zoomImg[i].width();
                     window.size[i][1] = window.zoomImg[i].height();

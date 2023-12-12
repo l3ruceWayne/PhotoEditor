@@ -2,6 +2,12 @@ package com.buaa.PhotoEditor.window.add;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+
+import static com.buaa.PhotoEditor.util.MatUtil.copy;
+import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
+import static com.buaa.PhotoEditor.window.Constant.*;
+
+
 import com.buaa.PhotoEditor.window.custom.CustomColorChooser;
 import com.buaa.PhotoEditor.window.thread.AddTextThread;
 
@@ -15,6 +21,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+
 
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
@@ -165,9 +175,9 @@ public class Text {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }
-        if (window.tool.region.selectRegionItem.isSelected()) {
+        if (window.tool.getRegion().selectRegionItem.isSelected()) {
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-                window.tool.region.removeRegionSelected(i);
+                window.tool.getRegion().removeRegionSelected(i);
             }
             if (flag) {
                 flag = false;
@@ -187,6 +197,7 @@ public class Text {
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             window.last.push(copyImgArray(window.zoomImg));
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
+
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
                 addTextThread[i].matForAddText = copy(window.zoomImg[i]);
             }
@@ -198,6 +209,15 @@ public class Text {
             JOptionPane.showMessageDialog(null, "Select an area to add text!");
         }
     }
+
+    /**
+     * @param:
+     * @return
+     * @Description: 初始化文字设置
+     * @author: 张旖霜
+     * @date: 11/27/2023 12:48 PM
+     * @version: 1.0
+     */
 
     public Scalar getColor() {
         return color;

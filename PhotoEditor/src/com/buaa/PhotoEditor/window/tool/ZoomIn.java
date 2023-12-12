@@ -9,16 +9,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * @Description: 放大图片
+ * @author: 张旖霜 卢思文
+ * @date: 12/12/2023 11:58 AM
+ * @version: 1.0
+ */
 public class ZoomIn {
-
     public Window window;
     public JMenuItem zoomInItem;
 
     public ZoomIn(Window window) {
         this.window = window;
         zoomInItem = new JMenu("Zoom+");
-
-
         zoomInItem.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
                 zoomIn();
@@ -26,23 +29,12 @@ public class ZoomIn {
         });
     }
 
-    /*
-     * @param img: 当前图片
-     * @return
-     * @Description:放大图片（+10%）后期可以考虑让用户设定放大缩小的比例
-     * @author: 张旖霜
-     * @date: 11/27/2023 1:00 PM
-     * @version: 1.0
-     */
-
     /**
-     * @param
-     * @return
-     * @Description: 无损像素
+     * @Description: 无损像素放大图片（换下一个放大比例的图）
      * @author: 卢思文
      * @date: 12/1/2023 3:34 PM
-     * @version: 1.0
-     **/
+     * @version: 3.0
+     */
     public void zoomIn() {
         // 如果未选择图片，弹窗提示并return
         if (window.originalImg == null) {
@@ -55,26 +47,20 @@ public class ZoomIn {
             return;
         }
         // 取消 drag
-        window.tool.drag.dragItem.setSelected(false);
+        window.tool.getDrag().dragItem.setSelected(false);
         window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        // 不能再放大了，return，后期加弹窗
+        // 不能再放大了
         if (window.counter == MAX_SIZE_COUNTER) {
             return;
         } else {
             window.counter++;
         }
-        if (window.tool.region.selectedRegionLabel[window.counter - 1] != null) {
-            window.tool.region.selectedRegionLabel[window.counter - 1].setVisible(false);
+        if (window.tool.getRegion().selectedRegionLabel[window.counter - 1] != null) {
+            window.tool.getRegion().selectedRegionLabel[window.counter - 1].setVisible(false);
         }
-        if (window.tool.region.selectedRegionLabel[window.counter] != null) {
-            window.tool.region.selectedRegionLabel[window.counter].setVisible(true);
+        if (window.tool.getRegion().selectedRegionLabel[window.counter] != null) {
+            window.tool.getRegion().selectedRegionLabel[window.counter].setVisible(true);
         }
-//        if (window.add.widget.widgetLabel[window.counter - 1] != null) {
-//            window.add.widget.widgetLabel[window.counter - 1].setVisible(false);
-//        }
-//        if (window.add.widget.widgetLabel[window.counter] != null) {
-//            window.add.widget.widgetLabel[window.counter].setVisible(true);
-//        }
 
         int counter = window.counter;
         int width = window.size[counter][0];
@@ -86,9 +72,9 @@ public class ZoomIn {
         MatUtil.show(window.zoomImg[counter], window.showImgRegionLabel);
         if (width > panelWidth
                 || height > panelHeight) {
-            window.showImgRegionLabel.setLocation((panelWidth - width)/2,
-                    (panelHeight - height)/2);
-        } else{
+            window.showImgRegionLabel.setLocation((panelWidth - width) / 2,
+                    (panelHeight - height) / 2);
+        } else {
             window.panel.setLayout(window.gridBagLayout);
         }
     }

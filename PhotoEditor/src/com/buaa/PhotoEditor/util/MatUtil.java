@@ -7,6 +7,9 @@ import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Random;
+
+import javax.swing.*;
 
 import javax.swing.*;
 
@@ -101,7 +104,6 @@ public abstract class MatUtil extends JFrame {
         int height = getValueAfterZoom(window, widget.height(), i);
         int rx = lx + width;
         int ry = ly + height;
-
         if ((lx < 0 || rx > getValueAfterZoom(window, window.showImgRegionLabel.getWidth(), i))) {
             window.flagForWidget = false;
             return;

@@ -39,7 +39,7 @@ public class CopyThread extends Thread {
      * @version: 2.0
      **/
     private void copySelectedRegion() {
-        window.tool.region.selectRegionItem.setSelected(false);
+        window.tool.getRegion().selectRegionItem.setSelected(false);
         //如果未选择图片，弹窗提示并return
         if (window.zoomImg == null) {
             if(i == window.counter){
@@ -48,13 +48,13 @@ public class CopyThread extends Thread {
             return;
         }
         // 如果还没有选择区域，弹出提示框
-        if (window.tool.region.selectedRegionLabel[i].getBorder() == null) {
+        if (window.tool.getRegion().selectedRegionLabel[i].getBorder() == null) {
             if(i == window.counter){
                 JOptionPane.showMessageDialog(null, "Please select region first");
             }
             return;
         }
-        window.copyRegionImg[i] = window.zoomImg[i].submat(MatUtil.getRect(window.tool.region.selectedRegionLabel[i]));
+        window.copyRegionImg[i] = window.zoomImg[i].submat(MatUtil.getRect(window.tool.getRegion().selectedRegionLabel[i]));
         // pasting状态置1
         window.pasting = true;
     }

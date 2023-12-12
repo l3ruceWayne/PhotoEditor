@@ -1,12 +1,33 @@
 package com.buaa.PhotoEditor.window;
 
+
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 import static com.buaa.PhotoEditor.window.Constant.*;
+
+
+import java.awt.*;
+import java.awt.event.*;
+
+import java.util.Stack;
+import javax.swing.*;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.edit.Edit;
 import com.buaa.PhotoEditor.window.file.Save;
 import com.buaa.PhotoEditor.window.file.MyFile;
+
+
+import com.buaa.PhotoEditor.window.property.Property;
+
+
+// add
+import com.buaa.PhotoEditor.window.add.Add;
+// tool
+import com.buaa.PhotoEditor.window.tool.Tool;
+
+
+import com.buaa.PhotoEditor.window.filter.Filter;
+
 
 import com.buaa.PhotoEditor.window.layer.Layer;
 
@@ -20,7 +41,9 @@ import java.awt.event.*;
 import java.util.Stack;
 import javax.swing.*;
 
+
 import org.opencv.core.Mat;
+import org.opencv.dnn.Layer;
 
 
 /**
@@ -47,6 +70,7 @@ public class Window extends JFrame {
     // 为设置panel的布局增添的布局管理器
     public GridBagLayout gridBagLayout;
     public boolean flagForWidget;
+
     public Save save;
     public Tool tool;
     public Add add;
@@ -88,8 +112,6 @@ public class Window extends JFrame {
     // options
     public boolean pasting = false;
     public String title;
-    public int imgWidth;
-    public int imgHeight;
     //新增UI菜单
     public UI ui;
 
@@ -152,6 +174,7 @@ public class Window extends JFrame {
 
 
         // 只有一个layer，所以layer赋值之后就不再赋值
+
         if(layer == null){
             layer = new Layer(this);
         }
@@ -186,28 +209,28 @@ public class Window extends JFrame {
         separateMenu(menuBar);
         menuBar.add(ui.uiMenu);
         separateMenu(menuBar);
-        menuBar.add(tool.region.selectRegionItem);
-        tool.region.selectRegionItem.setMaximumSize(new Dimension(0, tool.region.selectRegionItem.getPreferredSize().height));
+        menuBar.add(tool.getRegion().selectRegionItem);
+        tool.getRegion().selectRegionItem.setMaximumSize(new Dimension(0, tool.getRegion().selectRegionItem.getPreferredSize().height));
         separateMenu(menuBar);
-        menuBar.add(tool.pen.penItem);
-        tool.pen.penItem.setMaximumSize(new Dimension(0, tool.pen.penItem.getPreferredSize().height));
-        menuBar.add(tool.pen.penColorPanel);
+        menuBar.add(tool.getPen().penItem);
+        tool.getPen().penItem.setMaximumSize(new Dimension(0, tool.getPen().penItem.getPreferredSize().height));
+        menuBar.add(tool.getPen().penColorPanel);
         menuBar.add(Box.createHorizontalGlue());
-        menuBar.add(tool.pen.penSizeSpinner);
+        menuBar.add(tool.getPen().penSizeSpinner);
         separateMenu(menuBar);
-        menuBar.add(tool.eraser.eraserItem);
-        menuBar.add(tool.eraser.eraserSizeSpinner);
+        menuBar.add(tool.getEraser().eraserItem);
+        menuBar.add(tool.getEraser().eraserSizeSpinner);
         separateMenu(menuBar);
-        menuBar.add(tool.rotate.rotateItem);
+        menuBar.add(tool.getRotate().rotateItem);
         separateMenu(menuBar);
-        menuBar.add(tool.zoomIn.zoomInItem);
+        menuBar.add(tool.getZoomIn().zoomInItem);
         separateMenu(menuBar);
-        menuBar.add(tool.zoomOut.zoomOutItem);
+        menuBar.add(tool.getZoomOut().zoomOutItem);
         separateMenu(menuBar);
-        menuBar.add(tool.drag.dragItem);
-        tool.drag.dragItem.setMaximumSize(new Dimension(0, tool.drag.dragItem.getPreferredSize().height));
+        menuBar.add(tool.getDrag().dragItem);
+        tool.getDrag().dragItem.setMaximumSize(new Dimension(0, tool.getDrag().dragItem.getPreferredSize().height));
         separateMenu(menuBar);
-        menuBar.add(tool.preview.previewItem);
+        menuBar.add(tool.getPreview().previewItem);
         separateMenu(menuBar);
         menuBar.add(Box.createHorizontalGlue());
         setJMenuBar(menuBar);
@@ -253,7 +276,7 @@ public class Window extends JFrame {
             if (pasting) {
                 pasting = false;
                 for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-                    this.tool.region.removeRegionSelected(i);
+                    this.tool.getRegion().removeRegionSelected(i);
                 }
             }
         }

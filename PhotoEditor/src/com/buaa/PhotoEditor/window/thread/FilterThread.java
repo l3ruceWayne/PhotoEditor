@@ -51,7 +51,7 @@ public class FilterThread extends Thread {
         invert.invertItem.addActionListener(evt -> invert());
         animize.animizeItem.addActionListener(evt -> animize());
         focus.focusItem.addActionListener(evt -> focus());
-        glitch.glitchItemDialogOKButton.addActionListener(evt -> glitch());
+        glitch.glitchItemDialogOkButton.addActionListener(evt -> glitch());
 
     }
 
@@ -72,12 +72,12 @@ public class FilterThread extends Thread {
             window.last.push(copyImgArray(window.zoomImg));
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
         }
-        if (window.tool.region.selectRegionItem.isSelected()) {
+        if (window.tool.getRegion().selectRegionItem.isSelected()) {
 
             MatUtil.grayScale(window.zoomImg[i],
-                    getRect(window.tool.region
+                    getRect(window.tool.getRegion()
                             .selectedRegionLabel[i]));
-            window.tool.region.removeRegionSelected(i);
+            window.tool.getRegion().removeRegionSelected(i);
 
         } else {
             MatUtil.grayScale(window.zoomImg[i]);
@@ -112,10 +112,11 @@ public class FilterThread extends Thread {
             }
             try {
                 int blurLevel = Integer.parseInt(blur.blurLevelTextField.getText());
-                if (window.tool.region.selectRegionItem.isSelected()) {
-                    MatUtil.blur(window.zoomImg[i], blurLevel,
-                        getRect(window.tool.region.selectedRegionLabel[i]));
-                    window.tool.region.removeRegionSelected(i);
+                if (window.tool.getRegion().selectRegionItem.isSelected()) {
+
+                    MatUtil.blur(window.zoomImg[i], blurLevel, getRect(window.tool.getRegion().selectedRegionLabel[i]));
+                    window.tool.getRegion().removeRegionSelected(i);
+
                 } else {
                     MatUtil.blur(window.zoomImg[i], blurLevel);
                 }
@@ -156,9 +157,9 @@ public class FilterThread extends Thread {
             window.last.push(copyImgArray(window.zoomImg));
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
         }
-        if (window.tool.region.selectRegionItem.isSelected()) {
-            MatUtil.inversion(window.zoomImg[i], getRect(window.tool.region.selectedRegionLabel[i]));
-            window.tool.region.removeRegionSelected(i);
+        if (window.tool.getRegion().selectRegionItem.isSelected()) {
+            MatUtil.inversor(window.zoomImg[i], getRect(window.tool.getRegion().selectedRegionLabel[i]));
+            window.tool.getRegion().removeRegionSelected(i);
         } else {
             MatUtil.inversion(window.zoomImg[i]);
         }
@@ -191,9 +192,9 @@ public class FilterThread extends Thread {
             window.last.push(copyImgArray(window.zoomImg));
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
         }
-        if (window.tool.region.selectRegionItem.isSelected()) {
-            MatUtil.cartoon(window.zoomImg[i], getRect(window.tool.region.selectedRegionLabel[i]));
-            window.tool.region.removeRegionSelected(i);
+        if (window.tool.getRegion().selectRegionItem.isSelected()) {
+            MatUtil.cartoon(window.zoomImg[i], getRect(window.tool.getRegion().selectedRegionLabel[i]));
+            window.tool.getRegion().removeRegionSelected(i);
         } else {
             MatUtil.cartoon(window.zoomImg[i]);
         }
@@ -225,9 +226,9 @@ public class FilterThread extends Thread {
             window.last.push(copyImgArray(window.zoomImg));
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
         }
-        if (window.tool.region.selectRegionItem.isSelected()) {
-            MatUtil.focus(window.zoomImg[i], getRect(window.tool.region.selectedRegionLabel[i]));
-            window.tool.region.removeRegionSelected(i);
+        if (window.tool.getRegion().selectRegionItem.isSelected()) {
+            MatUtil.focus(window.zoomImg[i], getRect(window.tool.getRegion().selectedRegionLabel[i]));
+            window.tool.getRegion().removeRegionSelected(i);
             if (i != window.counter) {
                 return;
             }
@@ -269,10 +270,10 @@ public class FilterThread extends Thread {
                 } else if (Glitch.red.isSelected()) {
                     glitch.color = EColor.RED;
                 }
-                if (window.tool.region.selectRegionItem.isSelected()) {
+                if (window.tool.getRegion().selectRegionItem.isSelected()) {
                     MatUtil.glitchWave(window.zoomImg[i], glitch.waveLength, glitch.color, MatUtil.
-                            getRect(window.tool.region.selectedRegionLabel[i]));
-                    window.tool.region.removeRegionSelected(i);
+                            getRect(window.tool.getRegion().selectedRegionLabel[i]));
+                    window.tool.getRegion().removeRegionSelected(i);
                 } else {
                     MatUtil.glitchWave(window.zoomImg[i], glitch.waveLength, glitch.color);
                 }

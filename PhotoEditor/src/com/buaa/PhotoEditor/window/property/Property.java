@@ -2,7 +2,13 @@ package com.buaa.PhotoEditor.window.property;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+
+
 import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
+
+
+import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
+
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -104,7 +110,6 @@ public class Property {
             .addComponent(resizeButton)
             .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
     }
-
     /**
      * @return void
      * @Description:点击触发，完成面板有关参数的初始化设置 触发后，把当前修改的新值保存到currentPropertyValue中（方便undo和redo的操作）
@@ -150,7 +155,7 @@ public class Property {
     public Window getWindow() {
         return window;
     }
-
+    
     public MySize getMySize() {
         return mySize;
     }

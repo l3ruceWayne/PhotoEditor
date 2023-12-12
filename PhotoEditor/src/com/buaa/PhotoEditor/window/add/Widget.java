@@ -2,7 +2,9 @@ package com.buaa.PhotoEditor.window.add;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import com.formdev.flatlaf.icons.FlatOptionPaneInformationIcon;
 import org.opencv.core.Mat;
+import org.opencv.ml.ANN_MLP_ANNEAL;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -62,9 +64,9 @@ public class Widget {
             return;
         }
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-            window.tool.region.removeRegionSelected(i);
+            window.tool.getRegion().removeRegionSelected(i);
         }
-        window.tool.region.disableListeners();
+        window.tool.getRegion().disableListeners();
 
         JFileChooser fileChooser = new JFileChooser();
 
@@ -78,6 +80,9 @@ public class Widget {
                 Mat widget = MatUtil.readImg(widgetPath);
                 widgetIcon = new ImageIcon(widgetPath);
 
+                /*
+                    增加防范措施，防止小组件的大小大过背景图片
+                 */
                 if (widgetIcon.getIconWidth() > window.size[window.counter][0]
                         || widgetIcon.getIconHeight() > window.size[window.counter][1]) {
                     JOptionPane.showMessageDialog(null,
