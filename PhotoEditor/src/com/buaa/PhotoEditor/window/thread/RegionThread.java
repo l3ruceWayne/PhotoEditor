@@ -12,8 +12,7 @@ import java.awt.event.MouseEvent;
 /**
  * ClassName: RegionThread
  * Package: com.buaa.PhotoEditor.window.thread
- * Description:
- *
+ * Description: 区域选择多线程，是复制、剪切、区域滤镜等的基础
  * @Author 卢思文
  * @Create 12/2/2023 8:56 PM
  * @Version 1.0
@@ -30,14 +29,24 @@ public class RegionThread extends Thread {
     @Override
     public void run() {
         MouseInputAdapter mia = new MouseInputAdapter() {
-
+            /**
+            * @Description: 点击后确定区域的左上顶点或者右下顶点
+            * @author: 卢思文
+            * @date: 12/11/2023 9:30 PM
+            * @version: 1.0
+            **/
             @Override
             public void mousePressed(MouseEvent e) {
                 if (window.tool.region.selectRegionItem.isSelected()) {
                     addRegion(e.getX(), e.getY());
                 }
             }
-
+            /**
+            * @Description: 拖拽以实现区域的放大缩小
+            * @author: 卢思文
+            * @date: 12/11/2023 9:31 PM
+            * @version: 1.0
+            **/
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (window.tool.region.selectRegionItem.isSelected()) {
@@ -45,43 +54,38 @@ public class RegionThread extends Thread {
                 }
             }
         };
-
         window.showImgRegionLabel.addMouseListener(mia);
         window.showImgRegionLabel.addMouseMotionListener(mia);
     }
-
+    /**
+    * @Description: 用于确定区域起点
+    * @author: 卢思文
+    * @date: 12/11/2023 9:32 PM
+    * @version: 1.2
+    **/
     public void addRegion(int x, int y) {
         Point p = new Point(getValueAfterZoom(window, x, i),
-                getValueAfterZoom(window, y, i));
+            getValueAfterZoom(window, y, i));
         window.tool.region.selectedRegionLabel[i].setLocation(p);
         window.tool.region.selectedRegionLabel[i].setSize(1, 1);
         window.tool.region.selectedRegionLabel[i].setBorder(BorderFactory
-                .createLineBorder(Color.cyan));
-
-//        window.showImgRegionLabel.setLayout(null);
+            .createLineBorder(Color.cyan));
         window.tool.region.selectedRegionLabel[i].setVisible(false);
         window.showImgRegionLabel.add(window.tool.region.selectedRegionLabel[i]);
         if (i == window.counter) {
             window.tool.region.selectedRegionLabel[i].setVisible(true);
         }
-//        // 可能过后改bug会用
-//        // 在panel的z轴视角上设置各组件的优先级/遮盖关系：index小的，优先级高
-//        window.showImgRegionLabel.setComponentZOrder(selectedRegionLabel[i], 0);
-//        for (int i = 0; i < window.add.widget.widgetLabelList.size(); i++) {
-//            window.panel.setComponentZOrder(window.add.widget.widgetLabelList.get(i), i + 1);
-//        }
-//        window.panel.setComponentZOrder(window.showImgRegionLabel,
-//                window.add.widget.widgetLabelList.size() + 1);
-//
-//        window.showImgRegionLabel.revalidate();
-//        window.showImgRegionLabel.repaint();
-
         window.tool.region.selectedRegionX[i]
-                = window.tool.region.selectedRegionLabel[i].getX();
+            = window.tool.region.selectedRegionLabel[i].getX();
         window.tool.region.selectedRegionY[i]
-                = window.tool.region.selectedRegionLabel[i].getY();
+            = window.tool.region.selectedRegionLabel[i].getY();
     }
-
+    /**
+    * @Description: 鼠标拖拽过程中，确定区域大小，同时防止区域超过图片之外
+    * @author: 卢思文
+    * @date: 12/11/2023 9:32 PM
+    * @version: 1.0
+    **/
     public void setRegionSize(int x, int y) {
         x = getValueAfterZoom(window, x, i);
         y = getValueAfterZoom(window, y, i);
@@ -100,6 +104,5 @@ public class RegionThread extends Thread {
             y = 0;
         }
         window.tool.region.selectedRegionLabel[i].setBounds(x, y, width, height);
-//        window.tool.region.pointRegion = new Point(x+width, y-height);
     }
 }

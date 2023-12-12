@@ -2,18 +2,17 @@ package com.buaa.PhotoEditor.window.thread;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-import com.buaa.PhotoEditor.window.add.Text;
-
 import javax.swing.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * ClassName: CopyThread
  * Package: com.buaa.PhotoEditor.window.thread
- * Description:
- *
+ * Description: 实现复制的多线程，同时对多张图片执行复制操作
  * @Author 卢思文
  * @Create 12/10/2023 10:33 AM
- * @Version 1.0
+ * @Version 1.1
  */
 public class CopyThread extends Thread {
     public Window window;
@@ -28,13 +27,14 @@ public class CopyThread extends Thread {
 
     @Override
     public void run() {
-        copyItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        copyItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
+            InputEvent.CTRL_MASK));
         copyItem.addActionListener(evt -> copySelectedRegion());
     }
     /**
      * @return void
      * @Description:获取选区并将pasting状态置1 增加未选择图片弹窗
-     * @author: 罗雨曦
+     * @author: 罗雨曦、卢思文
      * @date: 12/5/2023 3:28 PM
      * @version: 2.0
      **/
@@ -58,5 +58,4 @@ public class CopyThread extends Thread {
         // pasting状态置1
         window.pasting = true;
     }
-
 }

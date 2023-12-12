@@ -14,16 +14,15 @@ import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
  * @version 1.0
  */
 public class Paste {
-
     public PasteThread[] pasteThread;
-
+    private Window window;
     public Paste(Window window) {
         pasteThread = new PasteThread[NUM_FOR_NEW];
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             pasteThread[i] = new PasteThread(window, i);
             pasteThread[i].start();
-            // 等待线程完成
             try {
+                // 等待线程完成
                 pasteThread[i].join();
             } catch (InterruptedException e) {
                 e.printStackTrace();

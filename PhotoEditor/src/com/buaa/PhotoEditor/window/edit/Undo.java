@@ -3,6 +3,7 @@ package com.buaa.PhotoEditor.window.edit;
 import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.thread.UndoThread;
 
+
 import javax.swing.*;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
@@ -17,18 +18,17 @@ import static com.buaa.PhotoEditor.window.Constant.*;
 public class Undo {
     public JMenuItem undoItem;
     public UndoThread[] undoThread;
-
     /**
      * @param window 当前窗口
-     * @Description 构造方法——生成子菜单项并设置快捷键
-     * @author 罗雨曦
-     * @date 2023/11/27
-     * @version: 1.0
-     **/
+     * @return null
+     * @Description:构造方法——生成子菜单项并设置快捷键
+     * @author: 罗雨曦、张旖霜
+     * @date: 2023/11/27 14:06
+     * @version: 2.0
+     */
     public Undo(Window window) {
         undoItem = new JMenuItem("Undo");
         undoThread = new UndoThread[NUM_FOR_NEW];
-
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             undoThread[i] = new UndoThread(window, i, undoItem);
             undoThread[i].start();
@@ -38,6 +38,6 @@ public class Undo {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        };
     }
 }

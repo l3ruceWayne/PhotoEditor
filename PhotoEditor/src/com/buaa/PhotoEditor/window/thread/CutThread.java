@@ -2,8 +2,6 @@ package com.buaa.PhotoEditor.window.thread;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-import org.opencv.core.Mat;
-import org.opencv.core.Size;
 
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 
@@ -12,9 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
-import static com.buaa.PhotoEditor.window.Constant.AUTO_SIZE_COUNTER;
 
-/*
+/**
  * @Description:实现了cut的多线程
  * @author: 张旖霜
  * @date: 12/9/2023 10:21 AM
@@ -34,7 +31,9 @@ public class CutThread extends Thread {
     @Override
     public void run() {
         // 进行监听
-        cutItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        cutItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C,
+                java.awt.event.InputEvent.ALT_MASK
+                        | java.awt.event.InputEvent.CTRL_MASK));
         cutItem.addActionListener(new ActionListener() {
             /**
              * @param evt 触发操作
@@ -44,10 +43,12 @@ public class CutThread extends Thread {
              * @date: 2023/11/27 14:11
              * @version: 1.0
              **/
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 if (window.zoomImg == null) {
-                    if(i == window.counter){
-                        JOptionPane.showMessageDialog(null, "Please open an image first");
+                    if (i == window.counter) {
+                        JOptionPane.showMessageDialog(null,
+                                "Please open an image first");
                     }
                     return;
                 }
@@ -77,7 +78,6 @@ public class CutThread extends Thread {
                     // 当前大小改成cut后的图片大小
                     window.size[i][0] = window.zoomImg[i].width();
                     window.size[i][1] = window.zoomImg[i].height();
-
                     if (i == window.counter) {
                         window.panel.setLayout(null);
                         // 显示图片
@@ -86,10 +86,6 @@ public class CutThread extends Thread {
                                 window.zoomImg[window.counter].height());
                         window.panel.setLayout(window.gridBagLayout);
                     }
-
-                    // remove region
-                    // lsw 注释了下面这一行代码后解决cut后图片不居中的问题
-//                    window.panel.setLayout(null);
                     window.tool.region.selectedRegionLabel[i].setBorder(null);
                     window.showImgRegionLabel.remove(window.tool.region.selectedRegionLabel[i]);
                     window.panel.revalidate();
@@ -97,6 +93,5 @@ public class CutThread extends Thread {
                 }
             }
         });
-
     }
 }

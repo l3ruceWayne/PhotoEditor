@@ -1,12 +1,10 @@
 package com.buaa.PhotoEditor.window.thread;
 
-import com.buaa.PhotoEditor.Main;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 
-
-import javax.swing.*;
 
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
@@ -14,22 +12,21 @@ import java.awt.event.MouseEvent;
 
 import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
 
-import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
-
 
 /**
  * ClassName: paintThread
  * Package: com.buaa.PhotoEditor.window.thread
- * Description: i 是 下标
- *
+ * Description: 实现画笔的多线程操作
+ * i是与zoomImg[]有关的下标
  * @Author 卢思文
  * @Create 12/2/2023 9:31 AM
- * @Version 1.0
+ * @Version 1.3
  */
-public class PaintThread extends Thread{
+public class PaintThread extends Thread {
     public Window window;
     public int i;
-    public PaintThread(Window window, int i){
+
+    public PaintThread(Window window, int i) {
         this.window = window;
         this.i = i;
     }
@@ -37,11 +34,12 @@ public class PaintThread extends Thread{
     @Override
     public void run() {
         MouseInputAdapter mia = new MouseInputAdapter() {
-            /*
-                lsw
-                新添，绘画点击的笔迹
-                应该还需要添加橡皮擦除的点击事件处理
-             */
+            /**
+            * @Description: 利用画笔进行点击时，画出点迹，需要进行点击事件的捕捉
+            * @author: 卢思文
+            * @date: 12/11/2023 9:12 PM
+            * @version: 1.0
+            **/
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (window.tool.pen.penItem.isSelected()) {
@@ -49,7 +47,13 @@ public class PaintThread extends Thread{
                     initLastPoint();
                 }
             }
-
+            /**
+            * @Description: 画笔曲线的绘制，鼠标拖拽事件的捕捉
+            * @author: 卢思文
+            * @date: 12/11/2023 9:12 PM
+            * @version: 2.0
+            **/
+            @Override
             public void mouseDragged(MouseEvent e) {
                 if (window.tool.pen.penItem.isSelected()) {
                     paint(e.getX(), e.getY(), false);
@@ -63,20 +67,17 @@ public class PaintThread extends Thread{
                 当松开的时候我们将上一个状态入栈，然后更改img
                  */
                 if (window.tool.pen.penItem.isSelected()) {
-
                     // 在第一个线程入栈
                     if (i == 0) {
                         window.next.clear();
                         window.nextOriginalImg.clear();
                         window.nextPropertyValue.clear();
                         window.lastPropertyValue
-                                .push(copyPropertyValue(window
-                                        .currentPropertyValue));
+                            .push(copyPropertyValue(window
+                            .currentPropertyValue));
                         window.last.push(copyImgArray(window.zoomImg));
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
-
-
                     if (window.paintingImg[i] != null) {
                         window.zoomImg[i] = copy(window.paintingImg[i]);
                     }
@@ -91,7 +92,9 @@ public class PaintThread extends Thread{
         window.showImgRegionLabel.addMouseMotionListener(mia);
     }
 
-    /*
+    /**
+     * @param x : 鼠标 x 坐标
+     * @param y ：鼠标 y 坐标
      * @param flag : true则是画点，否则画线
      * @Description:
      * 实现画笔功能，原理是将指定像素块染成指定的颜色
@@ -99,36 +102,28 @@ public class PaintThread extends Thread{
      * newX和newY是drag后的重新定位
      * @author: 张旖霜、卢思文
      * @date: 12/5/2023 3:42 AM
-     * @version: 1.0
+     * @version: 2.0
      */
-        /*  lsw
-            解决了画到图片外报错的问题：让width和height分别减去penSize,
-            因为x只是鼠标的点，而画的时候是penSize大小的矩形块
-            所以当x在图片边界的时候，画的区域已经超过了边界，导致报错
-         */
-
-
     public void paint(int x, int y, boolean flag) {
         if (window.paintingImg[i] == null) {
             window.paintingImg[i] = copy(window.zoomImg[i]);
         }
         int[] color = {window.tool.pen.penColorPanel.getBackground().getBlue(),
-                window.tool.pen.penColorPanel.getBackground().getGreen(),
-                window.tool.pen.penColorPanel.getBackground().getRed()
+            window.tool.pen.penColorPanel.getBackground().getGreen(),
+            window.tool.pen.penColorPanel.getBackground().getRed()
         };
         int tempX = getValueAfterZoom(window, x, i);
         int tempY = getValueAfterZoom(window, y, i);
         if (window.tool.pen.lastPoint[i] != null && !flag) {
             /*
-                lsw
                 将当前点与上一个点连线，解决笔迹断续的问题
             */
             MatUtil.drawLine(window.tool.pen.lastPoint[i].x,
-                    window.tool.pen.lastPoint[i].y,
-                    tempX,
-                    tempY,
-                    color,
-                    window.tool.pen.penSize[i], window.paintingImg[i]);
+                window.tool.pen.lastPoint[i].y,
+                tempX,
+                tempY,
+                color,
+                window.tool.pen.penSize[i], window.paintingImg[i]);
         } else {
             /*
                 解决无法画到边界的问题
@@ -140,22 +135,20 @@ public class PaintThread extends Thread{
                 tempY = window.paintingImg[i].height() - window.tool.pen.penSize[i];
             }
             MatUtil.paint(color,
-                    window.tool.pen.penSize[i],
-                    window.tool.pen.penSize[i],
-                    tempX,
-                    tempY,
-                    window.paintingImg[i]);
+                window.tool.pen.penSize[i],
+                window.tool.pen.penSize[i],
+                tempX,
+                tempY,
+                window.paintingImg[i]);
         }
         if (i == window.counter) {
             show(window.paintingImg[window.counter], window.showImgRegionLabel);
         }
-
         // 更新上一个点为当前点
-        window.tool.pen. lastPoint[i] = new Point(getValueAfterZoom(window, x, i),
-                getValueAfterZoom(window, y, i));
-
-
+        window.tool.pen.lastPoint[i] = new Point(getValueAfterZoom(window, x, i),
+            getValueAfterZoom(window, y, i));
     }
+
     private void initLastPoint() {
         window.tool.pen.lastPoint[i] = null;
     }

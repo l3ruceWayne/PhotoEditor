@@ -7,6 +7,9 @@ import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.edit.Edit;
 import com.buaa.PhotoEditor.window.file.Save;
 import com.buaa.PhotoEditor.window.file.MyFile;
+
+import com.buaa.PhotoEditor.window.layer.Layer;
+
 import com.buaa.PhotoEditor.window.property.Property;
 import com.buaa.PhotoEditor.window.add.Add;
 import com.buaa.PhotoEditor.window.tool.Tool;
@@ -18,6 +21,7 @@ import java.util.Stack;
 import javax.swing.*;
 
 import org.opencv.core.Mat;
+
 
 /**
  * @author 卢思文、罗雨曦
@@ -47,6 +51,9 @@ public class Window extends JFrame {
     public Tool tool;
     public Add add;
     public Filter filter;
+
+    public static Layer layer;
+
     public MyFile myFile;
     public Edit edit;
     // control of photo
@@ -121,6 +128,7 @@ public class Window extends JFrame {
         currentPropertyValue = new int[10];
         this.setTitle(title);
         addKeyListener(new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent evt) {
                 keyPress(evt);
             }
@@ -141,6 +149,12 @@ public class Window extends JFrame {
         add = new Add(this);
         showImgRegionLabel = new JLabel();
         tool = new Tool(this);
+
+
+        // 只有一个layer，所以layer赋值之后就不再赋值
+        if(layer == null){
+            layer = new Layer(this);
+        }
         menuBar = new JMenuBar();
         filter = new Filter(this);
         myFile = new MyFile(this);
@@ -273,6 +287,7 @@ public class Window extends JFrame {
             }
             if (flagForWidget) {
                 add.getWidget().widgetIcon = null;
+
             }
         }
     }
