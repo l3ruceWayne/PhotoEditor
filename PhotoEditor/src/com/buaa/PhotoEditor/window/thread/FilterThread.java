@@ -158,7 +158,7 @@ public class FilterThread extends Thread {
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
         }
         if (window.tool.getRegion().selectRegionItem.isSelected()) {
-            MatUtil.inversor(window.zoomImg[i], getRect(window.tool.getRegion().selectedRegionLabel[i]));
+            MatUtil.inversion(window.zoomImg[i], getRect(window.tool.getRegion().selectedRegionLabel[i]));
             window.tool.getRegion().removeRegionSelected(i);
         } else {
             MatUtil.inversion(window.zoomImg[i]);
