@@ -1,20 +1,14 @@
 package com.buaa.PhotoEditor.window.tool;
 
-import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-import com.buaa.PhotoEditor.window.thread.PaintThread;
 import com.buaa.PhotoEditor.window.thread.RegionThread;
 import org.opencv.core.Mat;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 
 import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
 /*
 
  * @Description:drag后重新定位的bug已修改

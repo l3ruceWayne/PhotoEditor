@@ -6,15 +6,13 @@ import javax.swing.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
-
 public class Blur {
     public JMenuItem blurItem;
     public Window window;
     public JLabel blurLevelLabel;
     public JTextField blurLevelTextField;
     public JDialog blurItemDialog;
-    public JButton blurItemDialogOKButton;
+    public JButton blurItemDialogOkButton;
 
     public Blur(Window window) {
         this.window = window;
@@ -39,7 +37,7 @@ public class Blur {
         blurLevelLabel = new JLabel("Blur Level:");
         blurLevelTextField = new JTextField();
 
-        blurItemDialogOKButton = new JButton("OK");
+        blurItemDialogOkButton = new JButton("OK");
 
         setLayout();
 
@@ -68,7 +66,7 @@ public class Blur {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                         .addGroup(blurDialogLayout.createParallelGroup(javax.swing
                                         .GroupLayout.Alignment.TRAILING)
-                                .addComponent(blurItemDialogOKButton))
+                                .addComponent(blurItemDialogOkButton))
                         .addContainerGap(29, Short.MAX_VALUE)
                 )
         );
@@ -82,7 +80,7 @@ public class Blur {
                                         .addComponent(blurLevelTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(blurItemDialogOKButton)
+                                        .addComponent(blurItemDialogOkButton)
                                         .addComponent(blurLevelLabel))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );

@@ -1,22 +1,16 @@
 package com.buaa.PhotoEditor.window.tool;
 
-import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.thread.EraserThread;
-import org.opencv.core.Mat;
-import org.opencv.core.Rect;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 
 import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * @Description: 为橡皮添加图标和光标，增添调节橡皮擦粗细的设置

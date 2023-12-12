@@ -13,9 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
-/*
- * @Description:实现了redo的多线程执行
- * 实现了redo originalImg的操作
+
+/**
+ * @Description:实现了redo的多线程执行 实现了redo originalImg的操作
  * 将栈修改成保存zoomImg数组，Redo操作是恢复每一张图片的操作，把数组中的图片都换成redo后的图（next栈顶的图）
  * 因为cut后，原图大小也不一样了，所以redo后，就要恢复原图cut前的originalImg大小（存在nextOriginalImg的栈中）
  * @author: 张旖霜
@@ -36,7 +36,6 @@ public class RedoThread extends Thread {
     @Override
     public void run() {
         // 进行监听
-
         redoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         redoItem.addActionListener(new ActionListener() {
             /**
@@ -51,36 +50,32 @@ public class RedoThread extends Thread {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (window.zoomImg == null) {
-                    if(i == window.counter){
-                        JOptionPane.showMessageDialog(null, "Please open an image first");
+                    if (i == window.counter) {
+                        JOptionPane.showMessageDialog(null,
+                                "Please open an image first");
                     }
                     return;
                 }
-
                 // 取消 drag
                 window.tool.drag.dragItem.setSelected(false);
                 window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-
                 if (!window.next.isEmpty()) {
                     if (i == ORIGINAL_SIZE_COUNTER) {
                         window.last.push(copyImgArray(window.zoomImg));
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                     }
-
                     if (!window.tool.region.selectRegionItem.isSelected()) {
-                        if (i == ORIGINAL_SIZE_COUNTER){
+                        if (i == ORIGINAL_SIZE_COUNTER) {
                             // 将栈顶的每个大小的图片复制到当前图片zoomImg中（redo操作）
                             window.zoomImg = copyImgArray(window.next.peek());
                             // 将栈顶的上一步每个大小的原图复制到当前大小的原图OriginalImg中（undo操作）
                             window.originalZoomImg = copyImgArray(window.nextOriginalImg.peek());
                             window.currentPropertyValue = MatUtil.copyPropertyValue(window.nextPropertyValue.peek());
-
                             // 还原property的值
                             window.property.getMySize().txtWidth.setText(window.currentPropertyValue[4] + "");
                             window.property.getMySize().txtHeight.setText(window.currentPropertyValue[5] + "");
                         }
-
                         // 在线程执行最后一步时，出栈
                         if (i == 0) {
                             window.next.pop();
@@ -98,8 +93,7 @@ public class RedoThread extends Thread {
                         window.zoomImg[i] = MatUtil.copy(img);
                         window.tool.region.removeRegionSelected(i);
                     }
-                    if (i == window.counter)
-                    {
+                    if (i == window.counter) {
                         window.property.updateProperty();
                         // 显示当前大小的图片
                         MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
@@ -111,9 +105,7 @@ public class RedoThread extends Thread {
                     }
 
                 } else {
-                    //个人认为需要保留弹窗，后期可删
-                    if (i == window.counter)
-                    {
+                    if (i == window.counter) {
                         JOptionPane.showMessageDialog(null, "There's nothing left to redo!");
                     }
                 }

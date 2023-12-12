@@ -4,8 +4,6 @@ import com.buaa.PhotoEditor.window.Window;
 import static com.buaa.PhotoEditor.window.Constant.*;
 import com.buaa.PhotoEditor.window.thread.RotateThread;
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /*
 * @Description:图片旋转功能（顺时针旋转90°），后期可能可以添加图片翻转功能（镜面）
