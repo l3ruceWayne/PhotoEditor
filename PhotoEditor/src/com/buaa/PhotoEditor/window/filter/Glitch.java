@@ -5,6 +5,7 @@ import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
 
+
 /**
  * @Description: 设置 Glitch 效果
  * @author: 卢思文

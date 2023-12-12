@@ -10,6 +10,9 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 
 /**
  * @Description: 画笔（增添选择画笔颜色/选择画笔粗细/选择画笔后光标变成画笔样式）

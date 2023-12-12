@@ -1,6 +1,9 @@
 package com.buaa.PhotoEditor.window.tool;
 
 import com.buaa.PhotoEditor.window.Window;
+import static com.buaa.PhotoEditor.window.Constant.*;
+import com.buaa.PhotoEditor.window.thread.RotateThread;
+import javax.swing.*;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 

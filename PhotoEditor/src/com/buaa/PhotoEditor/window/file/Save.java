@@ -8,6 +8,8 @@ import org.opencv.imgcodecs.Imgcodecs;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -59,12 +61,9 @@ public class Save {
         }
         updateStack();
         mergeWidget();
-
         if (!window.flagForWidget) {
             return;
         }
-
-        // 若用户没有点击过 save as，则保存路径为原图路径
         if (path == null) {
             path = window.originalImgPath;
         }

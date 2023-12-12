@@ -20,6 +20,7 @@ public class Main {
         } catch (UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
         }
+
         new Window("");
     }
 }

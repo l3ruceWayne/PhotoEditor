@@ -14,18 +14,16 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.buaa.PhotoEditor.window.Constant.NUM_FOR_NEW;
-
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /**
- * @Description: 1. 解决了添加widget图片不能为中文的问题，并且支持矢量图
+ * @author 卢思文、张旖霜
+ * @version 2.0
+ * @Description 1. 解决了添加widget图片不能为中文的问题，并且支持矢量图
  * 2. 增添了自由改变widget尺寸的功能及对应的光标显示
  * 3. 增添了移动widget的时候的光标显示
- * @author: 卢思文
- * @date: 11/27/2023 4:35 PM
- * @version: 1.0
- **/
+ * @date 2023/12/1
+ */
 public class Widget {
 
     public Window window;
@@ -39,7 +37,6 @@ public class Widget {
     public boolean flag;
     public boolean threadStartFlag;
 
-
     public Widget(Window window) {
         this.window = window;
         widgetItem = new javax.swing.JMenuItem("Widget");
@@ -50,9 +47,16 @@ public class Widget {
         WIDGET_SUPPORT_FILE_TYPES.add("JPEG");
         WIDGET_SUPPORT_FILE_TYPES.add("PNG");
 
-        widgetItem.addActionListener(evt -> addWidget(evt));
+        widgetItem.addActionListener(this::addWidget);
     }
 
+    /**
+     * @param evt 触发事件
+     * @Description 增加小组件
+     * @author 张旖霜
+     * @date 2023/12/2
+     * @version: 1.0
+     */
     public void addWidget(ActionEvent evt) {
         //如果未选择图片，弹窗提示并return
         if (window.originalImg == null) {
@@ -70,7 +74,6 @@ public class Widget {
                 == JFileChooser.APPROVE_OPTION) {
 
             widgetPath = fileChooser.getSelectedFile().getAbsolutePath();
-            // pending
             if (WIDGET_SUPPORT_FILE_TYPES.contains(widgetPath
                     .substring(widgetPath.lastIndexOf(".") + 1)
                     .toUpperCase())) {
@@ -97,13 +100,10 @@ public class Widget {
                 window.panel.setLayout(null);
                 window.panel.add(widgetLabel);
 
-
                 // 设定各小组件优先级
                 window.panel.setComponentZOrder(widgetLabel, 0);
                 window.panel.revalidate();
                 window.panel.repaint();
-
-
             } else {
                 JOptionPane.showMessageDialog(null,
                         "only support JPG, JPEG and PNG");
@@ -120,7 +120,6 @@ public class Widget {
 
     public void addWidgetListener(ImageIcon widgetIcon) {
         flag = false;
-//        Window win = this;
         int width = widgetIcon.getIconWidth();
         int height = widgetIcon.getIconHeight();
         MouseInputAdapter mia = new MouseInputAdapter() {
@@ -131,13 +130,10 @@ public class Widget {
                 selectedWidgetLabel = widgetLabel;
                 ex = e.getX();
                 ey = e.getY();
-
-//                widgetLabel.setBorder(BorderFactory.createLineBorder(Color.CYAN));
             }
 
             public void mouseReleased(MouseEvent e) {
                 flag = false;
-//                widgetLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE.brighter()));
             }
 
             public void mouseDragged(MouseEvent e) {
@@ -146,7 +142,6 @@ public class Widget {
                 int x = e.getX() + lx;
                 int y = e.getY() + ly;
                 if (isInResizeArea(e, widgetLabel)) {
-//                    widgetLabel.setCursor(new Cursor(Cursor.NW_RESIZE_CURSOR));
                     int dx = x - lx;
                     double percent = (double) dx / (double) width;
                     // 同比例缩放
@@ -200,27 +195,17 @@ public class Widget {
      * @param e           鼠标事件
      * @param widgetLabel 添加的widget的JLabel对象
      * @return boolean 是否在特定区域内
-     * @Description: 判断光标是否在widget的右下角（这里是改变widget大小的功能触发区）
-     * @author: 卢思文
-     * @date: 11/27/2023 4:38 PM
+     * @Description 判断光标是否在widget的右下角（这里是改变widget大小的功能触发区）
+     * @author 卢思文
+     * @date 2023/11/27
      * @version: 1.0
-     **/
+     */
     public static boolean isInResizeArea(MouseEvent e, JLabel widgetLabel) {
         int rx = widgetLabel.getWidth();
         int ry = widgetLabel.getHeight();
         int x = e.getX();
         int y = e.getY();
-        if (rx - 20 < x && x < rx + 20 && ry - 20 < y && y < ry + 20) {
-            return true;
-        }
-        return false;
+        return rx - 20 < x && x < rx + 20 && ry - 20 < y && y < ry + 20;
     }
 
-    public void removeWidgetSelection() {
-
-        if (selectedWidgetLabel != null) {
-            selectedWidgetLabel.setBorder(null);
-            selectedWidgetLabel = null;
-        }
-    }
 }

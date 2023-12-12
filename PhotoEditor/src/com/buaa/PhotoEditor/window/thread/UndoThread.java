@@ -13,9 +13,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/*
- * @Description:实现了undo的多线程执行
- * 实现了undo originalImg的操作
+/**
+ * @Description:实现了undo的多线程执行 实现了undo originalImg的操作
  * 将栈修改成保存zoomImg数组，Undo操作是撤销每一张图片的操作，把数组中的图片都换成上一步
  * 因为cut后，原图大小也不一样了，所以undo后，如果上一步是cut，就要恢复原图cut前的originalImg大小（存在lastOriginalImg的栈中）
  * @author: 张旖霜
@@ -32,11 +31,14 @@ public class UndoThread extends Thread {
         this.i = i;
         this.undoItem = undoItem;
     }
-
+    /**
+    * @Description: 实现对undo的多线程监听
+    * @author: 张旖霜
+    * @date: 12/11/2023 9:36 PM
+    * @version: 1.1
+    **/
     @Override
     public void run() {
-        // 进行监听
-
         undoItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         undoItem.addActionListener(new ActionListener() {
             /**
@@ -46,7 +48,7 @@ public class UndoThread extends Thread {
              * 实现了property值的undo操作
              * @author: 罗雨曦 张旖霜
              * @date: 2023/11/27 14:07
-             * @version: 1.0
+             * @version: 1.2
              **/
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,19 +74,17 @@ public class UndoThread extends Thread {
                         window.nextPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                     }
 
+
                     if (!window.tool.getRegion().selectRegionItem.isSelected()) {
-                        // 将栈顶的上一步每个大小的图片复制到当前图片zoomImg中（undo操作）
-//                        window.zoomImg[i] = copy(window.last.peek()[i]);
-                        // 将栈顶的上一步每个大小的原图复制到当前大小的原图OriginalImg中（undo操作）
-//                        window.originalZoomImg[i] = copy(window.lastOriginalImg.peek()[i]);
-                        if (i == ORIGINAL_SIZE_COUNTER)
-                        {
+                        /*
+                        将栈顶的上一步每个大小的图片复制到当前图片zoomImg中（undo操作）
+                        将栈顶的上一步每个大小的原图复制到当前大小的原图OriginalImg中（undo操作）
+                         */
+                        if (i == ORIGINAL_SIZE_COUNTER) {
                             window.zoomImg = copyImgArray(window.last.peek());
                             window.originalZoomImg = copyImgArray(window.lastOriginalImg.peek());
-
                             // 当前property的值入栈
                             window.currentPropertyValue = MatUtil.copyPropertyValue(window.lastPropertyValue.pop());
-
                             // 还原property的值
                             window.property.getMySize().txtWidth.setText(window.currentPropertyValue[4] + "");
                             window.property.getMySize().txtHeight.setText(window.currentPropertyValue[5] + "");
@@ -114,11 +114,10 @@ public class UndoThread extends Thread {
                         MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
                         //取消区域选择复选框
                         window.tool.getRegion().removeRegionSelected();
+
                         window.panel.setLayout(window.gridBagLayout);
                     }
-
                 } else {
-                    //个人认为需要保留弹窗，后期可删
                     if (i == window.counter) {
                         JOptionPane.showMessageDialog(null, "There's nothing left to undo!");
                     }

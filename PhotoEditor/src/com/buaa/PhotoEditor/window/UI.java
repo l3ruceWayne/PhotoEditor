@@ -3,34 +3,29 @@ package com.buaa.PhotoEditor.window;
 import javax.swing.*;
 
 /**
-* @Description: 更改编辑器的UI风格
-* @author 罗雨曦
-* @date 2023/12/5 1:39
-* @version: 1.0
-**/
+ * @author 罗雨曦
+ * @Description 更改编辑器的UI风格
+ * @date 2023/12/5
+ * @version: 1.0
+ */
 public class UI {
     public JMenu uiMenu;
     public Window window;
-    private JMenuItem lightMode;
-    private JMenuItem darkMode;
-    private JMenuItem systemMode;
-    private JMenuItem javaMode;
 
     /**
      * @param window 当前窗口
-     * @return null
-     * @Description: 构造函数，改变UI种类
-     * @author: 罗雨曦
-     * @date: 2023/12/5 1:40
+     * @Description 构造函数，改变UI种类
+     * @author 罗雨曦
+     * @date 2023/12/5
      * @version: 1.0
-     **/
+     */
     public UI(Window window) {
         this.window = window;
         uiMenu = new JMenu("UI");
-        lightMode = new JMenuItem("Light Mode");
-        darkMode = new JMenuItem("Dark Mode");
-        systemMode = new JMenuItem("System Mode");
-        javaMode = new JMenuItem("Java Mode");
+        JMenuItem lightMode = new JMenuItem("Light Mode");
+        JMenuItem darkMode = new JMenuItem("Dark Mode");
+        JMenuItem systemMode = new JMenuItem("System Mode");
+        JMenuItem javaMode = new JMenuItem("Java Mode");
 
         lightMode.addActionListener(e -> {
             try {

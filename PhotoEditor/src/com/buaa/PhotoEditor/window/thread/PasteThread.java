@@ -3,18 +3,19 @@ package com.buaa.PhotoEditor.window.thread;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
 
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 
-import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
-import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
-
+/**
+* @Description: 粘贴多线程
+* @author: 张旖霜
+* @date: 12/11/2023 9:27 PM
+* @version: 1.0
+**/
 public class PasteThread extends Thread {
     public Window window;
     public int i;
@@ -48,18 +49,14 @@ public class PasteThread extends Thread {
                     return;
                 }
                 if (window.pasting) {
-
-
-
                     // 当前property的值入栈，第一层将zoomImg数组入栈（这时仅zoomImg[0]是入栈的，其他的还没更新好）
-
                     if (i == 0) {
                         window.next.clear();
                         window.nextOriginalImg.clear();
                         window.nextPropertyValue.clear();
                         window.lastPropertyValue
-                                .push(copyPropertyValue(window
-                                        .currentPropertyValue));
+                            .push(copyPropertyValue(window
+                            .currentPropertyValue));
                         window.last.push(copyImgArray(window.zoomImg));
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
@@ -69,13 +66,17 @@ public class PasteThread extends Thread {
                             window.copyRegionImg[i],
                             MatUtil.getRect(window.tool.getRegion().selectedRegionLabel[i]));
                     window.zoomImg[i] = MatUtil.copy(img);
-
                     if (i == window.counter) {
                         MatUtil.show(window.zoomImg[i], window.showImgRegionLabel);
                     }
                 }
             }
-
+            /**
+            * @Description: 鼠标移动的过程中，显示粘贴框
+            * @author: 卢思文
+            * @date: 12/11/2023 9:27 PM
+            * @version: 1.0
+            **/
             @Override
             public void mouseMoved(MouseEvent e) {
                 if (window.zoomImg == null) {
@@ -94,7 +95,6 @@ public class PasteThread extends Thread {
             }
 
         };
-
         window.showImgRegionLabel.addMouseListener(mia);
         window.showImgRegionLabel.addMouseMotionListener(mia);
     }
