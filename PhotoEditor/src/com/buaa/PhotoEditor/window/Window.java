@@ -43,7 +43,6 @@ import javax.swing.*;
 
 
 import org.opencv.core.Mat;
-import org.opencv.dnn.Layer;
 
 
 /**
@@ -267,8 +266,8 @@ public class Window extends JFrame {
         }
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             add.getWidget().widgetIcon = null;
-            if (tool.region.selectRegionItem.isSelected()) {
-                tool.region.removeRegionSelected();
+            if (tool.getRegion().selectRegionItem.isSelected()) {
+                tool.getRegion().removeRegionSelected();
             }
             if (add.getWidget().selectedWidgetLabel != null) {
                 add.getWidget().removeWidget();

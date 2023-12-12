@@ -86,8 +86,8 @@ public class CutThread extends Thread {
                                 window.zoomImg[window.counter].height());
                         window.panel.setLayout(window.gridBagLayout);
                     }
-                    window.tool.region.selectedRegionLabel[i].setBorder(null);
-                    window.showImgRegionLabel.remove(window.tool.region.selectedRegionLabel[i]);
+                    window.tool.getRegion().selectedRegionLabel[i].setBorder(null);
+                    window.showImgRegionLabel.remove(window.tool.getRegion().selectedRegionLabel[i]);
                     window.panel.revalidate();
                     window.panel.repaint();
                 }

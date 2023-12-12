@@ -145,8 +145,8 @@ public class AddTextThread extends Thread {
      * @version: 2.0
      */
     public void writeText(int i) {
-        int x = window.tool.region.selectedRegionLabel[i].getX();
-        int y = window.tool.region.selectedRegionLabel[i].getY();
+        int x = window.tool.getRegion().selectedRegionLabel[i].getX();
+        int y = window.tool.getRegion().selectedRegionLabel[i].getY();
         BufferedImage bufImg = MatUtil.bufferedImg(window.zoomImg[i]);
         int size = getValueAfterZoom(window, text.getScale() * 25, i);
         Font font = new Font("simhei", Font.PLAIN, size);

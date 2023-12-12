@@ -135,7 +135,7 @@ public class Property {
         // 更新property现在的值
         window.currentPropertyValue[4] = Integer.parseInt(mySize.txtWidth.getText());
         window.currentPropertyValue[5] = Integer.parseInt(mySize.txtHeight.getText());
-        window.tool.region.removeRegionSelected();
+        window.tool.getRegion().removeRegionSelected();
     }
     /**
     * @Description: 更新property面板显示的图片参数
