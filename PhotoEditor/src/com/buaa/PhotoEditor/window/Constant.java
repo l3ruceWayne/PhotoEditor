@@ -1,14 +1,12 @@
 package com.buaa.PhotoEditor.window;
 
 /**
- * ClassName: Constant
- * Package: com.buaa.PhotoEditor.window
- * Description:
- *
- * @Author 卢思文
- * @Create 12/1/2023 4:37 PM
- * @Version 1.0
+ * @Description 存放常量
+ * @author 卢思文
+ * @date 2023/12/1
+ * @version 1.0
  */
+
 public class Constant {
     /*
         lsw
@@ -30,9 +28,8 @@ public class Constant {
     public static final int ORIGINAL_SIZE_COUNTER = 11;
     public static final int MAX_SIZE_COUNTER = 10;
     public static final int AUTO_SIZE_COUNTER = 5;
-    /*
-        缩小和放大份额，例如份额是10，即每次尺寸增加/减小原图尺寸/10
-     */
+
+    // 缩小和放大份额，例如份额是10，即每次尺寸增加/减小原图尺寸/10
     public static final int ZOOM_RATIO = 6;
 
     public static final int MAX_PEN_SIZE = 30;
@@ -43,6 +40,4 @@ public class Constant {
     public static final int INIT_PEN_SIZE = AUTO_SIZE_COUNTER / 2 + 1;
     public static final int PEN_STEP_SIZE = 1;
     public static final int ERASER_STEP_SIZE = 1;
-
-
 }

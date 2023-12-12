@@ -1,15 +1,14 @@
-
 package com.buaa.PhotoEditor.window.add;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import com.buaa.PhotoEditor.window.custom.CustomColorChooser;
+import com.buaa.PhotoEditor.window.thread.AddTextThread;
 
 import static com.buaa.PhotoEditor.util.MatUtil.copy;
 import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.window.Constant.*;
 
-import com.buaa.PhotoEditor.window.custom.CustomColorChooser;
-import com.buaa.PhotoEditor.window.thread.AddTextThread;
 import org.opencv.core.Scalar;
 
 import javax.swing.*;
@@ -19,12 +18,12 @@ import java.awt.event.MouseEvent;
 
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
-/*
- * @Description:选择区域后写入文字（特别说明：用户选择区域后才能写字，写文字后不能修改位置）
+/**
+ * @author 张旖霜
+ * @version 2.0
+ * @Description 选择区域后写入文字（特别说明：用户选择区域后才能写字，写文字后不能修改位置）
  * （但是其实不用到选择一个区域，因为是根据选择时点击的第一个位置来定位的，不受选择框限制）
- * @author: 张旖霜
- * @date: 11/27/2023 3:17 PM
- * @version: 1.0
+ * @date 2023/11/27
  */
 public class Text {
     public AddTextThread[] addTextThread;
@@ -33,7 +32,7 @@ public class Text {
     private Scalar color;
     private int scale;
     public String str;
-    public JButton OKButton;
+    public JButton okButton;
     public CustomColorChooser customColorChooser;
     public JDialog addTextDialog;
     public JPanel textColorPanel;
@@ -45,8 +44,8 @@ public class Text {
     public boolean flag;
 
     public Text(Window window) {
-        OKButton = new JButton("OK");
-        customColorChooser = new CustomColorChooser(window, OKButton);
+        okButton = new JButton("OK");
+        customColorChooser = new CustomColorChooser(window, okButton);
         scale = 1;
         color = new Scalar(0, 0, 0);
         str = "";
@@ -66,21 +65,19 @@ public class Text {
         textField.setText(str);
         setColor(new Scalar(0, 0, 0));
         textColorPanel.setBackground(Color.BLACK);
-
         initAddTextDialog();
         flag = true;
         addTextItem.addActionListener(evt -> writeTextActionPerformed());
-
     }
 
 
-    /*
-     * @param:
-     * @return
-     * @Description:创建文字设置的面板
-     * @author: 张旖霜
-     * @date: 11/27/2023 12:51 PM
-     * @version: 1.0
+    /**
+     * @param
+     * @return void
+     * @Description 创建文字设置的面板
+     * @author 张旖霜
+     * @date 2023/11/27
+     * @version 1.0
      */
     public void initAddTextDialog() {
         addTextDialog.setSize(280, 200);
@@ -94,6 +91,7 @@ public class Text {
                 customColorChooser.showDialog();
             }
         });
+
         // panelTextColor
         GroupLayout pnlTextColorLayout = new javax.swing.GroupLayout(textColorPanel);
         textColorPanel.setLayout(pnlTextColorLayout);
@@ -152,17 +150,16 @@ public class Text {
         );
     }
 
-    /*
-     * @param:
-     * @return
-     * @Description:选好位置（框选区域）后，显示字体设置面板
+    /**
+     * @param
+     * @return void
+     * @Description 选好位置（框选区域）后，显示字体设置面板
      * 增加未选择图片弹窗
-     * @author: 张旖霜,罗雨曦
-     * @date: 12/5/2023 3:28 PM
-     * @version: 2.0
+     * @author 张旖霜, 罗雨曦
+     * @date 2023/12/5
+     * @version 2.0
      */
-
-    public void writeTextActionPerformed() {//GEN-FIRST:event_writeTextActionPerformed
+    public void writeTextActionPerformed() {
         //如果未选择图片，弹窗提示并return
         if (window.originalImg == null) {
             JOptionPane.showMessageDialog(null, "Please open an image first");
@@ -190,29 +187,17 @@ public class Text {
             window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
             window.last.push(copyImgArray(window.zoomImg));
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
-            for(int i = 0;i<=ORIGINAL_SIZE_COUNTER;i++){
+            for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
                 addTextThread[i].matForAddText = copy(window.zoomImg[i]);
             }
             setStr("");
             textField.setText(str);
             addTextDialog.setModal(true);
             addTextDialog.setVisible(true);
-
-
         } else {
             JOptionPane.showMessageDialog(null, "Select an area to add text!");
         }
     }
-
-
-    /*
-     * @param:
-     * @return
-     * @Description: 初始化文字设置
-     * @author: 张旖霜
-     * @date: 11/27/2023 12:48 PM
-     * @version: 1.0
-     */
 
     public Scalar getColor() {
         return color;
@@ -237,5 +222,4 @@ public class Text {
     public void setStr(String str) {
         this.str = str;
     }
-
 }

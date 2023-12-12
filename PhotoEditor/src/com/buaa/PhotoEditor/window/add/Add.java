@@ -4,11 +4,17 @@ import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
 
+/**
+ * @author 卢思文
+ * @version 1.0
+ * @Description 添加文字、小组件
+ * @date 2023/12/11
+ */
 public class Add {
     public JMenu addMenu;
     public Window window;
-    public Widget widget;
-    public Text text;
+    private Widget widget;
+    private Text text;
 
     public Add(Window window) {
         this.window = window;
@@ -25,9 +31,5 @@ public class Add {
 
     public Widget getWidget() {
         return widget;
-    }
-
-    public Text getText() {
-        return text;
     }
 }

@@ -4,8 +4,11 @@ import static com.buaa.PhotoEditor.util.MatUtil.*;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.add.Text;
+
+
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -43,7 +46,7 @@ public class AddTextThread extends Thread {
                 matForAddText = copy(window.zoomImg[i]);
             }
         });
-        text.OKButton.addActionListener(e -> {
+        text.okButton.addActionListener(e -> {
             Color color = text.customColorChooser.colorChooser.getColor();
             text.setColor(new Scalar(color.getBlue(), color.getGreen(), color.getRed()));
             text.textColorPanel.setBackground(color);

@@ -49,7 +49,7 @@ public class ZoomIn {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }
-        if(window.add.widget.widgetIcon != null){
+        if(window.add.getWidget().widgetIcon != null){
             JOptionPane.showMessageDialog(null,
                     "Please handle widget first");
             return;

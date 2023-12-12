@@ -54,7 +54,7 @@ public class Save {
      * @version: 2.0
      **/
     private void getNewImg() {
-        if (window.add.widget.widgetIcon == null) {
+        if (window.add.getWidget().widgetIcon == null) {
             return;
         }
         window.next.clear();
@@ -65,10 +65,10 @@ public class Save {
         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
         window.flagForWidget = true;
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-            int x = (int) (window.add.widget.widgetLabel.getX() - ((double) window.panel.getWidth() - window.showImgRegionLabel.getWidth()) / 2);
-            int y = (int) (window.add.widget.widgetLabel.getY() - ((double) window.panel.getHeight() - window.showImgRegionLabel.getHeight()) / 2);
+            int x = (int) (window.add.getWidget().widgetLabel.getX() - ((double) window.panel.getWidth() - window.showImgRegionLabel.getWidth()) / 2);
+            int y = (int) (window.add.getWidget().widgetLabel.getY() - ((double) window.panel.getHeight() - window.showImgRegionLabel.getHeight()) / 2);
             MatUtil.widget(window.zoomImg[i],
-                    MatUtil.readImg(window.add.widget.widgetLabel.getIcon().toString()),
+                    MatUtil.readImg(window.add.getWidget().widgetLabel.getIcon().toString()),
                     x, y, i, window);
             if (!window.flagForWidget) {
                 if (i == window.counter) {
@@ -78,11 +78,11 @@ public class Save {
             }
             if (i == window.counter) {
                 MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
-                window.panel.remove(window.add.widget.widgetLabel);
+                window.panel.remove(window.add.getWidget().widgetLabel);
             }
         }
         if (window.flagForWidget) {
-            window.add.widget.widgetIcon = null;
+            window.add.getWidget().widgetIcon = null;
         }
     }
 

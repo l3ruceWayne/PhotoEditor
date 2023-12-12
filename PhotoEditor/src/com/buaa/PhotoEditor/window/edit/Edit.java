@@ -20,19 +20,18 @@ public class Edit {
     private Redo redo;
     /**
      * @param window 当前窗口
-     * @return null
-     * @Description:构造方法——生成子菜单栏
-     * @author: 罗雨曦
-     * @date: 2023/11/27 14:02
+     * @Description 构造方法——生成子菜单栏
+     * @author 罗雨曦
+     * @date 2023/11/27
      * @version: 1.0
      **/
     public Edit(Window window) {
         this.window = window;
         this.copy = new Copy(window);
-        this.cut = new Cut(window);
-        this.undo = new Undo(window);
-        this.redo = new Redo(window);
-        this.paste = new Paste(window);
+        Cut cut = new Cut(window);
+        Undo undo = new Undo(window);
+        Redo redo = new Redo(window);
+        Paste paste = new Paste(window);
         editMenu = new JMenu("Edit");
         editMenu.add(copy.copyItem);
         editMenu.add(cut.cutItem);

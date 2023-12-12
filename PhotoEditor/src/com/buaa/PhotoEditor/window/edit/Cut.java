@@ -21,14 +21,12 @@ public class Cut {
     public CutThread[] cutThread;
     /**
      * @param window 当前窗口
-     * @return null
-     * @Description:构造方法——生成子菜单项并设置快捷键
+     * @Description 构造方法——生成子菜单项并设置快捷键
      * @author: 罗雨曦
-     * @date: 2023/11/27 14:10
+     * @date 2023/11/27
      * @version: 1.0
      **/
     public Cut(Window window) {
-        this.window = window;
         cutItem = new JMenuItem("Cut");
         cutThread = new CutThread[NUM_FOR_NEW];
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {

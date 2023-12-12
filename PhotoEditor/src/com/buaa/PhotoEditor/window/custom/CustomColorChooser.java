@@ -6,38 +6,43 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * ClassName: CustomColorChooser
- * Package: com.buaa.PhotoEditor.window.custom
- * Description:
- *
- * @Author 卢思文
- * @Create 12/10/2023 6:06 PM
- * @Version 1.0
+ * @author 卢思文
+ * @version 1.0
+ * @Description 字体颜色选择
+ * @date 2023/12/10
  */
 public class CustomColorChooser {
     public Window window;
     public JColorChooser colorChooser;
     public JDialog dialog;
-    public JButton OKButton;
+    public JButton okButton;
 
-    public CustomColorChooser(Window window, JButton OKButton) {
+    public CustomColorChooser(Window window, JButton okButton) {
         this.window = window;
-        this.OKButton = OKButton;
+        this.okButton = okButton;
     }
-    public void showDialog(){
+
+    /**
+     * @Description 弹框
+     * @author 卢思文
+     * @date 2023/12/11
+     * @version: 1.0
+     */
+    public void showDialog() {
         colorChooser = new JColorChooser();
 
         // Create the dialog
         dialog = new JDialog(window, "Choose a color", true);
         dialog.getContentPane().add(colorChooser);
-        dialog.getContentPane().add(OKButton, BorderLayout.SOUTH);
+        dialog.getContentPane().add(okButton, BorderLayout.SOUTH);
+
         // Set up and show the dialog
         dialog.pack();
-        int x = window.getLocation().x + (window.getWidth() - dialog.getWidth())/2;
-        int y = window.getLocation().y + (window.getHeight() - dialog.getHeight())/2;
-        // 居中显示
-        dialog.setLocation(x,y);
-        dialog.setVisible(true);
+        int x = window.getLocation().x + (window.getWidth() - dialog.getWidth()) / 2;
+        int y = window.getLocation().y + (window.getHeight() - dialog.getHeight()) / 2;
 
+        // 居中显示
+        dialog.setLocation(x, y);
+        dialog.setVisible(true);
     }
 }
