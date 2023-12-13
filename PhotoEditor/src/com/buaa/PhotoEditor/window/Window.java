@@ -28,20 +28,6 @@ import com.buaa.PhotoEditor.window.tool.Tool;
 
 import com.buaa.PhotoEditor.window.filter.Filter;
 
-
-import com.buaa.PhotoEditor.window.layer.Layer;
-
-import com.buaa.PhotoEditor.window.property.Property;
-import com.buaa.PhotoEditor.window.add.Add;
-import com.buaa.PhotoEditor.window.tool.Tool;
-import com.buaa.PhotoEditor.window.filter.Filter;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Stack;
-import javax.swing.*;
-
-
 import org.opencv.core.Mat;
 
 
@@ -74,8 +60,6 @@ public class Window extends JFrame {
     public Tool tool;
     public Add add;
     public Filter filter;
-
-    public static Layer layer;
 
     public MyFile myFile;
     public Edit edit;
@@ -172,11 +156,7 @@ public class Window extends JFrame {
         tool = new Tool(this);
 
 
-        // 只有一个layer，所以layer赋值之后就不再赋值
-
-        if(layer == null){
-            layer = new Layer(this);
-        }
+        this.setVisible(true);
         menuBar = new JMenuBar();
         filter = new Filter(this);
         myFile = new MyFile(this);
@@ -236,19 +216,8 @@ public class Window extends JFrame {
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addComponent(panel, GroupLayout.DEFAULT_SIZE,
-                                GroupLayout.DEFAULT_SIZE,
-                                Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addComponent(panel,
-                                GroupLayout.DEFAULT_SIZE,
-                                GroupLayout.DEFAULT_SIZE,
-                                Short.MAX_VALUE)
-        );
+        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         pack();
     }
 
@@ -293,9 +262,7 @@ public class Window extends JFrame {
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
                 int x = (int) (add.getWidget().widgetLabel.getX() - ((double) panel.getWidth() - showImgRegionLabel.getWidth()) / 2);
                 int y = (int) (add.getWidget().widgetLabel.getY() - ((double) panel.getHeight() - showImgRegionLabel.getHeight()) / 2);
-                MatUtil.widget(zoomImg[i],
-                        MatUtil.readImg(add.getWidget().widgetLabel.getIcon().toString()),
-                        x, y, i, this);
+                MatUtil.widget(zoomImg[i], MatUtil.readImg(add.getWidget().widgetLabel.getIcon().toString()), x, y, i, this);
                 if (!flagForWidget) {
                     if (i == counter) {
                         JOptionPane.showMessageDialog(null, "Please remove widget completely inside the photo");
