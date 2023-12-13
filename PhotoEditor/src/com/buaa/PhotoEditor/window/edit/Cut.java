@@ -30,7 +30,7 @@ public class Cut {
         cutItem = new JMenuItem("Cut");
         cutThread = new CutThread[NUM_FOR_NEW];
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-            cutThread[i] = new CutThread(this.window, i, cutItem);
+            cutThread[i] = new CutThread(window, i, cutItem);
             cutThread[i].start();
             try {
                 // 等待上一个进程执行结束再进行下一个线程的启动
