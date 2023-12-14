@@ -9,7 +9,6 @@ import org.opencv.imgcodecs.Imgcodecs;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -37,7 +36,6 @@ public class Save {
         saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 KeyEvent.CTRL_DOWN_MASK));
         saveItem.addActionListener(e -> saveImg());
-
         saveAsItem = new JMenuItem("Save As");
         saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 KeyEvent.CTRL_DOWN_MASK
@@ -59,8 +57,17 @@ public class Save {
                     "Please open an image and edit it first");
             return;
         }
-        updateStack();
-        mergeWidget();
+        /*
+            handleWidget()的作用是：
+            1. 处理栈（这块代码请不要分离出来，否则反而麻烦）
+            2. 如果添加了widget但是没有"enter"，保存操作会自动"enter"
+             并且会检测widget是否超出图片外
+         */
+        handleWidget();
+        /*
+            如果widget超出范围，handleWidget()会做标记，即window.flagForWidget
+            超出范围，自然保存不成功，之后的代码就不用执行了，所以return
+         */
         if (!window.flagForWidget) {
             return;
         }
@@ -96,8 +103,10 @@ public class Save {
             if (!path.contains(jpgExtension)) {
                 path += jpgExtension;
             }
-            updateStack();
-            mergeWidget();
+            /*
+                下面4行代码的作用同saveImg中的注释所描述的那样
+             */
+            handleWidget();
             if (!window.flagForWidget) {
                 return;
             }
@@ -108,38 +117,25 @@ public class Save {
     }
 
     /**
-     * @Description: 更新 undo redo 用到的栈
-     * @author: 卢思文 张旖霜
-     * @date: 2023/12/5 4:03
-     * @version: 1.0
+     * @Description: 处理添加了 widget 的情况，同时进行栈相关的处理
+     * @author: 卢思文，罗雨曦
+     * @date: 12/5/2023 4:18 PM
+     * @version: 3.0
      */
-    private void updateStack() {
+    private void handleWidget() {
+        if (window.add.getWidget().widgetIcon == null) {
+            return;
+        }
         window.next.clear();
         window.nextOriginalImg.clear();
         window.nextPropertyValue.clear();
         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
         window.last.push(copyImgArray(window.zoomImg));
         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
-    }
-
-    /**
-     * @Description: 处理添加了 widget 的情况
-     * @author: 卢思文，罗雨曦
-     * @date: 12/5/2023 4:18 PM
-     * @version: 3.0
-     */
-    private void mergeWidget() {
-        int x;
-        int y;
-
-        if (window.add.getWidget().widgetIcon == null) {
-            return;
-        }
-
         window.flagForWidget = true;
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-            x = (int) (window.add.getWidget().widgetLabel.getX() - ((double) window.panel.getWidth() - window.showImgRegionLabel.getWidth()) / 2);
-            y = (int) (window.add.getWidget().widgetLabel.getY() - ((double) window.panel.getHeight() - window.showImgRegionLabel.getHeight()) / 2);
+            int x = (int) (window.add.getWidget().widgetLabel.getX() - ((double) window.panel.getWidth() - window.showImgRegionLabel.getWidth()) / 2);
+            int y = (int) (window.add.getWidget().widgetLabel.getY() - ((double) window.panel.getHeight() - window.showImgRegionLabel.getHeight()) / 2);
             MatUtil.widget(window.zoomImg[i],
                     MatUtil.readImg(window.add.getWidget().widgetLabel.getIcon().toString()),
                     x, y, i, window);
@@ -177,8 +173,8 @@ public class Save {
 
     /**
      * @param fileName 图片要保存到的路径的字符串形式
-     * @param bytes Mat图片转为byte[]形式
-     * @param append 此处恒为false，即FileOutputStream都是从头开始输出图片，设置目的为与FileOutputStream参数保持一致
+     * @param bytes    Mat图片转为byte[]形式
+     * @param append   此处恒为false，即FileOutputStream都是从头开始输出图片，设置目的为与FileOutputStream参数保持一致
      * @return boolean 操作是否成功
      * @Description: 将byte[]形式的图片通过流输入到指定路径
      * @author: 罗雨曦
