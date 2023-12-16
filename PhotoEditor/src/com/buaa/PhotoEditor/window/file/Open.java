@@ -23,9 +23,9 @@ public class Open {
 
     public Open(Window window) {
         this.window = window;
-        openItem = new JMenuItem("Open");
-        openItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        openItem.addActionListener(e -> selectImg());
+        this.openItem = new JMenuItem("Open");
+        this.openItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        this.openItem.addActionListener(e -> selectImg());
 
     }
 

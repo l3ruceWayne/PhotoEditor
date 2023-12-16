@@ -159,6 +159,7 @@ public class AddTextThread extends Thread {
         if (i != window.counter) {
             return;
         }
+        window.saveFlag = false;
         MatUtil.show(window.zoomImg[i], window.showImgRegionLabel);
     }
     /**

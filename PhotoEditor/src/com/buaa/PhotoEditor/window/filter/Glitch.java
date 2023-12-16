@@ -4,6 +4,8 @@ import com.buaa.PhotoEditor.modal.EColor;
 import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 
 /**
@@ -29,7 +31,7 @@ public class Glitch {
     public Glitch(Window window) {
         this.window = window;
         glitchItem = new JMenuItem("Glitch");
-
+        glitchItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.SHIFT_DOWN_MASK));
         glitchItem.addActionListener(evt -> glitch());
         initGlitchItem();
     }

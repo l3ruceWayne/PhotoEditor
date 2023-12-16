@@ -4,6 +4,7 @@ import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 
 /**
@@ -18,7 +19,8 @@ public class Animize {
 
     public Animize(Window window) {
         this.window = window;
-        animizeItem = new JMenuItem("Animize");
-        animizeItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, InputEvent.CTRL_DOWN_MASK));
+        this.animizeItem = new JMenuItem("Animize");
+        this.animizeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
+            InputEvent.CTRL_DOWN_MASK));
     }
 }

@@ -27,8 +27,8 @@ public class Undo {
      * @version: 2.0
      */
     public Undo(Window window) {
-        undoItem = new JMenuItem("Undo");
-        undoThread = new UndoThread[NUM_FOR_NEW];
+        this.undoItem = new JMenuItem("Undo");
+        this.undoThread = new UndoThread[NUM_FOR_NEW];
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             undoThread[i] = new UndoThread(window, i, undoItem);
             undoThread[i].start();

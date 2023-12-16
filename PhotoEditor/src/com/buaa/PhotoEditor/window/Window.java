@@ -97,24 +97,11 @@ public class Window extends JFrame {
     public String title;
     //新增UI菜单
     public UI ui;
-
-    public Window(Mat img, String title) {
-        this(title);
-        this.title = title;
-        this.img = img;
-        cnt = 0;
-        // 将当前的property的初始值暂存起来（如同img）
-        currentPropertyValue[4] = Integer.parseInt(property.getMySize().txtWidth.getText());
-        currentPropertyValue[5] = Integer.parseInt(property.getMySize().txtHeight.getText());
-        MatUtil.show(img, showImgRegionLabel);
-        showImgRegionLabel.setSize(img.width(), img.height());
-        this.setSize(img.width(), img.height());
-        setResizable(true);
-        setLocationRelativeTo(null);
-    }
+    public boolean saveFlag;
 
     public Window(String title) {
         this.title = title;
+        saveFlag = true;
         initComponents();
         setBounds(0, 0, getToolkit().getScreenSize().width, getToolkit().getScreenSize().height);
         setResizable(false);
@@ -162,7 +149,22 @@ public class Window extends JFrame {
         myFile = new MyFile(this);
         edit = new Edit(this);
         property = new Property(this);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if(saveFlag){
+                    Window.this.dispose();
+                    return;
+                }
+                int confirm = JOptionPane.showConfirmDialog(Window.this,
+                        "You haven't save your edit. Are you sure to close?",
+                        "Close Confirmation", JOptionPane.YES_NO_OPTION);
+                if(confirm == JOptionPane.YES_OPTION){
+                    Window.this.dispose();
+                }
+            }
+        });
         ui = new UI(this);
         showImgRegionLabel.setText("Please select photo");
 
@@ -229,11 +231,11 @@ public class Window extends JFrame {
      * @version: 1.0
      */
     public void keyPress(KeyEvent evt) {
-        if (zoomImg == null) {
-            JOptionPane.showMessageDialog(null, "Please open an image first");
-            return;
-        }
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            if (zoomImg == null) {
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                return;
+            }
             add.getWidget().widgetIcon = null;
             if (tool.getRegion().selectRegionItem.isSelected()) {
                 tool.getRegion().removeRegionSelected();
@@ -249,6 +251,10 @@ public class Window extends JFrame {
             }
         }
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (zoomImg == null) {
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                return;
+            }
             if (add.getWidget().widgetIcon == null) {
                 return;
             }

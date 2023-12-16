@@ -86,6 +86,7 @@ public class RotateThread extends Thread {
         if (i != window.counter) {
             return;
         }
+        window.tool.getDrag().dragItem.setSelected(false);
         // 布局重新设置，类似于ZoomIn中的相关代码
         window.panel.setLayout(null);
         window.showImgRegionLabel.setSize(window.size[i][0],

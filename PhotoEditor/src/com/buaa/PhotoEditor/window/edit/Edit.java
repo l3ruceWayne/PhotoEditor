@@ -28,10 +28,10 @@ public class Edit {
     public Edit(Window window) {
         this.window = window;
         this.copy = new Copy(window);
-        Cut cut = new Cut(window);
-        Undo undo = new Undo(window);
-        Redo redo = new Redo(window);
-        Paste paste = new Paste(window);
+        this.cut = new Cut(window);
+        this.undo = new Undo(window);
+        this.redo = new Redo(window);
+        this.paste = new Paste(window);
         editMenu = new JMenu("Edit");
         editMenu.add(copy.copyItem);
         editMenu.add(cut.cutItem);

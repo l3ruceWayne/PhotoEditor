@@ -90,7 +90,7 @@ public class Widget {
                     widgetIcon = null;
                     return;
                 }
-
+                window.saveFlag = false;
                 widgetLabel = new JLabel(widgetIcon);
 
                 addWidgetListener(widgetIcon);

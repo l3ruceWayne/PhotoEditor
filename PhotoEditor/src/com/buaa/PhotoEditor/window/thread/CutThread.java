@@ -8,6 +8,8 @@ import static com.buaa.PhotoEditor.util.MatUtil.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 import static com.buaa.PhotoEditor.window.Constant.*;
 
@@ -31,9 +33,7 @@ public class CutThread extends Thread {
     @Override
     public void run() {
         // 进行监听
-        cutItem.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C,
-                java.awt.event.InputEvent.ALT_MASK
-                        | java.awt.event.InputEvent.CTRL_MASK));
+        cutItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
         cutItem.addActionListener(new ActionListener() {
             /**
              * @param evt 触发操作
@@ -53,6 +53,7 @@ public class CutThread extends Thread {
                     return;
                 }
                 if (i == window.counter) {
+                    window.saveFlag = false;
                     window.tool.getRegion().selectRegionItem.setSelected(false);
                 }
                 // 如果还没有选择区域，弹出提示框

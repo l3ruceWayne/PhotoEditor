@@ -17,9 +17,10 @@ public class Paste {
     public PasteThread[] pasteThread;
     private Window window;
     public Paste(Window window) {
-        pasteThread = new PasteThread[NUM_FOR_NEW];
+        this.window = window;
+        this.pasteThread = new PasteThread[NUM_FOR_NEW];
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-            pasteThread[i] = new PasteThread(window, i);
+            pasteThread[i] = new PasteThread(this.window, i);
             pasteThread[i].start();
             try {
                 // 等待线程完成

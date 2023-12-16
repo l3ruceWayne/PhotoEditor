@@ -44,13 +44,13 @@ public class Filter {
         filterThread = new FilterThread[NUM_FOR_NEW];
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             filterThread[i] = new FilterThread(window,
-                    gray,
-                    blur,
-                    invert,
-                    animize,
-                    focus,
-                    glitch,
-                    i);
+                gray,
+                blur,
+                invert,
+                animize,
+                focus,
+                glitch,
+                i);
             filterThread[i].start();
             // 等待线程完成，让线程可以顺序执行（方便线程中的操作）
             try {
