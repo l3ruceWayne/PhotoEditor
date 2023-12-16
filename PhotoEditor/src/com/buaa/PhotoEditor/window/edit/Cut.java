@@ -18,6 +18,7 @@ import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 public class Cut {
     public JMenuItem cutItem;
     public CutThread[] cutThread;
+    private Window window;
     /**
      * @param window 当前窗口
      * @Description 构造方法——生成子菜单项并设置快捷键
@@ -26,10 +27,11 @@ public class Cut {
      * @version: 1.0
      **/
     public Cut(Window window) {
-        cutItem = new JMenuItem("Cut");
-        cutThread = new CutThread[NUM_FOR_NEW];
+        this.window = window;
+        this.cutItem = new JMenuItem("Cut");
+        this.cutThread = new CutThread[NUM_FOR_NEW];
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
-            cutThread[i] = new CutThread(window, i, cutItem);
+            cutThread[i] = new CutThread(this.window, i, cutItem);
             cutThread[i].start();
             try {
                 // 等待上一个进程执行结束再进行下一个线程的启动

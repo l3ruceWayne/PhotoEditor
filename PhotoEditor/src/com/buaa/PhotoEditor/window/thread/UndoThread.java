@@ -66,15 +66,13 @@ public class UndoThread extends Thread {
                 }
                 // 取消 drag
                 window.tool.getDrag().dragItem.setSelected(false);
-                window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+//                window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 if (!window.last.isEmpty()) {
                     if (i == ORIGINAL_SIZE_COUNTER) {
                         window.next.push(copyImgArray(window.zoomImg));
                         window.nextOriginalImg.push(copyImgArray(window.originalZoomImg));
                         window.nextPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
                     }
-
-
                     if (!window.tool.getRegion().selectRegionItem.isSelected()) {
                         /*
                         将栈顶的上一步每个大小的图片复制到当前图片zoomImg中（undo操作）
@@ -112,9 +110,6 @@ public class UndoThread extends Thread {
                         window.showImgRegionLabel.setSize(window.zoomImg[window.counter].width(),
                                 window.zoomImg[window.counter].height());
                         MatUtil.show(window.zoomImg[window.counter], window.showImgRegionLabel);
-                        //取消区域选择复选框
-                        window.tool.getRegion().removeRegionSelected();
-
                         window.panel.setLayout(window.gridBagLayout);
                     }
                 } else {

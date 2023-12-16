@@ -68,7 +68,7 @@ public class MySize {
             MatUtil.resize(window.zoomImg[ORIGINAL_SIZE_COUNTER], new Size(newWidth, newHeight));
             MatUtil.resize(window.originalZoomImg[ORIGINAL_SIZE_COUNTER], new Size(newWidth, newHeight));
 
-
+            window.saveFlag = false;
             JOptionPane.showMessageDialog(null, "Success");
 
         } catch (Exception ex) {

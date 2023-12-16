@@ -32,8 +32,8 @@ public class Redo {
      * @version: 1.0
      **/
     public Redo(Window window) {
-        redoItem = new JMenuItem("Redo");
-        redoThread = new RedoThread[NUM_FOR_NEW];
+        this.redoItem = new JMenuItem("Redo");
+        this.redoThread = new RedoThread[NUM_FOR_NEW];
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             redoThread[i] = new RedoThread(window, i, redoItem);
             redoThread[i].start();

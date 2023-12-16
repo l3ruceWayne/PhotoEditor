@@ -43,6 +43,7 @@ public class PaintThread extends Thread {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (window.tool.getPen().penItem.isSelected()) {
+                    window.saveFlag = false;
                     paint(e.getX(), e.getY(), true);
                     initLastPoint();
                 }
@@ -56,6 +57,7 @@ public class PaintThread extends Thread {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (window.tool.getPen().penItem.isSelected()) {
+                    window.saveFlag = false;
                     paint(e.getX(), e.getY(), false);
                 }
             }

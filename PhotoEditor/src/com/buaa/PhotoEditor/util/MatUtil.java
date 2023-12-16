@@ -15,6 +15,7 @@ import javax.swing.*;
 
 import com.buaa.PhotoEditor.window.Window;
 
+import com.buaa.PhotoEditor.window.file.Open;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -81,7 +82,14 @@ public abstract class MatUtil extends JFrame {
         byte[] targetPixels = ((DataBufferByte) bfImg.getRaster()
                 .getDataBuffer()).getData();
 
-        System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
+        // 矢量图警告
+        try {
+            System.arraycopy(buffer, 0, targetPixels, 0, buffer.length);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Sorry, not support to open a vector illustration\n" +
+                    "You can open a new photo again");
+        }
         return bfImg;
     }
 

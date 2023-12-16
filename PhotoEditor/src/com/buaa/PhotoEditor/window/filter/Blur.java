@@ -23,7 +23,7 @@ public class Blur {
     public Blur(Window window) {
         this.window = window;
         blurItem = new JMenuItem("Blur");
-        blurItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
+        blurItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B,
                 InputEvent.CTRL_DOWN_MASK));
         blurItem.addActionListener(evt -> blur());
         initBlurItem();

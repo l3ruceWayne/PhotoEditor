@@ -211,6 +211,11 @@ public class Pen {
                         // bug
                         Color.BLACK);
         penColorPanel.setBackground(color);
+        // 解决更换颜色后画笔光标消失但此时仍能绘画的问题
+        if(penItem.isSelected()){
+            penItem.setSelected(false);
+            penItem.doClick();
+        }
     }
 
 }

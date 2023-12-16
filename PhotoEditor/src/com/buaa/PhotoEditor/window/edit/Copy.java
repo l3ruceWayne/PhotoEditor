@@ -28,9 +28,9 @@ public class Copy {
      * @version: 2.0
      **/
     public Copy(Window window) {
-        copyThread = new CopyThread[NUM_FOR_NEW];
+        this.copyThread = new CopyThread[NUM_FOR_NEW];
         this.window = window;
-        copyItem = new JMenuItem("Copy");
+        this.copyItem = new JMenuItem("Copy");
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             copyThread[i] = new CopyThread(window, copyItem, i);
             copyThread[i].start();

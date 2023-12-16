@@ -28,19 +28,20 @@ public class Save {
     public JMenuItem saveAsItem;
     private Window window;
     private String path;
+    private boolean flag;
 
     public Save(Window window) {
         this.window = window;
-
-        saveItem = new JMenuItem("Save");
-        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+        this.flag = false;
+        this.saveItem = new JMenuItem("Save");
+        this.saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 KeyEvent.CTRL_DOWN_MASK));
-        saveItem.addActionListener(e -> saveImg());
-        saveAsItem = new JMenuItem("Save As");
-        saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+        this.saveItem.addActionListener(e -> saveImg());
+        this.saveAsItem = new JMenuItem("Save As");
+        this.saveAsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
                 KeyEvent.CTRL_DOWN_MASK
                         | KeyEvent.SHIFT_DOWN_MASK));
-        saveAsItem.addActionListener(e -> saveAsNewImg());
+        this.saveAsItem.addActionListener(e -> saveAsNewImg());
     }
 
 
@@ -68,15 +69,17 @@ public class Save {
             如果widget超出范围，handleWidget()会做标记，即window.flagForWidget
             超出范围，自然保存不成功，之后的代码就不用执行了，所以return
          */
-        if (!window.flagForWidget) {
+        if (!flag && !window.flagForWidget) {
             return;
         }
+        flag = false;
         if (path == null) {
             path = window.originalImgPath;
         }
         saveMatToJpg(path, window.zoomImg[ORIGINAL_SIZE_COUNTER]);
         JOptionPane.showMessageDialog(null,
                 "Success");
+        window.saveFlag = true;
     }
 
     /**
@@ -104,15 +107,20 @@ public class Save {
                 path += jpgExtension;
             }
             /*
-                下面4行代码的作用同saveImg中的注释所描述的那样
+                下面8行代码的作用同saveImg中的注释所描述的那样
              */
             handleWidget();
+            if (!flag && !window.flagForWidget) {
+                return;
+            }
+            flag = false;
             if (!window.flagForWidget) {
                 return;
             }
             saveMatToJpg(path, window.zoomImg[ORIGINAL_SIZE_COUNTER]);
             JOptionPane.showMessageDialog(null,
                     "Success");
+            window.saveFlag = true;
         }
     }
 
@@ -124,6 +132,7 @@ public class Save {
      */
     private void handleWidget() {
         if (window.add.getWidget().widgetIcon == null) {
+            flag = true;
             return;
         }
         window.next.clear();

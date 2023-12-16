@@ -3,6 +3,8 @@ package com.buaa.PhotoEditor.window.filter;
 import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * @Description: 设置 Focus 效果
@@ -17,7 +19,8 @@ public class Focus {
     public Focus(Window window) {
         this.window = window;
         focusItem = new JMenuItem("Focus");
-        focusItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        focusItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F,
+            InputEvent.CTRL_DOWN_MASK));
     }
 
 }

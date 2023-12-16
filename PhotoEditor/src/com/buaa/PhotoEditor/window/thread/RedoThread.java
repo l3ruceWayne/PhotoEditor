@@ -58,7 +58,7 @@ public class RedoThread extends Thread {
                 }
                 // 取消 drag
                 window.tool.getDrag().dragItem.setSelected(false);
-                window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+//                window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 if (!window.next.isEmpty()) {
                     if (i == ORIGINAL_SIZE_COUNTER) {
                         window.last.push(copyImgArray(window.zoomImg));

@@ -63,6 +63,7 @@ public class FilterThread extends Thread {
             return;
         }
         if (i == ORIGINAL_SIZE_COUNTER) {
+            window.saveFlag = false;
             window.next.clear();
             window.nextOriginalImg.clear();
             window.nextPropertyValue.clear();
@@ -100,6 +101,7 @@ public class FilterThread extends Thread {
             blur.blurItemDialog.dispose();
         } else {
             if (i == ORIGINAL_SIZE_COUNTER) {
+                window.saveFlag = false;
                 window.next.clear();
                 window.nextOriginalImg.clear();
                 window.nextPropertyValue.clear();
@@ -148,6 +150,7 @@ public class FilterThread extends Thread {
             return;
         }
         if (i == ORIGINAL_SIZE_COUNTER) {
+            window.saveFlag = false;
             window.next.clear();
             window.nextOriginalImg.clear();
             window.nextPropertyValue.clear();
@@ -183,6 +186,7 @@ public class FilterThread extends Thread {
             return;
         }
         if (i == ORIGINAL_SIZE_COUNTER) {
+            window.saveFlag = false;
             window.next.clear();
             window.nextOriginalImg.clear();
             window.nextPropertyValue.clear();
@@ -217,6 +221,7 @@ public class FilterThread extends Thread {
             return;
         }
         if (i == ORIGINAL_SIZE_COUNTER) {
+            window.saveFlag = false;
             window.next.clear();
             window.nextOriginalImg.clear();
             window.nextPropertyValue.clear();
@@ -252,6 +257,7 @@ public class FilterThread extends Thread {
             glitch.glitchItemDialog.dispose();
         } else {
             if (i == ORIGINAL_SIZE_COUNTER) {
+                window.saveFlag = false;
                 window.next.clear();
                 window.nextOriginalImg.clear();
                 window.nextPropertyValue.clear();

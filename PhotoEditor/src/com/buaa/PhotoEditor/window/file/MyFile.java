@@ -20,10 +20,10 @@ public class MyFile {
         this.window = window;
         this.open = new Open(window);
         this.save = new Save(window);
-        fileMenu = new JMenu("File");
-        fileMenu.add(open.openItem);
-        fileMenu.add(save.saveItem);
-        fileMenu.add(save.saveAsItem);
+        this.fileMenu = new JMenu("File");
+        this.fileMenu.add(open.openItem);
+        this.fileMenu.add(save.saveItem);
+        this.fileMenu.add(save.saveAsItem);
     }
 
     public Window getWindow() {
