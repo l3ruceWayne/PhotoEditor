@@ -14,9 +14,9 @@ import java.awt.event.KeyEvent;
 import static com.buaa.PhotoEditor.window.Constant.*;
 
 /**
- * @Description:实现了cut的多线程
- * @author: 张旖霜
- * @date: 12/9/2023 10:21 AM
+ * @Description 实现了cut的多线程
+ * @author 张旖霜
+ * @date 12/9/2023 10:21 AM
  * @version: 1.0
  */
 public class CutThread extends Thread {
@@ -37,10 +37,9 @@ public class CutThread extends Thread {
         cutItem.addActionListener(new ActionListener() {
             /**
              * @param evt 触发操作
-             * @return void
-             * @Description:利用MatUtil实现图片的剪切与展示
-             * @author: 罗雨曦
-             * @date: 2023/11/27 14:11
+             * @Description 利用MatUtil实现图片的剪切与展示
+             * @author 罗雨曦
+             * @date 2023/11/27 14:11
              * @version: 1.0
              **/
             @Override

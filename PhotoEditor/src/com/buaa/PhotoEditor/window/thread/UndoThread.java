@@ -14,11 +14,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * @Description:实现了undo的多线程执行 实现了undo originalImg的操作
+ * @Description 实现了undo的多线程执行 实现了undo originalImg的操作
  * 将栈修改成保存zoomImg数组，Undo操作是撤销每一张图片的操作，把数组中的图片都换成上一步
  * 因为cut后，原图大小也不一样了，所以undo后，如果上一步是cut，就要恢复原图cut前的originalImg大小（存在lastOriginalImg的栈中）
- * @author: 张旖霜
- * @date: 12/5/2023 9:36 PM
+ * @author 张旖霜
+ * @date 12/5/2023 9:36 PM
  * @version: 1.0
  */
 public class UndoThread extends Thread {
@@ -32,9 +32,9 @@ public class UndoThread extends Thread {
         this.undoItem = undoItem;
     }
     /**
-    * @Description: 实现对undo的多线程监听
-    * @author: 张旖霜
-    * @date: 12/11/2023 9:36 PM
+    * @Description 实现对undo的多线程监听
+    * @author 张旖霜
+    * @date 12/11/2023 9:36 PM
     * @version: 1.1
     **/
     @Override
@@ -43,11 +43,10 @@ public class UndoThread extends Thread {
         undoItem.addActionListener(new ActionListener() {
             /**
              * @param e 触发操作
-             * @return void
-             * @Description:利用栈操作实现撤销操作
+             * @Description 利用栈操作实现撤销操作
              * 实现了property值的undo操作
-             * @author: 罗雨曦 张旖霜
-             * @date: 2023/11/27 14:07
+             * @author 罗雨曦 张旖霜
+             * @date 2023/11/27 14:07
              * @version: 1.2
              **/
             @Override

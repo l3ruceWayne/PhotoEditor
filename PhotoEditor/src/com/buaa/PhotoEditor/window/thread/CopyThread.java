@@ -7,13 +7,12 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 /**
- * ClassName: CopyThread
- * Package: com.buaa.PhotoEditor.window.thread
- * Description: 实现复制的多线程，同时对多张图片执行复制操作
- * @Author 卢思文
- * @Create 12/10/2023 10:33 AM
- * @Version 1.1
+ * @Description 实现复制的多线程，同时对多张图片执行复制操作
+ * @author 卢思文
+ * @date 12/10/2023 10:33 AM
+ * @version 1.1
  */
+
 public class CopyThread extends Thread {
     public Window window;
     public JMenuItem copyItem;
@@ -32,10 +31,9 @@ public class CopyThread extends Thread {
         copyItem.addActionListener(evt -> copySelectedRegion());
     }
     /**
-     * @return void
-     * @Description:获取选区并将pasting状态置1 增加未选择图片弹窗
-     * @author: 罗雨曦、卢思文
-     * @date: 12/5/2023 3:28 PM
+     * @Description 获取选区并将pasting状态置1 增加未选择图片弹窗
+     * @author 罗雨曦、卢思文
+     * @date 12/5/2023 3:28 PM
      * @version: 2.0
      **/
     private void copySelectedRegion() {

@@ -15,9 +15,9 @@ import javax.swing.event.ChangeListener;
 
 
 /**
- * @Description: 画笔（增添选择画笔颜色/选择画笔粗细/选择画笔后光标变成画笔样式）
- * @author: 卢思文
- * @date: 11/26/2023 4:14 PM
+ * @Description 画笔（增添选择画笔颜色/选择画笔粗细/选择画笔后光标变成画笔样式）
+ * @author 卢思文
+ * @date 11/26/2023 4:14 PM
  * @version: 1.0
  */
 public class Pen {
@@ -85,9 +85,9 @@ public class Pen {
 
     /**
      * @param e : 事件
-     * @Description: 初始化penItem；点击画笔之后，取消使用选择区域、橡皮功能，光标变成画笔；取消画笔之后，光标恢复原样
-     * @author: 卢思文
-     * @date: 11/26/2023 8:05 PM
+     * @Description 初始化penItem；点击画笔之后，取消使用选择区域、橡皮功能，光标变成画笔；取消画笔之后，光标恢复原样
+     * @author 卢思文
+     * @date 11/26/2023 8:05 PM
      * @version: 1.0
      */
     private void initPenItem(ItemEvent e) {
@@ -107,9 +107,9 @@ public class Pen {
     }
 
     /**
-     * @Description: 初始化 penColorPanel
-     * @author: 卢思文
-     * @date: 11/26/2023 8:05 PM
+     * @Description 初始化 penColorPanel
+     * @author 卢思文
+     * @date 11/26/2023 8:05 PM
      * @version: 1.0
      */
     private void initPenColorPanel() {
@@ -122,9 +122,9 @@ public class Pen {
     }
 
     /**
-     * @Description: 画笔尺寸初始化
-     * @author: 卢思文
-     * @date: 11/26/2023 8:19 PM
+     * @Description 画笔尺寸初始化
+     * @author 卢思文
+     * @date 11/26/2023 8:19 PM
      * @version: 1.0
      */
     public void initPenSize() {
@@ -146,9 +146,9 @@ public class Pen {
     }
 
     /**
-     * @Description: 根据用户设置，更新画笔的大小
-     * @author: 卢思文
-     * @date: 11/26/2023 8:19 PM
+     * @Description 根据用户设置，更新画笔的大小
+     * @author 卢思文
+     * @date 11/26/2023 8:19 PM
      * @version: 1.0
      */
     private void setPenSize() {
@@ -174,9 +174,9 @@ public class Pen {
     }
 
     /**
-     * @Description: 执行多线程，监听鼠标状态
-     * @author: 张旖霜
-     * @date: 11/27/2023 7:53 PM
+     * @Description 执行多线程，监听鼠标状态
+     * @author 张旖霜
+     * @date 11/27/2023 7:53 PM
      * @version: 1.0
      */
     public void penListener() {
@@ -194,9 +194,9 @@ public class Pen {
 
 
     /**
-     * @Description: 选择画笔颜色
-     * @author: 卢思文
-     * @date: 11/26/2023 8:09 PM
+     * @Description 选择画笔颜色
+     * @author 卢思文
+     * @date 11/26/2023 8:09 PM
      * @version: 1.0
      */
     public void selectPenColor() {

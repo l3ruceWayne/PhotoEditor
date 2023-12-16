@@ -13,13 +13,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * ClassName: EraserThread
- * Package: com.buaa.PhotoEditor.window.thread
- * Description: 橡皮多线程，实现多张图片的同时擦除操作
- * @Author 卢思文
- * @Create 12/2/2023 7:28 PM
- * @Version 1.0
+ * @Description 橡皮多线程，实现多张图片的同时擦除操作
+ * @author 卢思文
+ * @date 12/2/2023 7:28 PM
+ * @version 1.0
  */
+
 public class EraserThread extends Thread {
     public Window window;
     public int i;
@@ -29,9 +28,9 @@ public class EraserThread extends Thread {
         this.i = i;
     }
     /**
-    * @Description: 线程实现监听
-    * @author: 卢思文
-    * @date: 12/11/2023 9:01 PM
+    * @Description 线程实现监听
+    * @author 卢思文
+    * @date 12/11/2023 9:01 PM
     * @version: 1.0
     **/
     @Override
@@ -117,10 +116,9 @@ public class EraserThread extends Thread {
     }
     /**
      * @param x, y:鼠标位置
-     * @return
-     * @Description: 换成在window.showImgRegionLabel上监听鼠标，所以不需要重新定位
-     * @author: 张旖霜、卢思文
-     * @date: 11/27/2023 3:30 PM
+     * @Description 换成在window.showImgRegionLabel上监听鼠标，所以不需要重新定位
+     * @author 张旖霜、卢思文
+     * @date 11/27/2023 3:30 PM
      * @version: 2.0
      */
     public void erase(int x, int y) {

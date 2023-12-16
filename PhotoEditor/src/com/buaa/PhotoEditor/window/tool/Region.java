@@ -10,9 +10,9 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 
 /**
- * @Description: 选择区域功能
- * @author: 张旖霜、卢思文
- * @date: 11/27/2023 3:31 PM
+ * @Description 选择区域功能
+ * @author 张旖霜、卢思文
+ * @date 11/27/2023 3:31 PM
  * @version: 1.0
  */
 public class Region {
@@ -50,9 +50,9 @@ public class Region {
 
     /**
      * @param e : 事件
-     * @Description: 初始化regionItem
-     * @author: 卢思文
-     * @date: 11/26/2023 8:05 PM
+     * @Description 初始化regionItem
+     * @author 卢思文
+     * @date 11/26/2023 8:05 PM
      * @version: 1.0
      */
     private void initRegionItem(ItemEvent e) {
@@ -70,9 +70,9 @@ public class Region {
     }
 
     /**
-     * @Description: 执行多线程，监听鼠标状态
-     * @author: 张旖霜
-     * @date: 11/27/2023 7:53 PM
+     * @Description 执行多线程，监听鼠标状态
+     * @author 张旖霜
+     * @date 11/27/2023 7:53 PM
      * @version: 1.0
      */
     public void regionListener() {
@@ -82,9 +82,9 @@ public class Region {
     }
 
     /**
-     * @Description: 取消某图层的region
-     * @author: 卢思文
-     * @date: 11/27/2023 7:53 PM
+     * @Description 取消某图层的region
+     * @author 卢思文
+     * @date 11/27/2023 7:53 PM
      * @version: 1.0
      */
     public void removeRegionSelected(int i) {
@@ -101,9 +101,9 @@ public class Region {
     }
 
     /**
-     * @Description: 取消所有图层的region
-     * @author: 张旖霜
-     * @date: 11/27/2023 7:53 PM
+     * @Description 取消所有图层的region
+     * @author 张旖霜
+     * @date 11/27/2023 7:53 PM
      * @version: 1.0
      */
     public void removeRegionSelected() {
@@ -115,9 +115,9 @@ public class Region {
     }
 
     /**
-     * @Description: 恢复选择region前的状态
-     * @author: 张旖霜
-     * @date: 11/27/2023 7:53 PM
+     * @Description 恢复选择region前的状态
+     * @author 张旖霜
+     * @date 11/27/2023 7:53 PM
      * @version: 1.0
      */
     public void disableListeners() {

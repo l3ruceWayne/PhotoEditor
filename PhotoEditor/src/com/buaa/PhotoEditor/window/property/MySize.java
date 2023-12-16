@@ -8,16 +8,9 @@ import static com.buaa.PhotoEditor.window.Constant.*;
 
 import org.opencv.core.Size;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-
-import static com.buaa.PhotoEditor.util.MatUtil.resize;
-
-import org.opencv.core.Size;
-import javax.swing.*;
-
 
 /**
- * @Description: 调节图片大小（分辨率）
+ * @Description 调节图片大小（分辨率）
  * @author 罗雨曦
  * @date 2023/11/27 14:00
  * @version: 1.1
@@ -30,10 +23,9 @@ public class MySize {
 
     /**
      * @param window 当前窗口
-     * @return null
-     * @Description: 构造方法——生成参数重设区域
-     * @author: 罗雨曦
-     * @date: 2023/11/27 14:00
+     * @Description 构造方法——生成参数重设区域
+     * @author 罗雨曦
+     * @date 2023/11/27 14:00
      * @version: 1.0
      **/
 
@@ -45,9 +37,9 @@ public class MySize {
     }
 
     /**
-     * @Description: 改变原尺寸图片的大小，可撤销
-     * @author: 卢思文、罗雨曦
-     * @date: 11/25/2023 11:41 AM
+     * @Description 改变原尺寸图片的大小，可撤销
+     * @author 卢思文、罗雨曦
+     * @date 11/25/2023 11:41 AM
      * @version: 1.2
      **/
     public void resize() {

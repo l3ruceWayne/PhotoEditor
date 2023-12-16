@@ -1,33 +1,11 @@
 package com.buaa.PhotoEditor.window.thread;
 
 import static com.buaa.PhotoEditor.util.MatUtil.*;
-
-import static com.buaa.PhotoEditor.window.Constant.*;
-
-
 import com.buaa.PhotoEditor.util.MatUtil;
-import com.buaa.PhotoEditor.window.Constant;
 import com.buaa.PhotoEditor.window.Window;
 import com.buaa.PhotoEditor.window.add.Text;
-
-
-
-import com.buaa.PhotoEditor.window.tool.ZoomIn;
-
-
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
-import org.opencv.features2d.ORB;
-
-
-import javax.print.attribute.standard.OrientationRequested;
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -35,18 +13,14 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.net.SocketTimeoutException;
-import java.nio.channels.NonReadableChannelException;
 
 /**
- * ClassName: AddTextThread
- * Package: com.buaa.PhotoEditor.window.thread
- * Description: 添加文本的多线程操作，实现同时在多张图片上添加文本
- *
- * @Author 卢思文
- * @Create 12/9/2023 5:43 PM
- * @Version 1.5
+ * @Description 添加文本的多线程操作，实现同时在多张图片上添加文本
+ * @author 卢思文
+ * @date 12/9/2023 5:43 PM
+ * @version 1.5
  */
+
 public class AddTextThread extends Thread {
     public Window window;
     public Text text;
@@ -78,9 +52,9 @@ public class AddTextThread extends Thread {
             writeText(i);
         });
         /*
-         * @Description:设置字体大小，设置时文本同时进行显示
-         * @author: 张旖霜
-         * @date: 11/27/2023 12:51 PM
+         * @Description设置字体大小，设置时文本同时进行显示
+         * @author 张旖霜
+         * @date 11/27/2023 12:51 PM
          * @version: 1.0
          */
         text.addTextSpinner.addChangeListener(evt -> {
@@ -99,9 +73,9 @@ public class AddTextThread extends Thread {
         text.textField.getDocument()
             .addDocumentListener(new DocumentListener() {
                 /**
-                * @Description: 插入文本时，文本同步显示
-                * @author: 卢思文、张旖霜
-                * @date: 12/11/2023 8:52 PM
+                * @Description 插入文本时，文本同步显示
+                * @author 卢思文、张旖霜
+                * @date 12/11/2023 8:52 PM
                 * @version: 1.2
                 **/
                 @Override
@@ -111,9 +85,9 @@ public class AddTextThread extends Thread {
                     writeText(i);
                 }
                 /**
-                * @Description: 删除文本时，文本同步显示
-                * @author: 卢思文、张旖霜
-                * @date: 12/11/2023 8:52 PM
+                * @Description 删除文本时，文本同步显示
+                * @author 卢思文、张旖霜
+                * @date 12/11/2023 8:52 PM
                 * @version: 1.2
                 **/
                 @Override
@@ -123,9 +97,9 @@ public class AddTextThread extends Thread {
                     writeText(i);
                 }
                 /**
-                * @Description: 改变文本，文本同步显示
-                * @author: 卢思文、张旖霜
-                * @date: 12/11/2023 8:53 PM
+                * @Description 改变文本，文本同步显示
+                * @author 卢思文、张旖霜
+                * @date 12/11/2023 8:53 PM
                 * @version: 1.2
                 **/
                 @Override
@@ -138,10 +112,10 @@ public class AddTextThread extends Thread {
     }
 
     /**
-     * @param: i ： 是有关于zoomImg[]的下标索引
-     * @Description:根据字体的设置，在图片上写入文字
-     * @author: 张旖霜、卢思文
-     * @date: 11/27/2023 12:52 PM
+     * @param i 是有关于zoomImg[]的下标索引
+     * @Description 根据字体的设置，在图片上写入文字
+     * @author 张旖霜、卢思文
+     * @date 11/27/2023 12:52 PM
      * @version: 2.0
      */
     public void writeText(int i) {
@@ -163,9 +137,9 @@ public class AddTextThread extends Thread {
         MatUtil.show(window.zoomImg[i], window.showImgRegionLabel);
     }
     /**
-    * @Description: 获取改变后的字号大小
-    * @author: 张旖霜
-    * @date: 11/27/2023 12:52 PM
+    * @Description 获取改变后的字号大小
+    * @author 张旖霜
+    * @date 11/27/2023 12:52 PM
     * @version: 1.0
     **/
     public void textScaleChanged() {

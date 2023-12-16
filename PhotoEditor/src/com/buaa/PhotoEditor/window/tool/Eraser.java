@@ -10,9 +10,9 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 
 /**
- * @Description: 橡皮（为橡皮添加图标和光标，增添调节橡皮擦粗细的设置）
- * @author: 卢思文
- * @date: 11/26/2023 10:06 PM
+ * @Description 橡皮（为橡皮添加图标和光标，增添调节橡皮擦粗细的设置）
+ * @author 卢思文
+ * @date 11/26/2023 10:06 PM
  * @version: 1.0
  */
 public class Eraser {
@@ -68,9 +68,9 @@ public class Eraser {
 
     /**
      * @param e : 事件
-     * @Description: 初始化 eraserItem，若已选择，开始监听滑鼠
-     * @author: 卢思文
-     * @date: 11/26/2023 8:19 PM
+     * @Description 初始化 eraserItem，若已选择，开始监听滑鼠
+     * @author 卢思文
+     * @date 11/26/2023 8:19 PM
      * @version: 1.0
      */
     private void initEraserItem(ItemEvent e) {
@@ -91,9 +91,9 @@ public class Eraser {
     }
 
     /**
-     * @Description: 橡皮尺寸初始化
-     * @author: 卢思文
-     * @date: 11/26/2023 8:19 PM
+     * @Description 橡皮尺寸初始化
+     * @author 卢思文
+     * @date 11/26/2023 8:19 PM
      * @version: 1.0
      */
     public void initEraserSize() {
@@ -117,9 +117,9 @@ public class Eraser {
     }
 
     /**
-     * @Description: 根据用户设置，更新橡皮的大小
-     * @author: 卢思文
-     * @date: 11/26/2023 8:19 PM
+     * @Description 根据用户设置，更新橡皮的大小
+     * @author 卢思文
+     * @date 11/26/2023 8:19 PM
      * @version: 1.0
      */
     private void setEraserSize() {
@@ -145,9 +145,9 @@ public class Eraser {
     }
 
     /**
-     * @Description: 执行多线程，监听鼠标状态
-     * @author: 张旖霜
-     * @date: 11/27/2023 7:53 PM
+     * @Description 执行多线程，监听鼠标状态
+     * @author 张旖霜
+     * @date 11/27/2023 7:53 PM
      * @version: 1.0
      */
     public void eraserListener() {

@@ -16,13 +16,12 @@ import javax.swing.*;
 import static com.buaa.PhotoEditor.util.MatUtil.getRect;
 
 /**
- * ClassName: FilterThread
- * Package: com.buaa.PhotoEditor.window.thread
- * Description: 滤镜有关的多线程操作
- * @Author 卢思文
- * @Create 12/9/2023 11:25 AM
- * @Version 1.0
+ * @Description 滤镜有关的多线程操作
+ * @author 卢思文
+ * @date 12/9/2023 11:25 AM
+ * @version 1.0
  */
+
 public class FilterThread extends Thread {
     public Window window;
     private Gray gray;
@@ -91,9 +90,9 @@ public class FilterThread extends Thread {
 
     }
     /**
-    * @Description: blur滤镜的实现
-    * @author: 卢思文
-    * @date: 12/11/2023 9:06 PM
+    * @Description blur滤镜的实现
+    * @author 卢思文
+    * @date 12/11/2023 9:06 PM
     * @version: 1.0
     **/
     public void blur() {
@@ -137,9 +136,9 @@ public class FilterThread extends Thread {
         }
     }
     /**
-    * @Description: invert滤镜的实现
-    * @author: 卢思文
-    * @date: 12/11/2023 9:08 PM
+    * @Description invert滤镜的实现
+    * @author 卢思文
+    * @date 12/11/2023 9:08 PM
     * @version: 1.0
     **/
     public void invert() {
@@ -173,9 +172,9 @@ public class FilterThread extends Thread {
     }
 
     /**
-    * @Description: animize(动漫化)滤镜的实现，该滤镜计算量比较大，实现时间比较长
-    * @author: 卢思文
-    * @date: 12/11/2023 9:09 PM
+    * @Description animize(动漫化)滤镜的实现，该滤镜计算量比较大，实现时间比较长
+    * @author 卢思文
+    * @date 12/11/2023 9:09 PM
     * @version: 1.0
     **/
     public void animize() {
@@ -208,9 +207,9 @@ public class FilterThread extends Thread {
         MatUtil.show(window.zoomImg[i], window.showImgRegionLabel);
     }
     /**
-    * @Description: focus(聚焦)滤镜的实现，操作前需要选定区域作为焦点
-    * @author: 卢思文
-    * @date: 12/11/2023 9:10 PM
+    * @Description focus(聚焦)滤镜的实现，操作前需要选定区域作为焦点
+    * @author 卢思文
+    * @date 12/11/2023 9:10 PM
     * @version: 1.0
     **/
     public void focus() {
@@ -246,9 +245,9 @@ public class FilterThread extends Thread {
         }
     }
     /**
-    * @Description: glitch(故障风格, 例如抖音图标的风格)滤镜的实现
-    * @author: 卢思文
-    * @date: 12/11/2023 9:10 PM
+    * @Description glitch(故障风格, 例如抖音图标的风格)滤镜的实现
+    * @author 卢思文
+    * @date 12/11/2023 9:10 PM
     * @version: 1.0
     **/
     public void glitch() {

@@ -7,9 +7,9 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 /**
- * @Description: 设置 Gray 滤镜
- * @author: 卢思文
- * @date: 11/26/2023 8:58 PM
+ * @Description 设置 Gray 滤镜
+ * @author 卢思文
+ * @date 11/26/2023 8:58 PM
  * @version: 1.0
  */
 public class Gray {

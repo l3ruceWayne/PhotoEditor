@@ -7,15 +7,12 @@ import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Random;
 
 import javax.swing.*;
 
-import javax.swing.*;
 
 import com.buaa.PhotoEditor.window.Window;
 
-import com.buaa.PhotoEditor.window.file.Open;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -245,8 +242,8 @@ public abstract class MatUtil extends JFrame {
     /**
      * @param propertyValue: 当前要使用的property的值
      * @return 以新的数组返回（其中的元素是property的值）
-     * @Description: 为了让栈里保存的是新的数组，而不仅仅是对currentPropertyValue数组的引用
-     * @author: 张旖霜
+     * @Description 为了让栈里保存的是新的数组，而不仅仅是对currentPropertyValue数组的引用
+     * @author 张旖霜
      * @date 2023/11/30
      * @version: 1.0
      */

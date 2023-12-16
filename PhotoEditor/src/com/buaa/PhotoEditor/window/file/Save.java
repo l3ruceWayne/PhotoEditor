@@ -18,10 +18,10 @@ import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /**
- * @Description: 修改后图片的保存和另存为功能
- * @author: 卢思文
- * @date: 11/27/2023 4:44 PM
- * @version: 2.0
+ * @Description 修改后图片的保存和另存为功能
+ * @author 卢思文
+ * @date 11/27/2023 4:44 PM
+ * @version 2.0
  */
 public class Save {
     public JMenuItem saveItem;
@@ -46,10 +46,10 @@ public class Save {
 
 
     /**
-     * @Description: 保存图片，如果用户点击了save as，保存路径改为save as的保存路径
+     * @Description 保存图片，如果用户点击了save as，保存路径改为save as的保存路径
      * 通过流以字节单位写图片，既能保证图片质量也能控制图片文件的大小
-     * @author: 张旖霜 卢思文 罗雨曦
-     * @date: 12/5/2023 3:58 AM
+     * @author 张旖霜 卢思文 罗雨曦
+     * @date 12/5/2023 3:58 AM
      * @version: 3.0
      */
     private void saveImg() {
@@ -83,9 +83,9 @@ public class Save {
     }
 
     /**
-     * @Description: 对修改后的图片进行另存为操作
-     * @author: 卢思文 罗雨曦
-     * @date: 12/5/2023 2:52 PM
+     * @Description 对修改后的图片进行另存为操作
+     * @author 卢思文 罗雨曦
+     * @date 12/5/2023 2:52 PM
      * @version: 2.0
      */
     private void saveAsNewImg() {
@@ -125,9 +125,9 @@ public class Save {
     }
 
     /**
-     * @Description: 处理添加了 widget 的情况，同时进行栈相关的处理
-     * @author: 卢思文，罗雨曦
-     * @date: 12/5/2023 4:18 PM
+     * @Description 处理添加了 widget 的情况，同时进行栈相关的处理
+     * @author 卢思文，罗雨曦
+     * @date 12/5/2023 4:18 PM
      * @version: 3.0
      */
     private void handleWidget() {
@@ -168,9 +168,9 @@ public class Save {
      * @param imgPath  图片要保存到的路径的字符串形式
      * @param dstImage 要保存的图片
      * @return boolean 是否保存成功
-     * @Description: 重新写将Mat保存为JPG图片的方法, 以避开Matutil.save保存路径中含有中文就无法正确保存的bug
-     * @author: 罗雨曦
-     * @date: 2023/12/5 4:01
+     * @Description 重新写将Mat保存为JPG图片的方法, 以避开Matutil.save保存路径中含有中文就无法正确保存的bug
+     * @author 罗雨曦
+     * @date 2023/12/5 4:01
      * @version: 1.0
      */
     private static boolean saveMatToJpg(String imgPath, Mat dstImage) {
@@ -185,9 +185,9 @@ public class Save {
      * @param bytes    Mat图片转为byte[]形式
      * @param append   此处恒为false，即FileOutputStream都是从头开始输出图片，设置目的为与FileOutputStream参数保持一致
      * @return boolean 操作是否成功
-     * @Description: 将byte[]形式的图片通过流输入到指定路径
-     * @author: 罗雨曦
-     * @date: 2023/12/5 4:03
+     * @Description 将byte[]形式的图片通过流输入到指定路径
+     * @author 罗雨曦
+     * @date 2023/12/5 4:03
      * @version: 1.0
      */
     private static boolean writeFileByBytes(String fileName, byte[] bytes, boolean append) {

@@ -7,9 +7,9 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 /**
- * @Description: 设置 Blur 效果
- * @author: 卢思文
- * @date: 11/26/2023 8:58 PM
+ * @Description 设置 Blur 效果
+ * @author 卢思文
+ * @date 11/26/2023 8:58 PM
  * @version: 1.0
  */
 public class Blur {
@@ -30,9 +30,9 @@ public class Blur {
     }
 
     /**
-     * @Description: 点击blur后触发，打开blur设置面板
-     * @author: 卢思文
-     * @date: 12/12/2023 10:28 AM
+     * @Description 点击blur后触发，打开blur设置面板
+     * @author 卢思文
+     * @date 12/12/2023 10:28 AM
      * @version: 1.0
      */
     private void blur() {
@@ -45,9 +45,9 @@ public class Blur {
     }
 
     /**
-     * @Description: 初始化 blurItem以及其设置面板
-     * @author: 卢思文
-     * @date: 12/12/2023 10:29 AM
+     * @Description 初始化 blurItem以及其设置面板
+     * @author 卢思文
+     * @date 12/12/2023 10:29 AM
      * @version: 1.0
      */
     private void initBlurItem() {
@@ -66,9 +66,9 @@ public class Blur {
     }
 
     /**
-     * @Description: 设置面板的水平和垂直布局
-     * @author: 卢思文
-     * @date: 12/12/2023 10:30 AM
+     * @Description 设置面板的水平和垂直布局
+     * @author 卢思文
+     * @date 12/12/2023 10:30 AM
      * @version: 1.0
      */
     private void setLayout() {

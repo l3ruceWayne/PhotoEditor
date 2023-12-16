@@ -2,9 +2,7 @@ package com.buaa.PhotoEditor.window.add;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
-import com.formdev.flatlaf.icons.FlatOptionPaneInformationIcon;
 import org.opencv.core.Mat;
-import org.opencv.ml.ANN_MLP_ANNEAL;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;

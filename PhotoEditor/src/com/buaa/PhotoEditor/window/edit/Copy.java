@@ -9,7 +9,7 @@ import static com.buaa.PhotoEditor.window.Constant.NUM_FOR_NEW;
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /**
- * @Description: 选择某个选区后复制该选区，通过在画布上点击鼠标实现该选区的剪贴
+ * @Description 选择某个选区后复制该选区，通过在画布上点击鼠标实现该选区的剪贴
  * @author 罗雨曦、张旖霜
  * @date 2023/11/27 14:12
  * @version: 2.0
@@ -21,10 +21,9 @@ public class Copy {
 
     /**
      * @param window 当前窗口
-     * @return null
-     * @Description:构造方法——生成子菜单项并设置快捷键
-     * @author: 张旖霜、罗雨曦
-     * @date: 2023/11/27 14:13
+     * @Description 构造方法——生成子菜单项并设置快捷键
+     * @author 张旖霜、罗雨曦
+     * @date 2023/11/27 14:13
      * @version: 2.0
      **/
     public Copy(Window window) {
