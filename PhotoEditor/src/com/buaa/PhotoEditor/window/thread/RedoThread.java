@@ -61,6 +61,7 @@ public class RedoThread extends Thread {
 //                window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 if (!window.next.isEmpty()) {
                     if (i == ORIGINAL_SIZE_COUNTER) {
+                        window.saveFlag = false;
                         window.last.push(copyImgArray(window.zoomImg));
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                         window.lastPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));
