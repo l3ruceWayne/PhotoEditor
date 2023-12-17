@@ -8,6 +8,7 @@ import static com.buaa.PhotoEditor.window.Constant.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.chrono.Era;
 
 /**
  * @Description: 放大图片
@@ -41,7 +42,7 @@ public class ZoomIn {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }
-        if(window.add.getWidget().widgetIcon != null){
+        if (window.add.getWidget().widgetIcon != null) {
             JOptionPane.showMessageDialog(null,
                     "Please handle widget first");
             return;
@@ -49,6 +50,11 @@ public class ZoomIn {
         // 取消 drag
         window.tool.getDrag().dragItem.setSelected(false);
         window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        if (window.tool.getPen().penItem.isSelected()) {
+            window.showImgRegionLabel.setCursor(Pen.penCursor);
+        }else if (window.tool.getEraser().eraserItem.isSelected()){
+            window.showImgRegionLabel.setCursor(Eraser.eraserCursor);
+        }
         // 不能再放大了
         if (window.counter == MAX_SIZE_COUNTER) {
             return;
@@ -61,7 +67,6 @@ public class ZoomIn {
         if (window.tool.getRegion().selectedRegionLabel[window.counter] != null) {
             window.tool.getRegion().selectedRegionLabel[window.counter].setVisible(true);
         }
-
         int counter = window.counter;
         int width = window.size[counter][0];
         int height = window.size[counter][1];

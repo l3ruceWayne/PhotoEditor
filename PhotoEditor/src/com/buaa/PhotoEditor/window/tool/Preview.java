@@ -5,6 +5,9 @@ import com.buaa.PhotoEditor.window.Window;
 
 import javax.swing.*;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -18,39 +21,26 @@ import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
  */
 public class Preview {
     public Window window;
-    public JMenu previewItem;
+    public JCheckBoxMenuItem previewItem;
 
     public Preview(Window window) {
         this.window = window;
-        previewItem = new JMenu("Preview");
-        previewItem.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                if (window.originalImg == null) {
-                    JOptionPane.showMessageDialog(null, "Please open an image first");
-                    previewItem.setSelected(false);
-                }
-                if(window.add.getWidget().widgetIcon != null){
-
-                    JOptionPane.showMessageDialog(null,
-                            "Please handle widget first");
-                    return;
-                }
-                showOriginalImg();
+        previewItem = new JCheckBoxMenuItem("Preview");
+        previewItem.addActionListener(e -> {
+            if (window.originalImg == null) {
+                JOptionPane.showMessageDialog(null, "Please open an image first");
+                previewItem.setSelected(false);
+                return;
             }
+            if(window.add.getWidget().widgetIcon != null){
 
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (window.originalImg == null) {
-                    JOptionPane.showMessageDialog(null, "Please open an image first");
-                    previewItem.setSelected(false);
-                }
-
-                if(window.add.getWidget().widgetIcon != null){
-                    JOptionPane.showMessageDialog(null,
-                            "Please handle widget first");
-                    return;
-                }
+                JOptionPane.showMessageDialog(null,
+                        "Please handle widget first");
+                return;
+            }
+            if (previewItem.isSelected()) {
+                showOriginalImg();
+            } else {
                 showZoomImg();
             }
         });
@@ -69,10 +59,20 @@ public class Preview {
         window.tool.getPen().penItem.setSelected(false);
         window.tool.getEraser().eraserItem.setSelected(false);
         window.tool.getDrag().dragItem.setSelected(false);
+        int width = window.size[ORIGINAL_SIZE_COUNTER][0];
+        int height = window.size[ORIGINAL_SIZE_COUNTER][1];
+        int panelWidth = window.panel.getWidth();
+        int panelHeight = window.panel.getHeight();
+        window.panel.setLayout(null);
+        window.showImgRegionLabel.setSize(width, height);
         MatUtil.show(window.zoomImg[ORIGINAL_SIZE_COUNTER], window.showImgRegionLabel);
-        window.showImgRegionLabel.setSize(window.zoomImg[ORIGINAL_SIZE_COUNTER].width(),
-                window.zoomImg[ORIGINAL_SIZE_COUNTER].height());
-        window.panel.setLayout(window.gridBagLayout);
+        if (width > panelWidth
+                || height > panelHeight) {
+            window.showImgRegionLabel.setLocation((panelWidth - width) / 2,
+                    (panelHeight - height) / 2);
+        } else {
+            window.panel.setLayout(window.gridBagLayout);
+        }
     }
 
     /**
@@ -89,6 +89,7 @@ public class Preview {
         int panelHeight = window.panel.getHeight();
         window.panel.setLayout(null);
         window.showImgRegionLabel.setSize(width, height);
+        window.tool.getDrag().dragItem.setSelected(false);
         MatUtil.show(window.zoomImg[counter], window.showImgRegionLabel);
         if (width > panelWidth
                 || height > panelHeight) {
