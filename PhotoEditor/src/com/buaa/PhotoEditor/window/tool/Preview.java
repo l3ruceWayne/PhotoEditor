@@ -53,14 +53,12 @@ public class Preview {
      * @version: 3.0
      */
     public void showOriginalImg() {
-        System.out.println("no");
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
             window.tool.getRegion().removeRegionSelected(i);
         }
         window.tool.getPen().penItem.setSelected(false);
         window.tool.getEraser().eraserItem.setSelected(false);
         window.tool.getDrag().dragItem.setSelected(false);
-        int counter = window.counter;
         int width = window.size[ORIGINAL_SIZE_COUNTER][0];
         int height = window.size[ORIGINAL_SIZE_COUNTER][1];
         int panelWidth = window.panel.getWidth();
@@ -84,7 +82,6 @@ public class Preview {
      * @version: 3.0
      */
     public void showZoomImg() {
-        System.out.println("yes");
         int counter = window.counter;
         int width = window.size[counter][0];
         int height = window.size[counter][1];
@@ -92,6 +89,7 @@ public class Preview {
         int panelHeight = window.panel.getHeight();
         window.panel.setLayout(null);
         window.showImgRegionLabel.setSize(width, height);
+        window.tool.getDrag().dragItem.setSelected(false);
         MatUtil.show(window.zoomImg[counter], window.showImgRegionLabel);
         if (width > panelWidth
                 || height > panelHeight) {

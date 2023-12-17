@@ -36,7 +36,7 @@ public class Drag {
 
     /**
      * @param e 事件
-     * @Description: 初始化 dragItem，若已选择，开始监听滑鼠
+     * @Description: 初始化 dragItem，若已选择，开始监听鼠标
      * @author: 张旖霜
      * @date: 11/27/2023 12:57 PM
      * @version: 2.0
@@ -52,6 +52,8 @@ public class Drag {
                 dragListener();
                 flag = true;
             }
+        }else{
+            window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
