@@ -120,10 +120,12 @@ public class Window extends JFrame {
         nextPropertyValue = new Stack<>();
         currentPropertyValue = new int[10];
         this.setTitle(title);
-        addKeyListener(new KeyAdapter() {
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             @Override
-            public void keyPressed(KeyEvent evt) {
-                keyPress(evt);
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                keyPress(e);
+                System.out.println("test");
+                return false;
             }
         });
     }
@@ -154,14 +156,14 @@ public class Window extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if(saveFlag){
+                if (saveFlag) {
                     Window.this.dispose();
                     return;
                 }
                 int confirm = JOptionPane.showConfirmDialog(Window.this,
                         "You haven't save your edit. Are you sure to close?",
                         "Close Confirmation", JOptionPane.YES_NO_OPTION);
-                if(confirm == JOptionPane.YES_OPTION){
+                if (confirm == JOptionPane.YES_OPTION) {
                     Window.this.dispose();
                 }
             }
@@ -234,12 +236,13 @@ public class Window extends JFrame {
     public void keyPress(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             if (zoomImg == null) {
-                JOptionPane.showMessageDialog(null, "Please open an image first");
                 return;
             }
             add.getWidget().widgetIcon = null;
-            if (tool.getRegion().selectRegionItem.isSelected()) {
-                tool.getRegion().removeRegionSelected();
+            if(tool.getRegion().selectRegionItem.isSelected()){
+                for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+                    tool.getRegion().removeRegionSelected(i);
+                }
             }
             if (add.getWidget().selectedWidgetLabel != null) {
                 add.getWidget().removeWidget();
@@ -253,7 +256,6 @@ public class Window extends JFrame {
         }
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             if (zoomImg == null) {
-                JOptionPane.showMessageDialog(null, "Please open an image first");
                 return;
             }
             if (add.getWidget().widgetIcon == null) {
@@ -269,9 +271,9 @@ public class Window extends JFrame {
             // 处理放大缩小后的小组件，以便可以保存到图片上去
             String newWidgetPath = "resources/newWidget." + widgetFormat;
             resizeImage(Widget.widgetPath, newWidgetPath,
-                add.getWidget().widgetLabel.getWidth(),
-                add.getWidget().widgetLabel.getHeight(),
-                Widget.widgetFormat);
+                    add.getWidget().widgetLabel.getWidth(),
+                    add.getWidget().widgetLabel.getHeight(),
+                    Widget.widgetFormat);
             add.getWidget().widgetLabel.setIcon(new ImageIcon(newWidgetPath));
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
                 int x = (int) (add.getWidget().widgetLabel.getX() - ((double) panel.getWidth() - showImgRegionLabel.getWidth()) / 2);
