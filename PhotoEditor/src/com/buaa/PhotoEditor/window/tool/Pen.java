@@ -38,9 +38,9 @@ public class Pen {
     // 加载画笔图标，因为共用，所以static
     static {
         penCursorIcon = new ImageIcon(
-                "resources/penCursorImage.png");
+                "PhotoEditor/resources/penCursorImage.png");
         penItemIcon = new ImageIcon(
-                "resources/penItemImage.png"
+                "PhotoEditor/resources/penItemImage.png"
         );
         Image image = penCursorIcon.getImage();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -57,7 +57,7 @@ public class Pen {
         }
 
         // 调整布局（原本图标后面会多一块无意义空白）
-        Dimension preferredSize = new Dimension(40, 30);
+        Dimension preferredSize = new Dimension(50, 35);
         penItem.setPreferredSize(preferredSize);
 
         // 如果未选择图片，弹窗提示并return

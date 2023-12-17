@@ -38,6 +38,10 @@ public class Region {
             regionThread[i] = new RegionThread(window, i);
         }
         selectRegionItem = new JCheckBoxMenuItem("Region");
+
+        Dimension preferredSize = new Dimension(100, 35);
+        selectRegionItem.setPreferredSize(preferredSize);
+
         // 如果未选择图片，弹窗提示并return
         selectRegionItem.addActionListener(e -> {
             if (window.originalImg == null) {

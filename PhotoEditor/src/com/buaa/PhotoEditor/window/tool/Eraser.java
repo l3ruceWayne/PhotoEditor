@@ -29,9 +29,9 @@ public class Eraser {
     // 加载橡皮图标，因为共用，所以static
     static {
         eraserCursorIcon = new ImageIcon(
-                "resources/eraserCursorImage.png");
+                "PhotoEditor/resources/eraserCursorImage.png");
         eraserItemIcon = new ImageIcon(
-                "resources/eraserItemImage.png"
+                "PhotoEditor/resources/eraserItemImage.png"
         );
         Image image = eraserCursorIcon.getImage();
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -47,7 +47,7 @@ public class Eraser {
         }
 
         // 调整布局（原本图标后面会多一块无意义空白）
-        Dimension preferredSize = new Dimension(40, 30);
+        Dimension preferredSize = new Dimension(50, 35);
         eraserItem.setPreferredSize(preferredSize);
 
         // 如果未选择图片，弹窗提示并return

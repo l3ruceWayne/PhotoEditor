@@ -24,6 +24,9 @@ public class Drag {
         dragItem = new JCheckBoxMenuItem("Drag");
         flag = false;
 
+        Dimension preferredSize = new Dimension(80, 35);
+        dragItem.setPreferredSize(preferredSize);
+
         dragItem.addActionListener(e -> {
             if (window.originalImg == null) {
                 JOptionPane.showMessageDialog(null, "Please open an image first");

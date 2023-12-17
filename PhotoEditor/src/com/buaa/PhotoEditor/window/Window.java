@@ -191,10 +191,8 @@ public class Window extends JFrame {
         menuBar.add(ui.uiMenu);
         separateMenu(menuBar);
         menuBar.add(tool.getRegion().selectRegionItem);
-        tool.getRegion().selectRegionItem.setMaximumSize(new Dimension(0, tool.getRegion().selectRegionItem.getPreferredSize().height));
         separateMenu(menuBar);
         menuBar.add(tool.getPen().penItem);
-        tool.getPen().penItem.setMaximumSize(new Dimension(0, tool.getPen().penItem.getPreferredSize().height));
         menuBar.add(tool.getPen().penColorPanel);
         menuBar.add(Box.createHorizontalGlue());
         menuBar.add(tool.getPen().penSizeSpinner);
@@ -209,7 +207,6 @@ public class Window extends JFrame {
         menuBar.add(tool.getZoomOut().zoomOutItem);
         separateMenu(menuBar);
         menuBar.add(tool.getDrag().dragItem);
-        tool.getDrag().dragItem.setMaximumSize(new Dimension(0, tool.getDrag().dragItem.getPreferredSize().height));
         separateMenu(menuBar);
         menuBar.add(tool.getPreview().previewItem);
         separateMenu(menuBar);

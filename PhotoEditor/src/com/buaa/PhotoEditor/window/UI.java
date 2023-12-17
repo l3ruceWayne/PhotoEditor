@@ -24,8 +24,11 @@ public class UI {
         uiMenu = new JMenu("UI");
         JMenuItem lightMode = new JMenuItem("Light Mode");
         JMenuItem darkMode = new JMenuItem("Dark Mode");
-        JMenuItem systemMode = new JMenuItem("System Mode");
-        JMenuItem javaMode = new JMenuItem("Java Mode");
+        JMenuItem metalMode = new JMenuItem("Metal Mode");
+        JMenuItem classicMode = new JMenuItem("Classic Mode");
+        JMenuItem motifMode = new JMenuItem("Motif Mode");
+        JMenuItem nimbusMode = new JMenuItem("Nimbus Mode");
+
 
         lightMode.addActionListener(e -> {
             try {
@@ -45,29 +48,52 @@ public class UI {
             }
         });
 
-        systemMode.addActionListener(e -> {
+        metalMode.addActionListener(e -> {
             try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
                 SwingUtilities.updateComponentTreeUI(window);
-            } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
+            } catch (UnsupportedLookAndFeelException | InstantiationException | ClassNotFoundException |
                      IllegalAccessException ex) {
                 throw new RuntimeException(ex);
             }
         });
 
-        javaMode.addActionListener(e -> {
+        classicMode.addActionListener(e -> {
             try {
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
                 SwingUtilities.updateComponentTreeUI(window);
-            } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
+            } catch (UnsupportedLookAndFeelException | InstantiationException | ClassNotFoundException |
                      IllegalAccessException ex) {
                 throw new RuntimeException(ex);
             }
         });
+
+        motifMode.addActionListener(e -> {
+            try {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+                SwingUtilities.updateComponentTreeUI(window);
+            } catch (UnsupportedLookAndFeelException | InstantiationException | ClassNotFoundException |
+                     IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        nimbusMode.addActionListener(e -> {
+            try {
+                UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+                SwingUtilities.updateComponentTreeUI(window);
+            } catch (UnsupportedLookAndFeelException | InstantiationException | ClassNotFoundException |
+                     IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
 
         uiMenu.add(lightMode);
         uiMenu.add(darkMode);
-        uiMenu.add(systemMode);
-        uiMenu.add(javaMode);
+        uiMenu.add(metalMode);
+        uiMenu.add(classicMode);
+        uiMenu.add(nimbusMode);
+        uiMenu.add(motifMode);
     }
 }
