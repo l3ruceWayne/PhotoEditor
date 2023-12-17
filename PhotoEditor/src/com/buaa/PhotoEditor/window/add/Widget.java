@@ -10,6 +10,8 @@ import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.*;
 import java.text.Format;
@@ -218,6 +220,7 @@ public class Widget {
 
         widgetLabel.addMouseListener(mia);
         widgetLabel.addMouseMotionListener(mia);
+
 
     }
 

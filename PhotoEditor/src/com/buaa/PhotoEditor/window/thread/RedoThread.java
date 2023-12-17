@@ -2,6 +2,7 @@ package com.buaa.PhotoEditor.window.thread;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import com.buaa.PhotoEditor.window.property.MySize;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
@@ -75,8 +76,8 @@ public class RedoThread extends Thread {
                             window.originalZoomImg = copyImgArray(window.nextOriginalImg.peek());
                             window.currentPropertyValue = MatUtil.copyPropertyValue(window.nextPropertyValue.peek());
                             // 还原property的值
-                            window.property.getMySize().txtWidth.setText(window.currentPropertyValue[4] + "");
-                            window.property.getMySize().txtHeight.setText(window.currentPropertyValue[5] + "");
+                            MySize.txtWidth.setText(window.currentPropertyValue[4] + "");
+                            MySize.txtHeight.setText(window.currentPropertyValue[5] + "");
                         }
                         // 在线程执行最后一步时，出栈
                         if (i == 0) {
