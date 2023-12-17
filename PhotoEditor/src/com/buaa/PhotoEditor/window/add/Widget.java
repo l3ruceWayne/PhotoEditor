@@ -10,7 +10,11 @@ import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.*;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +36,8 @@ public class Widget {
     public JMenuItem widgetItem;
     public JLabel selectedWidgetLabel;
     public final List<String> WIDGET_SUPPORT_FILE_TYPES;
-    public String widgetPath;
-
+    public static String widgetPath;
+    public static String widgetFormat;
     public boolean flag;
     public boolean threadStartFlag;
 
@@ -77,6 +81,16 @@ public class Widget {
             if (WIDGET_SUPPORT_FILE_TYPES.contains(widgetPath
                     .substring(widgetPath.lastIndexOf(".") + 1)
                     .toUpperCase())) {
+                String[] strings = widgetPath.split("\\.");
+
+                widgetFormat = strings[strings.length - 1];
+
+                try {
+                    copyFile(widgetPath, "resources/widget." + widgetFormat);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                widgetPath = "resources/widget." + widgetFormat;
                 Mat widget = MatUtil.readImg(widgetPath);
                 widgetIcon = new ImageIcon(widgetPath);
 
@@ -109,6 +123,24 @@ public class Widget {
                         "only support JPG, JPEG and PNG");
             }
         }
+    }
+
+    /**
+     * @Description 复制本地图片文件
+     * @author 卢思文
+     * @date 2023/12/17 14:40
+     * @version: 1.0
+     **/
+    public static void copyFile(String sourceFile, String targetFile) throws IOException {
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(sourceFile));
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(targetFile));
+        byte[] buffer = new byte[100];
+        int len;
+        while ((len = bis.read(buffer)) != -1) {
+            bos.write(buffer, 0, len);
+        }
+        bos.close();
+        bis.close();
     }
 
     public void removeWidget() {
@@ -189,6 +221,7 @@ public class Widget {
         widgetLabel.addMouseListener(mia);
         widgetLabel.addMouseMotionListener(mia);
 
+
     }
 
     /**
@@ -205,7 +238,7 @@ public class Widget {
         int ry = widgetLabel.getHeight();
         int x = e.getX();
         int y = e.getY();
-        return rx - 20 < x && x < rx + 20 && ry - 20 < y && y < ry + 20;
+        return 4 * rx / 5 < x && x < 6 * rx / 5 && 4 * ry / 5 < y && y < 6 * ry / 5;
     }
 
 }
