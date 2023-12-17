@@ -2,13 +2,16 @@ package com.buaa.PhotoEditor.util;
 
 import com.buaa.PhotoEditor.modal.EColor;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import javax.swing.*;
@@ -409,5 +412,32 @@ public abstract class MatUtil extends JFrame {
         int height = c.getHeight();
 
         return new Rect(x, y, width, height);
+    }
+    /**
+     * @Description resize本地任意类型图片并另存为本地地址
+     * @author 卢思文
+     * @date 2023/12/17 14:37
+     * @version: 1.0
+     **/
+    public static void resizeImage(String inputImagePath, String outputImagePath, int scaledWidth, int scaledHeight, String format) {
+        try {
+            File inputFile = new File(inputImagePath);
+            BufferedImage inputImage = ImageIO.read(inputFile);
+
+            BufferedImage outputImage = new BufferedImage(scaledWidth,
+                scaledHeight,
+                inputImage.getType());
+
+            Image scaledImage = inputImage.getScaledInstance(scaledWidth,
+                scaledHeight,
+                Image.SCALE_SMOOTH);
+            outputImage.getGraphics().drawImage(scaledImage, 0, 0, null);
+
+            File outputFile = new File(outputImagePath);
+            ImageIO.write(outputImage, format, outputFile);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
