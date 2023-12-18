@@ -13,13 +13,12 @@ import javax.swing.*;
 public class Add {
     public JMenu addMenu;
     public Window window;
-    private Widget widget;
-    private Text text;
+    private final Widget widget;
 
     public Add(Window window) {
         this.window = window;
         this.widget = new Widget(window);
-        this.text = new Text(window);
+        Text text = new Text(window);
         addMenu = new JMenu("Add");
         addMenu.add(widget.widgetItem);
         addMenu.add(text.addTextItem);

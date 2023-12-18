@@ -13,13 +13,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * ClassName: EraserThread
- * Package: com.buaa.PhotoEditor.window.thread
- * Description: 橡皮多线程，实现多张图片的同时擦除操作
- * @Author 卢思文
- * @Create 12/2/2023 7:28 PM
- * @Version 1.0
+ * @author 卢思文
+ * @version 1.0
+ * @Description 橡皮多线程，实现多张图片的同时擦除操作
+ * @date 12/2/2023 7:28 PM
  */
+
 public class EraserThread extends Thread {
     public Window window;
     public int i;
@@ -28,12 +27,12 @@ public class EraserThread extends Thread {
         this.window = window;
         this.i = i;
     }
+
     /**
-    * @Description: 线程实现监听
-    * @author: 卢思文
-    * @date: 12/11/2023 9:01 PM
-    * @version: 1.0
-    **/
+     * @Description 线程实现监听
+     * @author 卢思文
+     * @date 12/11/2023 9:01 PM
+     */
     @Override
     public void run() {
         // 增加计时器，当长按橡皮2000毫秒后，清除全屏
@@ -44,8 +43,8 @@ public class EraserThread extends Thread {
                 window.nextOriginalImg.clear();
                 window.nextPropertyValue.clear();
                 window.lastPropertyValue
-                    .push(copyPropertyValue(window
-                    .currentPropertyValue));
+                        .push(copyPropertyValue(window
+                                .currentPropertyValue));
                 window.last.push(copyImgArray(window.zoomImg));
                 window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
             }
@@ -69,6 +68,7 @@ public class EraserThread extends Thread {
             public void mousePressed(MouseEvent e) {
                 timer.start();
             }
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 timer.stop();
@@ -80,12 +80,14 @@ public class EraserThread extends Thread {
             public void mouseClicked(MouseEvent e) {
                 erase(e.getX(), e.getY());
             }
+
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (window.tool.getEraser().eraserItem.isSelected()) {
                     erase(e.getX(), e.getY());
                 }
             }
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 /*
@@ -98,8 +100,8 @@ public class EraserThread extends Thread {
                         window.nextOriginalImg.clear();
                         window.nextPropertyValue.clear();
                         window.lastPropertyValue
-                            .push(copyPropertyValue(window
-                            .currentPropertyValue));
+                                .push(copyPropertyValue(window
+                                        .currentPropertyValue));
                         window.last.push(copyImgArray(window.zoomImg));
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
@@ -115,13 +117,12 @@ public class EraserThread extends Thread {
         window.showImgRegionLabel.addMouseListener(mia);
         window.showImgRegionLabel.addMouseMotionListener(mia);
     }
+
     /**
      * @param x, y:鼠标位置
-     * @return
-     * @Description: 换成在window.showImgRegionLabel上监听鼠标，所以不需要重新定位
-     * @author: 张旖霜、卢思文
-     * @date: 11/27/2023 3:30 PM
-     * @version: 2.0
+     * @Description 换成在window.showImgRegionLabel上监听鼠标，所以不需要重新定位
+     * @author 张旖霜、卢思文
+     * @date 11/27/2023 3:30 PM
      */
     public void erase(int x, int y) {
         if (window.paintingImg[i] == null) {
@@ -149,7 +150,7 @@ public class EraserThread extends Thread {
                         window.tool.getEraser().eraserSize[i],
                         window.tool.getEraser().eraserSize[i]));
 
-        
+
         // 拿原图覆盖现在正在画的图，就相当于橡皮擦操作
         MatUtil.overlay(eraseRegion, originalRegion);
         if (i == window.counter) {

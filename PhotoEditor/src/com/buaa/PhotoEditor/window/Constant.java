@@ -1,10 +1,10 @@
 package com.buaa.PhotoEditor.window;
 
 /**
- * @Description 存放常量
  * @author 卢思文
- * @date 2023/12/1
  * @version 1.0
+ * @Description 存放常量
+ * @date 2023/12/1
  */
 
 public class Constant {

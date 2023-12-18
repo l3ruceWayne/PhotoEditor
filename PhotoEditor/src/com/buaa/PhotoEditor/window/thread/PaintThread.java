@@ -12,16 +12,14 @@ import java.awt.event.MouseEvent;
 
 import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
 
-
 /**
- * ClassName: paintThread
- * Package: com.buaa.PhotoEditor.window.thread
- * Description: 实现画笔的多线程操作
+ * @author 卢思文
+ * @version 1.3
+ * @Description 实现画笔的多线程操作
  * i是与zoomImg[]有关的下标
- * @Author 卢思文
- * @Create 12/2/2023 9:31 AM
- * @Version 1.3
+ * @date 12/2/2023 9:31 AM
  */
+
 public class PaintThread extends Thread {
     public Window window;
     public int i;
@@ -35,11 +33,10 @@ public class PaintThread extends Thread {
     public void run() {
         MouseInputAdapter mia = new MouseInputAdapter() {
             /**
-            * @Description: 利用画笔进行点击时，画出点迹，需要进行点击事件的捕捉
-            * @author: 卢思文
-            * @date: 12/11/2023 9:12 PM
-            * @version: 1.0
-            **/
+             * @Description 利用画笔进行点击时，画出点迹，需要进行点击事件的捕捉
+             * @author 卢思文
+             * @date 12/11/2023 9:12 PM
+             */
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (window.tool.getPen().penItem.isSelected()) {
@@ -48,12 +45,12 @@ public class PaintThread extends Thread {
                     initLastPoint();
                 }
             }
+
             /**
-            * @Description: 画笔曲线的绘制，鼠标拖拽事件的捕捉
-            * @author: 卢思文
-            * @date: 12/11/2023 9:12 PM
-            * @version: 2.0
-            **/
+             * @Description 画笔曲线的绘制，鼠标拖拽事件的捕捉
+             * @author 卢思文
+             * @date 12/11/2023 9:12 PM
+             */
             @Override
             public void mouseDragged(MouseEvent e) {
                 if (window.tool.getPen().penItem.isSelected()) {
@@ -75,8 +72,8 @@ public class PaintThread extends Thread {
                         window.nextOriginalImg.clear();
                         window.nextPropertyValue.clear();
                         window.lastPropertyValue
-                            .push(copyPropertyValue(window
-                            .currentPropertyValue));
+                                .push(copyPropertyValue(window
+                                        .currentPropertyValue));
                         window.last.push(copyImgArray(window.zoomImg));
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
@@ -95,16 +92,14 @@ public class PaintThread extends Thread {
     }
 
     /**
-     * @param x : 鼠标 x 坐标
-     * @param y ：鼠标 y 坐标
+     * @param x    : 鼠标 x 坐标
+     * @param y    ：鼠标 y 坐标
      * @param flag : true则是画点，否则画线
-     * @Description:
-     * 实现画笔功能，原理是将指定像素块染成指定的颜色
+     * @Description 实现画笔功能，原理是将指定像素块染成指定的颜色
      * 解决了“快速移动导致笔迹断续”的问题，思想：在离散的点之间插值
      * newX和newY是drag后的重新定位
-     * @author: 张旖霜、卢思文
-     * @date: 12/5/2023 3:42 AM
-     * @version: 2.0
+     * @author 张旖霜、卢思文
+     * @date 12/5/2023 3:42 AM
      */
     public void paint(int x, int y, boolean flag) {
         if (window.paintingImg[i] == null) {

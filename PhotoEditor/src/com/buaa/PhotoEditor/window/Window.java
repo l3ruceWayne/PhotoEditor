@@ -194,10 +194,8 @@ public class Window extends JFrame {
         menuBar.add(ui.uiMenu);
         separateMenu(menuBar);
         menuBar.add(tool.getRegion().selectRegionItem);
-        tool.getRegion().selectRegionItem.setMaximumSize(new Dimension(0, tool.getRegion().selectRegionItem.getPreferredSize().height));
         separateMenu(menuBar);
         menuBar.add(tool.getPen().penItem);
-        tool.getPen().penItem.setMaximumSize(new Dimension(0, tool.getPen().penItem.getPreferredSize().height));
         menuBar.add(tool.getPen().penColorPanel);
         menuBar.add(Box.createHorizontalGlue());
         menuBar.add(tool.getPen().penSizeSpinner);
@@ -212,7 +210,6 @@ public class Window extends JFrame {
         menuBar.add(tool.getZoomOut().zoomOutItem);
         separateMenu(menuBar);
         menuBar.add(tool.getDrag().dragItem);
-        tool.getDrag().dragItem.setMaximumSize(new Dimension(0, tool.getDrag().dragItem.getPreferredSize().height));
         separateMenu(menuBar);
         menuBar.add(tool.getPreview().previewItem);
         separateMenu(menuBar);
@@ -231,7 +228,6 @@ public class Window extends JFrame {
      * @Description ESC按键的功能设置, Enter按键的功能设置
      * @author 卢思文
      * @date 2023/11/26
-     * @version: 2.0
      */
     public void keyPress(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -302,7 +298,6 @@ public class Window extends JFrame {
      * @Description 因为会多次复用，故将插入自适应块和垂直分隔线进行简单封装
      * @author 罗雨曦
      * @date 2023/12/12
-     * @version: 1.0
      */
     public void separateMenu(JMenuBar menuBar) {
         menuBar.add(Box.createHorizontalGlue());

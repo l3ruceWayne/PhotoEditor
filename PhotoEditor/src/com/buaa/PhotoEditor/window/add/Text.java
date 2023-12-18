@@ -6,14 +6,10 @@ import com.buaa.PhotoEditor.window.Window;
 import static com.buaa.PhotoEditor.util.MatUtil.copy;
 import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
 import static com.buaa.PhotoEditor.window.Constant.*;
-
+import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 import com.buaa.PhotoEditor.window.custom.CustomColorChooser;
 import com.buaa.PhotoEditor.window.thread.AddTextThread;
-
-import static com.buaa.PhotoEditor.util.MatUtil.copy;
-import static com.buaa.PhotoEditor.util.MatUtil.copyImgArray;
-import static com.buaa.PhotoEditor.window.Constant.*;
 
 import org.opencv.core.Scalar;
 
@@ -21,12 +17,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 
-
-import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /**
  * @author 张旖霜
@@ -82,12 +73,9 @@ public class Text {
 
 
     /**
-     * @param
-     * @return void
      * @Description 创建文字设置的面板
      * @author 张旖霜
      * @date 2023/11/27
-     * @version 1.0
      */
     public void initAddTextDialog() {
         addTextDialog.setSize(280, 200);
@@ -161,13 +149,10 @@ public class Text {
     }
 
     /**
-     * @param
-     * @return void
      * @Description 选好位置（框选区域）后，显示字体设置面板
      * 增加未选择图片弹窗
      * @author 张旖霜, 罗雨曦
      * @date 2023/12/5
-     * @version 2.0
      */
     public void writeTextActionPerformed() {
         //如果未选择图片，弹窗提示并return
@@ -209,15 +194,6 @@ public class Text {
             JOptionPane.showMessageDialog(null, "Select an area to add text!");
         }
     }
-
-    /**
-     * @param:
-     * @return
-     * @Description: 初始化文字设置
-     * @author: 张旖霜
-     * @date: 11/27/2023 12:48 PM
-     * @version: 1.0
-     */
 
     public Scalar getColor() {
         return color;

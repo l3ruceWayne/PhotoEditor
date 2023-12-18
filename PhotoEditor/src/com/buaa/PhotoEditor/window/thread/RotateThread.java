@@ -15,13 +15,12 @@ import static org.opencv.core.Core.flip;
 import static org.opencv.core.Core.transpose;
 
 /**
- * ClassName: RotateThread
- * Package: com.buaa.PhotoEditor.window.thread
- * Description: 实现旋转的多线程，多张图片同时旋转
- * @Author 卢思文
- * @Create 12/9/2023 11:06 AM
- * @Version 1.0
+ * @author 卢思文
+ * @version 1.0
+ * @Description 实现旋转的多线程，多张图片同时旋转
+ * @date 12/9/2023 11:06 AM
  */
+
 public class RotateThread extends Thread {
     public Window window;
     public int i;
@@ -42,15 +41,15 @@ public class RotateThread extends Thread {
             }
         });
     }
+
     /**
-    * @Description: 区域的旋转设置，涉及到布局管理器的调整
-    * @author: 卢思文
-    * @date: 12/11/2023 9:34 PM
-    * @version: 1.0
-    **/
+     * @Description 区域的旋转设置，涉及到布局管理器的调整
+     * @author 卢思文
+     * @date 12/11/2023 9:34 PM
+     */
     private void rotate() {
         if (window.zoomImg == null) {
-            if(i == window.counter){
+            if (i == window.counter) {
                 JOptionPane.showMessageDialog(null, "Please open an image first");
             }
             return;
@@ -104,9 +103,9 @@ public class RotateThread extends Thread {
         int panelHeight = window.panel.getHeight();
         // 如果图片大小超出panel的大小，需要取消布局管理器的权限，自己介入布局管理，否则无法居中
         if (width > panelWidth
-            || height > panelHeight) {
+                || height > panelHeight) {
             window.showImgRegionLabel.setLocation((panelWidth - width) / 2,
-            (panelHeight - height) / 2);
+                    (panelHeight - height) / 2);
             // 没超过，仍使用布局管理器
         } else {
             window.panel.setLayout(window.gridBagLayout);

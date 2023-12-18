@@ -8,10 +8,10 @@ import java.awt.event.KeyEvent;
 
 
 /**
- * @Description: 设置 Animize 滤镜
- * @author: 卢思文
- * @date: 11/26/2023 8:58 PM
- * @version: 1.0
+ * @author 卢思文
+ * @version 1.0
+ * @Description 设置 Animize 滤镜
+ * @date 11/26/2023 8:58 PM
  */
 public class Animize {
     public JMenuItem animizeItem;
@@ -21,6 +21,6 @@ public class Animize {
         this.window = window;
         this.animizeItem = new JMenuItem("Animize");
         this.animizeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
-            InputEvent.CTRL_DOWN_MASK));
+                InputEvent.CTRL_DOWN_MASK));
     }
 }

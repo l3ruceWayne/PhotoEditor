@@ -9,16 +9,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import javax.swing.*;
 
 import com.buaa.PhotoEditor.window.Window;
 
-import com.buaa.PhotoEditor.window.file.Open;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -38,8 +35,7 @@ public abstract class MatUtil extends JFrame {
      * @Description 计算zoom操作后的坐标值
      * @author 卢思文、张旖霜
      * @date 2023/12/1
-     * @version: 1.0
-     **/
+     */
     public static int getValueAfterZoom(Window window, double x, int i) {
         if (i == window.counter) {
             return (int) x;
@@ -55,7 +51,6 @@ public abstract class MatUtil extends JFrame {
      * @Description 将编辑后的图片实时展示
      * @author 卢思文、罗雨曦
      * @date 2023/12/11
-     * @version: 2.0
      */
     public static void show(Mat img, JLabel jLabel) {
         ImageIcon imgIcon = new ImageIcon(bufferedImg(img));
@@ -72,7 +67,6 @@ public abstract class MatUtil extends JFrame {
      * 此方法不能用来处理矢量图片
      * @author 卢思文、罗雨曦
      * @date 2023/12/1
-     * @version: 2.0
      */
     public static BufferedImage bufferedImg(Mat img) {
         int type = (img.channels() > 1) ? BufferedImage.TYPE_3BYTE_BGR :
@@ -91,7 +85,7 @@ public abstract class MatUtil extends JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,
                     "Sorry, not support to open a vector illustration\n" +
-                    "You can open a new photo again");
+                            "You can open a new photo again");
         }
         return bfImg;
     }
@@ -106,7 +100,6 @@ public abstract class MatUtil extends JFrame {
      * @Description 添加小组件
      * @author 卢思文
      * @date 2023/12/1
-     * @version: 1.0
      */
     public static void widget(Mat img, Mat widget, int wx, int wy, int i, Window window) {
         int lx = getValueAfterZoom(window, wx, i);
@@ -248,10 +241,9 @@ public abstract class MatUtil extends JFrame {
     /**
      * @param propertyValue: 当前要使用的property的值
      * @return 以新的数组返回（其中的元素是property的值）
-     * @Description: 为了让栈里保存的是新的数组，而不仅仅是对currentPropertyValue数组的引用
-     * @author: 张旖霜
+     * @Description 为了让栈里保存的是新的数组，而不仅仅是对currentPropertyValue数组的引用
+     * @author 张旖霜
      * @date 2023/11/30
-     * @version: 1.0
      */
     public static int[] copyPropertyValue(int[] propertyValue) {
         int[] newPropertyValue = new int[10];
@@ -265,7 +257,6 @@ public abstract class MatUtil extends JFrame {
      * @Description 为了让栈里保存的是新的数组，而不仅仅是对zoomImg数组的引用
      * @author 张旖霜
      * @date 2023/12/5
-     * @version: 1.0
      */
     public static Mat[] copyImgArray(Mat[] imgArray) {
         Mat[] newImgArray = new Mat[12];
@@ -332,7 +323,6 @@ public abstract class MatUtil extends JFrame {
      * @Description 修复了无法打开中文路径图片的问题
      * @author 卢思文
      * @date 2023/11/26
-     * @version: 1.1
      */
     public static Mat readImg(String url) {
         byte[] data;
@@ -364,7 +354,6 @@ public abstract class MatUtil extends JFrame {
      * @Description 以画笔的颜色、画笔的粗细在mat上画出当前点和上一个点之间的连线
      * @author 卢思文
      * @date 2023/11/29
-     * @version: 1.0
      */
     public static void drawLine(int x1, int y1, int x2, int y2, int[] color, int penSize, Mat mat) {
         Scalar scalarColor = new Scalar(color[0], color[1], color[2]);
@@ -391,7 +380,6 @@ public abstract class MatUtil extends JFrame {
      * @Description bufferedImage类型转换成Mat类型（主要用在writeText）
      * @author 张旖霜
      * @date 2023/11/27
-     * @version: 1.0
      */
     public static Mat bufImgToMat(BufferedImage bufImg) {
         byte[] pixels = ((DataBufferByte) bufImg.getRaster().getDataBuffer())
