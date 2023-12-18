@@ -5,10 +5,10 @@ import com.buaa.PhotoEditor.window.Window;
 import javax.swing.*;
 
 /**
- * @Description 主菜单栏上的一级菜单，整合文件相关操作，下设open save两个功能子菜单
  * @author 罗雨曦、卢思文
+ * @version 1.0
+ * @Description 主菜单栏上的一级菜单，整合文件相关操作，下设open save两个功能子菜单
  * @date 2023/11/27 11:26
- * @version: 1.0
  */
 public class MyFile {
     public JMenu fileMenu;

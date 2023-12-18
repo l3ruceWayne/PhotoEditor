@@ -16,10 +16,10 @@ import javax.swing.*;
 import static com.buaa.PhotoEditor.util.MatUtil.getRect;
 
 /**
- * @Description 滤镜有关的多线程操作
  * @author 卢思文
- * @date 12/9/2023 11:25 AM
  * @version 1.0
+ * @Description 滤镜有关的多线程操作
+ * @date 12/9/2023 11:25 AM
  */
 
 public class FilterThread extends Thread {
@@ -89,14 +89,14 @@ public class FilterThread extends Thread {
         MatUtil.show(window.zoomImg[i], window.showImgRegionLabel);
 
     }
+
     /**
-    * @Description blur滤镜的实现
-    * @author 卢思文
-    * @date 12/11/2023 9:06 PM
-    * @version: 1.0
-    **/
+     * @Description blur滤镜的实现
+     * @author 卢思文
+     * @date 12/11/2023 9:06 PM
+     */
     public void blur() {
-        if (!blur.blurLevelLabel.isVisible()&& !blur.blurLevelTextField.isVisible()) {
+        if (!blur.blurLevelLabel.isVisible() && !blur.blurLevelTextField.isVisible()) {
             blur.blurItemDialog.dispose();
         } else {
             if (i == ORIGINAL_SIZE_COUNTER) {
@@ -106,7 +106,7 @@ public class FilterThread extends Thread {
                 window.nextPropertyValue.clear();
                 // 当前property的值入栈
                 window.lastPropertyValue.push(MatUtil
-                    .copyPropertyValue(window.currentPropertyValue));
+                        .copyPropertyValue(window.currentPropertyValue));
                 // 将当前的window.img压入window.last中，保存上一张图片
                 window.last.push(copyImgArray(window.zoomImg));
                 window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
@@ -135,12 +135,12 @@ public class FilterThread extends Thread {
             }
         }
     }
+
     /**
-    * @Description invert滤镜的实现
-    * @author 卢思文
-    * @date 12/11/2023 9:08 PM
-    * @version: 1.0
-    **/
+     * @Description invert滤镜的实现
+     * @author 卢思文
+     * @date 12/11/2023 9:08 PM
+     */
     public void invert() {
         if (window.zoomImg == null) {
             if (i == window.counter) {
@@ -172,11 +172,10 @@ public class FilterThread extends Thread {
     }
 
     /**
-    * @Description animize(动漫化)滤镜的实现，该滤镜计算量比较大，实现时间比较长
-    * @author 卢思文
-    * @date 12/11/2023 9:09 PM
-    * @version: 1.0
-    **/
+     * @Description animize(动漫化)滤镜的实现，该滤镜计算量比较大，实现时间比较长
+     * @author 卢思文
+     * @date 12/11/2023 9:09 PM
+     */
     public void animize() {
         if (window.zoomImg == null) {
             if (i == window.counter) {
@@ -206,12 +205,12 @@ public class FilterThread extends Thread {
         }
         MatUtil.show(window.zoomImg[i], window.showImgRegionLabel);
     }
+
     /**
-    * @Description focus(聚焦)滤镜的实现，操作前需要选定区域作为焦点
-    * @author 卢思文
-    * @date 12/11/2023 9:10 PM
-    * @version: 1.0
-    **/
+     * @Description focus(聚焦)滤镜的实现，操作前需要选定区域作为焦点
+     * @author 卢思文
+     * @date 12/11/2023 9:10 PM
+     */
     public void focus() {
         if (window.zoomImg == null) {
             if (i == window.counter) {
@@ -244,12 +243,12 @@ public class FilterThread extends Thread {
             JOptionPane.showMessageDialog(null, "Please select a region first");
         }
     }
+
     /**
-    * @Description glitch(故障风格, 例如抖音图标的风格)滤镜的实现
-    * @author 卢思文
-    * @date 12/11/2023 9:10 PM
-    * @version: 1.0
-    **/
+     * @Description glitch(故障风格, 例如抖音图标的风格)滤镜的实现
+     * @author 卢思文
+     * @date 12/11/2023 9:10 PM
+     */
     public void glitch() {
         if (!glitch.offsetLabel.isVisible()
                 && !glitch.offsetValueTextField.isVisible()) {

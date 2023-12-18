@@ -8,10 +8,10 @@ import javax.swing.*;
 import java.awt.event.InputEvent;
 
 /**
- * @Description 主菜单栏上的一级菜单，整合工具类相关操作
  * @author 卢思文
+ * @version 1.0
+ * @Description 主菜单栏上的一级菜单，整合工具类相关操作
  * @date 11/26/2023 8:21 PM
- * @version: 1.0
  */
 public class Tool {
     public Window window;

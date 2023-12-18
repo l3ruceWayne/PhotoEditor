@@ -10,10 +10,10 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 
 /**
- * @Description 选择区域功能
  * @author 张旖霜、卢思文
+ * @version 1.0
+ * @Description 选择区域功能
  * @date 11/27/2023 3:31 PM
- * @version: 1.0
  */
 public class Region {
     public RegionThread[] regionThread;
@@ -57,7 +57,6 @@ public class Region {
      * @Description 初始化regionItem
      * @author 卢思文
      * @date 11/26/2023 8:05 PM
-     * @version: 1.0
      */
     private void initRegionItem(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -77,7 +76,6 @@ public class Region {
      * @Description 执行多线程，监听鼠标状态
      * @author 张旖霜
      * @date 11/27/2023 7:53 PM
-     * @version: 1.0
      */
     public void regionListener() {
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
@@ -89,7 +87,6 @@ public class Region {
      * @Description 取消某图层的region
      * @author 卢思文
      * @date 11/27/2023 7:53 PM
-     * @version: 1.0
      */
     public void removeRegionSelected(int i) {
         window.panel.setLayout(null);
@@ -108,7 +105,6 @@ public class Region {
      * @Description 取消所有图层的region
      * @author 张旖霜
      * @date 11/27/2023 7:53 PM
-     * @version: 1.0
      */
     public void removeRegionSelected() {
         window.panel.setLayout(null);
@@ -122,7 +118,6 @@ public class Region {
      * @Description 恢复选择region前的状态
      * @author 张旖霜
      * @date 11/27/2023 7:53 PM
-     * @version: 1.0
      */
     public void disableListeners() {
         selectRegionItem.setSelected(false);

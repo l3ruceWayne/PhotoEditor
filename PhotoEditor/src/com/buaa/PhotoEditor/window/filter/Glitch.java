@@ -9,10 +9,10 @@ import java.awt.event.KeyEvent;
 
 
 /**
- * @Description 设置 Glitch 效果
  * @author 卢思文
+ * @version 1.0
+ * @Description 设置 Glitch 效果
  * @date 11/26/2023 8:58 PM
- * @version: 1.0
  */
 public class Glitch {
     public int waveLength;
@@ -40,7 +40,6 @@ public class Glitch {
      * @Description 点击glitch后触发，打开glitch设置面板
      * @author 卢思文
      * @date 12/12/2023 10:28 AM
-     * @version: 1.0
      */
     private void glitch() {
         if (window.zoomImg == null) {
@@ -55,7 +54,6 @@ public class Glitch {
      * @Description 初始化 glitchItem以及其设置面板
      * @author 卢思文
      * @date 12/12/2023 10:29 AM
-     * @version: 1.0
      */
     private void initGlitchItem() {
         glitchItemDialog = new JDialog();
@@ -85,7 +83,6 @@ public class Glitch {
      * @Description 设置面板的水平和垂直布局
      * @author 卢思文
      * @date 12/12/2023 10:30 AM
-     * @version: 1.0
      */
     private void setLayout() {
         GroupLayout glitchDialogLayout = new GroupLayout(

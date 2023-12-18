@@ -8,10 +8,10 @@ import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 
 /**
- * @Description 实现粘贴功能的Paste类
  * @author 卢思文
- * @date 2023/11/26
  * @version 1.0
+ * @Description 实现粘贴功能的Paste类
+ * @date 2023/11/26
  */
 public class Paste {
     public PasteThread[] pasteThread;

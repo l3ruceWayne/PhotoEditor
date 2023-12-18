@@ -14,8 +14,8 @@ import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
 * @Description 粘贴多线程
 * @author 张旖霜
 * @date 12/11/2023 9:27 PM
-* @version: 1.0
-**/
+* @version 1.0
+*/
 public class PasteThread extends Thread {
     public Window window;
     public int i;
@@ -33,8 +33,8 @@ public class PasteThread extends Thread {
              * @Description 粘贴状态下，鼠标点击会进行粘贴
              * @author 卢思文
              * @date 11/26/2023 9:14 PM
-             * @version: 1.0
-             **/
+             * @version 1.0
+             */
 
             public void mouseClicked(MouseEvent e) {
                 if (window.zoomImg == null) {
@@ -77,8 +77,8 @@ public class PasteThread extends Thread {
             * @Description 鼠标移动的过程中，显示粘贴框
             * @author 卢思文
             * @date 12/11/2023 9:27 PM
-            * @version: 1.0
-            **/
+            * @version 1.0
+            */
             @Override
             public void mouseMoved(MouseEvent e) {
                 if (window.zoomImg == null) {

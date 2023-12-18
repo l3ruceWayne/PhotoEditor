@@ -26,7 +26,6 @@ public class CustomColorChooser {
      * @Description 弹框
      * @author 卢思文
      * @date 2023/12/11
-     * @version: 1.0
      */
     public void showDialog() {
         colorChooser = new JColorChooser();

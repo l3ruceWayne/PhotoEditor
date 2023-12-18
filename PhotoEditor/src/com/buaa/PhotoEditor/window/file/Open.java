@@ -13,9 +13,9 @@ import java.nio.file.Path;
 
 /**
  * @author 罗雨曦、卢思文
+ * @version 1.0
  * @Description 打开图片
  * @date 2023/11/27 14:08
- * @version: 1.0
  */
 public class Open {
     public JMenuItem openItem;
@@ -36,7 +36,6 @@ public class Open {
      * 修复方法：改写 MatUtil.readImg 方法，先用其他数据结构读取图片，再转化成Mat
      * @author 卢思文、罗雨曦
      * @date 11/26/2023 8:49 PM
-     * @version: 2.0
      */
     private void selectImg() {
         JFileChooser fileChooser = new JFileChooser();
@@ -85,7 +84,6 @@ public class Open {
      * @Description 若是JPEG或JPG或PNG图片，返回true，代表可处理；反之返回false，代表不可处理
      * @author 罗雨曦 张旖霜
      * @date 2023/12/4 21:26
-     * @version: 1.3
      */
     private static boolean checkImageFormat(Path imagePath) {
         String fileName = imagePath.getFileName().toString();
@@ -96,7 +94,6 @@ public class Open {
      * @Description 尺寸数组的初始化及放大缩小图片的初始化，计算图片的自适应大小，找到图片缩放的大小比例
      * @author 卢思文
      * @date 12/12/2023 9:23 AM
-     * @version: 3.0
      */
     private void initImgSize() {
         window.size = new int[NUM_FOR_NEW][2];

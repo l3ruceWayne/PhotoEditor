@@ -12,10 +12,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * @Description 缩小图片
  * @author 张旖霜 卢思文
+ * @version 1.0
+ * @Description 缩小图片
  * @date 12/12/2023 11:58 AM
- * @version: 1.0
  */
 public class ZoomOut {
     public Window window;
@@ -36,7 +36,6 @@ public class ZoomOut {
      * @Description 无损像素缩小图片（换上一个缩小比例的图）
      * @author 卢思文
      * @date 12/1/2023 3:34 PM
-     * @version: 3.0
      */
     public void zoomOut() {
         // 如果未选择图片，弹窗提示并return
@@ -44,7 +43,7 @@ public class ZoomOut {
             JOptionPane.showMessageDialog(null, "Please open an image first");
             return;
         }
-        if(window.add.getWidget().widgetIcon != null){
+        if (window.add.getWidget().widgetIcon != null) {
             JOptionPane.showMessageDialog(null,
                     "Please handle widget first");
             return;

@@ -153,14 +153,14 @@ public class Window extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if(saveFlag){
+                if (saveFlag) {
                     Window.this.dispose();
                     return;
                 }
                 int confirm = JOptionPane.showConfirmDialog(Window.this,
                         "You haven't save your edit. Are you sure to close?",
                         "Close Confirmation", JOptionPane.YES_NO_OPTION);
-                if(confirm == JOptionPane.YES_OPTION){
+                if (confirm == JOptionPane.YES_OPTION) {
                     Window.this.dispose();
                 }
             }
@@ -225,7 +225,6 @@ public class Window extends JFrame {
      * @Description ESC按键的功能设置
      * @author 卢思文
      * @date 2023/11/26
-     * @version: 1.0
      */
     public void keyPress(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -289,7 +288,6 @@ public class Window extends JFrame {
      * @Description 因为会多次复用，故将插入自适应块和垂直分隔线进行简单封装
      * @author 罗雨曦
      * @date 2023/12/12
-     * @version: 1.0
      */
     public void separateMenu(JMenuBar menuBar) {
         menuBar.add(Box.createHorizontalGlue());

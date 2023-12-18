@@ -24,8 +24,7 @@ public class Redo {
      * @Description 构造方法——生成子菜单项并设置快捷键
      * @author 罗雨曦、张旖霜
      * @date 2023/11/27 14:06
-     * @version: 1.0
-     **/
+     */
     public Redo(Window window) {
         this.redoItem = new JMenuItem("Redo");
         this.redoThread = new RedoThread[NUM_FOR_NEW];
