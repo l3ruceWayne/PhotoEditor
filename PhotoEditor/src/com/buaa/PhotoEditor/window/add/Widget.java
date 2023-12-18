@@ -55,7 +55,7 @@ public class Widget {
      * @Description 增加小组件
      * @author 张旖霜
      * @date 2023/12/2
-     * @version: 1.0
+     * @version 1.0
      */
     public void addWidget(ActionEvent evt) {
         //如果未选择图片，弹窗提示并return
@@ -198,7 +198,7 @@ public class Widget {
      * @Description 判断光标是否在widget的右下角（这里是改变widget大小的功能触发区）
      * @author 卢思文
      * @date 2023/11/27
-     * @version: 1.0
+     * @version 1.0
      */
     public static boolean isInResizeArea(MouseEvent e, JLabel widgetLabel) {
         int rx = widgetLabel.getWidth();

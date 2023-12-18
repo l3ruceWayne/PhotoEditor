@@ -226,7 +226,7 @@ public class Window extends JFrame {
      * @Description ESC按键的功能设置
      * @author 卢思文
      * @date 2023/11/26
-     * @version: 1.0
+     * @version 1.0
      */
     public void keyPress(KeyEvent evt) {
         if (zoomImg == null) {
@@ -286,7 +286,7 @@ public class Window extends JFrame {
      * @Description 因为会多次复用，故将插入自适应块和垂直分隔线进行简单封装
      * @author 罗雨曦
      * @date 2023/12/12
-     * @version: 1.0
+     * @version 1.0
      */
     public void separateMenu(JMenuBar menuBar) {
         menuBar.add(Box.createHorizontalGlue());

@@ -7,10 +7,10 @@ import java.awt.event.InputEvent;
 
 
 /**
- * @Description: 设置 Animize 滤镜
- * @author: 卢思文
- * @date: 11/26/2023 8:58 PM
- * @version: 1.0
+ * @Description 设置 Animize 滤镜
+ * @author 卢思文
+ * @date 11/26/2023 8:58 PM
+ * @version 1.0
  */
 public class Animize {
     public JMenuItem animizeItem;

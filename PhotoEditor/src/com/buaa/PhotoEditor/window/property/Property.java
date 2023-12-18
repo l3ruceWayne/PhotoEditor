@@ -15,11 +15,11 @@ import java.awt.event.MouseEvent;
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /**
- * @Description: 主菜单栏上的一级菜单，整合参数设置相关操作，下设ContrastAndBrightness Graininess MySize Saturation四个功能子菜单； 目前面板布局存在问题，后需改进
+ * @Description 主菜单栏上的一级菜单，整合参数设置相关操作，下设ContrastAndBrightness Graininess MySize Saturation四个功能子菜单； 目前面板布局存在问题，后需改进
  * 将updateProperty方法整合到了此类里面
  * @author 罗雨曦、卢思文
  * @date 2023/11/27 14:02
- * @version: 1.0
+ * @version 1.0
  **/
 public class Property {
     public JMenu propertyMenu;
@@ -29,11 +29,10 @@ public class Property {
 
     /**
      * @param window 当前窗口
-     * @return null
-     * @Description:构造方法——生成参数设置面板
-     * @author: 罗雨曦
-     * @date: 2023/11/27 14:03
-     * @version: 1.0
+     * @Description 构造方法——生成参数设置面板
+     * @author 罗雨曦
+     * @date 2023/11/27 14:03
+     * @version 1.0
      **/
     public Property(Window window) {
         this.window = window;
@@ -53,11 +52,10 @@ public class Property {
     }
 
     /**
-     * @return void
-     * @Description:设置面板界面布局
-     * @author: 罗雨曦，卢思文
-     * @date: 2023/11/27 14:03
-     * @version: 2.0
+     * @Description 设置面板界面布局
+     * @author 罗雨曦，卢思文
+     * @date 2023/11/27 14:03
+     * @version 2.0
      **/
     public void initLayout() {
         JLabel widthLabel = new JLabel("Width:");
@@ -111,11 +109,10 @@ public class Property {
             .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
     }
     /**
-     * @return void
-     * @Description:点击触发，完成面板有关参数的初始化设置 触发后，把当前修改的新值保存到currentPropertyValue中（方便undo和redo的操作）
-     * @author: 罗雨曦 张旖霜
-     * @date: 2023/11/27 14:03
-     * @version: 1.0
+     * @Description 点击触发，完成面板有关参数的初始化设置 触发后，把当前修改的新值保存到currentPropertyValue中（方便undo和redo的操作）
+     * @author 罗雨曦 张旖霜
+     * @date 2023/11/27 14:03
+     * @version 1.0
      **/
     public void propertyMouseClicked() {
         // 如果未选择图片，弹窗提示并return
@@ -138,10 +135,10 @@ public class Property {
         window.tool.getRegion().removeRegionSelected();
     }
     /**
-    * @Description: 更新property面板显示的图片参数
-    * @author: 罗雨曦
-    * @date: 12/11/2023 8:45 PM
-    * @version: 1.0
+    * @Description 更新property面板显示的图片参数
+    * @author 罗雨曦
+    * @date 12/11/2023 8:45 PM
+    * @version 1.0
     **/
     public void updateProperty() {
         getMySize().txtWidth.setText(window.size[ORIGINAL_SIZE_COUNTER][0] + "");

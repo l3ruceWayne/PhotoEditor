@@ -39,13 +39,10 @@ import java.net.SocketTimeoutException;
 import java.nio.channels.NonReadableChannelException;
 
 /**
- * ClassName: AddTextThread
- * Package: com.buaa.PhotoEditor.window.thread
- * Description: 添加文本的多线程操作，实现同时在多张图片上添加文本
- *
- * @Author 卢思文
- * @Create 12/9/2023 5:43 PM
- * @Version 1.5
+ * @Description 添加文本的多线程操作，实现同时在多张图片上添加文本
+ * @author 卢思文
+ * @date 12/9/2023 5:43 PM
+ * @version 1.5
  */
 public class AddTextThread extends Thread {
     public Window window;
@@ -77,11 +74,11 @@ public class AddTextThread extends Thread {
             }
             writeText(i);
         });
-        /*
-         * @Description:设置字体大小，设置时文本同时进行显示
-         * @author: 张旖霜
-         * @date: 11/27/2023 12:51 PM
-         * @version: 1.0
+        /**
+         * @Description 设置字体大小，设置时文本同时进行显示
+         * @author 张旖霜
+         * @date 11/27/2023 12:51 PM
+         * @version 1.0
          */
         text.addTextSpinner.addChangeListener(evt -> {
             if ((int) text.addTextSpinner.getValue() > 0) {
@@ -99,11 +96,11 @@ public class AddTextThread extends Thread {
         text.textField.getDocument()
             .addDocumentListener(new DocumentListener() {
                 /**
-                * @Description: 插入文本时，文本同步显示
-                * @author: 卢思文、张旖霜
-                * @date: 12/11/2023 8:52 PM
-                * @version: 1.2
-                **/
+                * @Description 插入文本时，文本同步显示
+                * @author 卢思文、张旖霜
+                * @date 12/11/2023 8:52 PM
+                * @version 1.2
+                */
                 @Override
                 public void insertUpdate(DocumentEvent e) {
                     text.setStr(text.textField.getText());
@@ -111,11 +108,11 @@ public class AddTextThread extends Thread {
                     writeText(i);
                 }
                 /**
-                * @Description: 删除文本时，文本同步显示
-                * @author: 卢思文、张旖霜
-                * @date: 12/11/2023 8:52 PM
-                * @version: 1.2
-                **/
+                * @Description 删除文本时，文本同步显示
+                * @author 卢思文、张旖霜
+                * @date 12/11/2023 8:52 PM
+                * @version 1.2
+                */
                 @Override
                 public void removeUpdate(DocumentEvent e) {
                     text.setStr(text.textField.getText());
@@ -123,11 +120,11 @@ public class AddTextThread extends Thread {
                     writeText(i);
                 }
                 /**
-                * @Description: 改变文本，文本同步显示
-                * @author: 卢思文、张旖霜
-                * @date: 12/11/2023 8:53 PM
-                * @version: 1.2
-                **/
+                * @Description 改变文本，文本同步显示
+                * @author 卢思文、张旖霜
+                * @date 12/11/2023 8:53 PM
+                * @version 1.2
+                */
                 @Override
                 public void changedUpdate(DocumentEvent e) {
                     text.setStr(text.textField.getText());
@@ -138,11 +135,11 @@ public class AddTextThread extends Thread {
     }
 
     /**
-     * @param: i ： 是有关于zoomImg[]的下标索引
-     * @Description:根据字体的设置，在图片上写入文字
-     * @author: 张旖霜、卢思文
-     * @date: 11/27/2023 12:52 PM
-     * @version: 2.0
+     * @param i 是有关于zoomImg[]的下标索引
+     * @Description 根据字体的设置，在图片上写入文字
+     * @author 张旖霜、卢思文
+     * @date 11/27/2023 12:52 PM
+     * @version 2.0
      */
     public void writeText(int i) {
         int x = window.tool.getRegion().selectedRegionLabel[i].getX();
@@ -162,10 +159,10 @@ public class AddTextThread extends Thread {
         MatUtil.show(window.zoomImg[i], window.showImgRegionLabel);
     }
     /**
-    * @Description: 获取改变后的字号大小
-    * @author: 张旖霜
-    * @date: 11/27/2023 12:52 PM
-    * @version: 1.0
+    * @Description 获取改变后的字号大小
+    * @author 张旖霜
+    * @date 11/27/2023 12:52 PM
+    * @version 1.0
     **/
     public void textScaleChanged() {
         text.setScale((int) text.addTextSpinner.getValue());

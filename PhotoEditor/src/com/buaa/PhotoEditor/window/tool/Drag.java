@@ -9,10 +9,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 
 /**
- * @Description: 拖拽图片，实现方式是根据鼠标拖动的位置重新设置图片的位置
- * @author: 张旖霜
- * @date: 11/27/2023 12:57 PM
- * @version: 2.0
+ * @Description 拖拽图片，实现方式是根据鼠标拖动的位置重新设置图片的位置
+ * @author 张旖霜
+ * @date 11/27/2023 12:57 PM
+ * @version 2.0
  */
 public class Drag {
     private Window window;
@@ -36,10 +36,10 @@ public class Drag {
 
     /**
      * @param e 事件
-     * @Description: 初始化 dragItem，若已选择，开始监听滑鼠
-     * @author: 张旖霜
-     * @date: 11/27/2023 12:57 PM
-     * @version: 2.0
+     * @Description 初始化 dragItem，若已选择，开始监听滑鼠
+     * @author 张旖霜
+     * @date 11/27/2023 12:57 PM
+     * @version 2.0
      */
     private void initDragItem(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -63,10 +63,10 @@ public class Drag {
 
             /**
              * @param e 鼠标事件
-             * @Description: 获取鼠标位置
-             * @author: 张旖霜
-             * @date: 11/27/2023 12:57 PM
-             * @version: 2.0
+             * @Description 获取鼠标位置
+             * @author 张旖霜
+             * @date 11/27/2023 12:57 PM
+             * @version 2.0
              */
             public void mousePressed(MouseEvent e) {
                 ex = e.getX();
@@ -75,10 +75,10 @@ public class Drag {
 
             /**
              * @param e 鼠标事件
-             * @Description: 根据鼠标位置移动图片，实现拖动图片操作
-             * @author: 张旖霜
-             * @date: 11/27/2023 12:57 PM
-             * @version: 2.0
+             * @Description 根据鼠标位置移动图片，实现拖动图片操作
+             * @author 张旖霜
+             * @date 11/27/2023 12:57 PM
+             * @version 2.0
              */
             public void mouseDragged(MouseEvent e) {
                 if (dragItem.isSelected()) {

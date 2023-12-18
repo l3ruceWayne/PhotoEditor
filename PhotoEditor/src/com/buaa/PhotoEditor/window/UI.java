@@ -6,7 +6,7 @@ import javax.swing.*;
  * @author 罗雨曦
  * @Description 更改编辑器的UI风格
  * @date 2023/12/5
- * @version: 1.0
+ * @version 1.0
  */
 public class UI {
     public JMenu uiMenu;
@@ -17,7 +17,7 @@ public class UI {
      * @Description 构造函数，改变UI种类
      * @author 罗雨曦
      * @date 2023/12/5
-     * @version: 1.0
+     * @version 1.0
      */
     public UI(Window window) {
         this.window = window;

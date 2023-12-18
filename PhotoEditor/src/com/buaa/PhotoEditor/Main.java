@@ -6,10 +6,10 @@ import org.opencv.core.Core;
 import javax.swing.*;
 
 /**
- * @Description:
- * @author:
- * @date: 12/11/2023 10:18 PM
- * @version: 1.0
+ * @Description
+ * @author
+ * @date 12/11/2023 10:18 PM
+ * @version 1.0
  */
 public class Main {
 

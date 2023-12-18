@@ -15,10 +15,10 @@ import javax.swing.event.ChangeListener;
 
 
 /**
- * @Description: 画笔（增添选择画笔颜色/选择画笔粗细/选择画笔后光标变成画笔样式）
- * @author: 卢思文
- * @date: 11/26/2023 4:14 PM
- * @version: 1.0
+ * @Description 画笔（增添选择画笔颜色/选择画笔粗细/选择画笔后光标变成画笔样式）
+ * @author 卢思文
+ * @date 11/26/2023 4:14 PM
+ * @version 1.0
  */
 public class Pen {
     public JCheckBoxMenuItem penItem;
@@ -107,10 +107,10 @@ public class Pen {
     }
 
     /**
-     * @Description: 初始化 penColorPanel
-     * @author: 卢思文
-     * @date: 11/26/2023 8:05 PM
-     * @version: 1.0
+     * @Description 初始化 penColorPanel
+     * @author 卢思文
+     * @date 11/26/2023 8:05 PM
+     * @version 1.0
      */
     private void initPenColorPanel() {
         // 颜色选框（panel）美化:内嵌加白边
@@ -122,10 +122,10 @@ public class Pen {
     }
 
     /**
-     * @Description: 画笔尺寸初始化
-     * @author: 卢思文
-     * @date: 11/26/2023 8:19 PM
-     * @version: 1.0
+     * @Description 画笔尺寸初始化
+     * @author 卢思文
+     * @date 11/26/2023 8:19 PM
+     * @version 1.0
      */
     public void initPenSize() {
         penSize = new int[NUM_FOR_NEW];
@@ -146,10 +146,10 @@ public class Pen {
     }
 
     /**
-     * @Description: 根据用户设置，更新画笔的大小
-     * @author: 卢思文
-     * @date: 11/26/2023 8:19 PM
-     * @version: 1.0
+     * @Description 根据用户设置，更新画笔的大小
+     * @author 卢思文
+     * @date 11/26/2023 8:19 PM
+     * @version 1.0
      */
     private void setPenSize() {
         // 如果未选择图片，弹窗提示并使数值不可编辑
@@ -174,10 +174,10 @@ public class Pen {
     }
 
     /**
-     * @Description: 执行多线程，监听鼠标状态
-     * @author: 张旖霜
-     * @date: 11/27/2023 7:53 PM
-     * @version: 1.0
+     * @Description 执行多线程，监听鼠标状态
+     * @author 张旖霜
+     * @date 11/27/2023 7:53 PM
+     * @version 1.0
      */
     public void penListener() {
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
@@ -194,10 +194,10 @@ public class Pen {
 
 
     /**
-     * @Description: 选择画笔颜色
-     * @author: 卢思文
-     * @date: 11/26/2023 8:09 PM
-     * @version: 1.0
+     * @Description 选择画笔颜色
+     * @author 卢思文
+     * @date 11/26/2023 8:09 PM
+     * @version 1.0
      */
     public void selectPenColor() {
         // 如果未选择图片，弹窗提示并return

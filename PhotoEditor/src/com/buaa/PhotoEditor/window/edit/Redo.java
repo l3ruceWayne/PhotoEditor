@@ -25,11 +25,10 @@ public class Redo {
     public RedoThread[] redoThread;
     /**
      * @param window 当前窗口
-     * @return null
-     * @Description:构造方法——生成子菜单项并设置快捷键
-     * @author: 罗雨曦、张旖霜
-     * @date: 2023/11/27 14:06
-     * @version: 1.0
+     * @Description 构造方法——生成子菜单项并设置快捷键
+     * @author 罗雨曦、张旖霜
+     * @date 2023/11/27 14:06
+     * @version 1.0
      **/
     public Redo(Window window) {
         redoItem = new JMenuItem("Redo");

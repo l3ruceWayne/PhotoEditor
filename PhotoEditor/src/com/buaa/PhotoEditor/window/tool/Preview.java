@@ -11,10 +11,10 @@ import java.awt.event.MouseEvent;
 import static com.buaa.PhotoEditor.window.Constant.ORIGINAL_SIZE_COUNTER;
 
 /**
- * @Description: 查看编辑成果，长按preview按钮显示图片原本大小的效果，松开恢复
- * @author: 张旖霜
- * @date: 12/9/2023 9:59 AM
- * @version: 3.0
+ * @Description 查看编辑成果，长按preview按钮显示图片原本大小的效果，松开恢复
+ * @author 张旖霜
+ * @date 12/9/2023 9:59 AM
+ * @version 3.0
  */
 public class Preview {
     public Window window;
@@ -57,10 +57,10 @@ public class Preview {
     }
 
     /**
-     * @Description: 长按显示原图大小编辑成果
-     * @author: 张旖霜
-     * @date: 12/9/2023 10:00 AM
-     * @version: 3.0
+     * @Description 长按显示原图大小编辑成果
+     * @author 张旖霜
+     * @date 12/9/2023 10:00 AM
+     * @version 3.0
      */
     public void showOriginalImg() {
         for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
@@ -76,10 +76,10 @@ public class Preview {
     }
 
     /**
-     * @Description: 松开显示counter大小的图片（恢复）
-     * @author: 张旖霜
-     * @date: 12/9/2023 10:00 AM
-     * @version: 3.0
+     * @Description 松开显示counter大小的图片（恢复）
+     * @author 张旖霜
+     * @date 12/9/2023 10:00 AM
+     * @version 3.0
      */
     public void showZoomImg() {
         int counter = window.counter;

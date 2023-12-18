@@ -15,12 +15,12 @@ import java.awt.event.ActionListener;
 import static com.buaa.PhotoEditor.window.Constant.*;
 
 /**
- * @Description:实现了redo的多线程执行 实现了redo originalImg的操作
+ * @Description 实现了redo的多线程执行 实现了redo originalImg的操作
  * 将栈修改成保存zoomImg数组，Redo操作是恢复每一张图片的操作，把数组中的图片都换成redo后的图（next栈顶的图）
  * 因为cut后，原图大小也不一样了，所以redo后，就要恢复原图cut前的originalImg大小（存在nextOriginalImg的栈中）
- * @author: 张旖霜
- * @date: 12/5/2023 9:36 PM
- * @version: 1.0
+ * @author 张旖霜
+ * @date 12/5/2023 9:36 PM
+ * @version 1.0
  */
 public class RedoThread extends Thread {
     public Window window;
@@ -40,13 +40,12 @@ public class RedoThread extends Thread {
         redoItem.addActionListener(new ActionListener() {
             /**
              * @param e 触发操作
-             * @return void
-             * @Description:利用栈操作实现重做操作
+             * @Description 利用栈操作实现重做操作
              * 实现了property值的redo操作
-             * @author: 罗雨曦 张旖霜
-             * @date: 2023/11/27 14:05
-             * @version: 1.0
-             **/
+             * @author 罗雨曦 张旖霜
+             * @date 2023/11/27 14:05
+             * @version 1.0
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (window.zoomImg == null) {

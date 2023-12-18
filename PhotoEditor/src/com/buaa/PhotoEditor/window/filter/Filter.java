@@ -9,10 +9,10 @@ import com.buaa.PhotoEditor.window.thread.FilterThread;
 import javax.swing.*;
 
 /**
- * @Description: 滤镜类，只需要在Window类里面new Filter(),即可实现所有滤镜相关内容初始化
- * @author: 卢思文
- * @date: 11/26/2023 8:58 PM
- * @version: 3.0
+ * @Description 滤镜类，只需要在Window类里面new Filter(),即可实现所有滤镜相关内容初始化
+ * @author 卢思文
+ * @date 11/26/2023 8:58 PM
+ * @version 3.0
  */
 public class Filter {
     public JMenu filterMenu;

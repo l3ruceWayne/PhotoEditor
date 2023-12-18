@@ -5,10 +5,10 @@ import com.buaa.PhotoEditor.window.Window;
 import javax.swing.*;
 
 /**
- * @Description: 设置 Focus 效果
- * @author: 卢思文
- * @date: 11/26/2023 8:58 PM
- * @version: 1.0
+ * @Description 设置 Focus 效果
+ * @author 卢思文
+ * @date 11/26/2023 8:58 PM
+ * @version 1.0
  */
 public class Focus {
     public JMenuItem focusItem;
