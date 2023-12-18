@@ -65,27 +65,27 @@ public class Property {
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
         layout.setHorizontalGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(sizeLabel)
-                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(100, Short.MAX_VALUE)
-                                .addComponent(widthLabel)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(mySize.txtWidth, GroupLayout.PREFERRED_SIZE,
-                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(heightLabel)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(mySize.txtHeight, GroupLayout.PREFERRED_SIZE,
-                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(100, Short.MAX_VALUE))
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(resizeButton)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(sizeLabel)
+            .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addContainerGap(100, Short.MAX_VALUE)
+            .addComponent(widthLabel)
+            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(MySize.txtWidth, GroupLayout.PREFERRED_SIZE,
+                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addGap(18, 18, 18)
+            .addComponent(heightLabel)
+            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(MySize.txtHeight, GroupLayout.PREFERRED_SIZE,
+                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addContainerGap(100, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addComponent(resizeButton)
+            .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         layout.setVerticalGroup(layout.createSequentialGroup()
@@ -125,8 +125,8 @@ public class Property {
         propertyMenuDialog.setVisible(true);
         propertyMenuDialog.setResizable(true);
         // 更新property现在的值
-        window.currentPropertyValue[4] = Integer.parseInt(mySize.txtWidth.getText());
-        window.currentPropertyValue[5] = Integer.parseInt(mySize.txtHeight.getText());
+        window.currentPropertyValue[4] = Integer.parseInt(MySize.txtWidth.getText());
+        window.currentPropertyValue[5] = Integer.parseInt(MySize.txtHeight.getText());
         window.tool.getRegion().removeRegionSelected();
     }
 
@@ -136,8 +136,8 @@ public class Property {
      * @date 12/11/2023 8:45 PM
      */
     public void updateProperty() {
-        getMySize().txtWidth.setText(window.size[ORIGINAL_SIZE_COUNTER][0] + "");
-        getMySize().txtHeight.setText(window.size[ORIGINAL_SIZE_COUNTER][1] + "");
+        MySize.txtWidth.setText(window.size[ORIGINAL_SIZE_COUNTER][0] + "");
+        MySize.txtHeight.setText(window.size[ORIGINAL_SIZE_COUNTER][1] + "");
         getMySize().sizeLabel.setText("Size: "
                 + window.size[ORIGINAL_SIZE_COUNTER][0] + "x"
                 + window.size[ORIGINAL_SIZE_COUNTER][1]);

@@ -54,6 +54,8 @@ public class Drag {
                 dragListener();
                 flag = true;
             }
+        }else{
+            window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 

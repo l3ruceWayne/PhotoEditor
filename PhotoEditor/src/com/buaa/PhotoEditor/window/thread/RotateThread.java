@@ -2,7 +2,9 @@ package com.buaa.PhotoEditor.window.thread;
 
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
+import com.buaa.PhotoEditor.window.property.MySize;
 
+import static com.buaa.PhotoEditor.window.Constant.*;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -79,6 +81,10 @@ public class RotateThread extends Thread {
         int temp = window.size[i][0];
         window.size[i][0] = window.size[i][1];
         window.size[i][1] = temp;
+        if(i == ORIGINAL_SIZE_COUNTER){
+            MySize.txtWidth.setText(window.size[i][0] + "");
+            MySize.txtHeight.setText(window.size[i][1] + "");
+        }
         // 原图也需要做同样的处理
         transpose(window.originalZoomImg[i], window.originalZoomImg[i]);
         flip(window.originalZoomImg[i], window.originalZoomImg[i], 1);

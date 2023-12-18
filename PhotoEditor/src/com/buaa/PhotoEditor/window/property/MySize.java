@@ -18,9 +18,9 @@ import javax.swing.*;
  * @date 2023/11/27 14:00
  */
 public class MySize {
-    public javax.swing.JTextField txtHeight;
-    public javax.swing.JTextField txtWidth;
-    public javax.swing.JLabel sizeLabel;
+    public static JTextField txtHeight;
+    public static JTextField txtWidth;
+    public JLabel sizeLabel;
     private Window window;
 
     /**
@@ -51,8 +51,8 @@ public class MySize {
             window.last.push(copyImgArray(window.zoomImg));
             window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
 
-            int newWidth = Integer.parseInt(window.property.getMySize().txtWidth.getText());
-            int newHeight = Integer.parseInt(window.property.getMySize().txtHeight.getText());
+            int newWidth = Integer.parseInt(txtWidth.getText());
+            int newHeight = Integer.parseInt(txtHeight.getText());
 
             window.size[ORIGINAL_SIZE_COUNTER][0] = newWidth;
             window.size[ORIGINAL_SIZE_COUNTER][1] = newHeight;

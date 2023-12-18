@@ -67,6 +67,7 @@ public class UndoThread extends Thread {
 //                window.showImgRegionLabel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 if (!window.last.isEmpty()) {
                     if (i == ORIGINAL_SIZE_COUNTER) {
+                        window.saveFlag = false;
                         window.next.push(copyImgArray(window.zoomImg));
                         window.nextOriginalImg.push(copyImgArray(window.originalZoomImg));
                         window.nextPropertyValue.push(MatUtil.copyPropertyValue(window.currentPropertyValue));

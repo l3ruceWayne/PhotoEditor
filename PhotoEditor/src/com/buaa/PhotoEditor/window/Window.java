@@ -3,7 +3,7 @@ package com.buaa.PhotoEditor.window;
 
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 import static com.buaa.PhotoEditor.window.Constant.*;
-
+import static com.buaa.PhotoEditor.window.add.Widget.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -12,6 +12,7 @@ import java.util.Stack;
 import javax.swing.*;
 
 import com.buaa.PhotoEditor.util.MatUtil;
+import com.buaa.PhotoEditor.window.add.Widget;
 import com.buaa.PhotoEditor.window.edit.Edit;
 import com.buaa.PhotoEditor.window.file.Save;
 import com.buaa.PhotoEditor.window.file.MyFile;
@@ -119,10 +120,12 @@ public class Window extends JFrame {
         nextPropertyValue = new Stack<>();
         currentPropertyValue = new int[10];
         this.setTitle(title);
-        addKeyListener(new KeyAdapter() {
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             @Override
-            public void keyPressed(KeyEvent evt) {
-                keyPress(evt);
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                keyPress(e);
+                System.out.println("test");
+                return false;
             }
         });
     }
@@ -222,19 +225,20 @@ public class Window extends JFrame {
 
     /**
      * @param evt 键盘事件
-     * @Description ESC按键的功能设置
+     * @Description ESC按键的功能设置, Enter按键的功能设置
      * @author 卢思文
      * @date 2023/11/26
      */
     public void keyPress(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             if (zoomImg == null) {
-                JOptionPane.showMessageDialog(null, "Please open an image first");
                 return;
             }
             add.getWidget().widgetIcon = null;
-            if (tool.getRegion().selectRegionItem.isSelected()) {
-                tool.getRegion().removeRegionSelected();
+            if(tool.getRegion().selectRegionItem.isSelected()){
+                for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
+                    tool.getRegion().removeRegionSelected(i);
+                }
             }
             if (add.getWidget().selectedWidgetLabel != null) {
                 add.getWidget().removeWidget();
@@ -248,7 +252,6 @@ public class Window extends JFrame {
         }
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             if (zoomImg == null) {
-                JOptionPane.showMessageDialog(null, "Please open an image first");
                 return;
             }
             if (add.getWidget().widgetIcon == null) {
@@ -261,6 +264,13 @@ public class Window extends JFrame {
             last.push(copyImgArray(zoomImg));
             lastOriginalImg.push(copyImgArray(originalZoomImg));
             flagForWidget = true;
+            // 处理放大缩小后的小组件，以便可以保存到图片上去
+            String newWidgetPath = "resources/newWidget." + widgetFormat;
+            resizeImage(Widget.widgetPath, newWidgetPath,
+                    add.getWidget().widgetLabel.getWidth(),
+                    add.getWidget().widgetLabel.getHeight(),
+                    Widget.widgetFormat);
+            add.getWidget().widgetLabel.setIcon(new ImageIcon(newWidgetPath));
             for (int i = 0; i <= ORIGINAL_SIZE_COUNTER; i++) {
                 int x = (int) (add.getWidget().widgetLabel.getX() - ((double) panel.getWidth() - showImgRegionLabel.getWidth()) / 2);
                 int y = (int) (add.getWidget().widgetLabel.getY() - ((double) panel.getHeight() - showImgRegionLabel.getHeight()) / 2);
@@ -293,4 +303,5 @@ public class Window extends JFrame {
         menuBar.add(Box.createHorizontalGlue());
         menuBar.add(new JSeparator(SwingConstants.VERTICAL));
     }
+
 }

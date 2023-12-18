@@ -93,8 +93,8 @@ public class Pen {
         if (e.getStateChange() == ItemEvent.SELECTED) {
             window.tool.getRegion().removeRegionSelected();
             window.tool.getEraser().eraserItem.setSelected(false);
-            window.showImgRegionLabel.setCursor(penCursor);
             window.tool.getDrag().dragItem.setSelected(false);
+            window.showImgRegionLabel.setCursor(penCursor);
             if (!flag) {
                 penListener();
                 flag = true;
