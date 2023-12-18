@@ -124,7 +124,6 @@ public class Window extends JFrame {
             @Override
             public boolean dispatchKeyEvent(KeyEvent e) {
                 keyPress(e);
-                System.out.println("test");
                 return false;
             }
         });
