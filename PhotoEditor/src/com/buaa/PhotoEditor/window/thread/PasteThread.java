@@ -3,19 +3,20 @@ package com.buaa.PhotoEditor.window.thread;
 import com.buaa.PhotoEditor.util.MatUtil;
 import com.buaa.PhotoEditor.window.Window;
 import org.opencv.core.Mat;
-
+import static com.buaa.PhotoEditor.window.Constant.*;
 import static com.buaa.PhotoEditor.util.MatUtil.*;
 
 import javax.swing.event.MouseInputAdapter;
 import java.awt.event.MouseEvent;
 
 import static com.buaa.PhotoEditor.util.MatUtil.getValueAfterZoom;
+
 /**
-* @Description 粘贴多线程
-* @author 张旖霜
-* @date 12/11/2023 9:27 PM
-* @version 1.0
-*/
+ * @author 张旖霜
+ * @version 1.0
+ * @Description 粘贴多线程
+ * @date 12/11/2023 9:27 PM
+ */
 public class PasteThread extends Thread {
     public Window window;
     public int i;
@@ -57,28 +58,30 @@ public class PasteThread extends Thread {
                         window.nextOriginalImg.clear();
                         window.nextPropertyValue.clear();
                         window.lastPropertyValue
-                            .push(copyPropertyValue(window
-                            .currentPropertyValue));
+                                .push(copyPropertyValue(window
+                                        .currentPropertyValue));
                         window.last.push(copyImgArray(window.zoomImg));
                         window.lastOriginalImg.push(copyImgArray(window.originalZoomImg));
                     }
                     Mat img = MatUtil.copy(window.zoomImg[i]);
-                    window.tool.getRegion().selectedRegionLabel[i].setLocation(tempX,tempY);
+                    window.tool.getRegion().selectedRegionLabel[i].setLocation(tempX, tempY);
                     MatUtil.copyToRegion(img,
                             window.copyRegionImg[i],
                             MatUtil.getRect(window.tool.getRegion().selectedRegionLabel[i]));
                     window.zoomImg[i] = MatUtil.copy(img);
-                    if (i == window.counter) {
-                        MatUtil.show(window.zoomImg[i], window.showImgRegionLabel);
+                    if (i != window.counter) {
+                        return;
                     }
+                    MatUtil.show(window.zoomImg[i], window.showImgRegionLabel);
                 }
             }
+
             /**
-            * @Description 鼠标移动的过程中，显示粘贴框
-            * @author 卢思文
-            * @date 12/11/2023 9:27 PM
-            * @version 1.0
-            */
+             * @Description 鼠标移动的过程中，显示粘贴框
+             * @author 卢思文
+             * @date 12/11/2023 9:27 PM
+             * @version 1.0
+             */
             @Override
             public void mouseMoved(MouseEvent e) {
                 if (window.zoomImg == null) {
